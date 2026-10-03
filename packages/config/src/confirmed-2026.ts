@@ -42,8 +42,6 @@ export const confirmedSummitGuests2026 = [
   "Mike Bryan",
   "Blaise Aguirre",
   "Isabella Wolfington",
-  "Steven Cohen",
-  "Alexandra Cohen",
   "Jen Smorgen",
   "Sean Wolfington",
   "Ana Wolfington",
@@ -51,16 +49,27 @@ export const confirmedSummitGuests2026 = [
   "Cathy Olson",
   "Jeff Levin",
   "Darryl McDaniels (DMC)",
-  "Mike Tyson"
+  "Mike Tyson",
+  "Ray Lewis",
+  "Sarah Gilman",
+  "Alexa Price",
+  "Bianca Mok",
+  "Harvey Stern",
+  "Taylor Perry",
+  "Allison Elbl",
+  "Rahil Briggs",
+  "Miriam Isa",
+  "Silas Luke Jones",
+  "Bishop Briggs"
 ] as const;
 
 export const confirmedSummitGuests2026Source = {
   baseId: "app7BHptsc1bjc3DD",
   interfacePageId: "pagFmzDhXfNK53eWY",
   group: "Summit Status: Confirmed Attendance",
-  reviewedAt: "2026-09-16",
-  observedConfirmedRows: 56,
-  publicConfirmedRows: 53,
-  excludedRule: "Three TBC names withheld. Duplicate DMC record is no longer in the source; Darryl McDaniels (DMC) remains confirmed. Hold-space, invited, pending, and declined records excluded.",
+  reviewedAt: "2026-09-21",
+  observedConfirmedRows: 64,
+  publicConfirmedRows: 62,
+  excludedRule: "September 21 recheck: 64 Confirmed Attendance rows (Ray Lewis twice; Paul Dalio (TBC) withheld) -> 62 names; added Rahil Briggs, Miriam Isa, Silas Luke Jones, Bishop Briggs; Salina Raymond no longer confirmed. September 18 recheck: 62 Confirmed Attendance rows; Ray Lewis appears twice (one person). Two TBC names withheld (Paul Dalio (TBC), Ellie Kanner's +1 (TBC)). Earlier: three TBC names withheld. Steven Cohen and Alexandra Cohen are no longer in the Confirmed Attendance group on the September 16 recheck; Foundation sponsorship remains separate. Darryl McDaniels (DMC) remains confirmed. Hold-space, invited, pending, and declined records excluded.",
   accessMode: "Read-only Airtable interface review"
 } as const;

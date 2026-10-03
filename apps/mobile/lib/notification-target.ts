@@ -6,5 +6,5 @@ export function notificationTarget(data: Record<string, unknown>, snapshot: Even
   if (id && snapshot.scheduleItems.some(item => item.id === id)) {
     return { pathname: "/session/[id]" as const, params: { id } };
   }
-  return { pathname: "/(tabs)/schedule" as const };
+  return { pathname: "/(tabs)" as const };
 }

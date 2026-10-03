@@ -1,0 +1,17 @@
+# Keep secrets, local operational data and build output out of Vercel CLI uploads.
+.env
+.env.*
+!.env.example
+work/
+outputs/
+node_modules/
+**/node_modules/
+**/.next/
+**/.netlify/
+**/.vercel/
+apps/mobile/ios/
+apps/mobile/android/
+apps/mobile/dist/
+apps/mobile/preview/
+**/*.log
+CODEX_PROJECT_HANDOFF/

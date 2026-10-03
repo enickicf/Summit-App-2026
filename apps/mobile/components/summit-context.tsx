@@ -9,6 +9,7 @@ import { sanitizePublishedSnapshotContent } from "@not-alone/domain";
 import { eventSnapshotSchema, type EventSnapshot } from "@not-alone/validation";
 import { mobileApiBaseUrl } from "../lib/mobile-api";
 import { selectCachedSnapshot, selectPublishedSnapshot } from "../lib/snapshot-sync";
+import { applyAppContentRules } from "../lib/app-content-rules";
 
 const PUBLISHED_SNAPSHOT_CACHE_KEY = "not-alone.published-snapshot-cache.v1";
 const SNAPSHOT_REFRESH_MS = 60000;
@@ -39,7 +40,8 @@ export function SummitProvider({ children }: PropsWithChildren) {
   const mountedRef = useRef(true);
   const syncInFlightRef = useRef(false);
   const publishedSnapshotRef = useRef<EventSnapshot | null>(canonicalSnapshot);
-  const snapshot = publishedSnapshot ?? canonicalSnapshot;
+  // The published data is cached as received; the app applies its own presentation rules on top.
+  const snapshot = useMemo(() => applyAppContentRules(publishedSnapshot ?? canonicalSnapshot), [publishedSnapshot]);
   const nowUtc = new Date(clockTick + serverClockOffsetMs).toISOString();
 
   const syncPublishedSnapshot = useCallback(async () => {

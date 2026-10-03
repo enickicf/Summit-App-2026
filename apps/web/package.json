@@ -3,13 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NEXT_TELEMETRY_DISABLED=1 next dev --port 3001",
-    "build": "next build",
+    "dev": "NEXT_TELEMETRY_DISABLED=1 next dev --webpack --port 3001",
+    "build": "node scripts/fetch-published-snapshot.mjs && next build",
+    "snapshot:bundle": "node scripts/fetch-published-snapshot.mjs",
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@netlify/blobs": "^11.1.0",
+    "@next/third-parties": "^16.3.5",
     "@not-alone/api-client": "workspace:*",
     "@not-alone/config": "workspace:*",
     "@not-alone/domain": "workspace:*",
@@ -17,12 +20,14 @@
     "@not-alone/validation": "workspace:*",
     "lucide-react": "1.44.0",
     "next": "16.3.3",
+    "nodemailer": "^10.0.11",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "zod": "4.5.4"
   },
   "devDependencies": {
     "@types/node": "26.4.0",
+    "@types/nodemailer": "^8.0.2",
     "@types/react": "19.2.8",
     "@types/react-dom": "19.2.5",
     "typescript": "6.0.3",

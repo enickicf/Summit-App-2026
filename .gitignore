@@ -24,3 +24,12 @@ tmp/
 apps/mobile/.expo
 apps/admin/.next
 .vercel
+
+# Local Netlify folder
+.netlify
+
+# Side-by-side local builds of the classic/new site versions (NEXT_DIST_DIR)
+.next-*/
+
+# local staff portal submissions (dev only; production uses Netlify Blobs)
+work/staff-portal-store.json

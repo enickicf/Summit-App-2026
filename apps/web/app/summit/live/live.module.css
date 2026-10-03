@@ -1,0 +1,30 @@
+.page { background: #fff; color: #252b33; margin: 0 auto; max-width: 1220px; min-height: 70vh; overflow-wrap: anywhere; padding: 48px 32px 72px; }
+.intro { margin-bottom: 24px; }
+.eyebrow { color: #56446b; font-size: 14px; font-weight: 700; }
+.intro h1 { font-family: Georgia, "Times New Roman", serif; font-size: 40px; font-weight: 400; line-height: 1.15; margin: 8px 0 16px; }
+.page p { line-height: 1.65; margin: 8px 0; }
+.page h2 { font-family: Georgia, "Times New Roman", serif; font-size: 28px; font-weight: 400; line-height: 1.25; margin: 0 0 12px; }
+.page h3 { font-size: 18px; line-height: 1.4; margin: 0 0 8px; }
+.page .status { color: #315742; font-size: 14px; font-weight: 700; margin: 0 0 24px; }
+.now { border-block: 1px solid #c9ccd0; padding: 28px 0; }
+.now article + article { border-top: 1px solid #d3d6da; margin-top: 24px; padding-top: 24px; }
+.page .facts { color: #4c535d; display: flex; flex-wrap: wrap; font-size: 14px; gap: 8px 20px; margin-top: 16px; }
+.pending, .next { border-bottom: 1px solid #c9ccd0; padding: 28px 0; }
+.pending p { max-width: 760px; white-space: pre-line; }
+.pending h3 { margin-top: 20px; }
+.next article + article { margin-top: 24px; }
+.notices { display: grid; gap: 12px; margin: 24px 0; }
+.notices article { border: 1px solid #d3d6da; border-left: 4px solid #527865; border-radius: 4px; padding: 20px; }
+.notices article[data-severity="urgent"] { border-left-color: #a12636; }
+.notices article[data-severity="change"] { border-left-color: #99751f; }
+.notices h2 { font-family: inherit; font-size: 18px; font-weight: 700; }
+.links { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 24px; }
+.links a { align-items: center; color: #4b286d; display: inline-flex; min-height: 44px; text-decoration: underline; text-underline-offset: 4px; }
+.links a:focus-visible { outline: 3px solid #24664f; outline-offset: 2px; }
+
+@media (max-width: 700px) {
+  .page { padding: 32px 16px 48px; }
+  .intro h1 { font-size: 32px; }
+  .page h2 { font-size: 24px; }
+  .page .facts { flex-direction: column; gap: 4px; }
+}

@@ -1,0 +1,1706 @@
+{
+  "event": {
+    "id": "not-alone-summit-2026-prototype",
+    "name": "Not Alone Summit",
+    "organizationName": "Inspiring Children Foundation",
+    "timeZone": "America/Los_Angeles",
+    "dateLabel": "November 2-4, 2026 · Additional activities November 1 & 5",
+    "venueName": "Wynn Las Vegas",
+    "city": "Las Vegas, Nevada",
+    "positioning": "Human connection, emotional wellbeing, and meaningful action. Explore the 2026 program and check back for confirmed rooms and session details.",
+    "presentedBy": "Inspiring Children Foundation",
+    "poweredBy": "Steven & Alexandra Cohen Foundation",
+    "tracks": [
+      "Summit Sessions",
+      "Awards",
+      "Wellness",
+      "Community",
+      "Performances"
+    ],
+    "featuredPeople": [],
+    "demo": false,
+    "directoryEnabled": true
+  },
+  "revision": 9,
+  "serverTimeUtc": "2026-10-02T22:22:31.107Z",
+  "scheduleItems": [
+    {
+      "id": "20260000-0000-4000-8001-000000000001",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Mike's Bikes Community Ride",
+      "shortTitle": "Mike's Bikes Community Ride",
+      "summary": "Mike's Bikes Community Ride. Location to be confirmed. Access details to be confirmed.",
+      "description": "Mike's Bikes Community Ride. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-01T22:00:00.000Z",
+      "endUtc": "2026-11-02T01:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 0,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000002",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Mike's Bikes Sponsor and Talent Dinner",
+      "shortTitle": "Mike's Bikes Sponsor and Talent Dinner",
+      "summary": "Mike's Bikes Sponsor and Talent Dinner. Margaux. Sponsors and talent.",
+      "description": "Mike's Bikes Sponsor and Talent Dinner. Margaux. Sponsors and talent. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-02T03:00:00.000Z",
+      "endUtc": "2026-11-02T06:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 0,
+      "locationId": "20260000-0000-4000-8002-000000000001",
+      "locationName": "Margaux",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Sponsors and talent"
+      },
+      "eligibilityScope": {
+        "id": "ros-sponsors-and-talent",
+        "label": "Sponsors and talent"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000003",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Molly's Game Poker Night",
+      "shortTitle": "Molly's Game Poker Night",
+      "summary": "Molly's Game Poker Night. Margaux. Access details to be confirmed.",
+      "description": "Molly's Game Poker Night. Margaux. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-02T06:30:00.000Z",
+      "endUtc": "2026-11-02T08:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 0,
+      "locationId": "20260000-0000-4000-8002-000000000001",
+      "locationName": "Margaux",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000005",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Wellness and Community Programming",
+      "shortTitle": "Wellness and Community Programming",
+      "summary": "Wellness and Community Programming. Location to be confirmed. Access details to be confirmed.",
+      "description": "Wellness and Community Programming. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-02T21:00:00.000Z",
+      "endUtc": "2026-11-03T02:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 1,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000006",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Founders Cocktails",
+      "shortTitle": "Founders Cocktails",
+      "summary": "Founders Cocktails. Location to be confirmed. Founders.",
+      "description": "Founders Cocktails. Location to be confirmed. Founders. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-03T00:30:00.000Z",
+      "endUtc": "2026-11-03T01:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 1,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Founders"
+      },
+      "eligibilityScope": {
+        "id": "ros-founders",
+        "label": "Founders"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000007",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Founder's Dinner",
+      "shortTitle": "Founder's Dinner",
+      "summary": "Founder's Dinner. Location to be confirmed. Founders.",
+      "description": "Founder's Dinner. Location to be confirmed. Founders. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-03T01:00:00.000Z",
+      "endUtc": "2026-11-03T03:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 1,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Founders"
+      },
+      "eligibilityScope": {
+        "id": "ros-founders",
+        "label": "Founders"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000008",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Speaker Reception",
+      "shortTitle": "Speaker Reception",
+      "summary": "Speaker Reception. Location to be confirmed. Speakers.",
+      "description": "Speaker Reception. Location to be confirmed. Speakers. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-03T01:15:00.000Z",
+      "endUtc": "2026-11-03T02:15:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 1,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Speakers"
+      },
+      "eligibilityScope": {
+        "id": "ros-speakers",
+        "label": "Speakers"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000009",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Pet Partners Therapy",
+      "shortTitle": "Pet Partners Therapy",
+      "summary": "Pet Partners Therapy. Location to be confirmed. Access details to be confirmed.",
+      "description": "Pet Partners Therapy. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-03T02:00:00.000Z",
+      "endUtc": "2026-11-03T03:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 1,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000010",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Red Carpet",
+      "shortTitle": "Red Carpet",
+      "summary": "Red Carpet. Location to be confirmed. Access details to be confirmed.",
+      "description": "Red Carpet. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-03T02:15:00.000Z",
+      "endUtc": "2026-11-03T03:30:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 1,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000013",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Awards Show",
+      "shortTitle": "Awards Show",
+      "summary": "Awards Show. Location to be confirmed. Access details to be confirmed.",
+      "description": "Awards Show. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-03T04:00:00.000Z",
+      "endUtc": "2026-11-03T06:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 1,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": true,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000014",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Wellness Activity",
+      "shortTitle": "Wellness Activity",
+      "summary": "Wellness Activity. Location to be confirmed. Access details to be confirmed.",
+      "description": "Wellness Activity. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-03T16:00:00.000Z",
+      "endUtc": "2026-11-03T18:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 2,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000015",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Pet Partners Therapy",
+      "shortTitle": "Pet Partners Therapy",
+      "summary": "Pet Partners Therapy. Location to be confirmed. Access details to be confirmed.",
+      "description": "Pet Partners Therapy. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-03T17:00:00.000Z",
+      "endUtc": "2026-11-03T18:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 2,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000016",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Summit Sessions",
+      "shortTitle": "Summit Sessions",
+      "summary": "Summit Sessions. Location to be confirmed. Access details to be confirmed.",
+      "description": "Summit Sessions. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-03T18:30:00.000Z",
+      "endUtc": "2026-11-03T21:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 2,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000017",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Lunch",
+      "shortTitle": "Lunch",
+      "summary": "Lunch. Location to be confirmed. Access details to be confirmed.",
+      "description": "Lunch. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-03T21:30:00.000Z",
+      "endUtc": "2026-11-03T22:30:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 2,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000018",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Summit Sessions",
+      "shortTitle": "Summit Sessions",
+      "summary": "Summit Sessions. Location to be confirmed. Access details to be confirmed.",
+      "description": "Summit Sessions. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-03T23:00:00.000Z",
+      "endUtc": "2026-11-04T01:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 2,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000019",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Break",
+      "shortTitle": "Break",
+      "summary": "Break. Location to be confirmed. Access details to be confirmed.",
+      "description": "Break. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-04T01:00:00.000Z",
+      "endUtc": "2026-11-04T02:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 2,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000020",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Dinner",
+      "shortTitle": "Dinner",
+      "summary": "Dinner. Location to be confirmed. Access details to be confirmed.",
+      "description": "Dinner. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-04T02:30:00.000Z",
+      "endUtc": "2026-11-04T04:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 2,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000021",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Evening Talk and Performance",
+      "shortTitle": "Evening Talk and Performance",
+      "summary": "Evening Talk and Performance. Location to be confirmed. Access details to be confirmed.",
+      "description": "Evening Talk and Performance. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-04T04:30:00.000Z",
+      "endUtc": "2026-11-04T05:30:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 2,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000022",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Late Night Pickleball and Sauna",
+      "shortTitle": "Late Night Pickleball and Sauna",
+      "summary": "Late Night Pickleball and Sauna. Location to be confirmed. Access details to be confirmed.",
+      "description": "Late Night Pickleball and Sauna. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-04T06:00:00.000Z",
+      "endUtc": "2026-11-04T08:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 2,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000023",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Wellness Activity",
+      "shortTitle": "Wellness Activity",
+      "summary": "Wellness Activity. Location to be confirmed. Access details to be confirmed.",
+      "description": "Wellness Activity. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-04T16:00:00.000Z",
+      "endUtc": "2026-11-04T18:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 3,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000024",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Pet Partners Therapy",
+      "shortTitle": "Pet Partners Therapy",
+      "summary": "Pet Partners Therapy. Location to be confirmed. Access details to be confirmed.",
+      "description": "Pet Partners Therapy. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-04T17:00:00.000Z",
+      "endUtc": "2026-11-04T18:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 3,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000025",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Summit Sessions",
+      "shortTitle": "Summit Sessions",
+      "summary": "Summit Sessions. Location to be confirmed. Access details to be confirmed.",
+      "description": "Summit Sessions. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-04T18:30:00.000Z",
+      "endUtc": "2026-11-04T21:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 3,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000026",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Lunch",
+      "shortTitle": "Lunch",
+      "summary": "Lunch. Location to be confirmed. Access details to be confirmed.",
+      "description": "Lunch. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-04T21:30:00.000Z",
+      "endUtc": "2026-11-04T22:30:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 3,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000027",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Summit Sessions",
+      "shortTitle": "Summit Sessions",
+      "summary": "Summit Sessions. Location to be confirmed. Access details to be confirmed.",
+      "description": "Summit Sessions. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-04T23:00:00.000Z",
+      "endUtc": "2026-11-05T01:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 3,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000028",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Break",
+      "shortTitle": "Break",
+      "summary": "Break. Location to be confirmed. Access details to be confirmed.",
+      "description": "Break. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-05T01:00:00.000Z",
+      "endUtc": "2026-11-05T02:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 3,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": false,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    },
+    {
+      "id": "20260000-0000-4000-8001-000000000029",
+      "eventId": "not-alone-summit-2026-prototype",
+      "title": "Closing Celebration",
+      "shortTitle": "Closing Celebration",
+      "summary": "Closing Celebration. Location to be confirmed. Access details to be confirmed.",
+      "description": "Closing Celebration. Location to be confirmed. Access details to be confirmed. Additional program details will be posted when confirmed.",
+      "startUtc": "2026-11-05T02:30:00.000Z",
+      "endUtc": "2026-11-05T06:00:00.000Z",
+      "eventTimeZone": "America/Los_Angeles",
+      "dayOrder": 3,
+      "locationId": "20260000-0000-4000-8002-000000000002",
+      "locationName": "Location to be confirmed",
+      "speakerIds": [],
+      "status": "scheduled",
+      "visibilityScope": {
+        "id": "public",
+        "label": "Access details to be confirmed"
+      },
+      "eligibilityScope": {
+        "id": "unconfirmed",
+        "label": "Access details to be confirmed"
+      },
+      "notificationScope": {
+        "id": "public",
+        "label": "All attendees"
+      },
+      "notificationOffsetsMinutes": [],
+      "featured": true,
+      "published": true,
+      "revision": 9,
+      "updatedAt": "2026-09-16T19:59:57.188Z",
+      "publishedAt": "2026-09-16T19:59:57.188Z"
+    }
+  ],
+  "speakers": [
+    {
+      "id": "20260000-0000-4000-8003-000000000001",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Jason Kennedy",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000002",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Loni Love",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000003",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Anthony Ramos",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000004",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Steve Wozniak",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000005",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Mike Majlak",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000006",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Kevin Hines",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000007",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Ryan Wolfington",
+      "role": "Executive Producer",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Executive Producers"
+      ],
+      "roleSource": "Producer credits approved by event owner September 16, 2026; original site: https://www.inspiringchildren.org/summit. Attendance independently confirmed in Airtable."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000008",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Jewel",
+      "role": "Executive Producer",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Executive Producers"
+      ],
+      "roleSource": "Producer credits approved by event owner September 16, 2026; original site: https://www.inspiringchildren.org/summit. Attendance independently confirmed in Airtable."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000009",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Caroline Jones",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000010",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Nick Dana",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000011",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Sarah Steil",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000012",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Lexi Hensler",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000013",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Jon Hershfield",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000014",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Morgan Marler",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000015",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Nick Kislinger",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000016",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Sanem (Sam) Alkan",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000017",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Daniel Gillison",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000018",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Wendy Oliver-Pyatt",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000019",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Brandon Saho",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000020",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Michael Townsend",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000021",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Leah Smith",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000022",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Margaret Hines",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000023",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Caroline Silby",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000024",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Jessica Edwards",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000025",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Marc Brackett",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000026",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Ellie Kanner",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000027",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Kase Murray",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000028",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Trent Alenik",
+      "role": "Producer",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Producers"
+      ],
+      "roleSource": "Producer credits approved by event owner September 16, 2026; original site: https://www.inspiringchildren.org/summit. Attendance independently confirmed in Airtable."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000029",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Jan Thwaites",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000030",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Sally Dewhurst",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000031",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Sophie Novak",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000032",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Trevor Short",
+      "role": "Executive Producer",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Executive Producers"
+      ],
+      "roleSource": "Producer credits approved by event owner September 16, 2026; original site: https://www.inspiringchildren.org/summit. Attendance independently confirmed in Airtable."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000033",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Clark Cummings",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000034",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Aphrah Brokaw",
+      "role": "Producer",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Producers"
+      ],
+      "roleSource": "Producer credits approved by event owner September 16, 2026; original site: https://www.inspiringchildren.org/summit. Attendance independently confirmed in Airtable."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000035",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Paige Neuenschwander",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000036",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Noah Springer",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000037",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Melinda Springer",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000038",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Alana Springsteen",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000039",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "David Eagleman",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000040",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Bob Bryan",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000041",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Mike Bryan",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000042",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Blaise Aguirre",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000043",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Isabella Wolfington",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000044",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Steven Cohen",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000045",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Alexandra Cohen",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000046",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Jen Smorgen",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000047",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Sean Wolfington",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000048",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Ana Wolfington",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000049",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Janet Wozniak",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000050",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Cathy Olson",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000051",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Jeff Levin",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000052",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Darryl McDaniels (DMC)",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    },
+    {
+      "id": "20260000-0000-4000-8003-000000000053",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Mike Tyson",
+      "role": "Confirmed 2026 guest",
+      "bio": "",
+      "headshotUrl": null,
+      "published": true,
+      "directoryCategories": [
+        "Attendees"
+      ],
+      "roleSource": "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
+    }
+  ],
+  "faqs": [
+    {
+      "id": "20260000-0000-4000-8004-000000000001",
+      "question": "Which time zone does the schedule use?",
+      "answer": "All times are Las Vegas local time (America/Los_Angeles).",
+      "category": "Schedule",
+      "published": true
+    },
+    {
+      "id": "20260000-0000-4000-8004-000000000002",
+      "question": "Does a listing guarantee entry?",
+      "answer": "No. Some activities are for founders, speakers, sponsors, or talent. Ask the event team about eligibility; other access details are still being confirmed.",
+      "category": "Access",
+      "published": true
+    },
+    {
+      "id": "20260000-0000-4000-8004-000000000003",
+      "question": "Are all rooms and speakers assigned?",
+      "answer": "Not yet. Only published 2026 assignments are shown. Confirmed attendance does not mean a guest has a scheduled speaking appearance.",
+      "category": "Program",
+      "published": true
+    }
+  ],
+  "sponsors": [
+    {
+      "id": "20260000-0000-4000-8005-000000000001",
+      "name": "Steven & Alexandra Cohen Foundation",
+      "tier": "Powered by",
+      "websiteUrl": null,
+      "logoUrl": null,
+      "published": true
+    }
+  ],
+  "media": [],
+  "notices": [],
+  "locations": [
+    {
+      "id": "20260000-0000-4000-8002-000000000001",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Margaux",
+      "description": "Listed for the November 1 sponsor and talent dinner and poker night. Other room assignments are not yet confirmed.",
+      "mapX": 0.5,
+      "mapY": 0.5
+    },
+    {
+      "id": "20260000-0000-4000-8002-000000000002",
+      "eventId": "not-alone-summit-2026-prototype",
+      "name": "Location to be confirmed",
+      "description": "No room assignment has been published for these activities.",
+      "mapX": 0.5,
+      "mapY": 0.5
+    }
+  ],
+  "contentPages": [
+    {
+      "id": "20260000-0000-4000-8006-000000000001",
+      "slug": "schedule-note",
+      "title": "2026 program",
+      "body": "The 2026 agenda includes additional activities on November 1 and 5. All times are Pacific. Unconfirmed times and rooms are marked explicitly; attendance alone does not confirm a speaking appearance.",
+      "published": true,
+      "revision": 9
+    },
+    {
+      "id": "20260000-0000-4000-8006-000000000002",
+      "slug": "venue-room-guide",
+      "title": "2026 venue guide",
+      "body": "Margaux is listed for the November 1 sponsor and talent dinner and poker night. Other rooms and directions will be published when confirmed.",
+      "published": true,
+      "revision": 9
+    },
+    {
+      "id": "20260000-0000-4000-8006-000000000003",
+      "slug": "inspiring-children-foundation",
+      "title": "Inspiring Children Foundation",
+      "body": "Inspiring Children Foundation supports young people in Las Vegas through programs that connect physical health, emotional wellbeing, academics, athletics, creativity, entrepreneurship, and service.",
+      "published": true,
+      "revision": 9
+    },
+    {
+      "id": "20260000-0000-4000-8006-000000000004",
+      "slug": "schedule-pending-2026-11-02",
+      "title": "Timing to be confirmed",
+      "body": "AI relationships panel: timing and complete speaker lineup to be confirmed.\n\nDoors Open: 6:30 PM; end time to be confirmed.\n\nPre-Show: 7:30 PM; end time to be confirmed.\n\nLocations and access details to be confirmed.",
+      "published": true,
+      "revision": 9
+    },
+    {
+      "id": "20260000-0000-4000-8006-000000000005",
+      "slug": "schedule-pending-2026-11-05",
+      "title": "Timing to be confirmed",
+      "body": "Tennis: 10:00 AM; end time to be confirmed.\n\nHigh Tea: 12:00 PM; end time to be confirmed.\n\nLocations and access details to be confirmed.",
+      "published": true,
+      "revision": 9
+    },
+    {
+      "id": "20260000-0000-4000-8006-000000000006",
+      "slug": "awards-2026-program",
+      "title": "2026 Not Alone Awards",
+      "body": "Monday, November 2, 2026\n\nRed Carpet: 6:15-7:30 PM\nDoors Open: 6:30 PM\nPre-Show: 7:30 PM\nAwards Show: 8:00-10:00 PM\n\nAll times are Pacific. Room, honorees, award categories, and complete show lineup will be announced when confirmed.",
+      "published": true,
+      "revision": 9
+    }
+  ]
+}

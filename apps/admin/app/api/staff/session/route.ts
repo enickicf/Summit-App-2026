@@ -34,14 +34,15 @@ export async function PATCH(request: NextRequest) {
   const supabaseUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
-  if (!supabaseUrl || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    return NextResponse.json({ ok: true, mode: "local-adapter", role: process.env.LOCAL_STAFF_ROLE ?? "ADMIN" });
-  }
-  if (!refreshToken || !publishableKey) {
-    return clearSessionResponse("The staff session has expired.", 401);
-  }
-
   try {
+    if (!supabaseUrl || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      const staff = await authenticateStaffAccessToken("", [...STAFF_ROLES]);
+      return NextResponse.json({ ok: true, mode: staff.mode, role: staff.role });
+    }
+    if (!refreshToken || !publishableKey) {
+      return clearSessionResponse("The staff session has expired.", 401);
+    }
+
     const refreshResponse = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=refresh_token`, {
       method: "POST",
       headers: { "Content-Type": "application/json", apikey: publishableKey },
@@ -72,7 +73,10 @@ export async function PATCH(request: NextRequest) {
       response.cookies.set(STAFF_REFRESH_COOKIE, session.refresh_token, staffCookieOptions(60 * 60 * 24 * 30));
     }
     return response;
-  } catch {
+  } catch (error) {
+    if (error instanceof StaffAuthError && error.status === 503) {
+      return clearSessionResponse(error.message, error.status);
+    }
     return clearSessionResponse("Unable to refresh the staff session.", 401);
   }
 }

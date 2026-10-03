@@ -2,7 +2,7 @@ import Link from "next/link";
 import { publicAppConfig } from "@not-alone/config";
 
 type StaffNavProps = {
-  active: "overview" | "schedule" | "content" | "ask-ai" | "changes" | "import" | "notifications" | "emergency" | "history" | "settings";
+  active: "overview" | "schedule" | "content" | "ask-ai" | "changes" | "import" | "notifications" | "signups" | "emergency" | "history" | "settings";
 };
 
 const groups = [
@@ -14,6 +14,7 @@ const groups = [
       { id: "content", label: "Content Studio", href: "/content" },
       { id: "changes", label: "Review & Publish", href: "/changes" },
       { id: "notifications", label: "Notifications", href: "/notifications" },
+      { id: "signups", label: "Activation Sign-ups", href: "/signups" },
       { id: "emergency", label: "Emergency", href: "/emergency" }
     ]
   },

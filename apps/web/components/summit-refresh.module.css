@@ -1,0 +1,75 @@
+.summitHeader { position:relative; background:linear-gradient(100deg,#8fb1e0 0%,#8fb1e0 52%,#8fb1e0 100%); color:#fff; border-bottom:1px solid #ffffff33; }
+.navigation { display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:8px 30px; padding:18px 24px; color:#fff; font-family:"Original Poppins",sans-serif; }
+.navigation a { min-height:44px; display:inline-flex; align-items:center; border-bottom:2px solid transparent; font-size:14px; font-weight:600; padding:8px 0; }
+.navigation a[aria-current] { color:#fff; border-color:#8fb1e0; }
+.navigation a:hover { color:#fff9f1; border-color:#ffffffa6; }
+.navigation a:focus-visible { outline:2px solid #fff; outline-offset:5px; }
+.navigationLogo { position:absolute; z-index:1; left:max(24px,calc((100% - 1180px)/2)); top:50%; transform:translateY(-50%); display:block; }
+.navigationLogo:focus-visible { outline:2px solid #fff; outline-offset:5px; }
+.navigationLogo img { display:block; width:auto; height:56px; }
+:global(body):has(.navigation) { background:#ffffff; color:#000000; }
+:global(body):has(.navigation) :global(.contentPage), :global(body):has(.navigation) :global(.profilePage) { background:#ffffff; color:#000000; }
+:global(body):has(.navigation) :global(.profileRole), :global(body):has(.navigation) :global(.profileBio) { color:#555555; }
+:global(body):has(.navigation) :global(.siteHeader) { display:none; }
+.backgroundVideo { position:absolute; inset:0; }
+.backgroundVideo video { width:100%; height:100%; object-fit:cover; transition:object-position 0s; }
+.backgroundVideo .jewel { object-position:50% 5%; }
+.backgroundVideo .heroClip { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity 600ms ease; pointer-events:none; }
+.backgroundVideo .heroClipActive { opacity:1; }
+.backgroundVideo .cherrial { object-position:57% 30%; }
+.backgroundVideo .woz { object-position:50% 35%; }
+.highlightVideo { width:100%; aspect-ratio:16/9; background:#4a5faa; }
+.highlightVideo video { width:100%; height:100%; object-fit:contain; }
+@media(max-width:900px) { .navigationLogo { position:static; transform:none; width:max-content; margin:0 auto; padding-top:14px; } .navigationLogo + .navigation { padding-top:4px; } }
+@media(max-width:600px) { .navigationLogo img { height:44px; } .navigation { gap:4px 16px; padding:10px 16px; } .navigation a { font-size:12px; } }
+.recapBackground { overflow:hidden; container-type:size; background:#111111; }
+.recapPoster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.recapFrame { position:absolute; top:50%; left:50%; width:max(100cqw, 177.78cqh); height:max(56.25cqw, 100cqh); transform:translate(-50%,-50%); border:0; pointer-events:none; opacity:0; transition:opacity 500ms ease; }
+.recapFrameReady { opacity:1; }
+/* Owner (Sept 21): header and menu at the Awards site's sizes. */
+.summitHeader .summitLogoBar { background:none; border:0; }
+.summitHeader .navigation { gap:8px 28px; padding:14px 24px; border-top:1px solid #ffffff33; }
+.summitHeader .navigation a { min-height:44px; padding:8px 4px; border-bottom:3px solid transparent; font-size:17px; font-weight:700; line-height:1.5; white-space:nowrap; }
+.summitHeader .navigation a[aria-current] { border-color:#8fb1e0; }
+@media(max-width:600px) { .summitHeader .navigation { gap:4px 8px; padding:8px 12px; } .summitHeader .navigation a { padding:8px 2px; font-size:12px; } }
+/* Owner (Sept 21): no purple theme; the live ICF Summit palette (white, black, #d0d4ea, #8fb1e0).
+   Header: white bar, black Summit logo and black menu text, ICF blue for the current page. */
+.summitHeader { background:#fff !important; color:#000; border-bottom:1px solid #d0d4ea; }
+.summitHeader .navigation { color:#000; border-top:1px solid #d0d4ea; }
+.summitHeader .navigation a { color:#000; }
+.summitHeader .navigation a:hover { color:#4a5faa; border-color:#d0d4ea; }
+.summitHeader .navigation a[aria-current] { color:#000; border-color:#8fb1e0; }
+.summitHeader .navigation a:focus-visible { outline-color:#4a5faa; }
+:global(body):has(.navigation) { background:#fff; color:#000; }
+.recapBackground .recapPoster { width:100% !important; height:100% !important; max-width:none; object-fit:cover; }
+/* Logo bar at the Awards header's size (98px tall, 28px side padding). */
+.summitLogoBar { display:flex; align-items:center; justify-content:space-between; min-height:98px; padding:10px 28px; background:#fff; color:#000; font-family:"Original Poppins",sans-serif; }
+@media(max-width:600px) { .summitLogoBar { min-height:80px; padding:8px 20px; } }
+/* Oversize the background player just enough that YouTube's title bar and edges fall outside the hero.
+   Owner (Sept 21, late): 1.3x cropped too much of the picture; 1.12x shows far more of each frame. */
+.recapFrame { width:calc(max(100cqw, 177.78cqh) * 1.12); height:calc(max(56.25cqw, 100cqh) * 1.12); }
+
+/* Owner (Sept 21): the hero opens on a still of the film's first frame, cropped like the film (the
+   film is shown 1.3x to keep YouTube's edges out of view), with a slow push-in until the film fades in. */
+/* Owner (Sept 21, late): the hero opens on a plain brand color (no still, no zoom) and cross-fades
+   into the film once it is really playing. The color sits above the player until then. */
+.recapCover { position:absolute; inset:0; z-index:1; opacity:1; transition:opacity 900ms ease; }
+.recapCoverBehind { opacity:0; }
+.recapFrame { transition:opacity 900ms ease; }
+
+/* Owner (Sept 22): "2026" menu item with a hover/focus list of the 2026 and 2025 Summit pages. */
+.navMenu { position:relative; display:inline-flex; }
+.navMenuList { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:none; flex-direction:column; min-width:170px; padding:6px 0; background:#fff; border:1px solid #d0d4ea; border-radius:6px; box-shadow:0 12px 28px -14px #00000059; z-index:30; }
+.navMenu:hover .navMenuList, .navMenu:focus-within .navMenuList { display:flex; }
+.summitHeader .navigation .navMenuList a { min-height:40px; padding:6px 16px; border-bottom:0; font-size:15px; white-space:nowrap; }
+.summitHeader .navigation .navMenuList a:hover { background:#d0d4ea; color:#000; }
+/* Owner (Sept 23): Donate sits on the far right as a sticker in ICF's style (blue pill, heart), out of the link row. */
+.summitHeader .navigation { position:relative; }
+.summitHeader .navigation .donateButton { position:absolute; right:max(24px,calc((100% - 1180px)/2)); top:50%; transform:translateY(-50%); display:inline-flex; align-items:center; gap:8px; min-height:0; padding:10px 22px; border:0; border-radius:15px; background:#8fb1e0; color:#fff; font-size:16px; font-weight:700; line-height:1.2; white-space:nowrap; }
+.summitHeader .navigation .donateButton:hover { background:#7aa1d8; color:#fff; }
+.summitHeader .navigation .donateButton:focus-visible { outline:2px solid #000; outline-offset:4px; }
+@media(max-width:1100px) { .summitHeader .navigation { padding-left:150px; padding-right:150px; } }
+/* Owner (Sept 23): on phones Donate stays on the right of the link row, as on the Awards site; the links
+   shrink so all five fit beside it on a 375px screen. */
+@media(max-width:900px) { .summitHeader .navigation { padding-left:24px; padding-right:130px; } .summitHeader .navigation .donateButton { right:24px; padding:8px 18px; font-size:14px; } }
+@media(max-width:600px) { .summitHeader .navigation { gap:4px 6px; padding:8px 92px 8px 10px; } .summitHeader .navigation a { font-size:10.5px; padding:8px 1px; letter-spacing:-.01em; } .summitHeader .navigation .donateButton { right:10px; gap:5px; padding:7px 10px; font-size:12px; letter-spacing:0; } }

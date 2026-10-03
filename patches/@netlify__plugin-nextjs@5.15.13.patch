@@ -1,0 +1,14 @@
+diff --git a/dist/build/content/server.js b/dist/build/content/server.js
+index c8a099b79039e9c68ce484ddf9477229eadf1de1..c1cede95f40b774914e9f19116e0ba6ea0cc4c04 100644
+--- a/dist/build/content/server.js
++++ b/dist/build/content/server.js
+@@ -277,6 +277,9 @@ var replaceMiddlewareManifest = async (sourcePath, destPath) => {
+   await writeFile(destPath, newData);
+ };
+ var replaceFunctionsConfigManifest = async (sourcePath, destPath) => {
++  // Not Alone Summit (Sept 28, 2026): the destination folder is created by sibling copies running in parallel; on a
++  // clean .netlify folder this write can run first and fail with ENOENT, so create the folder like replaceMiddlewareManifest does.
++  await mkdir(dirname(destPath), { recursive: true });
+   const data = await readFile(sourcePath, "utf8");
+   const manifest = JSON.parse(data);
+   if (manifest?.functions?.["/_middleware"]?.matchers) {

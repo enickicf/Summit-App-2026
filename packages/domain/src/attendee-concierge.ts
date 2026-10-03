@@ -1,5 +1,6 @@
 import { getNowAndUpcoming, groupPublishedProgramByDay, toEventTimeRange } from "./index";
 import type { EventSnapshot, ScheduleItem } from "@not-alone/validation";
+import { DateTime } from "luxon";
 
 export type AttendeeConciergeAnswer = {
   mode: "temporary-local" | "openai-ready";
@@ -35,9 +36,9 @@ export function createAttendeeConciergeAnswer({
   nowUtc: string;
 }): AttendeeConciergeAnswer {
   const normalized = question.toLowerCase();
-  const allItems = snapshot.scheduleItems.filter(item => item.published && item.visibilityScope.id === "public").sort((left, right) => left.startUtc.localeCompare(right.startUtc));
+  const allItems = snapshot.scheduleItems.filter(item => item.eventId === snapshot.event.id && item.published && item.visibilityScope.id === "public").sort((left, right) => left.startUtc.localeCompare(right.startUtc));
   const timeline = getNowAndUpcoming({
-    snapshot,
+    snapshot: { ...snapshot, scheduleItems: allItems },
     nowUtc,
     audienceGroups: ["public"]
   });
@@ -45,6 +46,9 @@ export function createAttendeeConciergeAnswer({
   const dayMatch = findDayScheduleMatch(normalized, allItems, snapshot.event.timeZone);
   const locationMatch = findLocationMatch(normalized, snapshot);
   const pendingDays = groupPublishedProgramByDay(snapshot).filter(day => day.notes.length > 0);
+  const currentDate = DateTime.fromISO(nowUtc, { zone: "utc" }).setZone(snapshot.event.timeZone).toISODate()!;
+  const pendingUpcoming = pendingDays.filter(day => day.date >= currentDate);
+  const pendingGuidance = pendingUpcoming.length > 0 ? ` Activities with unconfirmed timing remain for ${pendingUpcoming.map(day => day.dayLabel).join("; ")}. Check Schedule for the published timing notes.` : "";
 
   if (matchesAny(normalized, ["emergency", "crisis", "suicide", "self harm", "self-harm", "unsafe"])) {
     return createAnswer({
@@ -54,7 +58,20 @@ export function createAttendeeConciergeAnswer({
     });
   }
 
-  if (matchesAny(normalized, ["sponsor", "powered by", "presented by", "cohen", "villa"])) {
+  const topicGroups = [
+    ["awards", "award show", "red carpet"],
+    ["community"],
+    ["founder"],
+    ["sponsor and talent dinner"],
+    ["dinner", "lunch", "meal", "food"],
+    ["music", "concert", "performance"],
+    ["poker"],
+    ["bike", "ride"]
+  ];
+  const topic = topicGroups.find(terms => matchesAny(normalized, terms));
+  const activityDetails = topic && matchesAny(normalized, ["when", "where", "time", "timing", "location", "room", "schedule", "program"]);
+
+  if (!activityDetails && matchesAny(normalized, ["sponsor", "powered by", "presented by", "cohen", "villa"])) {
     const sponsors = snapshot.sponsors.filter(sponsor => sponsor.published);
     return createAnswer({
       title: "Published event partners",
@@ -80,7 +97,7 @@ export function createAttendeeConciergeAnswer({
         : `${personMatch.name} does not have a published appearance time yet`,
       body:
         personMatch.items.length > 0
-          ? `${personMatch.name} appears in the loaded schedule below.`
+          ? `${personMatch.name} has published schedule records below.${personMatch.items.some(item => item.status === "canceled") ? " Canceled appearances will not take place." : ""}`
           : `${personMatch.confirmed ? `${personMatch.name} is a confirmed 2026 guest, but attendance does not confirm a speaking slot.` : `${personMatch.name} is not confirmed in the current published 2026 guest list.`} The current app schedule does not include a specific published appearance time yet.`,
       items: personMatch.items.slice(0, 4),
       snapshot
@@ -101,6 +118,12 @@ export function createAttendeeConciergeAnswer({
   }
 
   const pendingTerms = ["tennis", "high tea", "doors open", "pre-show", "ai relationships"].filter(term => normalized.includes(term));
+  const resolvedPendingItems = allItems.filter(item => containsName(item.title, pendingTerms));
+  if (resolvedPendingItems.length > 0) return createAnswer({
+    title: "Published program details",
+    body: `Use the published activity details below.${resolvedPendingItems.some(item => item.status === "canceled") ? " Canceled activities will not take place." : ""}`,
+    items: resolvedPendingItems, snapshot
+  });
   const pendingMatch = pendingDays.find(day => day.notes.some(note => pendingTerms.some(term => note.body.toLowerCase().includes(term))));
   if (pendingMatch) return createAnswer({
     title: `${pendingMatch.dayLabel}: timing to be confirmed`,
@@ -115,7 +138,7 @@ export function createAttendeeConciergeAnswer({
           ? "These are the sessions currently active for the loaded schedule."
           : timeline.upcoming[0]
             ? `The next loaded session is ${timeline.upcoming[0].title}.`
-            : "There are no upcoming published sessions in the current snapshot.",
+            : `There are no upcoming fully timed published sessions in the current snapshot.${pendingGuidance}`,
       items: timeline.current.length > 0 ? timeline.current : timeline.upcoming.slice(0, 3),
       snapshot
     });
@@ -152,39 +175,14 @@ export function createAttendeeConciergeAnswer({
     });
   }
 
-  if (matchesAny(normalized, ["next", "where", "go", "room", "location"])) {
-    const nextItem = timeline.upcoming[0];
+  if (matchesAny(normalized, ["performing", "performer", "hosting", "host", "honoree", "winning"]) || (/\bwho\b/.test(normalized) && matchesAny(normalized, ["speaking", "awards", "performances"]))) {
     return createAnswer({
-      title: nextItem ? `Next: ${nextItem.title}` : "No next session found",
-      body: nextItem
-        ? `${nextItem.title}: ${toEventTimeRange(nextItem, snapshot.event.timeZone)}. ${nextItem.locationName}. Access: ${nextItem.eligibilityScope.label}.`
-        : "No upcoming published session is available in the current snapshot.",
-      items: timeline.upcoming.slice(0, 3),
-      snapshot
+      title: "Show roles require separate confirmation",
+      body: "A confirmed guest list does not establish performers, hosts, speakers, or honorees. Check the published schedule and Awards program for separately confirmed assignments, or ask the event team.",
+      items: []
     });
   }
 
-  if (matchesAny(normalized, ["featured", "speaker", "speakers", "who", "mike", "tyson", "jewel", "wozniak"])) {
-    return createAnswer({
-      title: "Confirmed 2026 guests",
-      body: snapshot.speakers.some(person => person.published)
-        ? `${snapshot.speakers.filter(person => person.published).map(person => person.name).join(", ")}. Attendance does not confirm a speaking time; check Schedule for published appearances.`
-        : "No 2026 guests have been published yet.",
-      items: findItems(allItems, normalized.split(/[^a-z0-9]+/).filter((word) => word.length > 3)).slice(0, 4),
-      snapshot
-    });
-  }
-
-  const topicGroups = [
-    ["awards", "award show", "red carpet"],
-    ["community"],
-    ["founder"],
-    ["dinner", "lunch", "meal", "food"],
-    ["music", "concert", "performance"],
-    ["poker"],
-    ["bike", "ride"]
-  ];
-  const topic = topicGroups.find(terms => matchesAny(normalized, terms));
   if (topic) {
     const items = findItems(allItems, topic);
     return createAnswer({
@@ -193,6 +191,40 @@ export function createAttendeeConciergeAnswer({
         ? "These activities are in the current published program. Attendance does not guarantee access; check each session's access details."
         : "No matching activity has been published yet. The event team will add details when confirmed.",
       items: items.slice(0, 6), snapshot
+    });
+  }
+
+  if (matchesAny(normalized, ["next", "where", "go", "room", "location"])) {
+    const nextItem = timeline.upcoming[0];
+    return createAnswer({
+      title: nextItem ? `Next: ${nextItem.title}` : "No next session found",
+      body: nextItem
+        ? `${nextItem.title}: ${toEventTimeRange(nextItem, snapshot.event.timeZone)}. ${nextItem.locationName}. Access: ${nextItem.eligibilityScope.label}.`
+        : `No upcoming fully timed published session is available in the current snapshot.${pendingGuidance}`,
+      items: timeline.upcoming.slice(0, 3),
+      snapshot
+    });
+  }
+
+  if (matchesAny(normalized, ["featured", "speaker", "speakers", "who"]) || containsName(normalized, ["mike", "tyson", "jewel", "wozniak"])) {
+    const guests = snapshot.event.directoryEnabled ? snapshot.speakers.filter(person => person.published && person.eventId === snapshot.event.id) : [];
+    return createAnswer({
+      title: "Confirmed 2026 guests",
+      body: guests.length > 0
+        ? `${guests.map(person => person.name).join(", ")}. Attendance does not confirm a speaking time; check Schedule for published appearances.`
+        : "No 2026 guests have been published yet.",
+      items: findItems(allItems, normalized.split(/[^a-z0-9]+/).filter((word) => word.length > 3)).slice(0, 4),
+      snapshot
+    });
+  }
+
+  if (matchesAny(normalized, ["schedule", "program"])) {
+    return createAnswer({
+      title: "Published schedule",
+      body: allItems.length > 0
+        ? `The published schedule contains ${allItems.length} timed activities. ${allItems.length > 8 ? "The first eight are below; open Schedule for the complete agenda." : "They are listed below."}`
+        : "No fully timed activities are published yet. Check Schedule for any published timing notes.",
+      items: allItems.slice(0, 8), snapshot
     });
   }
 
@@ -251,6 +283,7 @@ function findLocationMatch(prompt: string, snapshot: EventSnapshot) {
     .map((page) => page.body);
   const venueGuide = venueGuidePages.join(" ").toLowerCase();
   const location = snapshot.locations.find((candidate) => {
+    if (candidate.eventId !== snapshot.event.id) return false;
     const name = candidate.name.toLowerCase();
     const significantNameParts = name.split(/[^a-z0-9]+/).filter((part) => part.length >= 4);
     const directMatch = significantNameParts.some((part) => searchablePrompt.includes(part));
@@ -267,7 +300,7 @@ function findLocationMatch(prompt: string, snapshot: EventSnapshot) {
   return {
     location,
     guidance: guidance ?? location.description,
-    items: snapshot.scheduleItems.filter((item) => item.published && item.visibilityScope.id === "public" && item.locationId === location.id)
+    items: snapshot.scheduleItems.filter((item) => item.eventId === snapshot.event.id && item.published && item.visibilityScope.id === "public" && item.locationId === location.id)
   };
 }
 
@@ -289,7 +322,7 @@ function createAnswer({
     items: snapshot
       ? items.map((item) => ({
           id: item.id,
-          title: item.title,
+          title: item.status === "scheduled" ? item.title : `${item.title} (${item.status})`,
           time: toEventTimeRange(item, snapshot.event.timeZone),
           locationName: item.locationName
         }))
@@ -311,18 +344,30 @@ function findPersonScheduleMatch(prompt: string, items: ScheduleItem[], snapshot
     { name: "Harry Hudson", aliases: ["harry hudson"] },
     { name: "Kevin Hines", aliases: ["kevin hines"] }
   ];
-  const publishedPerson = snapshot.speakers.find(person => person.published && prompt.includes(person.name.toLowerCase()));
-  const person = publishedPerson ? { name: publishedPerson.name, aliases: [publishedPerson.name.toLowerCase()] } : people.find((candidate) => matchesAny(prompt, candidate.aliases));
+  const publicPeople = snapshot.event.directoryEnabled ? snapshot.speakers.filter(person => person.published && person.eventId === snapshot.event.id) : [];
+  const publishedPerson = publicPeople.find(person => containsName(prompt, [person.name]));
+  const person = publishedPerson ? { name: publishedPerson.name, aliases: [publishedPerson.name.toLowerCase()] } : people.find((candidate) => containsName(prompt, candidate.aliases));
 
   if (!person) {
     return null;
   }
 
+  const linkedPerson = publishedPerson ?? publicPeople.find(candidate => containsName(candidate.name, person.aliases));
   return {
     name: person.name,
-    confirmed: Boolean(publishedPerson || snapshot.speakers.some(candidate => candidate.published && person.aliases.some(alias => candidate.name.toLowerCase().includes(alias)))),
-    items: items.filter(item => findItems([item], person.aliases).length > 0 || (publishedPerson && item.speakerIds.includes(publishedPerson.id)))
+    confirmed: Boolean(linkedPerson),
+    // A textual mention is not an approved appearance assignment.
+    items: linkedPerson ? items.filter(item => item.speakerIds.includes(linkedPerson.id)) : []
   };
+}
+
+function containsName(value: string, names: string[]) {
+  const normalize = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  const words = ` ${normalize(value)} `;
+  return names.some(name => {
+    const normalized = normalize(name);
+    return normalized.length > 0 && words.includes(` ${normalized} `);
+  });
 }
 
 function findItems(items: ScheduleItem[], terms: string[]) {
@@ -342,5 +387,5 @@ function searchText(item: ScheduleItem) {
 }
 
 function matchesAny(value: string, terms: string[]) {
-  return terms.some((term) => value.includes(term));
+  return containsName(value, terms.flatMap(term => [term, `${term}s`]));
 }

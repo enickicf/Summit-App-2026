@@ -1,5 +1,66 @@
 # Awards website design and verification
 
+## Latest producer separation
+
+- The 2026 Awards talent-and-guests grid excludes the original approved producers,
+  including executive producers. The five confirmed producers remain credited in
+  their separate section below; no attendance records or 2025 credits were removed.
+- The page now has 46 talent/guest cards (16 with photos), plus the five separate
+  producer credits. The list announces: "The list is growing. More confirmed
+  talent and guests will be announced."
+- Regression tests cover separation, missing/generic producer metadata, preserved
+  credits, confirmation gating and ordering. Lint, typecheck and all 164 tests pass.
+- Browser inspection confirmed no producer duplicates in the guest grid and the
+  production section below it. Desktop and 390px phone layouts had no horizontal
+  overflow. This remains a local update, not a production deployment.
+
+## Latest 2025-format alignment
+
+- The 2026 Awards talent gallery now reuses the original 2025 portrait-grid CSS:
+  square photographs, purple name panels, centered headings and the same spacing.
+  The host uses the same portrait component, and current chair/producer sections
+  inherit the original Awards styling rather than the separate 2026 refinement.
+- Both years share the award-category markup. The 2026 expandable section remains
+  explicitly labeled as historical 2025 categories, not confirmed 2026 awards.
+- The 51-person confirmation gate and recognizable-name ordering are unchanged.
+  No search controls, invented portraits, added people or new roles were introduced.
+  The 2025 archive, existing hero and correct public Awards RSVP remain intact.
+- Browser comparison at 1280x900 confirmed identical portrait size (280px square),
+  four-column grid, 20px gaps, panel/name colors, heading and name typography, and
+  section padding between the 2025 and 2026 talent sections. The expanded category
+  grid also matched, including all 18 descriptions, padding and typography.
+- Visually checked the gallery at 320x568, 390x844 and 768x1024. The narrow-phone
+  producer section was checked too. No horizontal overflow or overflowing guest
+  cards was observed. The dropdown opens and closes; the roster has no search.
+- Repository lint, typecheck and all 163 tests passed, including 33 website tests.
+  A regression test locks in shared host, portrait and category presentation.
+- These changes are local only. No production deployment or native-device
+  certification was performed for this website-formatting change.
+
+## Latest owner-requested confirmation gate
+
+September 16 recheck of the read-only Airtable interface:
+https://airtable.com/app7BHptsc1bjc3DD/pagFmzDhXfNK53eWY
+
+- The Confirmed Attendance group now has 54 rows: 51 named confirmations and
+  three TBC placeholders. Steven Cohen and Alexandra Cohen are no longer in that
+  group. This supersedes the earlier 53-person review below; no decline status is
+  inferred. The Cohen Foundation sponsorship is unchanged.
+- Current website people require both a reviewed Airtable confirmation and staff
+  publication. Stale published records cannot bypass the reviewed allowlist.
+- The latest owner instruction also requires attendance confirmation for current
+  host, chair and producer cards. Historical credits alone no longer bypass this
+  check. The complete 2025 archive is unaffected.
+- The Awards gallery has no search controls. Familiar talent is ordered first;
+  ordering cannot add people. Real portraits and a compact name list replace
+  missing-photo tiles. Attendance is still not a performance/honoree claim.
+- Bundled guest IDs remain stable after the two withdrawals. Live API records,
+  deployed websites, and installed app builds are not changed by these local edits.
+- Airtable remains read-only and manually reviewed, not an automatic live sync.
+  Future confirmation changes require another review and release/publication.
+
+## Earlier visual-pass record
+
 Scope: owner-approved 2026 Awards presentation and the coordinated original-site
 restoration. No native app, admin permissions, canonical event records, or Airtable
 records were modified by this visual pass.

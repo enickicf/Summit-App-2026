@@ -5,12 +5,27 @@ export type DirectoryGroup = { title: string; people: DirectoryPerson[] };
 
 export const summit2025Highlights = ["Panels", "Pitches", "Awards", "Debates", "Concerts", "Seminars", "Meditation", "Workshops", "VIP Dinners", "Philanthropy", "Fitness & Yoga", "Product Launches", "Group Discussions", "Exclusive VIP Experiences"] as const;
 
+// NAS web meeting, Sept 21: cut "Featuring" to about five items (from ICF's published list).
+export const summit2026Features = ["Panels", "Workshops", "Concerts", "Awards", "VIP Dinners"] as const;
+
 // Verified on ICF's official YouTube channel and through YouTube oEmbed.
 export const awards2025Highlights = {
   title: "Inside the 2025 Not Alone Awards: A Night of Music, Mental Health and Human Development",
   watchUrl: "https://www.youtube.com/watch?v=z2NdP-X7_Mc",
   embedUrl: "https://www.youtube-nocookie.com/embed/z2NdP-X7_Mc?rel=0",
   duration: "1:38"
+} as const;
+
+// NAS web meeting, Sept 21: "make it the recap from last year". The 2025 Summit recap published on
+// the Not Alone Challenge YouTube channel (verified in the channel's video list, Sept 21, 2026).
+export const summit2025Recap = {
+  id: "bMAASyMiFHM",
+  title: "The 2025 Not Alone Summit: A National Convening for Mental Health and Connection",
+  watchUrl: "https://www.youtube.com/watch?v=bMAASyMiFHM",
+  embedUrl: "https://www.youtube-nocookie.com/embed/bMAASyMiFHM?rel=0",
+  // YouTube's own full-frame still (Inspiring Children performance); the custom thumbnail shows Villa Bibbiani.
+  posterUrl: "https://i.ytimg.com/vi/bMAASyMiFHM/maxres3.jpg",
+  duration: "3:25"
 } as const;
 
 export const summitPartners = {
@@ -33,6 +48,8 @@ function leadershipGroups(section: (typeof original.summit.sections)[number]): D
 }
 
 export const summit2025Leadership = leadershipGroups(original.summit.sections[4]!);
+// Explicit owner confirmation, September 17, 2026; not an attendance import.
+export const ownerApprovedCoChairs2026 = ["Cherrial Odell"] as const;
 export const summit2025Directory: DirectoryGroup[] = [
   ...original.summit.sections.slice(7, 13).map(section => ({ title: section.title, people: section.people.map(({ name, role }) => ({ name, role })) })),
   ...leadershipGroups(original.summit.sections[13]!)

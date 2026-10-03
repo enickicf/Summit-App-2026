@@ -1,7 +1,8 @@
 import { z } from "zod";
 
 export { confirmedSummitGuests2026, confirmedSummitGuests2026Source } from "./confirmed-2026.ts";
-export { originalProducerCredit, originalProducerCredits, producerCreditSource } from "./producer-credits.ts";
+export { originalProducerCredit, originalProducerCredits, producerCredit2026, producerCredits2026, producerCreditSource } from "./producer-credits.ts";
+export { confirmedAwaitingPublication2026, isPublicGuest2026, publicGuests2026, talentLevel2026, talentPlacement2026, type PublicCategory2026, type TalentLevel2026 } from "./talent-2026.ts";
 
 export const environmentNameSchema = z.enum(["local", "development", "staging", "production"]);
 

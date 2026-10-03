@@ -1,5 +1,7 @@
 # New Account Handoff
 
+HISTORICAL / SUPERSEDED September 18, 2026: do not execute the old init/add/commit/push/setup instructions below for this existing repository. Never transfer chat history or grant collaborator access for provider migration. Use 00_START_HERE, CLAUDE/AGENTS, current durable docs and RESTORE_REQUIREMENTS in the transfer instead. This old workflow is provenance, not current authorization.
+
 Use this when moving the Not Alone Summit app to a new ChatGPT/Codex account or inviting a collaborator.
 
 ## What To Transfer

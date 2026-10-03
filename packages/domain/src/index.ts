@@ -103,7 +103,7 @@ export function getNowAndUpcoming(input: NowAndUpcomingInput) {
   const now = DateTime.fromISO(input.nowUtc, { zone: "utc" });
   const visibleItems = input.snapshot.scheduleItems
     .filter((item) => canSeeScheduleItem(item, input.audienceGroups))
-    .sort((left, right) => left.startUtc.localeCompare(right.startUtc));
+    .sort((left, right) => Date.parse(left.startUtc) - Date.parse(right.startUtc));
 
   const current = visibleItems.filter((item) => {
     if (item.status === "canceled" || item.status === "completed") {
@@ -130,17 +130,18 @@ export function getSessionTemporalState(item: ScheduleItem, nowUtc: string): Ses
 }
 
 export function getEventPhase(snapshot: EventSnapshot, nowUtc: string, audienceGroups: string[] = ["public"]): EventPhase {
+  const nowMillis = Date.parse(nowUtc);
   const items = snapshot.scheduleItems
     .filter((item) => canSeeScheduleItem(item, audienceGroups) && item.status !== "canceled")
-    .sort((left, right) => left.startUtc.localeCompare(right.startUtc));
+    .sort((left, right) => Date.parse(left.startUtc) - Date.parse(right.startUtc));
   if (items.length === 0) return "empty";
-  if (nowUtc < items[0]!.startUtc) return "before";
+  if (nowMillis < Date.parse(items[0]!.startUtc)) return "before";
   const pendingDays = groupPublishedProgramByDay(snapshot).filter(day => day.notes.length > 0);
   const pendingDayEnd = pendingDays.at(-1)
-    ? DateTime.fromISO(pendingDays.at(-1)!.date, { zone: snapshot.event.timeZone }).endOf("day").toUTC().toISO()!
-    : "";
-  const lastEnd = items.reduce((latest, item) => item.endUtc > latest ? item.endUtc : latest, items[0]!.endUtc);
-  if (nowUtc >= (pendingDayEnd > lastEnd ? pendingDayEnd : lastEnd)) return "after";
+    ? DateTime.fromISO(pendingDays.at(-1)!.date, { zone: snapshot.event.timeZone }).endOf("day").toMillis()
+    : Number.NEGATIVE_INFINITY;
+  const lastEnd = items.reduce((latest, item) => Math.max(latest, Date.parse(item.endUtc)), Number.NEGATIVE_INFINITY);
+  if (nowMillis >= Math.max(pendingDayEnd, lastEnd)) return "after";
   return "live";
 }
 

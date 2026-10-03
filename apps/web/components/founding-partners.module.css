@@ -1,0 +1,19 @@
+/* Founding Partners: two transparent logos side by side, blending into the page (owner, Sept 23). */
+.section { text-align: center; }
+.title { margin: 0 0 28px; font-family: inherit; font-size: 26px; font-weight: 600; line-height: 1.2; }
+.logos { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 36px 72px; }
+.logo { flex: 0 1 320px; max-width: 320px; }
+.logo img { display: block; width: 100%; height: auto; max-height: 150px; object-fit: contain; }
+
+/* Summit page: inside the "Who's Coming" gallery, after Founders, before Attendees. */
+.summit { padding: 8px 0 8px; color: #000000; }
+/* Awards page: after the Founders section of the lineup. */
+.awards { margin-top: 64px; color: #ffffff; }
+.awards .title { color: #ffffff; text-align: center; margin-bottom: 32px; }
+
+@media (max-width: 600px) {
+  .title { font-size: 22px; }
+  .logos { gap: 28px 40px; }
+  .logo { flex-basis: 240px; max-width: 240px; }
+  .logo img { max-height: 110px; }
+}

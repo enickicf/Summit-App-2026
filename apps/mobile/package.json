@@ -12,8 +12,10 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@expo-google-fonts/great-vibes": "^0.4.1",
     "@expo-google-fonts/montserrat": "^0.4.2",
     "@expo-google-fonts/playfair-display": "^0.4.2",
+    "@expo-google-fonts/poppins": "^0.4.1",
     "@not-alone/api-client": "workspace:*",
     "@not-alone/config": "workspace:*",
     "@not-alone/design-tokens": "workspace:*",
@@ -34,6 +36,7 @@
     "expo-splash-screen": "57.0.9",
     "expo-status-bar": "57.0.1",
     "expo-updates": "57.0.22",
+    "expo-video": "57.0.4",
     "lucide-react-native": "^1.44.0",
     "luxon": "3.7.2",
     "react": "19.2.3",

@@ -6,7 +6,7 @@ import { AwardsHighlights } from "./awards-highlights";
 describe("Awards archival highlights", () => {
   it("shows the real local poster and an accessible play action before requesting YouTube", () => {
     const html = renderToStaticMarkup(<AwardsHighlights {...awards2025Highlights} />);
-    expect(html).toContain('src="/images/awards-2025-highlights.jpg"');
+    expect(decodeURIComponent(html)).toContain('url=/images/awards-2025-highlights.jpg');
     expect(html).toContain('aria-label="Play 2025 Not Alone Awards highlights"');
     expect(html).toContain("1:38");
     expect(html).not.toContain("<iframe");

@@ -1,50 +1,67 @@
 # Not Alone Summit Platform
 
-Connected digital platform for the 2026 Not Alone Summit and Not Alone Awards, built for Inspiring Children Foundation.
+An owner-controlled digital platform for Inspiring Children Foundation's Not Alone Summit and Not Alone Awards: a native iOS attendee app, staff Event Control Portal, and public Summit/Awards website.
 
-For the owner-controlled repository, deployment and contribution boundaries, see `docs/PROJECT_OWNERSHIP.md`.
+## North Star
 
-## Apps
+Build a reliable, calm, event-ready system that lets attendees access essential event information and lets authorized staff safely manage approved content, publishing, and communications. The native app, public web experience, and staff portal remain distinct products while sharing one canonical published event model.
 
-- `apps/mobile`: Expo React Native attendee app.
-- `apps/web`: Public website and responsive browser event companion.
-- `apps/admin`: Next.js staff Event Control Portal.
+The platform serves attendees, event staff, and the public. It preserves original 2025 ICF material as a historical archive while using reviewed 2026 source data for the current event. Unknown facts remain unconfirmed; the system must never invent event details.
 
-## Commands
+## Direction and Milestones
+
+1. Verify staging/service configuration and access boundaries.
+2. Reconcile, approve, and publish canonical 2026 content.
+3. Prove staff edit-to-publish-to-mobile/web behavior, rollback, and offline recovery.
+4. Finish owned public RSVP/contact workflows and final website content.
+5. Activate and physically test push/AI only when authorized credentials are available.
+6. Complete Apple/TestFlight/App Store release work and final acceptance.
+
+## Where We Are
+
+Current phase (September 18, 2026): local website polish is complete pending owner review and authorized deployment. Development is temporarily transferring from Codex to Claude Code, not restarting. Read [00_START_HERE.md](00_START_HERE.md); current files and durable memory supersede retired conversations. The intentionally dirty monorepo includes all three apps. No feature task should resume automatically during migration.
+
+The native attendee app, staff portal/API, public Summit site, public Awards site, shared data contracts, Supabase migration foundation, published-snapshot architecture, offline cache, and notification/AI foundations are implemented. The principal remaining work is verified cloud operations, final content, push/AI activation, public workflow ownership, and App Store readiness. See the detailed status before treating any service as live or release-ready.
+
+Important direction changes: native remains native; staff controls stay outside the app; attendees see the event-wide schedule rather than personal schedules; demo mode and retired submission flows stay removed; Airtable is read-only; and no collaborator updates are imported automatically.
+
+## Technology
+
+- Expo / React Native / Expo Router / TypeScript for the iOS-first attendee app
+- Next.js / React / TypeScript for staff portal/API and public web
+- pnpm workspaces with shared Zod contracts and domain logic
+- Supabase Postgres, Auth, RLS, revisions, audit, and future server-side operations
+
+## Run Locally
 
 ```bash
 pnpm install
-pnpm dev
 pnpm dev:mobile
 pnpm dev:admin
 pnpm dev:web
-pnpm ios
-pnpm mobile:web
-pnpm mobile:preview
 pnpm lint
 pnpm typecheck
 pnpm test
-pnpm snapshot:pull
-pnpm supabase:check
-pnpm production:readiness
 ```
 
-## Current Status
+Read the environment examples and service documentation before connecting any external system. Never place secret values in public/mobile variables or source control.
 
-The staging backend and staff portal are live over HTTPS. Supabase Auth, invited-staff administrator activation, atomic schedule publishing, the public snapshot API, and native mobile refresh are connected. The public web application now provides distinct Summit and Awards experiences plus a responsive browser event companion that reads the same canonical published event snapshot as mobile.
+## Detailed Documentation
 
-Push delivery remains intentionally disabled until Apple credentials and physical-device validation are complete. Server-side OpenAI integration is deployed with deterministic fallback; live model responses remain blocked only by provider account credits and final evaluation sign-off. Final 2026 content, legal approval, accessibility/device review, TestFlight, and App Store submission also remain release gates.
+- [Exact stopping point](docs/CURRENT_WORK.md)
+- [Production guardrails](docs/PRODUCTION_GUARDRAILS.md)
+- [Deployment and portal map](docs/DEPLOYMENTS_AND_PORTALS.md)
+- [Access without credentials](docs/ACCESS_AND_AUTH.md)
+- [Return to Codex](docs/RETURN_TO_CODEX.md)
 
-See `docs/PRODUCTION_READINESS_AUDIT.md` for the current verification record and release gates.
+- [Verified local baseline and recovery recommendation](docs/LOCAL_BASELINE_2026-09-17.md)
+- [Project handoff](docs/HANDOFF.md)
+- [Current project state](docs/PROJECT_STATE.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Data and services](docs/DATA_AND_SERVICES.md)
+- [Key decisions](docs/DECISIONS.md)
+- [Known issues](docs/KNOWN_ISSUES.md)
+- [Prioritized next tasks](docs/NEXT_TASKS.md)
+- [Ownership and collaboration boundary](docs/PROJECT_OWNERSHIP.md)
 
-Production credentials are intentionally absent. Use `.env.example` as the contract for local, staging, and production configuration.
-
-See `docs/PRODUCTION_BACKEND_SETUP.md` for the Supabase, staff auth, publish, AI, and notification setup path.
-
-See `docs/ROADMAP_TO_LIVE_APP.md` for the remaining milestones to make the attendee app, staff portal, AI workflows, notifications, and App Store release fully production-ready.
-
-See `docs/CREDENTIAL_LAST_HANDOFF.md` for the exact final activation order, credential boundaries, validation, and rollback steps.
-
-See `docs/PRIVACY_DATA_INVENTORY.md` and `docs/APP_STORE_REVIEWER_NOTES.md` for release-policy working documents.
-
-See `CONTRIBUTING.md` and `docs/COLLABORATION_WORKFLOW.md` before inviting collaborators or opening pull requests.
+Update this README only when the objective, roadmap, major milestone, or high-level direction materially changes.

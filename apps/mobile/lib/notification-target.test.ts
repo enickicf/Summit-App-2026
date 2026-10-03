@@ -7,8 +7,8 @@ describe("notification opening", () => {
     const id = demoSnapshot.scheduleItems[0]!.id;
     expect(notificationTarget({ eventId: demoSnapshot.event.id, scheduleItemId: id }, demoSnapshot)).toEqual({ pathname: "/session/[id]", params: { id } });
   });
-  it("opens the schedule for a removed session or general announcement", () => {
-    expect(notificationTarget({ eventId: demoSnapshot.event.id, scheduleItemId: "removed" }, demoSnapshot)).toEqual({ pathname: "/(tabs)/schedule" });
+  it("opens the schedule on Home for a removed session or general announcement", () => {
+    expect(notificationTarget({ eventId: demoSnapshot.event.id, scheduleItemId: "removed" }, demoSnapshot)).toEqual({ pathname: "/(tabs)" });
   });
   it("ignores another event and arbitrary URL payloads", () => {
     expect(notificationTarget({ eventId: "another-event", url: "https://example.org" }, demoSnapshot)).toBeNull();

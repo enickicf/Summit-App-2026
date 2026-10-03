@@ -1,5 +1,11 @@
 # 2026 Program Replacement
 
+## Current Baseline Note - September 17
+
+The import and cleanup narrative below is historical evidence. Current local reviewed config/fixtures contain **51 guests**, excluding Steven Cohen and Alexandra Cohen as attendees while retaining foundation credit; the inspected live revision 9 and preserved local operational store still have **53**. No new Airtable review or publication occurred during the baseline. Also, `scripts/sync-local-store-from-published.mjs` is now **read-only** and rejects `--apply`; the historical cleanup command below must not be treated as current instructions. See `LOCAL_BASELINE_2026-09-17.md` for fresh verification and exact local/live differences.
+
+## Historical Import Evidence
+
 Source reviewed September 16, 2026: Airtable base `app7BHptsc1bjc3DD`, Simplified ROS interface `pagFmzDhXfNK53eWY`. Read-only inspection; no Airtable changes. This is a reviewed import, not an automatic Airtable synchronization service.
 
 The event owner confirmed that source times mean Las Vegas/Pacific time (`America/Los_Angeles`). Published instants are UTC. Midnight endings advance to the following day.

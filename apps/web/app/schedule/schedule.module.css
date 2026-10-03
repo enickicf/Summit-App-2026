@@ -1,0 +1,116 @@
+.page {
+  background: #ffffff;
+  color: #000000;
+  font-family: "Original Poppins", sans-serif;
+  letter-spacing: 0;
+  margin: 0 auto;
+  max-width: 1220px;
+  min-height: 70vh;
+  padding: 56px 32px 80px;
+  overflow-wrap: anywhere;
+}
+
+.intro { border-bottom: 1px solid #d0d4ea; margin: 0 auto 28px; max-width: 880px; padding-bottom: 24px; }
+.eyebrow { color: #4a5faa; font-size: 12px; font-weight: 600; margin: 0 0 8px; text-transform: uppercase; }
+.intro h1 { color: #000000; font-family: inherit; font-size: 38px; font-weight: 600; line-height: 1.15; margin: 0 0 10px; }
+.dates { color: #444444; font-size: 15px; line-height: 1.6; margin: 0; }
+.venue { color: #4a5faa; font-weight: 600; }
+
+.sourceNotice { border-left: 3px solid #4a5faa; color: #000000; font-size: 14px; line-height: 1.65; margin: 24px 0; padding: 4px 16px; }
+.sourceNotice p { margin: 4px 0; }
+.sourceNotice summary { cursor: pointer; min-height: 44px; padding: 11px 0; }
+.sourceNotice summary:focus-visible { outline: 3px solid #4a5faa; outline-offset: 2px; }
+.sourceNoticeCompact { margin: 8px auto 20px; max-width: 760px; padding: 0 12px; }
+.sourceNoticeCompact details[open] { padding-bottom: 8px; }
+
+.browser { min-width: 0; }
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+  gap: 10px;
+  margin: 0 auto 8px;
+  max-width: 880px;
+}
+
+.days button {
+  background: #f4f5fa;
+  border: 1px solid #d0d4ea;
+  border-radius: 10px;
+  color: #000000;
+  cursor: pointer;
+  display: grid;
+  font-family: inherit;
+  gap: 2px;
+  min-height: 72px;
+  min-width: 0;
+  padding: 12px 6px;
+  text-align: center;
+  transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.days button:hover { background: #fff; border-color: #8fb1e0; }
+.days strong { color: #555555; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+.days span { font-size: 17px; font-weight: 600; }
+.days button[aria-selected="true"] { background: linear-gradient(125deg, #222222, #111111); border-color: #111111; box-shadow: 0 10px 24px #11111133; color: #fff; }
+.days button[aria-selected="true"] strong { color: #d0d4ea; }
+.days button:focus-visible, .panel:focus-visible { outline: 3px solid #4a5faa; outline-offset: 3px; }
+
+.panel { margin: 0 auto; max-width: 880px; padding-top: 28px; }
+.panel[hidden] { display: none; }
+.timeGroup { background: #f4f5fa; border: 1px solid #d0d4ea; border-left: 3px solid #222222; border-radius: 4px; box-shadow: 0 1px 2px #0000000d, 0 16px 36px -28px #00000040; display: grid; gap: 28px; grid-template-columns: 112px minmax(0, 1fr); margin: 0 0 32px; padding: 0 32px; }
+.timeGroup > h2 { color: #111111; font-family: inherit; font-size: 15px; font-weight: 600; line-height: 1.5; margin: 0; padding: 32px 0; }
+.sessions { display: grid; min-width: 0; }
+/* Owner (Sept 21): more space between events. */
+.session { min-width: 0; padding: 32px 0 34px; position: relative; }
+.session + .session { border-top: 1px solid #d0d4ea; }
+.session[data-status="canceled"] h3 { text-decoration: line-through; text-decoration-color: #a12636; }
+.topline { align-items: baseline; color: #777777; display: flex; flex-wrap: wrap; font-size: 13px; gap: 6px 14px; line-height: 1.5; }
+.topline strong { border: 1px solid #d0d4ea; border-radius: 2px; color: #222222; font-size: 11px; font-weight: 600; padding: 1px 7px; text-transform: uppercase; }
+.session[data-status="canceled"] .topline strong { border-color: #e2b8be; color: #942235; }
+.session h3 { color: #000000; font-family: inherit; font-size: 19px; font-weight: 600; line-height: 1.35; margin: 4px 0 8px; }
+.session p { color: #444444; font-size: 15px; line-height: 1.65; margin: 0 0 8px; }
+.session .foundersOnly { align-items: center; background: #d0d4ea; border-radius: 999px; color: #111111; display: inline-flex; font-size: 13px; font-weight: 700; gap: 7px; margin: 2px 0 12px; padding: 4px 12px; }
+.session .location { color: #444444; font-size: 14px; line-height: 1.5; margin: 0; }
+.location span { color: #777777; font-size: 12px; font-weight: 600; margin-right: 10px; text-transform: uppercase; }
+.pending { color: #444444; font-size: 14px; line-height: 1.65; margin: 6px 0 14px; padding: 0 4px; white-space: pre-line; }
+.empty { color: #444444; line-height: 1.6; padding: 28px 36px; text-align: center; }
+
+@media (max-width: 700px) {
+  .page { padding: 32px 16px 56px; }
+  .intro { margin-bottom: 22px; padding-bottom: 20px; }
+  .intro h1 { font-size: 30px; }
+  .days { gap: 6px; grid-template-columns: repeat(auto-fit, minmax(56px, 1fr)); }
+  .days button { min-height: 64px; padding: 10px 2px; }
+  .days span { font-size: 15px; }
+  .panel { padding-top: 20px; }
+  .timeGroup { gap: 0; grid-template-columns: minmax(0, 1fr); margin-bottom: 24px; padding: 0 18px; }
+  .timeGroup > h2 { padding: 20px 0 0; }
+  .session { padding: 10px 0 26px; }
+  .session + .session { padding-top: 26px; }
+  .session h3 { font-size: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) { .days button { transition: none; } }
+
+/* Owner (Sept 28): the charity poker tournament's own site and RSVP, on its schedule entry only. */
+.pokerLinks { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; } /* Sept 29: one "RSVP & details" button; equal 174px pills if a second ever returns */
+.pokerLinks a { display: inline-flex; align-items: center; justify-content: center; min-width: 174px; min-height: 44px; padding: 10px 18px; border: 1.5px solid #4a5faa; border-radius: 999px; color: #4a5faa; font-size: 14px; font-weight: 700; text-align: center; text-decoration: none; }
+.pokerLinks a:first-child { background: #4a5faa; color: #fff; }
+.pokerLinks a:hover { background: #3b4d90; border-color: #3b4d90; color: #fff; }
+.pokerLinks a:focus-visible { outline: 3px solid #4a5faa; outline-offset: 3px; }
+
+/* Owner (Sept 28): morning workshop sign-up on the schedule page. */
+.signup { margin-top: 14px; }
+.signupButton { font: inherit; font-size: 14px; font-weight: 700; color: #ffffff; background: #4a5faa; border: 0; border-radius: 999px; padding: 10px 22px; cursor: pointer; }
+.signupButton:hover { background: #3a4d93; }
+.signupButton:disabled { opacity: 0.6; cursor: wait; }
+.signupButton:focus-visible, .signupForm input:focus-visible { outline: 3px solid #8fb1e0; outline-offset: 2px; }
+.signupForm { display: grid; gap: 10px; max-width: 560px; padding: 16px 18px; background: #f4f5fa; border: 1px solid #d0d4ea; border-radius: 12px; }
+.signupForm label { font-size: 13px; font-weight: 700; }
+.signupRow { display: flex; flex-wrap: wrap; gap: 10px; }
+.signupRow input { flex: 1 1 220px; min-width: 0; font: inherit; padding: 10px 12px; border: 1px solid #d0d4ea; border-radius: 10px; background: #ffffff; }
+.signupNote { margin: 0; font-size: 14px; line-height: 1.5; color: #333333; }
+.signupError { margin: 0; color: #8a1c1c; font-size: 14px; }
+.signupDone { margin: 14px 0 0; padding: 12px 16px; background: #eef6ee; border: 1px solid #b9dcc0; border-radius: 10px; font-size: 14px; line-height: 1.5; max-width: 560px; }
+.signupHoneypot { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }

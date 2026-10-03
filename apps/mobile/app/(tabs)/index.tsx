@@ -1,43 +1,51 @@
+import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { CalendarClock, ChevronRight, Sparkles } from "lucide-react-native";
-import { useState } from "react";
-import { Image, ImageBackground, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View, type ImageSourcePropType, type StyleProp, type ViewStyle } from "react-native";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { colors, spacing, typography } from "@not-alone/design-tokens";
-import { getActiveOperationalNotices, getCountdownLabel, getEventPhase, getNowAndUpcoming, toEventTimeRange, type OperationalNotice } from "@not-alone/domain";
-import type { ScheduleItem, Speaker } from "@not-alone/validation";
+import { getActiveOperationalNotices, getEventPhase, getJumpToNowItem, groupPublishedProgramByDay, type OperationalNotice } from "@not-alone/domain";
+import type { ScheduleItem } from "@not-alone/validation";
 import { useSummit } from "../../components/summit-context";
 import { OpeningGreeting } from "../../components/opening-greeting";
+import { HeroLoop } from "../../components/hero-loop";
 import { useResponsiveLayout } from "../../components/responsive-layout";
+import { groupItemsByStart, PendingNotes, TimeGroupCard } from "../../components/schedule-cards";
+import { waitlistNote } from "../../components/signup-controls";
 import { sessionHref } from "../../lib/session-link";
+import { cardShadow, font, gradients, liftShadow, palette, space } from "../../lib/summit-theme";
 
-const summitArt = require("../../assets/summit-art-v2.png");
-const steveWozniakHeadshot = require("../../assets/steve-wozniak-headshot.jpg");
-
-export default function TodayScreen() {
+// Home is the attendee's portal: the website's hero loop, a one-line orientation, then the full
+// Event Schedule (with activation sign-ups). Map, Ask AI and Info live in their own tabs.
+export default function HomeScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const layout = useResponsiveLayout();
-  const {
-    snapshot,
-    nowUtc,
-    lastRevisionUpdateAt,
-    syncing,
-    syncError,
-    refreshPublishedSnapshot
-  } = useSummit();
-  const { current, upcoming } = getNowAndUpcoming({
-    audienceGroups: ["public"],
-    nowUtc,
-    snapshot
-  });
-  const currentItem = current[0];
-  const nextItem = upcoming[0];
+  const { snapshot, nowUtc, lastRevisionUpdateAt, syncing, syncError, refreshPublishedSnapshot } = useSummit();
+  const groups = useMemo(() => groupPublishedProgramByDay(snapshot), [snapshot]);
   const eventPhase = getEventPhase(snapshot, nowUtc);
-  const currentSpeaker = currentItem
-    ? snapshot.speakers.find((speaker) => speaker.published && currentItem.speakerIds.includes(speaker.id))
-    : undefined;
   const operationalNotices = getActiveOperationalNotices(snapshot, nowUtc);
-  const showSyncStatus = syncing || Boolean(syncError) || Boolean(lastRevisionUpdateAt);
+  const hasSelectedInitialDay = useRef(false);
+  const [selectedDayIndex, setSelectedDayIndex] = useState(0);
+  const selectedGroup = groups[Math.min(selectedDayIndex, Math.max(groups.length - 1, 0))];
+  const eventLocalDate = new Intl.DateTimeFormat("en-CA", { timeZone: snapshot.event.timeZone, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(nowUtc));
+  const videoWidth = Math.min(layout.width, 720) - layout.gutter * 2;
+  const videoHeight = Math.round(Math.min(videoWidth * 0.62, 320));
+
+  useEffect(() => {
+    if (groups.length === 0) {
+      setSelectedDayIndex(0);
+      return;
+    }
+    if (!hasSelectedInitialDay.current) {
+      // Open on today during the event, on the first day before it, otherwise on the next published item.
+      const target = getJumpToNowItem(snapshot.scheduleItems, nowUtc);
+      const targetIndex = target ? groups.findIndex((group) => group.items.some((item) => item.id === target.id)) : 0;
+      const currentDay = groups.findIndex(group => group.date === eventLocalDate);
+      setSelectedDayIndex(currentDay >= 0 ? currentDay : eventLocalDate < groups[0]!.date ? 0 : Math.max(targetIndex, 0));
+      hasSelectedInitialDay.current = true;
+      return;
+    }
+    if (selectedDayIndex >= groups.length) setSelectedDayIndex(0);
+  }, [groups, nowUtc, eventLocalDate, selectedDayIndex, snapshot.scheduleItems]);
 
   async function handleRefresh() {
     setRefreshing(true);
@@ -52,522 +60,159 @@ export default function TodayScreen() {
     <SafeAreaView style={styles.safeArea} edges={["top"]}>
       <OpeningGreeting />
       <ScrollView
-        style={styles.screen}
         contentContainerStyle={layout.contentStyle}
-        contentInsetAdjustmentBehavior="automatic"
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => void handleRefresh()}
-            tintColor={colors.gold}
-          />
-        }
+        contentInsetAdjustmentBehavior="never"
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void handleRefresh()} tintColor={palette.violet} />}
+        style={styles.screen}
       >
-        <View style={[styles.header, layout.paddingStyle]}>
-          <Text style={styles.eyebrow}>{snapshot.event.organizationName}</Text>
-          <Text style={styles.headerTitle}>Home</Text>
-          <Text style={styles.headerMeta}>{snapshot.event.dateLabel} · {snapshot.event.venueName}</Text>
-        </View>
-
-        {showSyncStatus ? (
-          <View style={[styles.syncStrip, layout.marginStyle]}>
-            <View style={[styles.syncDot, syncError ? styles.syncDotWarn : styles.syncDotReady]} />
-            <Text style={styles.syncText}>
-              {syncing
-                ? "Checking for the latest schedule."
-                : syncError
-                  ? "Using the saved schedule while reconnecting."
-                  : `New schedule received ${formatSyncTime(lastRevisionUpdateAt!)}`}
-            </Text>
+        <View style={layout.paddingStyle}>
+          <View style={[styles.video, liftShadow, { height: videoHeight }]}>
+            <HeroLoop />
+            <LinearGradient colors={["transparent", "rgba(47, 37, 66, 0.82)"]} locations={[0.4, 1]} style={StyleSheet.absoluteFill} />
+            <View style={styles.videoCopy}>
+              <Text accessibilityRole="header" style={styles.videoTitle}>Not Alone Summit <Text style={styles.videoYear}>2026</Text></Text>
+              <Text style={styles.videoMeta}>{snapshot.event.dateLabel.split(" · ")[0]} · {snapshot.event.venueName}</Text>
+            </View>
           </View>
-        ) : null}
 
-        {operationalNotices.length > 0 ? <NoticeStack insetStyle={layout.marginStyle} notices={operationalNotices} scheduleItems={snapshot.scheduleItems} /> : null}
-
-        {currentItem ? (
-          <LiveSessionCard insetStyle={layout.marginStyle} item={currentItem} nowUtc={nowUtc} speaker={currentSpeaker} />
-        ) : eventPhase === "after" ? (
-          <ImageBackground source={summitArt} resizeMode="cover" imageStyle={styles.liveImage} style={[styles.liveShell, layout.marginStyle]}>
-            <View style={styles.liveScrim}>
-              <Text style={styles.liveKicker}>Summit complete</Text>
-              <Text style={styles.waitingTitle}>Thank you for being here.</Text>
-              <Text style={styles.waitingBody}>
-                The conversations, connections, and resources from the summit remain with you. The full agenda is still available for reference.
-              </Text>
-              <Link href="/schedule" asChild>
-                <Pressable accessibilityRole="button" style={({ pressed }) => [styles.completionButton, pressed && styles.pressed]}>
-                  <Text style={styles.completionButtonText}>View event schedule</Text>
-                </Pressable>
-              </Link>
+          {syncing || syncError ? (
+            <View style={styles.syncStrip}>
+              <View style={[styles.syncDot, syncError ? styles.syncDotWarn : styles.syncDotReady]} />
+              <Text style={styles.syncText}>{syncing ? "Checking for the latest schedule." : "Using the saved schedule while reconnecting."}</Text>
             </View>
-          </ImageBackground>
-        ) : (
-          <ImageBackground source={summitArt} resizeMode="cover" imageStyle={styles.liveImage} style={[styles.liveShell, layout.marginStyle]}>
-            <View style={styles.liveScrim}>
-              <Text style={styles.liveKicker}>Welcome to the summit</Text>
-              <Text style={styles.waitingTitle}>You are not alone.</Text>
-              <Text style={styles.waitingBody}>
-                {snapshot.scheduleItems.length > 0
-                  ? "The event schedule, venue guide, and essential information are together in one place."
-                  : "Programming will appear here as soon as the event team publishes it."}
-              </Text>
-            </View>
-          </ImageBackground>
-        )}
+          ) : null}
+          {operationalNotices.length > 0 ? <NoticeStack notices={operationalNotices} scheduleItems={snapshot.scheduleItems} /> : null}
 
-        <View style={[styles.quickPanel, layout.marginStyle, layout.cardPaddingStyle]}>
-          <Text style={styles.panelLabel}>Your summit day</Text>
-          <MiniStatus
-            title={eventPhase === "after" ? "Event status" : "Up next"}
-            value={eventPhase === "after" ? "The summit has concluded" : nextItem ? nextItem.title : "Schedule coming soon"}
-            meta={eventPhase === "after" ? "View the completed agenda" : nextItem ? `${toEventTimeRange(nextItem, snapshot.event.timeZone)} · Starts in ${getCountdownLabel(nextItem.startUtc, nowUtc)}` : "Check back for event updates"}
-            detail={nextItem ? `${nextItem.locationName} · ${nextItem.visibilityScope.label}` : undefined}
-            href={nextItem ? sessionHref(nextItem) : "/schedule"}
-          />
-          <View style={styles.divider} />
-          <Link href="/help" asChild>
-            <Pressable accessibilityLabel="Ask the summit concierge" accessibilityRole="button" style={({ pressed }) => [styles.conciergeRow, pressed && styles.pressed]}>
-              <View style={styles.conciergeIcon}>
-                <Sparkles color={colors.gold} size={20} strokeWidth={2.2} />
+          <Text style={styles.intro}>
+            Welcome. This is your portal for the Summit: the full event schedule, the venue map and everything you need to know.
+            {" "}Activations have limited space, so tap <Text style={styles.introStrong}>Sign up</Text> on the ones you'd like to join.
+          </Text>
+
+          <View style={styles.header}>
+            <Text accessibilityRole="header" style={styles.title}>Event Schedule</Text>
+            {lastRevisionUpdateAt ? <Text style={styles.updated}>Updated {formatSyncTime(lastRevisionUpdateAt)}</Text> : null}
+          </View>
+
+          {eventPhase === "after" ? (
+            <View style={styles.completeBanner}>
+              <Text style={styles.eyebrow}>Event complete</Text>
+              <Text style={styles.completeTitle}>Thank you for being part of the Summit.</Text>
+              <Text style={styles.body}>The full agenda remains available for reference.</Text>
+            </View>
+          ) : null}
+
+          {groups.length === 0 ? (
+            <View style={[styles.empty, cardShadow]}>
+              <Text style={styles.emptyTitle}>No sessions published yet</Text>
+              <Text style={styles.body}>Times will appear here once the event team publishes the schedule.</Text>
+            </View>
+          ) : (
+            <>
+              <View accessibilityRole="tablist" style={styles.dayRail}>
+                {groups.map((group, index) => {
+                  const selected = selectedDayIndex === index;
+                  const label = <>
+                    <Text style={[styles.dayName, selected && styles.dayNameActive]}>{group.date === eventLocalDate ? "Today" : group.weekday}</Text>
+                    <Text style={[styles.dayDate, selected && styles.dayDateActive]}>{group.shortDate}</Text>
+                  </>;
+                  return (
+                    <Pressable
+                      accessibilityLabel={`${group.weekday}, ${group.shortDate}, ${group.items.length} events`}
+                      accessibilityRole="tab"
+                      accessibilityState={{ selected }}
+                      key={group.dayLabel}
+                      onPress={() => {
+                        hasSelectedInitialDay.current = true;
+                        setSelectedDayIndex(index);
+                      }}
+                      style={({ pressed }) => [styles.dayTabSlot, pressed && styles.pressed]}
+                    >
+                      {selected
+                        ? <LinearGradient colors={[...gradients.plum]} end={{ x: 1, y: 1 }} start={{ x: 0, y: 0 }} style={[styles.dayTab, styles.dayTabActive, liftShadow]}>{label}</LinearGradient>
+                        : <View style={styles.dayTab}>{label}</View>}
+                    </Pressable>
+                  );
+                })}
               </View>
-              <View style={styles.conciergeText}>
-                <Text style={styles.panelLabel}>Ask AI concierge</Text>
-                <Text style={styles.aiTitle}>Get a clear answer from the latest agenda.</Text>
-              </View>
-              <ChevronRight color={colors.muted} size={18} strokeWidth={2.2} />
-            </Pressable>
-          </Link>
+
+              {selectedGroup ? (
+                <View key={selectedGroup.dayLabel} style={styles.day}>
+                  <Text accessibilityRole="header" style={styles.dayTitle}>{selectedGroup.dayLabel}</Text>
+                  {groupItemsByStart(selectedGroup.items).map(items => <TimeGroupCard items={items} key={items[0]!.startUtc} nowUtc={nowUtc} />)}
+                  <PendingNotes notes={selectedGroup.notes} />
+                  {selectedGroup.items.length === 0 && selectedGroup.notes.length === 0 ? <Text style={styles.body}>No published sessions for this day.</Text> : null}
+                </View>
+              ) : null}
+              <Text style={styles.footnote}>{waitlistNote}</Text>
+            </>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-function LiveSessionCard({ insetStyle, item, nowUtc, speaker }: { insetStyle: StyleProp<ViewStyle>; item: ScheduleItem; nowUtc: string; speaker: Speaker | undefined }) {
-  const speakerImage = getSpeakerImage(speaker);
+function NoticeStack({ notices, scheduleItems }: { notices: OperationalNotice[]; scheduleItems: ScheduleItem[] }) {
   return (
-    <Link href={sessionHref(item)} asChild>
-      <Pressable
-        accessibilityLabel={`Live now. ${item.title}. ${item.locationName}`}
-        accessibilityRole="button"
-        style={({ pressed }) => [styles.liveShell, insetStyle, pressed && styles.pressed]}
-      >
-        <ImageBackground source={summitArt} resizeMode="cover" imageStyle={styles.liveImage} style={styles.liveBackground}>
-          <View style={styles.liveScrim}>
-            <View style={styles.liveTop}>
-              <View style={styles.liveTopText}>
-                <Text style={styles.liveKicker}>Live now</Text>
-                <Text style={styles.liveTime}>{toEventTimeRange(item, item.eventTimeZone)}</Text>
-                <Text style={styles.countdownText}>Ends in {getCountdownLabel(item.endUtc, nowUtc)}</Text>
-              </View>
-              {speakerImage ? <Image accessibilityLabel={speaker ? `Headshot of ${speaker.name}` : "Live session speaker"} resizeMode="cover" source={speakerImage} style={styles.speakerPortrait} /> : null}
-            </View>
-            <Text style={styles.sessionTitle}>{item.title}</Text>
-            {speaker ? <Text style={styles.speakerName}>{speaker.name} · {speaker.role}</Text> : null}
-            <Text style={styles.sessionSummary} numberOfLines={2}>{item.summary}</Text>
-            <View style={styles.liveFooter}>
-              <Text style={styles.locationText}>{item.locationName}</Text>
-              <Text style={styles.accessText}>{item.visibilityScope.label}</Text>
-            </View>
-          </View>
-        </ImageBackground>
-      </Pressable>
-    </Link>
-  );
-}
-
-function NoticeStack({ insetStyle, notices, scheduleItems }: { insetStyle: StyleProp<ViewStyle>; notices: OperationalNotice[]; scheduleItems: ScheduleItem[] }) {
-  return (
-    <View accessibilityLabel="Important event updates" style={[styles.noticeStack, insetStyle]}>
+    <View accessibilityLabel="Important event updates" style={styles.noticeStack}>
       {notices.map((notice) => {
         const body = <View style={[styles.notice, notice.severity === "urgent" && styles.noticeUrgent]}>
           <Text style={[styles.noticeLabel, notice.severity === "urgent" && styles.noticeLabelUrgent]}>{notice.severity === "urgent" ? "Urgent notice" : notice.severity === "change" ? "Schedule update" : "Event notice"}</Text>
           <Text style={styles.noticeTitle}>{notice.title}</Text>
           <Text style={styles.noticeBody}>{notice.body}</Text>
         </View>;
-        const item = notice.scheduleItemId
-          ? scheduleItems.find((candidate) => candidate.id === notice.scheduleItemId)
-          : undefined;
+        const item = notice.scheduleItemId ? scheduleItems.find((candidate) => candidate.id === notice.scheduleItemId) : undefined;
         return notice.scheduleItemId ? <Link href={item ? sessionHref(item) : { pathname: "/session/[id]", params: { id: notice.scheduleItemId } }} asChild key={notice.id}><Pressable accessibilityRole="button">{body}</Pressable></Link> : <View key={notice.id}>{body}</View>;
       })}
     </View>
   );
 }
 
-function MiniStatus({
-  title,
-  value,
-  meta,
-  detail,
-  href,
-}: {
-  title: string;
-  value: string;
-  meta: string;
-  detail?: string | undefined;
-  href: "/schedule" | ReturnType<typeof sessionHref>;
-}) {
-  return (
-    <Link href={href} asChild>
-      <Pressable accessibilityLabel={`${title}. ${value}. ${meta}`} accessibilityRole="button" style={({ pressed }) => [styles.miniStatus, pressed && styles.pressed]}>
-        <View style={styles.statusIcon}>
-          <CalendarClock color={colors.gold} size={22} strokeWidth={2.1} />
-        </View>
-        <View style={styles.statusText}>
-          <Text style={styles.panelLabel}>{title}</Text>
-          <Text style={styles.statusTitle} numberOfLines={2}>{value}</Text>
-          <Text style={styles.statusMeta}>{meta}</Text>
-          {detail ? <Text numberOfLines={2} style={styles.statusDetail}>{detail}</Text> : null}
-        </View>
-      </Pressable>
-    </Link>
-  );
-}
-
 function formatSyncTime(value: string) {
-  return new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    minute: "2-digit"
-  }).format(new Date(value));
-}
-
-function getSpeakerImage(speaker: Speaker | undefined): ImageSourcePropType | undefined {
-  if (!speaker) return undefined;
-  if (speaker.headshotUrl) return { uri: speaker.headshotUrl };
-  return /steve wozniak/i.test(speaker.name) ? steveWozniakHeadshot : undefined;
+  return new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit" }).format(new Date(value));
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    backgroundColor: colors.canvas,
-    flex: 1
-  },
-  screen: {
-    backgroundColor: colors.canvas
-  },
-  header: {
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.xs
-  },
-  eyebrow: {
-    color: colors.gold,
-    fontFamily: typography.bold,
-    fontSize: 11,
-    fontWeight: "800",
-    letterSpacing: 0,
-    textTransform: "uppercase"
-  },
-  headerTitle: {
-    color: colors.ink,
-    fontFamily: typography.bold,
-    fontSize: 24,
-    fontWeight: "800",
-    letterSpacing: 0,
-    lineHeight: 30,
-    marginTop: 2
-  },
-  headerMeta: {
-    color: colors.muted,
-    fontFamily: typography.medium,
-    fontSize: 13,
-    fontWeight: "500",
-    lineHeight: 19,
-    marginTop: 2
-  },
-  syncStrip: {
-    alignItems: "center",
-    backgroundColor: "rgba(13, 21, 48, 0.74)",
-    borderColor: colors.border,
-    borderRadius: 8,
-    borderWidth: 1,
-    flexDirection: "row",
-    gap: spacing.sm,
-    marginHorizontal: spacing.lg,
-    marginTop: spacing.md,
-    minHeight: 44,
-    paddingHorizontal: spacing.md
-  },
-  syncDot: {
-    borderRadius: 8,
-    height: 8,
-    width: 8
-  },
-  syncDotReady: {
-    backgroundColor: colors.gold
-  },
-  syncDotWarn: {
-    backgroundColor: colors.warning
-  },
-  syncText: {
-    color: colors.body,
-    flex: 1,
-    fontFamily: typography.medium,
-    fontSize: 12,
-    fontWeight: "500"
-  },
-  noticeStack: {
-    gap: spacing.sm,
-    marginHorizontal: spacing.lg,
-    marginTop: spacing.md
-  },
-  notice: {
-    backgroundColor: "rgba(230, 192, 111, 0.1)",
-    borderColor: "rgba(230, 192, 111, 0.42)",
-    borderLeftWidth: 4,
-    borderRadius: 8,
-    borderWidth: 1,
-    padding: spacing.md
-  },
-  noticeUrgent: {
-    backgroundColor: "rgba(154, 44, 44, 0.18)",
-    borderColor: "rgba(240, 111, 111, 0.65)"
-  },
-  noticeLabel: {
-    color: colors.gold,
-    fontFamily: typography.bold,
-    fontSize: 10,
-    fontWeight: "800",
-    textTransform: "uppercase"
-  },
-  noticeLabelUrgent: { color: "#FF9B9B" },
-  noticeTitle: {
-    color: colors.ink,
-    fontFamily: typography.bold,
-    fontSize: 16,
-    fontWeight: "800",
-    lineHeight: 21,
-    marginTop: 3
-  },
-  noticeBody: { color: colors.body, fontFamily: typography.body, fontSize: 12, lineHeight: 18, marginTop: spacing.xs },
-  revisionText: {
-    color: colors.muted,
-    fontFamily: typography.bold,
-    fontSize: 11,
-    fontWeight: "800",
-    textTransform: "uppercase"
-  },
-  liveShell: {
-    backgroundColor: colors.surface,
-    borderColor: "rgba(230, 192, 111, 0.2)",
-    borderRadius: 8,
-    borderWidth: 1,
-    marginHorizontal: spacing.lg,
-    marginTop: spacing.lg,
-    overflow: "hidden"
-  },
-  liveBackground: {
-    minHeight: 0
-  },
-  liveImage: {
-    opacity: 0.58
-  },
-  liveScrim: {
-    backgroundColor: "rgba(5, 10, 30, 0.72)",
-    padding: spacing.lg
-  },
-  liveTop: {
-    alignItems: "flex-start",
-    flexDirection: "row",
-    justifyContent: "space-between"
-  },
-  liveTopText: {
-    flex: 1,
-    paddingRight: spacing.md
-  },
-  liveKicker: {
-    color: colors.gold,
-    fontFamily: typography.bold,
-    fontSize: 11,
-    fontWeight: "800",
-    letterSpacing: 0,
-    textTransform: "uppercase"
-  },
-  liveTime: {
-    color: colors.ink,
-    fontFamily: typography.bold,
-    fontSize: 24,
-    fontWeight: "800",
-    lineHeight: 30,
-    marginTop: spacing.sm
-  },
-  countdownText: {
-    color: colors.gold,
-    fontFamily: typography.semibold,
-    fontSize: 12,
-    fontWeight: "600",
-    marginTop: spacing.xs
-  },
-  speakerPortrait: {
-    backgroundColor: colors.surface,
-    borderColor: "rgba(230, 192, 111, 0.5)",
-    borderRadius: 8,
-    borderWidth: 1,
-    height: 120,
-    width: 92
-  },
-  speakerName: {
-    color: colors.gold,
-    fontFamily: typography.semibold,
-    fontSize: 12,
-    fontWeight: "600",
-    lineHeight: 18,
-    marginTop: spacing.xs
-  },
-  sessionTitle: {
-    color: colors.ink,
-    fontFamily: typography.bold,
-    fontSize: 23,
-    fontWeight: "800",
-    lineHeight: 29,
-    marginTop: spacing.sm
-  },
-  sessionSummary: {
-    color: colors.body,
-    fontFamily: typography.body,
-    fontSize: 13,
-    lineHeight: 20,
-    marginTop: spacing.sm
-  },
-  liveFooter: {
-    alignItems: "center",
-    borderTopColor: "rgba(220, 229, 245, 0.14)",
-    borderTopWidth: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: spacing.lg,
-    paddingTop: spacing.md
-  },
-  locationText: {
-    color: colors.surfaceMuted,
-    flex: 1,
-    fontFamily: typography.semibold,
-    fontSize: 13,
-    fontWeight: "600",
-    paddingRight: spacing.sm
-  },
-  accessText: {
-    color: colors.gold,
-    fontFamily: typography.bold,
-    fontSize: 12,
-    fontWeight: "800",
-    textTransform: "uppercase"
-  },
-  waitingTitle: {
-    color: colors.ink,
-    fontFamily: typography.display,
-    fontSize: 32,
-    fontWeight: "700",
-    letterSpacing: 0,
-    lineHeight: 37,
-    marginTop: spacing.xl,
-    maxWidth: 260
-  },
-  waitingBody: {
-    color: colors.body,
-    fontFamily: typography.body,
-    fontSize: 15,
-    lineHeight: 23,
-    marginTop: spacing.md
-  },
-  completionButton: {
-    alignItems: "center",
-    alignSelf: "flex-start",
-    backgroundColor: colors.gold,
-    borderRadius: 8,
-    justifyContent: "center",
-    marginTop: spacing.lg,
-    minHeight: 42,
-    paddingHorizontal: spacing.lg
-  },
-  completionButtonText: {
-    color: colors.midnight,
-    fontFamily: typography.bold,
-    fontSize: 12,
-    fontWeight: "800"
-  },
-  quickPanel: {
-    backgroundColor: "rgba(13, 21, 48, 0.9)",
-    borderColor: colors.border,
-    borderRadius: 8,
-    borderWidth: 1,
-    marginHorizontal: spacing.lg,
-    marginTop: spacing.lg,
-    padding: spacing.lg
-  },
-  miniStatus: {
-    alignItems: "center",
-    flexDirection: "row",
-    gap: spacing.md
-  },
-  statusIcon: {
-    alignItems: "center",
-    backgroundColor: colors.goldSoft,
-    borderRadius: 8,
-    height: 56,
-    justifyContent: "center",
-    width: 56
-  },
-  statusText: {
-    flex: 1
-  },
-  panelLabel: {
-    color: colors.muted,
-    fontFamily: typography.bold,
-    fontSize: 11,
-    fontWeight: "800",
-    letterSpacing: 0,
-    textTransform: "uppercase"
-  },
-  statusTitle: {
-    color: colors.ink,
-    fontFamily: typography.bold,
-    fontSize: 17,
-    fontWeight: "800",
-    lineHeight: 22,
-    marginTop: 3
-  },
-  statusMeta: {
-    color: colors.gold,
-    fontFamily: typography.semibold,
-    fontSize: 12,
-    fontWeight: "600",
-    marginTop: spacing.xs
-  },
-  statusDetail: { color: colors.surfaceMuted, fontFamily: typography.medium, fontSize: 11, lineHeight: 16, marginTop: 3 },
-  divider: {
-    backgroundColor: colors.border,
-    height: 1,
-    marginVertical: spacing.lg
-  },
-  conciergeRow: {
-    alignItems: "center",
-    flexDirection: "row",
-    gap: spacing.md,
-    minHeight: 58
-  },
-  conciergeIcon: {
-    alignItems: "center",
-    borderColor: "rgba(230, 192, 111, 0.32)",
-    borderRadius: 8,
-    borderWidth: 1,
-    height: 44,
-    justifyContent: "center",
-    width: 44
-  },
-  conciergeText: {
-    flex: 1,
-    minWidth: 0
-  },
-  aiTitle: {
-    color: colors.ink,
-    fontFamily: typography.bold,
-    fontSize: 18,
-    fontWeight: "800",
-    lineHeight: 23,
-    marginTop: 3,
-    maxWidth: 420
-  },
-  pressed: {
-    opacity: 0.84
-  }
+  safeArea: { backgroundColor: palette.canvas, flex: 1 },
+  screen: { backgroundColor: palette.canvas },
+  video: { backgroundColor: "#9b98d8", borderRadius: 14, marginTop: space.sm, overflow: "hidden" },
+  videoCopy: { bottom: 0, left: 0, padding: space.lg, position: "absolute", right: 0 },
+  videoTitle: { color: palette.white, fontFamily: font.semibold, fontSize: 26, lineHeight: 32, textShadowColor: "rgba(47, 37, 66, 0.35)", textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 10 },
+  videoYear: { color: palette.gold, fontFamily: font.semibold },
+  videoMeta: { color: "rgba(255, 255, 255, 0.9)", fontFamily: font.regular, fontSize: 12, marginTop: 2 },
+  syncStrip: { alignItems: "center", backgroundColor: palette.card, borderColor: palette.rule, borderRadius: 6, borderWidth: 1, flexDirection: "row", gap: space.sm, marginTop: space.md, minHeight: 38, paddingHorizontal: space.md },
+  syncDot: { borderRadius: 8, height: 8, width: 8 },
+  syncDotReady: { backgroundColor: palette.violet },
+  syncDotWarn: { backgroundColor: palette.gold },
+  syncText: { color: palette.body, flex: 1, fontFamily: font.medium, fontSize: 12 },
+  noticeStack: { gap: space.sm, marginTop: space.md },
+  notice: { backgroundColor: palette.card, borderColor: palette.cardBorder, borderLeftColor: palette.plumMid, borderLeftWidth: 3, borderRadius: 4, borderWidth: 1, padding: space.md },
+  noticeUrgent: { backgroundColor: palette.dangerSoft, borderColor: "#e2b8be", borderLeftColor: palette.danger },
+  noticeLabel: { color: palette.violet, fontFamily: font.semibold, fontSize: 10, textTransform: "uppercase" },
+  noticeLabelUrgent: { color: palette.danger },
+  noticeTitle: { color: palette.heading, fontFamily: font.semibold, fontSize: 16, lineHeight: 22, marginTop: 3 },
+  noticeBody: { color: palette.body, fontFamily: font.regular, fontSize: 13, lineHeight: 20, marginTop: space.xs },
+  intro: { color: palette.body, fontFamily: font.regular, fontSize: 14, lineHeight: 22, marginTop: space.lg },
+  introStrong: { color: palette.plum, fontFamily: font.semibold },
+  header: { alignItems: "baseline", borderBottomColor: palette.rule, borderBottomWidth: 1, flexDirection: "row", justifyContent: "space-between", marginTop: space.xl, paddingBottom: space.md },
+  eyebrow: { color: palette.violet, fontFamily: font.semibold, fontSize: 12, textTransform: "uppercase" },
+  title: { color: palette.ink, fontFamily: font.semibold, fontSize: 28, lineHeight: 36 },
+  updated: { color: palette.muted, fontFamily: font.regular, fontSize: 12 },
+  completeBanner: { borderLeftColor: palette.violet, borderLeftWidth: 3, marginTop: space.lg, paddingHorizontal: space.md, paddingVertical: space.xs },
+  completeTitle: { color: palette.heading, fontFamily: font.semibold, fontSize: 17, lineHeight: 24, marginTop: 4 },
+  empty: { backgroundColor: palette.card, borderColor: palette.cardBorder, borderLeftColor: palette.plumMid, borderLeftWidth: 3, borderRadius: 4, borderWidth: 1, marginTop: space.lg, padding: space.lg },
+  emptyTitle: { color: palette.heading, fontFamily: font.semibold, fontSize: 18 },
+  dayRail: { flexDirection: "row", gap: 6, marginTop: space.lg },
+  dayTabSlot: { flex: 1, minWidth: 0 },
+  dayTab: { alignItems: "center", backgroundColor: "#f7f6f9", borderColor: palette.rule, borderRadius: 10, borderWidth: 1, justifyContent: "center", minHeight: 64, paddingHorizontal: 2, paddingVertical: 10 },
+  dayTabActive: { borderColor: palette.plum },
+  dayName: { color: "#746985", fontFamily: font.semibold, fontSize: 11, textTransform: "uppercase" },
+  dayNameActive: { color: palette.blush },
+  dayDate: { color: palette.ink, fontFamily: font.semibold, fontSize: 15, marginTop: 2 },
+  dayDateActive: { color: palette.white },
+  day: { paddingTop: space.lg },
+  dayTitle: { color: palette.plum, fontFamily: font.semibold, fontSize: 16, marginBottom: space.md },
+  body: { color: palette.body, fontFamily: font.regular, fontSize: 14, lineHeight: 22, marginTop: 6 },
+  footnote: { color: palette.muted, fontFamily: font.regular, fontSize: 12, lineHeight: 18, marginTop: space.sm },
+  pressed: { opacity: 0.8 }
 });

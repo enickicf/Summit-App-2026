@@ -1,0 +1,39 @@
+/* One-time analytics choice: a small card above the page's bottom edge, readable on the white Summit
+   pages and the black Awards pages alike; 16px gutters on phones. */
+.bar {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 60;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 14px 18px;
+  background: #fff;
+  color: #1b1b1b;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.bar p { margin: 0; flex: 1 1 320px; }
+.actions { display: flex; gap: 10px; margin-left: auto; }
+.actions button {
+  font: inherit;
+  font-weight: 600;
+  min-height: 40px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid #1b1b1b;
+  background: #fff;
+  color: #1b1b1b;
+  cursor: pointer;
+}
+.actions button:focus-visible { outline: 2px solid #4a5faa; outline-offset: 2px; }
+.actions .accept { background: #1b1b1b; color: #fff; }

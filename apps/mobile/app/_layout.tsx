@@ -4,8 +4,9 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
-import { colors, typography } from "@not-alone/design-tokens";
+import { font, palette } from "../lib/summit-theme";
 import { SummitProvider } from "../components/summit-context";
+import { SignupsProvider } from "../components/signups-context";
 import { NotificationNavigation } from "../components/notification-navigation";
 
 void SplashScreen.preventAutoHideAsync();
@@ -17,6 +18,11 @@ const Montserrat_700Bold = require("@expo-google-fonts/montserrat/700Bold/Montse
 const Montserrat_900Black = require("@expo-google-fonts/montserrat/900Black/Montserrat_900Black.ttf");
 const PlayfairDisplay_400Regular = require("@expo-google-fonts/playfair-display/400Regular/PlayfairDisplay_400Regular.ttf");
 const PlayfairDisplay_700Bold = require("@expo-google-fonts/playfair-display/700Bold/PlayfairDisplay_700Bold.ttf");
+const Poppins_400Regular = require("@expo-google-fonts/poppins/400Regular/Poppins_400Regular.ttf");
+const Poppins_500Medium = require("@expo-google-fonts/poppins/500Medium/Poppins_500Medium.ttf");
+const Poppins_600SemiBold = require("@expo-google-fonts/poppins/600SemiBold/Poppins_600SemiBold.ttf");
+const Poppins_700Bold = require("@expo-google-fonts/poppins/700Bold/Poppins_700Bold.ttf");
+const GreatVibes_400Regular = require("@expo-google-fonts/great-vibes/400Regular/GreatVibes_400Regular.ttf");
 
 export default function RootLayout() {
   const queryClient = useMemo(() => new QueryClient(), []);
@@ -27,7 +33,12 @@ export default function RootLayout() {
     Montserrat_700Bold,
     Montserrat_900Black,
     PlayfairDisplay_400Regular,
-    PlayfairDisplay_700Bold
+    PlayfairDisplay_700Bold,
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+    Poppins_700Bold,
+    GreatVibes_400Regular
   });
 
   useEffect(() => {
@@ -43,22 +54,25 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <SummitProvider>
-        <StatusBar style="light" />
+        <SignupsProvider>
+        <StatusBar style="dark" />
         <Stack
           screenOptions={{
             headerBackTitle: "Back",
             headerLargeTitle: false,
             headerShadowVisible: false,
-            headerStyle: { backgroundColor: colors.canvas },
-            headerTintColor: colors.accent,
-            headerTitleStyle: { color: colors.ink, fontFamily: typography.bold },
-            contentStyle: { backgroundColor: colors.canvas }
+            headerStyle: { backgroundColor: palette.canvas },
+            headerTintColor: palette.violetDeep,
+            headerTitleStyle: { color: palette.ink, fontFamily: font.semibold },
+            headerBackTitleStyle: { fontFamily: font.medium },
+            contentStyle: { backgroundColor: palette.canvas }
           }}
         >
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="session/[id]" options={{ title: "Session" }} />
         </Stack>
         <NotificationNavigation />
+        </SignupsProvider>
       </SummitProvider>
     </QueryClientProvider>
   );

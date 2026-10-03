@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { cookies } from "next/headers";
+import { randomUUID } from "node:crypto";
 import { publicAppConfig } from "@not-alone/config";
 import {
   attendeeDeviceRegistrationSchema,
@@ -9,6 +10,9 @@ import {
   type ChangeSource,
   type DocumentImportJob,
   type EventSnapshot,
+  type ExperienceSignupRequest,
+  type ExperienceSignupStaffUpdate,
+  type ExperienceSignupStatus,
   type StaffRole
 } from "@not-alone/validation";
 import {
@@ -17,6 +21,7 @@ import {
   createNotificationJobsForPublish,
   DraftPublishError,
   hydrateSnapshotContent,
+  mutateExperienceSignups,
   publishDraftSessions,
   publishContent as publishLocalContent,
   readLiveOpsStore,
@@ -31,6 +36,17 @@ import {
   type StaffContent,
   type StaffDraftSession
 } from "./live-ops-store";
+import {
+  applyExperienceSignupAction,
+  applyStaffSignupStatus,
+  assertSignupEligibleItem,
+  ExperienceSignupError,
+  signupsForInstall,
+  summarizeExperienceSignups,
+  type AttendeeSignupView,
+  type ExperienceSignupRecord,
+  type ExperienceSignupSummary
+} from "./experience-signups";
 import { createPublishPreview } from "./publish-diff";
 import { getBlockingPublishMessages } from "./schedule-quality";
 import { canProvisionAdmin, createAdminProfile, type StaffAuthIdentity } from "./staff-access";
@@ -67,7 +83,7 @@ export type StaffContext = {
 
 export class StaffAuthError extends Error {
   constructor(
-    public readonly status: 401 | 403,
+    public readonly status: 401 | 403 | 503,
     message: string
   ) {
     super(message);
@@ -252,6 +268,128 @@ export async function registerDevice(registration: AttendeeDeviceRegistration) {
   };
 }
 
+export async function upsertExperienceSignup(input: ExperienceSignupRequest): Promise<AttendeeSignupView> {
+  // Leaving only cancels this install's own row, so it stays possible after an item is unpublished.
+  if (input.action === "join") {
+    assertSignupEligibleItem(await readPublishedSnapshot(), input.scheduleItemId);
+  }
+
+  if (!hasSupabaseServerConfig()) {
+    return mutateExperienceSignups((records, eventId) => {
+      const outcome = applyExperienceSignupAction(records, { ...input, eventId }, {
+        nowUtc: new Date().toISOString(),
+        newId: randomUUID()
+      });
+      return { records: outcome.records, result: outcome.signup, changed: outcome.changed };
+    });
+  }
+
+  const row = await supabaseFetch<SupabaseSignupRow | null>("/rest/v1/rpc/upsert_experience_signup", {
+    method: "POST",
+    body: {
+      p_event_id: publicAppConfig.eventId,
+      p_schedule_item_id: input.scheduleItemId,
+      p_install_id: input.installId,
+      p_attendee_name: input.name,
+      p_action: input.action
+    },
+    expectedStatus: 200
+  });
+
+  if (!row?.status) {
+    if (input.action === "leave") return { scheduleItemId: input.scheduleItemId, status: "cancelled" };
+    throw new ExperienceSignupError(409, "This sign-up could not be recorded for the current event.");
+  }
+  return { scheduleItemId: row.schedule_item_id, status: row.status };
+}
+
+export async function listSignupsForInstall(installId: string): Promise<AttendeeSignupView[]> {
+  if (!hasSupabaseServerConfig()) {
+    const store = await readLiveOpsStore();
+    return signupsForInstall(store.experienceSignups ?? [], store.eventId, installId);
+  }
+
+  const rows = await supabaseFetch<Array<Pick<SupabaseSignupRow, "schedule_item_id" | "status">>>(
+    `/rest/v1/experience_signups?event_id=eq.${encodeURIComponent(publicAppConfig.eventId)}&install_id=eq.${encodeURIComponent(installId)}&select=schedule_item_id,status`,
+    { expectedStatus: 200 }
+  );
+  return rows.map((row) => ({ scheduleItemId: row.schedule_item_id, status: row.status }));
+}
+
+// Caller must already have verified staff access (pages use hasStaffPageAccess).
+export async function readExperienceSignupSummaries(): Promise<{
+  mode: "local-adapter" | "supabase";
+  publishedRevision: number;
+  experiences: ExperienceSignupSummary[];
+}> {
+  if (!hasSupabaseServerConfig()) {
+    const store = await readLiveOpsStore();
+    return {
+      mode: "local-adapter",
+      publishedRevision: store.publishedSnapshot.revision,
+      experiences: summarizeExperienceSignups(store.experienceSignups ?? [], store.publishedSnapshot, store.eventId)
+    };
+  }
+
+  const [snapshot, rows] = await Promise.all([
+    readPublishedSnapshot(),
+    supabaseFetch<SupabaseSignupRow[]>(
+      `/rest/v1/experience_signups?event_id=eq.${encodeURIComponent(publicAppConfig.eventId)}&select=id,event_id,schedule_item_id,install_id,attendee_name,status,created_at,updated_at&order=created_at.asc`,
+      { expectedStatus: 200 }
+    )
+  ]);
+  return {
+    mode: "supabase",
+    publishedRevision: snapshot.revision,
+    experiences: summarizeExperienceSignups(rows.map(fromSupabaseSignupRow), snapshot, publicAppConfig.eventId)
+  };
+}
+
+export async function listExperienceSignupsForStaff(staff: StaffContext) {
+  requireRole(staff, ["VIEWER", "EDITOR", "PUBLISHER", "ADMIN"]);
+  return readExperienceSignupSummaries();
+}
+
+export async function setExperienceSignupStatus(input: ExperienceSignupStaffUpdate, staff: StaffContext) {
+  requireRole(staff, ["PUBLISHER", "ADMIN"]);
+
+  if (!hasSupabaseServerConfig()) {
+    return mutateExperienceSignups((records, eventId) => {
+      const outcome = applyStaffSignupStatus(records, { ...input, eventId }, new Date().toISOString());
+      return {
+        records: outcome.records,
+        result: { signupId: outcome.updated.id, scheduleItemId: outcome.updated.scheduleItemId, status: outcome.updated.status },
+        changed: true,
+        activity: {
+          action: "SET_EXPERIENCE_SIGNUP_STATUS",
+          actorRole: staff.role,
+          detail: `Sign-up ${outcome.updated.id} changed from ${outcome.previous.status} to ${outcome.updated.status}.`
+        }
+      };
+    });
+  }
+
+  try {
+    const row = await supabaseFetch<SupabaseSignupRow>("/rest/v1/rpc/set_experience_signup_status", {
+      method: "POST",
+      body: {
+        p_event_id: publicAppConfig.eventId,
+        p_signup_id: input.signupId,
+        p_status: input.status,
+        p_actor_id: staff.actorId ?? null,
+        p_actor_role: staff.role
+      },
+      expectedStatus: 200
+    });
+    return { signupId: row.id, scheduleItemId: row.schedule_item_id, status: row.status };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
+    if (message.includes("SIGNUP_NOT_FOUND")) throw new ExperienceSignupError(404, "Sign-up not found.");
+    if (message.includes("SIGNUP_CANCELLED")) throw new ExperienceSignupError(409, "The attendee cancelled this sign-up.");
+    throw error;
+  }
+}
+
 export async function recordScheduleImport(
   input: {
     id: string;
@@ -312,10 +450,7 @@ export async function recordScheduleImport(
 
 export async function getStaffContext(request: NextRequest, allowedRoles: StaffRole[]): Promise<StaffContext> {
   if (!hasSupabaseServerConfig()) {
-    const localRole = parseLocalRole();
-    const context: StaffContext = { role: localRole, mode: "local-adapter" };
-    requireRole(context, allowedRoles);
-    return context;
+    return getLocalStaffContext(allowedRoles);
   }
 
   const bearerToken = getBearerToken(request) ?? request.cookies.get(STAFF_ACCESS_COOKIE)?.value;
@@ -331,10 +466,7 @@ export async function authenticateStaffAccessToken(
   allowedRoles: StaffRole[]
 ): Promise<StaffContext> {
   if (!hasSupabaseServerConfig()) {
-    const localRole = parseLocalRole();
-    const context: StaffContext = { role: localRole, mode: "local-adapter" };
-    requireRole(context, allowedRoles);
-    return context;
+    return getLocalStaffContext(allowedRoles);
   }
 
   let user: StaffAuthIdentity;
@@ -372,7 +504,7 @@ export async function authenticateStaffAccessToken(
 
 export async function hasStaffPageAccess(allowedRoles: StaffRole[] = ["VIEWER", "EDITOR", "PUBLISHER", "ADMIN"]) {
   if (!hasSupabaseServerConfig()) {
-    return true;
+    return process.env.NODE_ENV !== "production";
   }
 
   const cookieStore = await cookies();
@@ -687,6 +819,45 @@ async function registerSupabaseDevice(registration: AttendeeDeviceRegistration) 
   };
 }
 
+type SupabaseSignupRow = {
+  id: string;
+  event_id: string;
+  schedule_item_id: string;
+  install_id: string;
+  attendee_name: string;
+  status: ExperienceSignupStatus;
+  created_at: string;
+  updated_at: string;
+};
+
+function fromSupabaseSignupRow(row: SupabaseSignupRow): ExperienceSignupRecord {
+  return {
+    id: row.id,
+    eventId: row.event_id,
+    scheduleItemId: row.schedule_item_id,
+    installId: row.install_id,
+    attendeeName: row.attendee_name,
+    status: row.status,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  };
+}
+
+// Latest published revision only; lighter than readSupabaseState for public sign-up checks.
+async function readPublishedSnapshot(): Promise<EventSnapshot> {
+  if (!hasSupabaseServerConfig()) {
+    return (await readLiveOpsStore()).publishedSnapshot;
+  }
+  const rows = await supabaseFetch<Array<{ snapshot: unknown }>>(
+    `/rest/v1/schedule_revisions?event_id=eq.${encodeURIComponent(publicAppConfig.eventId)}&select=snapshot&order=revision.desc&limit=1`,
+    { expectedStatus: 200 }
+  );
+  if (!rows[0]) {
+    throw new ExperienceSignupError(404, "No published schedule is available yet.");
+  }
+  return hydrateSnapshotContent(rows[0].snapshot);
+}
+
 function parseDraftSessions(value: unknown, snapshot: EventSnapshot): StaffDraftSession[] {
   const candidate = value as { draftSessions?: unknown } | undefined;
   const parsed = staffDraftSessionsSchema.safeParse(candidate?.draftSessions);
@@ -771,6 +942,15 @@ function parseLocalRole(): StaffRole {
   return candidate === "VIEWER" || candidate === "EDITOR" || candidate === "PUBLISHER" || candidate === "ADMIN"
     ? candidate
     : "ADMIN";
+}
+
+function getLocalStaffContext(allowedRoles: StaffRole[]): StaffContext {
+  if (process.env.NODE_ENV === "production") {
+    throw new StaffAuthError(503, "Staff access is temporarily unavailable.");
+  }
+  const context: StaffContext = { role: parseLocalRole(), mode: "local-adapter" };
+  requireRole(context, allowedRoles);
+  return context;
 }
 
 function redactOperationalError(error: unknown) {

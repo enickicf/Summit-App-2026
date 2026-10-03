@@ -1,0 +1,22 @@
+.page { background:#ffffff; color:#000000; font-family:"Original Poppins",sans-serif; letter-spacing:0; }
+.intro { display:flex; flex-direction:column; align-items:center; padding:56px max(24px,calc((100% - 1180px)/2)) 72px; text-align:center; }
+.photo { display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; object-position:50% 22%; border-radius:6px; box-shadow:0 18px 50px #00000026; }
+.logo { display:block; width:200px; max-width:60%; height:auto; margin:44px auto 0; }
+.message { max-width:640px; margin:28px auto 0; font-size:18px; line-height:1.7; color:#000000; }
+.address { display:flex; flex-direction:column; gap:2px; margin-top:28px; padding-top:22px; border-top:1px solid #4a5faa29; min-width:min(320px,100%); font-style:normal; font-size:15px; font-weight:600; line-height:1.6; color:#4a5faa; }
+@media(max-width:600px) { .intro { padding:28px 16px 48px; } .photo { aspect-ratio:4/3; object-position:50% 30%; } .logo { width:160px; margin-top:32px; } .message { font-size:16px; } }
+.mapSection { padding:0 max(24px,calc((100% - 760px)/2)) 72px; text-align:center; }
+.mapSection h2 { margin:0 0 8px; font-size:28px; font-weight:600; color:#000000; }
+.mapSection > p { margin:0 auto; max-width:620px; color:#444444; font-size:15px; line-height:1.6; }
+.map { display:block; width:100%; max-width:520px; height:auto; margin:24px auto 18px; border:1px solid #d0d4ea; border-radius:14px; background:#f4f5fa; box-shadow:0 18px 50px #0000001a; }
+.mapSection .lost { max-width:520px; padding:14px 16px; border:1px solid #d0d4ea; border-radius:10px; background:#fff; text-align:left; }
+.mapSection .lost strong { color:#111111; }
+.mapSection .mapSource { margin-top:12px; font-size:12px; color:#777777; }
+@media(max-width:600px) { .mapSection { padding:0 16px 48px; } .mapSection h2 { font-size:23px; } }
+.rooms { max-width:620px; margin:24px auto 0; text-align:left; }
+.rooms h3 { margin:0 0 8px; font-size:17px; font-weight:600; color:#000000; }
+.rooms ul { list-style:none; margin:0; padding:0; display:grid; gap:8px; }
+.rooms li { display:grid; grid-template-columns:150px 1fr; gap:4px 12px; padding:10px 14px; border:1px solid #d0d4ea; border-radius:10px; background:#fff; font-size:14px; line-height:1.5; }
+.rooms li span { color:#4a5faa; font-weight:600; font-variant-numeric:tabular-nums; }
+.rooms li em { grid-column:2; font-style:normal; color:#444444; }
+@media(max-width:600px) { .rooms li { grid-template-columns:1fr; } .rooms li em { grid-column:1; } }

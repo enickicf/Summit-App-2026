@@ -5,6 +5,7 @@ import { checkRateLimit } from "../../../../lib/rate-limit";
 import { publicApiCorsHeaders, publicApiOptions } from "../../../../lib/public-api-cors";
 
 const allowedMethods = ["POST"] as const;
+const anonymousAudienceGroups = new Set(["public", "all_attendees"]);
 
 export function OPTIONS() {
   return publicApiOptions(allowedMethods);
@@ -36,6 +37,20 @@ export async function POST(request: NextRequest) {
         issues: parsed.error.issues.map((issue) => issue.message)
       },
       { status: 422, headers: publicApiCorsHeaders(allowedMethods) }
+    );
+  }
+
+  if (parsed.data.audienceGroups.some((group) => !anonymousAudienceGroups.has(group))) {
+    return NextResponse.json(
+      { ok: false, error: "Anonymous device registration supports public audiences only." },
+      {
+        status: 403,
+        headers: {
+          "Cache-Control": "no-store",
+          ...publicApiCorsHeaders(allowedMethods),
+          ...rateLimit.headers
+        }
+      }
     );
   }
 

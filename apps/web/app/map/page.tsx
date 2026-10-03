@@ -1,1 +1,7 @@
-export default function MapPage() { return <main className="contentPage"><p className="eyebrow">Wynn Las Vegas</p><h1>Summit Map</h1><div className="mapPlaceholder"><span>Venue map coming soon</span><p>Room locations and accessible routes will be published after venue approval.</p></div></main>; }
+import { redirect } from "next/navigation";
+
+// Owner / Ryan (Sept 29, 2026): the old Summit Map page repeated the rooms inside Wynn. Rooms are
+// private now (lib/room-privacy.ts), so this address simply goes to the public Venue page.
+export default function MapPage() {
+  redirect("/venue");
+}

@@ -1,0 +1,23 @@
+/* Floating Ask AI button + panel, bottom-right, like a chat widget (owner, Sept 23). */
+.widget { position: fixed; right: 20px; bottom: 20px; z-index: 70; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; font-family: "Original Poppins", sans-serif; }
+
+.launcher { position: relative; display: inline-flex; align-items: center; gap: 10px; min-height: 56px; padding: 0 22px 0 18px; border: 0; border-radius: 999px; background: #000000; color: #ffffff; font: inherit; font-size: 16px; font-weight: 700; line-height: 1; cursor: pointer; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28); }
+.launcher::before { content: ""; position: absolute; inset: -6px; border-radius: 999px; border: 2px solid #8fb1e0; opacity: 0.85; animation: askAiPulse 2.4s ease-out infinite; pointer-events: none; }
+.launcher:hover { background: #1f2a5c; }
+.launcher:focus-visible { outline: 3px solid #8fb1e0; outline-offset: 3px; }
+.launcher[aria-expanded="true"]::before { animation: none; opacity: 0; }
+@keyframes askAiPulse { 0% { transform: scale(0.92); opacity: 0.85; } 70% { transform: scale(1.14); opacity: 0; } 100% { transform: scale(1.14); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .launcher::before { animation: none; } }
+
+.panel { width: min(420px, calc(100vw - 32px)); max-height: min(72vh, 680px); overflow: auto; padding: 18px; border: 1px solid #d0d4ea; border-radius: 16px; background: #ffffff; color: #000000; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28); }
+.panelHeader { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+.panelTitle { display: inline-flex; align-items: center; gap: 8px; margin: 0; font-size: 18px; font-weight: 700; }
+.close { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: #f4f5fa; color: #000000; cursor: pointer; }
+.close:hover { background: #d0d4ea; }
+.close:focus-visible { outline: 3px solid #8fb1e0; outline-offset: 2px; }
+.scope { margin: 0 0 12px; color: #444444; font-size: 14px; line-height: 1.5; }
+
+@media (max-width: 600px) {
+  .widget { right: 12px; bottom: 12px; }
+  .launcher { min-height: 50px; padding: 0 18px 0 16px; font-size: 15px; }
+}

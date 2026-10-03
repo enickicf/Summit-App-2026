@@ -9,6 +9,25 @@ const publishedAt = "2026-09-16T16:00:00.000Z";
 const timeZone = ros2026Source.timeZone;
 const id = (type: number, row: number) => `20260000-0000-4000-800${type}-${String(row).padStart(12, "0")}`;
 
+// Keep published profile IDs stable when confirmations are withdrawn or reordered.
+// IDs 44 and 45 are retired, not reassigned to another guest.
+const guestIds: Record<(typeof confirmedSummitGuests2026)[number], number> = {
+  "Jason Kennedy": 1, "Loni Love": 2, "Anthony Ramos": 3, "Steve Wozniak": 4,
+  "Mike Majlak": 5, "Kevin Hines": 6, "Ryan Wolfington": 7, "Jewel": 8,
+  "Caroline Jones": 9, "Nick Dana": 10, "Sarah Steil": 11, "Lexi Hensler": 12,
+  "Jon Hershfield": 13, "Morgan Marler": 14, "Nick Kislinger": 15, "Sanem (Sam) Alkan": 16,
+  "Daniel Gillison": 17, "Wendy Oliver-Pyatt": 18, "Brandon Saho": 19, "Michael Townsend": 20,
+  "Leah Smith": 21, "Margaret Hines": 22, "Caroline Silby": 23, "Jessica Edwards": 24,
+  "Marc Brackett": 25, "Ellie Kanner": 26, "Kase Murray": 27, "Trent Alenik": 28,
+  "Jan Thwaites": 29, "Sally Dewhurst": 30, "Sophie Novak": 31, "Trevor Short": 32,
+  "Clark Cummings": 33, "Aphrah Brokaw": 34, "Paige Neuenschwander": 35, "Noah Springer": 36,
+  "Melinda Springer": 37, "Alana Springsteen": 38, "David Eagleman": 39, "Bob Bryan": 40,
+  "Mike Bryan": 41, "Blaise Aguirre": 42, "Isabella Wolfington": 43, "Jen Smorgen": 46,
+  "Sean Wolfington": 47, "Ana Wolfington": 48, "Janet Wozniak": 49, "Cathy Olson": 50,
+  "Jeff Levin": 51, "Darryl McDaniels (DMC)": 52, "Mike Tyson": 53, "Ray Lewis": 54,
+  "Sarah Gilman": 55, "Alexa Price": 56, "Bianca Mok": 57, "Harvey Stern": 58, "Taylor Perry": 60, "Allison Elbl": 61, "Rahil Briggs": 62, "Miriam Isa": 63, "Silas Luke Jones": 64, "Bishop Briggs": 65
+};
+
 export function rosInstant(day: number, clock: string) {
   const value = DateTime.fromISO(`2026-11-${String(day).padStart(2, "0")}T${clock}`, { zone: timeZone });
   if (!value.isValid) throw new Error(`Invalid ROS time: ${day} ${clock}`);
@@ -46,8 +65,8 @@ export const event2026Snapshot = eventSnapshotSchema.parse({
     directoryEnabled: true
   },
   revision, serverTimeUtc: publishedAt, scheduleItems,
-  speakers: confirmedSummitGuests2026.map((name, index) => ({
-    id: id(3, index + 1), eventId, name, role: originalProducerCredit(name)?.role ?? "Confirmed 2026 guest", bio: "", headshotUrl: null,
+  speakers: confirmedSummitGuests2026.map(name => ({
+    id: id(3, guestIds[name]), eventId, name, role: originalProducerCredit(name)?.role ?? "Confirmed 2026 guest", bio: "", headshotUrl: null,
     published: true, directoryCategories: [originalProducerCredit(name)?.category ?? "Attendees"],
     roleSource: originalProducerCredit(name) ? `Producer credits approved by event owner September 16, 2026; original site: ${producerCreditSource}. Attendance independently confirmed in Airtable.` : "Airtable Confirmed Attendance, reviewed September 16, 2026. Attendance only; no speaking role inferred."
   })),

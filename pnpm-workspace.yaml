@@ -43,3 +43,5 @@ overrides:
   "query-string>decode-uri-component": "0.5.0"
   "react-native-reanimated": "4.5.1"
   "xcode>uuid": "11.1.1"
+patchedDependencies:
+  '@netlify/plugin-nextjs@5.15.13': patches/@netlify__plugin-nextjs@5.15.13.patch

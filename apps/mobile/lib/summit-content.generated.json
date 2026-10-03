@@ -1,0 +1,496 @@
+{
+  "source": "apps/web editorial libs via apps/mobile/scripts/export-website-content.ts",
+  "sections": [
+    "Co-Chairs",
+    "Hosts",
+    "Founders",
+    "Musicians",
+    "Entertainers & Athletes",
+    "Experts",
+    "Business Leaders & Philanthropists",
+    "Talent",
+    "Executive Producers",
+    "Producers"
+  ],
+  "people": [
+    {
+      "name": "Steve Wozniak",
+      "category": "Co-Chairs",
+      "role": "Co-Founder of Apple & Mental Health Advocate",
+      "bio": "Steve Wozniak is an engineer, inventor and co-founder of Apple. His philanthropic interests include education, creativity and innovation, and he co-founded the Wozniak Family Foundation with Janet Wozniak.",
+      "image": "local:steve-wozniak",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/cd52fdc43b95133f8808.png"
+    },
+    {
+      "name": "Jewel",
+      "category": "Co-Chairs",
+      "role": "4-Time Grammy Nominated Singer-Songwriter and Mental Health Pioneer",
+      "bio": "Jewel is a singer-songwriter and mental health advocate. Inspiring Children recognizes her work in music and human development and lists her among the gathering's co-chairs.",
+      "image": "local:jewel",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/ce514b2801e235b5a131.png"
+    },
+    {
+      "name": "Cherrial Odell",
+      "category": "Co-Chairs",
+      "role": "Inspiring Children Alumna",
+      "bio": "Cherrial Odell is an Inspiring Children Foundation alumna. She is listed as a co-chair on the foundation's public Summit website and is an owner-confirmed co-chair for the 2026 gathering.",
+      "image": "local:cherrial-odell",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/249d15f3447ac6ac1059.png"
+    },
+    {
+      "name": "Loni Love",
+      "category": "Hosts",
+      "role": "Comedian & TV Host",
+      "bio": "Loni Love is a comedian and television host. She is the host of the 2026 Not Alone Awards, bringing her experience in entertainment to the celebration of human development and mental health.",
+      "image": "local:loni-love",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/29e71700f9c17f6a2c20.jpg"
+    },
+    {
+      "name": "Nick Kislinger",
+      "category": "Founders",
+      "role": "Flourish Trust",
+      "bio": "Nick Kislinger works across philanthropy, social innovation and mental health. His public ICF biography describes his work advising charitable initiatives, co-founding Impact Hub Los Angeles and launching the breathwork app Breathwrk.",
+      "image": "local:nick-kislinger",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/3c1a6625d6426b3a6f1f.jpg"
+    },
+    {
+      "name": "Ellie Kanner",
+      "category": "Founders",
+      "role": "Friends (TV Show)",
+      "bio": "Ellie Kanner is a director, writer and producer whose career also includes casting for Friends and Sex and the City. Her directing credits include Authors Anonymous, Wake and the series Dropping the Soap.",
+      "image": "local:ellie-kanner",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/8853e5a255231a4dceb5.jpg"
+    },
+    {
+      "name": "Melinda & Noah Springer",
+      "category": "Founders",
+      "role": "Pickle Pro Labs",
+      "bio": "Melinda and Noah Springer are recognized together among the founders on Inspiring Children Foundation's public Awards website, with their affiliation listed as Pickle Pro Labs.",
+      "image": "local:melinda-noah-springer",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/68b72a3cdec5733bb067.jpg"
+    },
+    {
+      "name": "Jen Smorgen",
+      "category": "Founders",
+      "role": "Smorgon Family Foundation",
+      "bio": "Jennifer Smorgon is a meditation teacher and mentor, and a founding member of the Chopra Foundation. She has taught in corporate and community settings and helps make meditation accessible in daily life.",
+      "image": "local:jen-smorgen",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/97fb380cc6df19d35cf6.png"
+    },
+    {
+      "name": "Sean & Ana Wolfington",
+      "category": "Founders",
+      "role": "Entrepreneurs",
+      "bio": "Sean and Ana Wolfington are entrepreneurs and philanthropists. Inspiring Children Foundation's public Awards and Summit materials recognize their shared philanthropic work and support for youth development.",
+      "image": "local:sean-ana-wolfington",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/2ab53ce9cb2710974ed3.jpg"
+    },
+    {
+      "name": "Janet Wozniak",
+      "category": "Founders",
+      "role": "Apple Computers",
+      "bio": "Janet Wozniak has worked in education development at Apple. With Steve Wozniak, she co-founded the Wozniak Family Foundation to support STEM education and social development.",
+      "image": "local:janet-wozniak",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/8c1da9231b09a4561855.jpg"
+    },
+    {
+      "name": "Ray Lewis",
+      "category": "Founders",
+      "role": "Speaker",
+      "bio": "",
+      "image": "local:ray-lewis",
+      "zoom": 1,
+      "imageSource": null
+    },
+    {
+      "name": "Sanem (Sam) Alkan",
+      "category": "Founders",
+      "role": "",
+      "bio": "",
+      "image": "local:sanem-alkan",
+      "zoom": 1,
+      "imageSource": null
+    },
+    {
+      "name": "Jessica Edwards",
+      "category": "Founders",
+      "role": "CDO of NAMI",
+      "bio": "",
+      "image": "local:jessica-edwards",
+      "zoom": 1,
+      "imageSource": null
+    },
+    {
+      "name": "Miriam Isa",
+      "category": "Founders",
+      "role": "",
+      "bio": "",
+      "image": null,
+      "zoom": 1
+    },
+    {
+      "name": "Anthony Ramos",
+      "category": "Musicians",
+      "role": "Actor & Recording Artist",
+      "bio": "Anthony Ramos is an actor and recording artist. He originated the roles of John Laurens and Philip Hamilton in Hamilton and played the lead role in the film adaptation of In the Heights.",
+      "image": "local:anthony-ramos",
+      "zoom": 1,
+      "imageSource": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ad/Anthony_Ramos_A_House_of_Dynamite-48_%28cropped%29.jpg/960px-Anthony_Ramos_A_House_of_Dynamite-48_%28cropped%29.jpg"
+    },
+    {
+      "name": "Caroline Jones",
+      "category": "Musicians",
+      "role": "Singer-Songwriter & Multi-Instrumentalist",
+      "bio": "Caroline Jones is a singer-songwriter and multi-instrumentalist with a solo recording career and experience as a member of Zac Brown Band. Her work spans country music and collaborations with fellow artists.",
+      "image": "local:caroline-jones",
+      "zoom": 1,
+      "imageSource": "https://www.opry.com/assets/img/GOO_Caroline_Jones_1200x628-f78e720238.jpg"
+    },
+    {
+      "name": "Alana Springsteen",
+      "category": "Musicians",
+      "role": "Singer-Songwriter",
+      "bio": "Alana Springsteen is a country singer-songwriter and multi-instrumentalist. She plays guitar and piano, co-produces her music and draws on personal experience in her songwriting.",
+      "image": "local:alana-springsteen",
+      "zoom": 1,
+      "imageSource": "https://www.opry.com/assets/img/GOO_Alana_Springsteen_1200x628-93a25506d6.jpg"
+    },
+    {
+      "name": "Darryl McDaniels (DMC)",
+      "category": "Musicians",
+      "role": "Run DMC",
+      "bio": "Darryl McDaniels, known as DMC, is a musician associated with Run-DMC. Inspiring Children's public Awards website includes him in its Musicians category.",
+      "image": "local:darryl-mcdaniels",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/00357cdfb8a968b39d9d.jpg"
+    },
+    {
+      "name": "Sarah Steil",
+      "category": "Musicians",
+      "role": "Musician",
+      "bio": "",
+      "image": "local:sarah-steil",
+      "zoom": 1,
+      "imageSource": null
+    },
+    {
+      "name": "Jason Kennedy",
+      "category": "Entertainers & Athletes",
+      "role": "Entertainment Journalist",
+      "bio": "Jason Kennedy is an entertainment journalist. Inspiring Children's public Awards website lists him among entertainers and athletes, while its Summit website also recognizes him as Summit host.",
+      "image": "local:jason-kennedy",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/731b8bd842090d2461f8.jpg"
+    },
+    {
+      "name": "Lexi Hensler",
+      "category": "Entertainers & Athletes",
+      "role": "Content Creator",
+      "bio": "Lexi Hensler is a digital content creator. Her public channels include YouTube, Instagram and TikTok, and her official links include the Hugz brand.",
+      "image": "local:lexi-hensler",
+      "zoom": 1,
+      "imageSource": "https://celebmafia.com/wp-content/uploads/2019/03/lexi-hensler-kids-choice-awards-2019-4.jpg"
+    },
+    {
+      "name": "Brandon Saho",
+      "category": "Entertainers & Athletes",
+      "role": "The Mental Game",
+      "bio": "Brandon Saho is a former sports reporter and the creator of The Mental Game. Through interviews and public conversations, he works to reduce stigma around mental health.",
+      "image": "local:brandon-saho",
+      "zoom": 1,
+      "imageSource": "https://static.wixstatic.com/media/68e392_0f29dead84ee4c73bdfde04b0a017b23~mv2.jpg/v1/crop/x_0,y_98,w_1440,h_1604/fill/w_834,h_928,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/592483239_1448771757255130_5949903694009096301_n.jpg"
+    },
+    {
+      "name": "Bob Bryan",
+      "category": "Entertainers & Athletes",
+      "role": "Hall of Fame Tennis Players",
+      "bio": "Bob Bryan is a Hall of Fame tennis player. Inspiring Children's public Awards website recognizes Bob and Mike Bryan together in its Entertainers & Athletes category.",
+      "image": "local:bob-bryan",
+      "zoom": 1.35,
+      "imageSource": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Bryan_B._RG15_%281%29_%2819120636110%29.jpg/960px-Bryan_B._RG15_%281%29_%2819120636110%29.jpg"
+    },
+    {
+      "name": "Mike Bryan",
+      "category": "Entertainers & Athletes",
+      "role": "Hall of Fame Tennis Players",
+      "bio": "Mike Bryan is a Hall of Fame tennis player. Inspiring Children's public Awards website recognizes Mike and Bob Bryan together in its Entertainers & Athletes category.",
+      "image": "local:mike-bryan",
+      "zoom": 1.35,
+      "imageSource": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Bryan_M._RG19_%2812%29_%2848199368111%29.jpg/960px-Bryan_M._RG19_%2812%29_%2848199368111%29.jpg"
+    },
+    {
+      "name": "Mike Tyson",
+      "category": "Entertainers & Athletes",
+      "role": "Hall of Fame Boxer",
+      "bio": "Mike Tyson is a Hall of Fame boxer. His career in professional boxing is recognized on Inspiring Children's public Awards website, which includes him among entertainers and athletes.",
+      "image": "local:mike-tyson",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/1fa744536fa297cd811c.png"
+    },
+    {
+      "name": "Sarah Gilman",
+      "category": "Entertainers & Athletes",
+      "role": "Actress",
+      "bio": "Sarah Gilman is an actress. Inspiring Children's public Awards website includes her among its entertainers and athletes.",
+      "image": "local:sarah-gilman",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/4211497cfb1e69b6a645.jpg"
+    },
+    {
+      "name": "Jon Hershfield",
+      "category": "Experts",
+      "role": "OCD Specialist",
+      "bio": "Jon Hershfield is a therapist specializing in obsessive-compulsive disorder and anxiety. His work combines exposure-based therapy with mindfulness and self-compassion, and he has authored and co-authored several books on OCD.",
+      "image": "local:jon-hershfield",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/79de68e4e34f7efe8334.jpg"
+    },
+    {
+      "name": "Wendy Oliver-Pyatt",
+      "category": "Experts",
+      "role": "Eating Disorder Expert",
+      "bio": "Wendy Oliver-Pyatt is an eating disorder expert. Inspiring Children's public Awards website recognizes her clinical expertise in its Experts category.",
+      "image": "local:wendy-oliver-pyatt",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/1ba60026beb8d584f753.jpg"
+    },
+    {
+      "name": "Caroline Silby",
+      "category": "Experts",
+      "role": "Sport Psychologist",
+      "bio": "Caroline Silby is a sport psychologist who works with athletes on mental performance. Her experience includes supporting U.S. Figure Skating and athletes competing at the Olympic level.",
+      "image": "local:caroline-silby",
+      "zoom": 2.2,
+      "imageSource": "https://www.drsilby.com/wp-content/uploads/2021/01/caroline-silby.png"
+    },
+    {
+      "name": "Marc Brackett",
+      "category": "Experts",
+      "role": "Yale",
+      "bio": "Marc Brackett is listed as a Yale-affiliated expert on Inspiring Children's public Awards website. His inclusion connects the gathering with research and expertise in emotional and mental well-being.",
+      "image": "local:marc-brackett",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/d8771a4542e176268877.png"
+    },
+    {
+      "name": "David Eagleman",
+      "category": "Experts",
+      "role": "Neuroscientist & Inventor",
+      "bio": "David Eagleman is a neuroscientist and author whose research includes perception and sensory substitution. His books include Livewired and Incognito, and he has explored the relationship between neuroscience and the legal system.",
+      "image": "local:david-eagleman",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/06d3a646a2b405b9db6c.jpg"
+    },
+    {
+      "name": "Blaise Aguirre",
+      "category": "Experts",
+      "role": "McLean Psych Hospital",
+      "bio": "Blaise Aguirre is a child and adolescent psychiatrist at McLean Hospital. His work includes dialectical behavior therapy and the 3East programs for adolescents, and he has written books on treatment and mindfulness.",
+      "image": "local:blaise-aguirre",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/568fa003b7400cb69bc0.jpg"
+    },
+    {
+      "name": "Mike Majlak",
+      "category": "Business Leaders & Philanthropists",
+      "role": "Impaulsive Podcast",
+      "bio": "Mike Majlak is a media personality associated with the Impaulsive podcast. Inspiring Children's public Awards website includes him among business leaders and philanthropists.",
+      "image": "local:mike-majlak",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/1e0f7a1f81b903fd7266.png"
+    },
+    {
+      "name": "Kevin Hines",
+      "category": "Business Leaders & Philanthropists",
+      "role": "Suicide Prevention Speaker",
+      "bio": "Kevin Hines is a mental health advocate, author and speaker focused on suicide prevention and resilience. His work includes the Kevin & Margaret Hines Foundation and the book Cracked, Not Broken.",
+      "image": "local:kevin-hines",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/46e836ec2c50ec0fb3f2.jpg"
+    },
+    {
+      "name": "Daniel Gillison",
+      "category": "Business Leaders & Philanthropists",
+      "role": "NAMI",
+      "bio": "Daniel Gillison is associated with the National Alliance on Mental Illness, known as NAMI. Inspiring Children's public Awards website recognizes him in its Business Leaders & Philanthropists category.",
+      "image": "local:daniel-gillison",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/fa67e3e78fefc1343e51.jpg"
+    },
+    {
+      "name": "Rahil Briggs",
+      "category": "Talent",
+      "role": "",
+      "bio": "",
+      "image": "local:rahil-briggs",
+      "zoom": 1,
+      "imageSource": null
+    },
+    {
+      "name": "Michael Townsend",
+      "category": "Talent",
+      "role": "Tape Art",
+      "bio": "",
+      "image": "local:michael-townsend",
+      "zoom": 1,
+      "imageSource": null
+    },
+    {
+      "name": "Leah Smith",
+      "category": "Talent",
+      "role": "Tape Art",
+      "bio": "",
+      "image": "local:leah-smith",
+      "zoom": 1,
+      "imageSource": null
+    },
+    {
+      "name": "Margaret Hines",
+      "category": "Talent",
+      "role": "",
+      "bio": "",
+      "image": "local:margaret-hines",
+      "zoom": 1,
+      "imageSource": null
+    },
+    {
+      "name": "Jeff Levin",
+      "category": "Talent",
+      "role": "Talent Manager",
+      "bio": "",
+      "image": "local:jeff-levin",
+      "zoom": 1,
+      "imageSource": null
+    },
+    {
+      "name": "Ryan Wolfington",
+      "category": "Executive Producers",
+      "role": "Executive Producer",
+      "bio": "Ryan Wolfington is a founder of Inspiring Children Foundation. The foundation's public Summit website credits him as an executive producer of the gathering.",
+      "image": "local:ryan-wolfington",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/58f13fb99dadbae73185.png"
+    },
+    {
+      "name": "Trevor Short",
+      "category": "Executive Producers",
+      "role": "Executive Producer",
+      "bio": "Trevor Short is a founder of Inspiring Dreams. Inspiring Children's public Summit website recognizes him among the gathering's executive producers.",
+      "image": "local:trevor-short",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/88a12d5e93cd6ded66b3.png"
+    },
+    {
+      "name": "Aphrah Brokaw",
+      "category": "Producers",
+      "role": "Producer",
+      "bio": "Aphrah Brokaw is a music manager associated with Jewel Inc. Inspiring Children's public Summit website recognizes her work as a producer of the gathering.",
+      "image": "local:aphrah-brokaw",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/2b98c9d8be6ddb24135e.png"
+    },
+    {
+      "name": "Trent Alenik",
+      "category": "Producers",
+      "role": "Producer",
+      "bio": "Trent Alenik is identified by Inspiring Children Foundation as its CEO. The foundation's public Summit website also credits him as a producer of the gathering.",
+      "image": "local:trent-alenik",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/c2137e82c7aad35ab34f.png"
+    }
+  ],
+  "awards": {
+    "venue": "Encore Theater at Wynn Las Vegas",
+    "date": "Monday, November 2, 2026",
+    "times": [
+      {
+        "label": "Doors Open",
+        "time": "6:30 PM"
+      },
+      {
+        "label": "Pre-Show",
+        "time": "7:00 PM"
+      },
+      {
+        "label": "Awards Show",
+        "time": "8:00 PM-10:00 PM"
+      }
+    ],
+    "intro": "The award show was created to celebrate the pioneers of human development and mental health, the visionaries, healers, and innovators who have courageously broken barriers, challenged stigma, and illuminated the path toward healing, growth, and connection.",
+    "foundation": "Steven & Alexandra Cohen Foundation",
+    "rsvpUrl": "https://not-alone-awards-rsvp-2026.netlify.app/",
+    "iHeartUrl": "https://www.youtube.com/@iHeartRadio/streams",
+    "host": {
+      "name": "Loni Love",
+      "role": "Comedian & TV Host",
+      "bio": "Loni Love is a comedian and television host. She is the host of the 2026 Not Alone Awards, bringing her experience in entertainment to the celebration of human development and mental health.",
+      "image": "local:loni-love",
+      "zoom": 1,
+      "imageSource": "https://not-alone-summit.netlify.app/original-2025/29e71700f9c17f6a2c20.jpg"
+    },
+    "highlights": {
+      "title": "Inside the 2025 Not Alone Awards: A Night of Music, Mental Health and Human Development",
+      "url": "https://www.youtube.com/watch?v=z2NdP-X7_Mc",
+      "duration": "1:38"
+    },
+    "winners2025": [
+      {
+        "award": "No Quit Award",
+        "recipient": "Kevin Hines"
+      },
+      {
+        "award": "Not Alone Legacy Award",
+        "recipient": "Didi Hirsch Mental Health Services"
+      },
+      {
+        "award": "Not Alone Service Award",
+        "recipient": "Atz Kilcher"
+      },
+      {
+        "award": "The Rudy Award",
+        "recipient": "Ozzie Tavares"
+      },
+      {
+        "award": "Not Alone Pioneer Award",
+        "recipient": "NAMI (National Alliance on Mental Illness)",
+        "note": "Accepted by CEO Dan Gillison Jr."
+      },
+      {
+        "award": "The Woz Innovation Award",
+        "recipient": "David Eagleman"
+      },
+      {
+        "award": "The Jewel Never Broken Award",
+        "recipient": "The Trevor Project",
+        "note": "Accepted by CEO Jaymes Black"
+      },
+      {
+        "award": "Not Alone Trailblazers Award",
+        "recipient": "Dr. Blaise Aguirre and Marc Brackett"
+      },
+      {
+        "award": "Not Alone Film of the Year Award",
+        "recipient": "Cabrini",
+        "note": "Executive producer Eustace Wolfington"
+      },
+      {
+        "award": "The Not Alone Award",
+        "recipient": "Darryl \"DMC\" McDaniels"
+      },
+      {
+        "award": "Not Alone Album of the Year",
+        "recipient": "Rachel Platten"
+      }
+    ]
+  }
+}

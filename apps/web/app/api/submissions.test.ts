@@ -14,6 +14,7 @@ describe("retired collaborator submission flows", () => {
     vi.stubGlobal("fetch", fetchMock);
     const response = await post();
     expect(response.status).toBe(410);
+    expect(response.headers.get("Cache-Control")).toBe("no-store");
     expect(await response.text()).toContain("No ");
     expect(fetchMock).not.toHaveBeenCalled();
   });

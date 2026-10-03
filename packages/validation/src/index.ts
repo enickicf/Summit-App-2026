@@ -280,6 +280,29 @@ export const attendeeDeviceRegistrationSchema = z.object({
   lastSeenAt: z.string().datetime()
 });
 
+// Attendee sign-ups for optional experiences. Names go to staff only and are never part of a
+// published snapshot. The install id is a random per-install identifier, not an account.
+export const experienceSignupStatusSchema = z.enum(["confirmed", "waitlisted", "cancelled"]);
+
+const signupNameSchema = z.string().trim().min(2).max(80)
+  .regex(/^[^\p{Cc}\p{Cf}]+$/u, "Name contains unsupported characters.");
+
+export const experienceSignupRequestSchema = z.object({
+  installId: z.string().uuid(),
+  name: signupNameSchema,
+  scheduleItemId: z.string().uuid(),
+  action: z.enum(["join", "leave"])
+}).strict();
+
+export const experienceSignupLookupSchema = z.object({
+  installId: z.string().uuid()
+}).strict();
+
+export const experienceSignupStaffUpdateSchema = z.object({
+  signupId: z.string().uuid(),
+  status: z.enum(["confirmed", "waitlisted"])
+}).strict();
+
 export const attendeeSyncStateSchema = z.object({
   eventId: z.string().min(1),
   localRevision: z.number().int().positive(),
@@ -310,3 +333,6 @@ export type PublicationRevision = z.infer<typeof publicationRevisionSchema>;
 export type AuditLogEntry = z.infer<typeof auditLogEntrySchema>;
 export type AttendeeDeviceRegistration = z.infer<typeof attendeeDeviceRegistrationSchema>;
 export type AttendeeSyncState = z.infer<typeof attendeeSyncStateSchema>;
+export type ExperienceSignupStatus = z.infer<typeof experienceSignupStatusSchema>;
+export type ExperienceSignupRequest = z.infer<typeof experienceSignupRequestSchema>;
+export type ExperienceSignupStaffUpdate = z.infer<typeof experienceSignupStaffUpdateSchema>;

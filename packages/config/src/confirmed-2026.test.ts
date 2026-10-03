@@ -9,11 +9,12 @@ describe("confirmed 2026 summit roster", () => {
   });
 
   it("matches the reviewed read-only Airtable snapshot", () => {
-    expect(confirmedSummitGuests2026).toHaveLength(53);
-    expect(confirmedSummitGuests2026Source.observedConfirmedRows).toBe(56);
+    expect(confirmedSummitGuests2026).toHaveLength(62);
+    expect(confirmedSummitGuests2026Source.observedConfirmedRows).toBe(64);
     expect(confirmedSummitGuests2026Source.publicConfirmedRows).toBe(confirmedSummitGuests2026.length);
     expect(confirmedSummitGuests2026).not.toEqual(expect.arrayContaining(["Erica McGraw", "Jay McGraw", "Raquelle Stevens"]));
-    expect(confirmedSummitGuests2026).toEqual(expect.arrayContaining(["Jeff Levin", "Mike Tyson", "Darryl McDaniels (DMC)", "Janet Wozniak", "Cathy Olson"]));
-    for (const name of ["Adam Lewis", "Melony Lewis", "Cameron Kelly", "Winston Kelly", "Jeneva Bell", "DMC"]) expect(confirmedSummitGuests2026).not.toContain(name);
+    expect(confirmedSummitGuests2026).toEqual(expect.arrayContaining(["Jeff Levin", "Mike Tyson", "Darryl McDaniels (DMC)", "Janet Wozniak", "Cathy Olson", "Ray Lewis", "Sarah Gilman"]));
+    for (const name of ["Paul Dalio (TBC)", "Paul Dalio", "Ellie Kanner's +1 (TBC)"]) expect(confirmedSummitGuests2026).not.toContain(name);
+    for (const name of ["Adam Lewis", "Melony Lewis", "Cameron Kelly", "Winston Kelly", "Jeneva Bell", "DMC", "Steven Cohen", "Alexandra Cohen"]) expect(confirmedSummitGuests2026).not.toContain(name);
   });
 });

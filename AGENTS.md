@@ -1,44 +1,62 @@
 # Not Alone Summit Engineering Rules
 
-This repository contains two connected products for Inspiring Children Foundation:
+## Start Here
 
-- `apps/mobile`: iOS-first React Native attendee app built with Expo, Expo Router, and TypeScript.
-- `apps/admin`: separate responsive Next.js staff Event Control Portal.
-- `apps/web`: independently deployed public website, connected to the same owner-controlled API as the attendee app.
-- `packages/*`: shared source of truth for config, schemas, domain logic, API contracts, design tokens, and fixtures.
-- `supabase/*`: database migrations, local seed data, and future Edge Function code.
+This existing project can move between coding providers. Start with `00_START_HERE.md` and `README.md`, then the order below plus `docs/CURRENT_WORK.md`, `docs/PRODUCTION_GUARDRAILS.md`, `docs/DEPLOYMENTS_AND_PORTALS.md` and `docs/ACCESS_AND_AUTH.md`. Durable memory and actual files replace old conversations. Update current work/state/tasks and decisions after substantial work; never require a retired Codex or Claude conversation.
 
-Non-negotiables:
+Read, in order:
 
-- Never replace the attendee app with a website, PWA, WebView wrapper, Capacitor app, or desktop-first React app.
-- Keep final event facts centrally configurable. Demo records must remain clearly labeled until approved content is supplied.
-- Store event instants as UTC and render event-local time using an IANA time zone.
-- Staff controls must remain outside the attendee app.
-- Mobile and staff surfaces must read from the same canonical published event model.
-- Keep this owner-controlled app, website, backend, and deployments independent of collaborator forks. Do not automatically import or merge external collaborator updates; obtain an explicit owner request before integrating them. See `docs/PROJECT_OWNERSHIP.md`.
-- Airtable is read-only. Attendance confirmation is not role approval. Producer credits must remain within the original ICF site list in `packages/config/src/producer-credits.ts`.
-- Do not duplicate schedules for AI, notifications, "Now", mobile, or staff preview.
-- Keep all elevated credentials server-side. Never expose service-role Supabase credentials, OpenAI keys, Apple credentials, or push credentials in mobile/browser bundles.
-- Enforce access and publishing rules server-side with Supabase RLS and transactional application functions as the production path.
-- AI, notifications, analytics, and realtime failures must not break cached schedule, map, or essential event information.
-- Use strict TypeScript, Zod validation, testable modules, and conservative mature dependencies.
-- Push delivery, production publishing, App Store/TestFlight submission, and paid/external resources require explicit authorization.
-- The release rule is zero known P0/P1 defects, supported by tests, runtime inspection, auditability, and documented limitations.
+1. `docs/HANDOFF.md`
+2. `docs/PROJECT_STATE.md`
+3. `docs/ARCHITECTURE.md`
+4. `docs/DATA_AND_SERVICES.md`
+5. `docs/DECISIONS.md`, `docs/KNOWN_ISSUES.md`, and `docs/NEXT_TASKS.md`
+6. `docs/PROJECT_OWNERSHIP.md` before any collaborator, deployment, or credential work.
 
-Required quality gates:
+This is one owner-controlled monorepo:
 
-- `pnpm lint`
-- `pnpm typecheck`
-- `pnpm test`
-- Mobile iOS Simulator/development-build inspection before release-ready status.
-- Staff portal browser inspection.
-- Database migration/RLS review before connecting staging or production data.
+- `apps/mobile`: native Expo/React Native attendee app.
+- `apps/admin`: Next.js staff Event Control Portal and owner-controlled API.
+- `apps/web`: independently deployed public Summit/Awards website and browser companion.
+- `packages/*`: shared configuration, contracts, domain logic, tokens, and fixtures.
+- `supabase/*`: database migrations and local seed material.
 
-## Owner vision and factual provenance
+## Non-Negotiables
 
-- Follow the owner's original product requirements and pre-collaboration design intent, plus later changes explicitly requested by the owner. The approved read-only 2026 Airtable replacement remains in scope; this instruction does not restore the old active agenda.
-- Do not introduce new features, roles, biographies, sponsors, attendance claims, session assignments, times, rooms, or event policies merely because they appeared in collaborator-authored code or notes. Existing code is not independent evidence that a fact is true.
-- Use the original ICF source content for the historical archive, reviewed 2026 Airtable records for current event facts, and explicit owner instructions for approved exceptions. Keep those sources and their years distinct. Missing or conflicting facts must remain unconfirmed, not filled in with plausible copy.
-- Do not infer a speaking slot, award, host role, or access entitlement from attendance alone. Preserve original production/chair credits only within the scope the owner explicitly approved; do not expand that list.
-- Do not reintroduce removed demo mode, personal schedules, collaborator-added native navigation, or retired submission flows without a new explicit owner request.
-- Before reverting work, inspect its provenance. Changes from another owner-authorized task are not collaborator changes. Preserve approved security, reliability, and 2026 publishing work; report any remaining uncertainty instead of claiming a complete historical reset or complete credential isolation.
+- Keep the attendee product native; do not replace it with a website, PWA, WebView, Capacitor app, or desktop-first app.
+- Keep staff controls outside the attendee app.
+- Mobile, public web, and staff must use one canonical published event model. Do not create parallel schedules for AI, notifications, previews, or "Now".
+- Store event instants as UTC and render with an IANA event timezone.
+- Draft changes stay invisible to attendees until an authorized atomic publish. A failed AI, notification, analytics, or realtime service must not break cached essential event information.
+- Keep privileged credentials server-side. Never expose Supabase service role, OpenAI, Apple, Expo, or push secrets in browser/mobile bundles or docs.
+- Supabase RLS and server-side transactional functions are the production authorization and publishing path.
+- Airtable is read-only. Attendance is not a speaking role, award, or staff authorization. Do not infer missing facts.
+- Historical 2025 content comes from original ICF sources; current 2026 facts come only from reviewed Airtable records or explicit owner direction. Keep years distinct.
+- Producer credits are restricted to the original ICF allowlist in `packages/config/src/producer-credits.ts`.
+- Do not import, merge, restore, or deploy collaborator code automatically. Preserve owner-approved changes and inspect provenance before reverting.
+- Removed demo mode, personal schedules, retired native navigation, and retired public submission flows stay removed unless the owner explicitly restores them.
+- Do not seed, delete, reset, or overwrite Supabase, Airtable, RSVP, local live-ops, or user/device data without specific authorization and a reviewed scope.
+
+## Live Data Protection
+
+This project may contain real production and user-submitted data. Preserve it exactly as it exists. If it is unclear whether data is live, assume that it is live and do not modify it.
+
+Never automatically reset or reseed databases, truncate tables, delete records or users, clear storage, remove uploads, recreate production databases, overwrite production data, destructively migrate data, disconnect existing services, or replace live data with sample data. Each requires explicit owner authorization and a reviewed scope.
+
+## Quality and Release Gates
+
+Run the applicable gates before calling a code change release-ready:
+
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm --filter @not-alone/web build
+pnpm --filter @not-alone/admin build
+```
+
+Also inspect the native iOS Simulator/development build, the staff portal in a browser, and migrations/RLS before staging or production data work. Release readiness requires zero known P0/P1 defects, verified behavior, auditability, and documented limitations.
+
+## Documentation Rule
+
+Keep the files listed above current when architecture, data source, services, decisions, or launch risk changes. Mark statements as `IMPLEMENTED`, `PARTIAL`, `PLANNED`, `BROKEN`, or `UNKNOWN`; never convert an unverified claim into a fact.

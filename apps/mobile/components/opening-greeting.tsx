@@ -13,7 +13,7 @@ import {
   View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { colors, typography } from "@not-alone/design-tokens";
+import { font, palette } from "../lib/summit-theme";
 import { useResponsiveLayout } from "./responsive-layout";
 
 const launchArt = require("../assets/launch-art-premium.png");
@@ -389,7 +389,7 @@ export function OpeningGreeting() {
                 Summit
               </Text>
               <LinearGradient
-                colors={["#76B8FF", "#FFF1CA", "#F1C461"]}
+                colors={["#8d9cdf", "#bd9fdf", "#efc2d4"]}
                 end={{ x: 1, y: 0.5 }}
                 start={{ x: 0, y: 0.5 }}
                 style={[styles.yearCapsule, landscape && styles.yearCapsuleLandscape]}
@@ -544,9 +544,8 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "#FAFCFF",
-    fontFamily: typography.black,
+    fontFamily: font.semibold,
     fontSize: 50,
-    fontWeight: "900",
     lineHeight: 53,
     maxWidth: 350,
     textAlign: "center",
@@ -567,16 +566,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 18,
     ...Platform.select({
-      web: { boxShadow: "0 0 20px rgba(230, 192, 111, 0.4)" },
-      default: { shadowColor: "#E6C06F", shadowOpacity: 0.4, shadowRadius: 20 }
+      web: { boxShadow: "0 0 20px rgba(189, 159, 223, 0.5)" },
+      default: { shadowColor: "#BD9FDF", shadowOpacity: 0.5, shadowRadius: 20 }
     }),
     width: 128
   },
   yearText: {
-    color: colors.midnight,
-    fontFamily: typography.black,
+    color: palette.plum,
+    fontFamily: font.semibold,
     fontSize: 19,
-    fontWeight: "900",
     letterSpacing: 0
   },
   yearCapsuleLandscape: {
@@ -599,7 +597,7 @@ const styles = StyleSheet.create({
   enterButton: {
     alignItems: "center",
     backgroundColor: "rgba(2, 10, 31, 0.82)",
-    borderColor: "rgba(255, 235, 194, 0.62)",
+    borderColor: "rgba(231, 222, 244, 0.7)",
     borderRadius: 23,
     borderWidth: 1,
     height: 46,
@@ -620,9 +618,8 @@ const styles = StyleSheet.create({
   },
   enterText: {
     color: "rgba(249, 251, 255, 0.96)",
-    fontFamily: typography.black,
+    fontFamily: font.semibold,
     fontSize: 13,
-    fontWeight: "900",
-    letterSpacing: 0
+    letterSpacing: 1.2
   }
 });

@@ -1,0 +1,44 @@
+import { describe, expect, it } from "vitest";
+import { event2026Snapshot } from "@not-alone/test-fixtures/event-2026";
+import { publishedProgramAnswer } from "./published-program-answer";
+
+const now = "2026-09-16T20:00:00.000Z";
+
+describe("published website program answers", () => {
+  it("answers a generic schedule question without substituting an event description", () => {
+    expect(publishedProgramAnswer("What is the schedule?", event2026Snapshot, now)).toContain("Mike's Bikes Community Ride");
+    expect(publishedProgramAnswer("What is the schedule?", event2026Snapshot, now)).toContain("first eight");
+  });
+
+  it("keeps incomplete times and unsupported questions distinct", () => {
+    expect(publishedProgramAnswer("When is tennis?", event2026Snapshot, now)).toContain("end time to be confirmed");
+    expect(publishedProgramAnswer("Is jewelry allowed?", event2026Snapshot, now)).toBeNull();
+  });
+
+  it("includes cancellation, event dates, access, and overnight end dates", () => {
+    const snapshot = structuredClone(event2026Snapshot);
+    const show = snapshot.scheduleItems.find(item => item.title === "Awards Show")!;
+    show.status = "canceled";
+    expect(publishedProgramAnswer("When are the awards?", snapshot, now)).toContain("Awards Show (canceled)");
+    const poker = publishedProgramAnswer("When is poker?", snapshot, now);
+    expect(poker).toContain("Sunday, November 1, 2026");
+    expect(poker).toContain("Nov 2, 2026, 12:00 AM PST");
+    expect(poker).toContain("Access:");
+  });
+
+  it("does not present hidden or unpublished activities or past activities as next", () => {
+    const snapshot = structuredClone(event2026Snapshot);
+    snapshot.scheduleItems.forEach(item => { item.published = false; });
+    expect(publishedProgramAnswer("What is the schedule?", snapshot, now)).not.toContain("Mike's Bikes");
+    expect(publishedProgramAnswer("What is next?", event2026Snapshot, "2026-11-10T20:00:00.000Z")).toContain("No upcoming");
+  });
+
+  it("keeps show roles separate from attendance and matches whole-word intent", () => {
+    const roleAnswer = publishedProgramAnswer("Who is performing at the awards?", event2026Snapshot, now)!;
+    expect(roleAnswer).toContain("does not establish performers");
+    expect(roleAnswer).not.toContain("Mike Tyson");
+    const timing = publishedProgramAnswer("Do you know the awards time?", event2026Snapshot, now)!;
+    expect(timing).toContain("Awards Show");
+    expect(timing).not.toContain("Mike's Bikes");
+  });
+});

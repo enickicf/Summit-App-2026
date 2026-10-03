@@ -1,96 +1,139 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import type { WebScheduleItem } from "../lib/snapshot";
+import { useId, useRef, useState } from "react";
+import { Lock } from "lucide-react";
+import type { EventSnapshot } from "@not-alone/validation";
+import { PublicEventNotices } from "./current-event-updates";
+import {
+  eventDateKey,
+  formatSessionTimes,
+  groupSessionsByStart,
+  initialScheduleDay,
+  isFoundersOnly,
+  scheduleDayForKey,
+  scheduleStatusLabels,
+  sessionDisplaySummary,
+  type ScheduleDay,
+  tabIndexForKey
+} from "../app/schedule/schedule-presentation";
+import { isPokerNight, pokerNight } from "../lib/poker-night-links";
+import { isWorkshopSignup } from "../lib/morning-workshops";
+import { WorkshopSignup } from "./workshop-signup";
+import styles from "../app/schedule/schedule.module.css";
+import { useEventClock } from "../app/schedule/use-event-clock";
+import { usePublicationRefresh } from "../app/schedule/use-publication-refresh";
+import { publicPendingProgramBlocks } from "../app/schedule/pending-program";
 
-function parts(item: WebScheduleItem) {
-  const date = new Date(item.startUtc);
-  const timeZone = item.eventTimeZone;
-  return {
-    key: new Intl.DateTimeFormat("en-CA", { timeZone, year: "numeric", month: "2-digit", day: "2-digit" }).format(date),
-    weekday: new Intl.DateTimeFormat("en-US", { timeZone, weekday: "long" }).format(date),
-    date: new Intl.DateTimeFormat("en-US", { timeZone, month: "long", day: "numeric" }).format(date),
-    start: new Intl.DateTimeFormat("en-US", { timeZone, hour: "numeric", minute: "2-digit" }).format(date),
-    end: new Intl.DateTimeFormat("en-US", { timeZone, hour: "numeric", minute: "2-digit" }).format(new Date(item.endUtc))
-  };
-}
+export function ScheduleBrowser({ days, eventTimeZone, initialNowUtc, noticeSnapshot, showRooms = false }: {
+  days: ScheduleDay[];
+  eventTimeZone: string;
+  initialNowUtc: string;
+  noticeSnapshot?: EventSnapshot | null;
+  // Owner / Ryan (Sept 29): rooms inside Wynn are shown only on the private venue guide (lib/room-privacy.ts).
+  showRooms?: boolean;
+}) {
+  const id = useId();
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  const [activeDay, setActiveDay] = useState(() => initialScheduleDay(days, eventDateKey(initialNowUtc, eventTimeZone)));
+  const nowUtc = useEventClock(initialNowUtc);
+  usePublicationRefresh();
+  const selected = scheduleDayForKey(days, activeDay, eventDateKey(nowUtc, eventTimeZone));
 
-type PendingDay = { key: string; label: string; date: string; notes: { id: string; title: string; body: string }[] };
-
-export function ScheduleBrowser({ items, pendingDays = [] }: { items: WebScheduleItem[]; pendingDays?: PendingDay[] }) {
-  const days = useMemo(() => {
-    const grouped = new Map<string, { label: string; date: string; items: WebScheduleItem[] }>();
-    for (const item of items) {
-      const itemParts = parts(item);
-      const current = grouped.get(itemParts.key);
-      grouped.set(itemParts.key, {
-        label: itemParts.weekday,
-        date: itemParts.date,
-        items: [...(current?.items ?? []), item]
-      });
-    }
-    for (const day of pendingDays) {
-      if (!grouped.has(day.key)) grouped.set(day.key, { label: day.label, date: day.date, items: [] });
-    }
-    return [...grouped.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([key, value]) => ({ key, ...value }));
-  }, [items, pendingDays]);
-  const [activeDay, setActiveDay] = useState(days[0]?.key ?? "");
-  const selected = days.find((day) => day.key === activeDay) ?? days[0];
-
-  if (!selected) return <p className="empty-state">The published schedule will appear here when available.</p>;
-
-  const timeGroups = new Map<string, WebScheduleItem[]>();
-  for (const item of selected.items) {
-    const start = parts(item).start;
-    timeGroups.set(start, [...(timeGroups.get(start) ?? []), item]);
-  }
+  const notices = noticeSnapshot ? <PublicEventNotices snapshot={noticeSnapshot} nowUtc={nowUtc} /> : null;
+  if (!selected) return <>{notices}<div className={styles.empty}>
+    <p>The published schedule will appear here when available.</p>
+  </div></>;
 
   return (
-    <div className="schedule-browser">
-      <div className="day-tabs" role="tablist" aria-label="Schedule days">
-        {days.map((day) => (
+    <>{notices}<div className={styles.browser}>
+      <div className={styles.days} role="tablist" aria-label="Schedule days">
+        {days.map((day, index) => (
           <button
-            key={day.key}
+            key={day.date}
+            ref={(node) => { tabs.current[index] = node; }}
+            id={`${id}-tab-${day.date}`}
             type="button"
             role="tab"
-            aria-selected={day.key === selected.key}
-            className={day.key === selected.key ? "active" : ""}
-            onClick={() => setActiveDay(day.key)}
+            aria-controls={`${id}-panel-${day.date}`}
+            aria-label={day.dayLabel}
+            aria-selected={day.date === selected.date}
+            tabIndex={day.date === selected.date ? 0 : -1}
+            onClick={() => setActiveDay(day.date)}
+            onKeyDown={(event) => {
+              const next = tabIndexForKey(event.key, index, days.length);
+              if (next === undefined) return;
+              event.preventDefault();
+              setActiveDay(days[next]!.date);
+              tabs.current[next]?.focus();
+            }}
           >
-            <strong>{day.label}</strong>
-            <span>{day.date}</span>
+            <strong>{day.weekday}</strong>
+            <span>{day.shortDate}</span>
           </button>
         ))}
       </div>
 
-      <div className="time-groups">
-        {[...timeGroups.entries()].map(([time, groupedItems]) => (
-          <section className="time-group" key={time} aria-labelledby={`time-${time.replace(/\W/g, "-")}`}>
-            <h2 id={`time-${time.replace(/\W/g, "-")}`}>{time}</h2>
-            <div className="session-stack">
-              {groupedItems.map((item) => {
-                const itemParts = parts(item);
-                return (
-                  <article className={`session-row status-${item.status}`} key={item.id}>
-                    <div className="session-row-topline">
-                      <span>{itemParts.start} - {itemParts.end}</span>
-                      {item.featured ? <strong>Featured</strong> : null}
-                      {item.status !== "scheduled" ? <strong>{item.status}</strong> : null}
-                    </div>
-                    <h3>{item.title}</h3>
-                    <p>{item.summary}</p>
-                    <div className="session-location">{item.locationName}</div>
-                  </article>
-                );
-              })}
-            </div>
-          </section>
-        ))}
-      </div>
-      {pendingDays.find(day => day.key === selected.key)?.notes.map(note => <section key={note.id} className="schedule-pending">
-        <h2>{note.title}</h2>
-        {note.body.split("\n\n").map((paragraph, index) => <p key={index}>{paragraph}</p>)}
-      </section>)}
-    </div>
+      {days.map(day => (
+        <div
+          key={day.date}
+          id={`${id}-panel-${day.date}`}
+          role="tabpanel"
+          aria-labelledby={`${id}-tab-${day.date}`}
+          tabIndex={0}
+          hidden={day.date !== selected.date}
+          className={styles.panel}
+        >
+          {day.date === selected.date ? <>
+            {groupSessionsByStart(day.items).map(({ startUtc, items }) => (
+              <section className={styles.timeGroup} key={startUtc} aria-labelledby={`${id}-time-${startUtc}`}>
+                <h2 id={`${id}-time-${startUtc}`}>
+                  <time dateTime={startUtc}>{formatSessionTimes(items[0]!, eventTimeZone).start}</time>
+                </h2>
+                <div className={styles.sessions}>
+                  {items.map((item) => {
+                    const times = formatSessionTimes(item, eventTimeZone);
+                    const summary = sessionDisplaySummary(item);
+                    const foundersOnly = isFoundersOnly(item);
+                    return (
+                      <article
+                        className={styles.session}
+                        data-status={item.status}
+                        data-founders-only={foundersOnly || undefined}
+                        key={item.id}
+                        aria-labelledby={`${id}-session-${item.id}`}
+                      >
+                        <div className={styles.topline}>
+                          {/* No end time in the source: none is shown (never "Until" the start time). */}
+                          {item.endUtc !== item.startUtc && <span>Until <time dateTime={item.endUtc}>{times.end}</time></span>}
+                          {item.featured ? <strong>Featured</strong> : null}
+                          {scheduleStatusLabels(item, nowUtc).map(label => <strong key={label}>{label}</strong>)}
+                        </div>
+                        <h3 id={`${id}-session-${item.id}`}>{item.title}</h3>
+                        {foundersOnly ? <p className={styles.foundersOnly}><Lock size={15} aria-hidden="true" />Founders only event</p> : null}
+                        {summary ? <p>{summary}</p> : null}
+                        {showRooms && <p className={styles.location}><span>Location</span>{/^location to be confirmed\.?$/i.test(item.locationName.trim()) ? "To be confirmed" : item.locationName}</p>}
+                        {/* Owner (Sept 28): the poker night has its own site and its own RSVP; this entry is
+                            the only place on the Summit site that links to them. */}
+                        {isPokerNight(item.title) && pokerNight.live ? <p className={styles.pokerLinks}>
+                          <a href={pokerNight.site} target="_blank" rel="noopener noreferrer">RSVP &amp; details</a>
+                        </p> : null}
+                        {/* Owner (Sept 28): name-only sign-up for the wellness workshops and the Thursday Tennis / High Tea, on the schedule page only. */}
+                        {isWorkshopSignup(item) ? <WorkshopSignup item={item} eventTimeZone={eventTimeZone} /> : null}
+                      </article>
+                    );
+                  })}
+                </div>
+              </section>
+            ))}
+            {day.notes.map(note => <div key={note.id} aria-label={note.title}>
+              {publicPendingProgramBlocks(note.body).map((block, index) => block.start ? <section className={styles.timeGroup} key={index}>
+                <h2>{block.start}</h2><div className={styles.sessions}><article className={styles.session}><h3>{block.title}</h3>{block.detail && <p>{block.detail}</p>}</article></div>
+              </section> : <p className={styles.pending} key={index}>{block.detail}</p>)}
+            </div>)}
+            {day.items.length === 0 && day.notes.length === 0 ? <p className={styles.empty}>No published sessions for this day.</p> : null}
+          </> : null}
+        </div>
+      ))}
+    </div></>
   );
 }

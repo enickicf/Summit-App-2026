@@ -1,6 +1,10 @@
 import { Link, useLocalSearchParams } from "expo-router";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View, type ImageSourcePropType } from "react-native";
-import { colors, spacing, typography } from "@not-alone/design-tokens";
+import { FoundersBadge } from "../../components/summit-ui";
+import { ParticipationControl, waitlistNote } from "../../components/signup-controls";
+import { scheduleParticipation } from "@not-alone/domain/experiences";
+import { displayLocation, isFoundersOnly } from "../../lib/schedule-presentation";
+import { cardShadow, font, palette, space } from "../../lib/summit-theme";
 import { toEventTimeRange } from "@not-alone/domain";
 import { useSummit } from "../../components/summit-context";
 import { useResponsiveLayout } from "../../components/responsive-layout";
@@ -43,6 +47,9 @@ export default function SessionDetailScreen() {
       <View style={[styles.hero, layout.paddingStyle]}>
         <Text style={styles.time}>{toEventTimeRange(item, snapshot.event.timeZone)}</Text>
         <Text style={styles.title}>{item.title}</Text>
+        {isFoundersOnly(item) ? <FoundersBadge /> : null}
+        <ParticipationControl item={item} />
+        {scheduleParticipation(item) === "experience" ? <Text style={styles.waitlist}>{waitlistNote}</Text> : null}
         <Text style={styles.summary}>{item.summary}</Text>
       </View>
 
@@ -52,7 +59,7 @@ export default function SessionDetailScreen() {
           {speakers.map((speaker) => {
             const speakerImage = getSpeakerImage(speaker);
             return (
-              <View key={speaker.id} style={[styles.speakerPanel, layout.cardPaddingStyle]}>
+              <View key={speaker.id} style={[styles.speakerPanel, cardShadow, layout.cardPaddingStyle]}>
                 {speakerImage ? (
                   <Image accessibilityLabel={`${speaker.name} headshot`} resizeMode="cover" source={speakerImage} style={styles.speakerImage} />
                 ) : (
@@ -71,9 +78,9 @@ export default function SessionDetailScreen() {
         </View>
       ) : null}
 
-      <View style={[styles.panel, layout.marginStyle, layout.cardPaddingStyle]}>
+      <View style={[styles.panel, cardShadow, layout.marginStyle, layout.cardPaddingStyle]}>
         <Text style={styles.panelTitle}>Session details</Text>
-        <DetailRow label="Location" value={item.locationName} />
+        <DetailRow label="Location" value={displayLocation(item.locationName)} />
         <DetailRow label="Access" value={item.visibilityScope.label} />
         {accessLabelsDiffer ? <DetailRow label="Eligibility" value={item.eligibilityScope.label} /> : null}
         {item.status !== "scheduled" ? <DetailRow label="Status" value={item.status} /> : null}
@@ -81,21 +88,21 @@ export default function SessionDetailScreen() {
 
       <View style={[styles.actionGrid, layout.marginStyle]}>
         <Link href="/map" asChild>
-          <Pressable accessibilityLabel="Open map and find this room" accessibilityRole="button" style={({ pressed }) => [styles.actionButton, pressed && styles.pressed]}>
-            <Text style={styles.actionLabel}>Map</Text>
-            <Text style={styles.actionText}>Find the room</Text>
+          <Pressable accessibilityLabel="Open map and find this room" accessibilityRole="button" style={[styles.actionButton, cardShadow]}>
+            <Text style={styles.actionLabel}>Venue</Text>
+            <Text style={styles.actionText}>Directions and rooms</Text>
           </Pressable>
         </Link>
         <Link href="/help" asChild>
-          <Pressable accessibilityLabel="Ask the summit concierge what to do next" accessibilityRole="button" style={({ pressed }) => [styles.actionButton, pressed && styles.pressed]}>
-            <Text style={styles.actionLabel}>Concierge</Text>
+          <Pressable accessibilityLabel="Ask the summit concierge what to do next" accessibilityRole="button" style={[styles.actionButton, cardShadow]}>
+            <Text style={styles.actionLabel}>Ask AI</Text>
             <Text style={styles.actionText}>Ask what to do next</Text>
           </Pressable>
         </Link>
       </View>
 
       {hasExpandedDescription ? (
-        <View style={[styles.panel, layout.marginStyle, layout.cardPaddingStyle]}>
+        <View style={[styles.panel, cardShadow, layout.marginStyle, layout.cardPaddingStyle]}>
           <Text style={styles.panelTitle}>About this session</Text>
           <Text style={styles.description}>{item.description}</Text>
         </View>
@@ -127,191 +134,34 @@ function getSpeakerImage(speaker: { name: string; headshotUrl: string | null }):
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    backgroundColor: colors.canvas
-  },
-  hero: {
-    padding: spacing.lg,
-    paddingTop: spacing.md
-  },
-  time: {
-    color: colors.accent,
-    fontSize: 15,
-    fontWeight: "800"
-  },
-  title: {
-    color: colors.ink,
-    fontFamily: typography.display,
-    fontSize: 32,
-    fontWeight: "700",
-    lineHeight: 37,
-    marginTop: spacing.sm
-  },
-  summary: {
-    color: colors.body,
-    fontSize: 17,
-    lineHeight: 24,
-    marginTop: spacing.md
-  },
-  panel: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: 8,
-    borderWidth: 1,
-    marginHorizontal: spacing.lg,
-    marginTop: spacing.lg,
-    padding: spacing.lg
-  },
-  actionGrid: {
-    flexDirection: "row",
-    gap: spacing.md,
-    marginHorizontal: spacing.lg,
-    marginTop: spacing.lg
-  },
-  actionButton: {
-    backgroundColor: "rgba(13, 21, 48, 0.8)",
-    borderColor: colors.border,
-    borderRadius: 8,
-    borderWidth: 1,
-    flex: 1,
-    minHeight: 76,
-    padding: spacing.md
-  },
-  actionLabel: {
-    color: colors.gold,
-    fontFamily: typography.bold,
-    fontSize: 11,
-    fontWeight: "800",
-    textTransform: "uppercase"
-  },
-  actionText: {
-    color: colors.ink,
-    fontFamily: typography.semibold,
-    fontSize: 13,
-    fontWeight: "700",
-    lineHeight: 18,
-    marginTop: spacing.sm
-  },
-  speakerSection: {
-    marginHorizontal: spacing.lg,
-    marginTop: spacing.lg
-  },
-  sectionLabel: {
-    color: colors.gold,
-    fontFamily: typography.bold,
-    fontSize: 11,
-    fontWeight: "800",
-    marginBottom: spacing.sm,
-    textTransform: "uppercase"
-  },
-  speakerPanel: {
-    alignItems: "center",
-    backgroundColor: colors.surface,
-    borderColor: "rgba(230, 192, 111, 0.22)",
-    borderRadius: 8,
-    borderWidth: 1,
-    flexDirection: "row",
-    gap: spacing.md,
-    marginBottom: spacing.sm,
-    overflow: "hidden",
-    padding: spacing.md
-  },
-  speakerImage: {
-    borderRadius: 8,
-    height: 104,
-    width: 84
-  },
-  speakerFallback: {
-    alignItems: "center",
-    backgroundColor: colors.midnight,
-    borderColor: colors.gold,
-    borderRadius: 8,
-    borderWidth: 1,
-    height: 104,
-    justifyContent: "center",
-    width: 84
-  },
-  speakerInitials: {
-    color: colors.gold,
-    fontFamily: typography.display,
-    fontSize: 28,
-    fontWeight: "700"
-  },
-  speakerText: {
-    flex: 1
-  },
-  speakerName: {
-    color: colors.ink,
-    fontFamily: typography.display,
-    fontSize: 23,
-    fontWeight: "700",
-    lineHeight: 28
-  },
-  speakerRole: {
-    color: colors.gold,
-    fontFamily: typography.semibold,
-    fontSize: 12,
-    lineHeight: 18,
-    marginTop: 2
-  },
-  speakerBio: {
-    color: colors.body,
-    fontSize: 12,
-    lineHeight: 18,
-    marginTop: spacing.xs
-  },
-  detailRow: {
-    borderTopColor: colors.border,
-    borderTopWidth: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: spacing.md
-  },
-  detailLabel: {
-    color: colors.muted,
-    fontSize: 14,
-    fontWeight: "700"
-  },
-  detailValue: {
-    color: colors.ink,
-    flex: 1,
-    fontSize: 14,
-    fontWeight: "700",
-    marginLeft: spacing.md,
-    textAlign: "right",
-    textTransform: "capitalize"
-  },
-  panelTitle: {
-    color: colors.ink,
-    fontFamily: typography.bold,
-    fontSize: 20,
-    fontWeight: "800",
-    marginBottom: spacing.sm
-  },
-  description: {
-    color: colors.body,
-    fontSize: 16,
-    lineHeight: 24
-  },
-  notFound: {
-    backgroundColor: colors.canvas,
-    flex: 1,
-    justifyContent: "center",
-    padding: spacing.xl
-  },
-  notFoundTitle: {
-    color: colors.ink,
-    fontFamily: typography.bold,
-    fontSize: 24,
-    fontWeight: "800"
-  },
-  notFoundBody: {
-    color: colors.body,
-    fontSize: 16,
-    lineHeight: 23,
-    marginTop: spacing.sm
-  },
-  pressed: {
-    opacity: 0.84
-  }
+  screen: { backgroundColor: palette.canvas },
+  hero: { paddingBottom: space.md, paddingTop: space.md },
+  time: { color: palette.violetDeep, fontFamily: font.semibold, fontSize: 15 },
+  title: { color: palette.heading, fontFamily: font.semibold, fontSize: 28, lineHeight: 36, marginTop: space.sm },
+  summary: { color: palette.body, fontFamily: font.regular, fontSize: 16, lineHeight: 25, marginTop: space.md },
+  panel: { backgroundColor: palette.card, borderColor: palette.cardBorder, borderLeftColor: palette.plumMid, borderLeftWidth: 3, borderRadius: 4, borderWidth: 1, marginTop: space.lg, padding: space.lg },
+  panelTitle: { color: palette.plum, fontFamily: font.semibold, fontSize: 16, marginBottom: space.xs },
+  detailRow: { borderTopColor: palette.hairline, borderTopWidth: 1, flexDirection: "row", gap: space.md, paddingVertical: space.md },
+  detailLabel: { color: palette.muted, fontFamily: font.semibold, fontSize: 11, paddingTop: 2, textTransform: "uppercase", width: 92 },
+  detailValue: { color: palette.ink, flex: 1, fontFamily: font.medium, fontSize: 14, lineHeight: 21 },
+  description: { color: palette.body, fontFamily: font.regular, fontSize: 15, lineHeight: 24, marginTop: space.sm },
+  actionGrid: { flexDirection: "row", gap: space.md, marginTop: space.lg },
+  actionButton: { backgroundColor: palette.white, borderColor: palette.cardBorder, borderRadius: 6, borderWidth: 1, flex: 1, minHeight: 76, padding: space.md },
+  actionLabel: { color: palette.violet, fontFamily: font.semibold, fontSize: 11, textTransform: "uppercase" },
+  actionText: { color: palette.heading, fontFamily: font.semibold, fontSize: 14, lineHeight: 19, marginTop: space.sm },
+  speakerSection: { gap: space.md, marginTop: space.lg },
+  sectionLabel: { color: palette.violet, fontFamily: font.semibold, fontSize: 11, textTransform: "uppercase" },
+  speakerPanel: { alignItems: "flex-start", backgroundColor: palette.white, borderColor: palette.cardBorder, borderRadius: 6, borderWidth: 1, flexDirection: "row", gap: space.md, padding: space.lg },
+  speakerImage: { backgroundColor: palette.lilac, borderRadius: 4, height: 104, width: 84 },
+  speakerFallback: { alignItems: "center", backgroundColor: palette.lilac, borderRadius: 4, height: 104, justifyContent: "center", width: 84 },
+  speakerInitials: { color: palette.plum, fontFamily: font.semibold, fontSize: 24 },
+  speakerText: { flex: 1 },
+  speakerName: { color: palette.heading, fontFamily: font.semibold, fontSize: 17, lineHeight: 23 },
+  speakerRole: { color: palette.violetDeep, fontFamily: font.medium, fontSize: 13, lineHeight: 19, marginTop: 2 },
+  speakerBio: { color: palette.body, fontFamily: font.regular, fontSize: 13, lineHeight: 20, marginTop: space.sm },
+  notFound: { alignItems: "center", backgroundColor: palette.canvas, flex: 1, justifyContent: "center", padding: space.xl },
+  notFoundTitle: { color: palette.heading, fontFamily: font.semibold, fontSize: 22 },
+  notFoundBody: { color: palette.body, fontFamily: font.regular, fontSize: 14, lineHeight: 21, marginTop: space.sm, textAlign: "center" },
+  waitlist: { color: palette.muted, fontFamily: font.regular, fontSize: 12, lineHeight: 18, marginTop: space.sm },
+  pressed: { opacity: 0.84 }
 });

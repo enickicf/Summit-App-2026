@@ -1,0 +1,244 @@
+.summit.summit { background:#ffffff; color:#000000; --rule:#4a5faa29; --accent:#4a5faa; }
+.summit .hero { position:relative; isolation:isolate; min-height:480px; height:min(680px,calc(100svh - 220px)); display:flex; align-items:center; overflow:hidden; padding:56px max(24px,calc((100% - 1180px)/2)); background:#111111; }
+.hero::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg,#8fb1e0eb,#8fb1e0a6 55%,#d0d4ea33),linear-gradient(0deg,#22222273,transparent 55%); pointer-events:none; z-index:1; }
+.heroArt { position:absolute; z-index:2; top:0; bottom:0; right:0; width:min(760px,58%); background:url("/images/summit-art-hero.jpg") 50% 60%/cover no-repeat; mix-blend-mode:screen; opacity:.75; filter:brightness(1.3) saturate(.85); pointer-events:none; -webkit-mask-image:radial-gradient(ellipse 60% 62% at 55% 58%,#000 45%,transparent 100%); mask-image:radial-gradient(ellipse 60% 62% at 55% 58%,#000 45%,transparent 100%); }
+.heroCopy { position:relative; z-index:2; max-width:680px; pointer-events:none; text-shadow:0 1px 14px #11111140; }
+.heroCopy a { pointer-events:auto; }
+.heroCopy h1 { font-family:inherit; font-size:76px; font-weight:600; line-height:1.1; margin:24px 0; color:#fff; letter-spacing:0; }
+.heroCopy h1 span { font-size:36px; color:#8fb1e0; }
+.summit .heroCopy p { font-size:15px; line-height:1.8; color:#fff; }
+.summit .eyebrow { font-size:12px; font-weight:600; text-transform:uppercase; color:#8fb1e0; margin-bottom:16px; }
+.heroActions { display:flex; flex-wrap:wrap; gap:12px 14px; margin-top:30px; }
+.heroActions a { display:inline-flex; align-items:center; gap:12px; min-height:48px; padding:6px 20px 6px 6px; border:1px solid #ffffff5c; border-radius:999px; background:#ffffff1f; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); color:#fff; font-size:14px; font-weight:600; text-shadow:none; transition:background 180ms ease, border-color 180ms ease, transform 180ms ease; }
+.heroActions a:hover { background:#ffffff38; border-color:#ffffffa6; transform:translateY(-1px); }
+.heroActions a:focus-visible { outline:3px solid #fff; outline-offset:3px; }
+.heroLinkIcon { display:grid; place-items:center; width:36px; height:36px; border-radius:50%; background:#fff; color:#111111; box-shadow:0 4px 14px #11111140; }
+.heroLinkIcon svg { margin-left:1px; }
+/* 2025 archive hero: a still photograph with a dusk-toned overlay, quieter heart art and a softer year. */
+.summit .hero .heroPhoto { position:absolute; max-width:none; inset:0; width:100%; height:100%; object-fit:cover; object-position:65% 30%; z-index:0; }
+.heroArchive::after { background:linear-gradient(90deg,#111111f0,#222222b8 48%,#8fb1e040),linear-gradient(0deg,#00000099,transparent 55%); }
+.heroArchive .heroArt { opacity:.5; }
+.heroArchive .heroCopy h1 span { color:#d0d4ea; }
+.summit :global(#summit-highlights), .summit :global(#awards-highlights) { scroll-margin-top:24px; }
+.summit .powered { margin:42px 0 0; font-size:11px; }
+.powered strong { display:block; font-size:14px; font-weight:500; }
+.summit > section { border-color:var(--rule); }
+.summit > section:not(.hero) { padding-top:80px; padding-bottom:80px; }
+.summit > section:global(#about) { background:#f2f1f5; }
+.summit > section:global(#about) h2 { font-size:36px; color:#4a5faa; text-align:left; max-width:850px; margin-bottom:28px; }
+.summit > section:global(#about) p { color:#000000; font-size:16px; max-width:900px; }
+.summit > section:global(#about) > img { background:#fff; padding:16px 28px; width:350px; margin:36px 0 0; border-radius:4px; }
+.summit > section:global(#foundation) { background:linear-gradient(115deg,#d0d4ea,#d0d4ea); color:#000000; }
+.summit > section:global(#foundation) p { color:#000000; }
+.summit > section:global(#leadership), .summit > section:global(#hosts), .summit > section:global(#producers) { background:#ffffff; }
+.summit > section:global(#leadership) p, .summit > section:global(#hosts) p, .summit > section:global(#producers) p { color:#555555; }
+.summit > section:global(#venue) { background:linear-gradient(115deg,#d0d4ea,#d0d4ea); color:#000000; }
+.summit > section:global(#venue) p { color:#000000; }
+.summit > section:global(#rsvp) { background:linear-gradient(115deg,#d0d4ea,#d0d4ea); color:#000000; }
+.summit :global(.directorySection) { background:#f2f1f5; border-color:var(--rule); }
+.summit :global(.sectionHeading h2) { color:#4a5faa; }
+.summit :global(.groupHeading h3) { color:#000000; }
+.summit :global(.sectionHeading > p) { color:#555555; }
+.summit :global(.eyebrow) { color:#4a5faa; }
+.summit :global(.directoryCount) { color:#555555; }
+.summit :global(.categoryTabs a) { color:#000000; }
+.summit :global(.searchBox input) { background:#f4f5fa; border-color:#4a5faa29; color:#000000; }
+.summit :global(.searchBox input)::placeholder { color:#555555; }
+.summit :global(.personCard), .summit :global(.personCard > div:nth-child(2)) { background:#d0d4ea; color:#000000; }
+.summit :global(.personCard):hover { background:#c3c8e2; }
+.summit :global(.personCard h4) { color:#4a5faa; }
+.summit :global(.personCard p) { color:#000000; }
+.summit :global(.portrait) { background:linear-gradient(145deg,#d0d4ea,#d0d4ea); color:#fff; }
+.summit .highlights { background:#ffffff; }
+.summit .program { min-height:360px; display:grid; grid-template-columns:minmax(0,1fr) minmax(220px,.45fr); align-items:end; gap:48px; background:linear-gradient(125deg,#222222,#111111); }
+.summit .program > div { text-shadow:none; }
+.summit .program h2 { font-size:34px; max-width:620px; }
+.summit .program p { font-size:15px; color:#fff; max-width:620px; }
+.awardsFilm { min-width:0; }
+.summit .awardsFilm .eyebrow { margin-bottom:14px; }
+.summit .program .programNote { margin:20px 0 0; font-size:14px; line-height:1.7; color:#ffffff; }
+.highlights > div:first-child { display:flex; align-items:baseline; justify-content:space-between; gap:24px; margin-bottom:32px; flex-wrap:wrap; }
+.summit .highlights h2 { margin:0; text-align:left; }
+.summit a:focus-visible { outline-color:#4a5faa; }
+.summit.summit > section:not(.hero) { padding-top:64px; padding-bottom:64px; }
+.summit.summit > section:global(#about) { text-align:center; }
+.quoteScript { font-family:"Great Vibes",cursive; font-weight:400; font-size:1.55em; line-height:1.05; letter-spacing:0; }
+.summit.summit > section:global(#about) h2 { max-width:760px; margin:0 auto 24px; text-align:center; font-size:32px; line-height:1.25; color:#4a5faa; }
+.summit.summit > section:global(#about) p { max-width:800px; margin:0 auto 20px; font-size:16px; line-height:1.75; }
+.summit.summit > section:global(#about) > img { width:300px; max-width:100%; margin:28px auto 0; padding:12px 20px; }
+.summit.summit > section:global(#foundation) { gap:48px; border-block:1px solid #d0d4ea; }
+.summit.summit > section:global(#foundation) > img { width:170px; max-width:100%; }
+.summit.summit > section:global(#foundation) p { max-width:800px; font-size:15px; line-height:1.75; margin-bottom:18px; }
+.summit.summit > section:global(#foundation) p:last-child { margin-bottom:0; }
+.summit.summit > section:global(#leadership), .summit.summit > section:global(#hosts), .summit.summit > section:global(#producers) { background:#ffffff; border-bottom:1px solid var(--rule); }
+.summit.summit > section:global(#leadership) h2, .summit.summit > section:global(#hosts) h2, .summit.summit > section:global(#producers) h2 { font-size:30px; margin-bottom:32px; color:#4a5faa; }
+.summit.summit > section:global(#leadership) img, .summit.summit > section:global(#hosts) img, .summit.summit > section:global(#producers) img { height:220px; margin-bottom:20px; }
+.summit.summit > section:global(#leadership) h3, .summit.summit > section:global(#hosts) h3, .summit.summit > section:global(#producers) h3 { font-size:18px; color:#4a5faa; }
+.summit.summit > section:global(#leadership) p, .summit.summit > section:global(#hosts) p, .summit.summit > section:global(#producers) p { font-size:14px; }
+.summit.summit :global(.directorySection) { margin-top:0; padding:64px max(24px,calc((100% - 1180px)/2)); border-top:0; }
+.summit.summit :global(.sectionHeading) { max-width:none; margin-bottom:40px; text-align:center; }
+.summit.summit :global(.sectionHeading h2) { font-size:32px; line-height:1.25; margin:8px 0 0; }
+.summit.summit :global(.directoryGroups) { gap:56px; }
+.summit.summit :global(.groupHeading) { margin-bottom:24px; }
+.summit.summit :global(.groupHeading h3) { font-size:26px; font-weight:600; line-height:1.3; }
+.summit.summit :global(.personCard), .summit.summit :global(.personCard > div:nth-child(2)) { background:#d0d4ea; }
+.summit.summit :global(.peopleGrid) { display:flex; flex-wrap:wrap; justify-content:flex-start; max-width:1325px; margin-left:auto; margin-right:auto; } /* Owner (Sept 23): short last row starts at the left */
+.summit.summit :global(.peopleGrid > .personCard) { flex:0 0 calc((100% - 60px) / 4); }
+.summit.summit :global(.personCard) { overflow:hidden; border-radius:4px; }
+.summit.summit :global(.personCard > div:nth-child(2)) { padding:18px 16px; }
+.summit.summit :global(.personCard h4) { font-size:17px; margin-bottom:6px; }
+.summit.summit :global(.personCard p) { font-size:13px; color:#555555; }
+.summit.summit .program { min-height:0; background:linear-gradient(125deg,#222222,#111111); color:#fff; border-block:1px solid #111111; }
+.summit.summit .program h2 { font-size:32px; margin-bottom:24px; }
+.summit.summit .program:has(.awardsFilm) { grid-template-columns:minmax(0,.8fr) minmax(0,1fr); align-items:center; }
+.summit.summit .program .eyebrow { color:#d0d4ea; }
+.summit.summit .program a { border-radius:4px; }
+.summit.summit .program > div:first-child > a { background:#8fb1e0; border-color:#8fb1e0; color:#fff; }
+.summit.summit .program ul { display:flex; flex-wrap:wrap; gap:8px 22px; margin:0 0 28px; padding:0; list-style:none; font-size:15px; color:#ffffff; }
+/* 2025 archive directory mirrors the 2026 guest cards; source people, roles and images are unchanged. */
+.archiveDirectory > section { padding:0; background:none; border:0; }
+.archiveDirectory > section + section { margin-top:56px; }
+.archiveDirectory > section > h2 { margin:0 0 24px; font-size:26px; font-weight:600; line-height:1.3; color:#000000; text-align:center; }
+.archiveDirectory > section > div { display:flex; flex-wrap:wrap; justify-content:flex-start; gap:20px; }
+.archiveDirectory > section > div > * { flex:0 0 calc((100% - 60px) / 4); min-width:0; display:flex; flex-direction:column; overflow:hidden; border-radius:4px; background:#d0d4ea; color:#000000; }
+.archiveDirectory > section > div > a:hover { background:#c3c8e2; }
+.archiveDirectory > section > div > * > div { flex:1; padding:18px 16px; background:transparent; }
+.archiveDirectory > section > div h3 { margin:0 0 6px; font-size:17px; color:#4a5faa; }
+.archiveDirectory > section > div p { margin:0; font-size:13px; line-height:1.45; color:#555555; }
+/* Every Summit guest card is identical: square photo plus a fixed text area (2-line name, 2-line role). */
+.summit.summit :global(.personCard > div:nth-child(2)), .archiveDirectory > section > div > * > div { box-sizing:border-box; flex:none; height:124px; min-height:0; overflow:hidden; }
+.summit.summit :global(.personCard h4), .summit.summit :global(.personCard p), .archiveDirectory > section > div h3, .archiveDirectory > section > div p { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
+.summit.summit :global(.personCard h4), .archiveDirectory > section > div h3 { line-height:1.3; }
+.summit.summit :global(.personCard p) { line-height:1.45; }
+.summit.summit > section:global(#rsvp) { background:linear-gradient(115deg,#d0d4ea,#d0d4ea); border-top:1px solid var(--rule); }
+.summit.summit > section:global(#rsvp) > img { display:none; }
+.summit.summit > section:global(#rsvp) h2 { font-size:30px; color:#000000; }
+.summit.summit > section:global(#rsvp) p { font-size:15px; color:#000000; }
+.summit.summit > section:global(#rsvp) > a { background:#8fb1e0; border-color:#8fb1e0; color:#fff; }
+@media(max-width:600px) {
+  .summit.summit > section:not(.hero), .summit.summit :global(.directorySection) { padding-top:44px; padding-bottom:44px; }
+  .summit.summit > section:global(#about) h2, .summit.summit :global(.sectionHeading h2), .summit.summit .program h2 { font-size:26px; }
+  .summit.summit > section:global(#foundation) { gap:24px; }
+  .summit.summit > section:global(#foundation) > img { width:140px; }
+  .summit.summit :global(.directoryGroups) { gap:40px; }
+  .summit.summit :global(.groupHeading h3) { font-size:22px; }
+  .summit.summit > section:global(#leadership) h2, .summit.summit > section:global(#hosts) h2, .summit.summit > section:global(#producers) h2, .summit.summit > section:global(#rsvp) h2 { font-size:26px; }
+  .summit.summit :global(.personCard > div:nth-child(2)) { padding:14px 12px; }
+  .summit.summit :global(.personCard h4) { font-size:15px; }
+  .archiveDirectory > section > div { gap:16px; }
+  .archiveDirectory > section > div > * { flex-basis:calc((100% - 16px) / 2); }
+  .archiveDirectory > section + section { margin-top:40px; }
+  .archiveDirectory > section > h2 { font-size:22px; }
+  .archiveDirectory > section > div > * > div { padding:14px 12px; }
+  .archiveDirectory > section > div h3 { font-size:15px; }
+  .summit.summit :global(.personCard > div:nth-child(2)), .archiveDirectory > section > div > * > div { height:132px; }
+  .summit.summit :global(.personCard h4), .archiveDirectory > section > div h3 { -webkit-line-clamp:3; }
+  .summit.summit :global(.peopleGrid > .personCard) { flex-basis:calc((100% - 16px) / 2); }
+}
+@media(min-width:601px) and (max-width:900px) { .summit.summit :global(.peopleGrid > .personCard) { flex-basis:calc((100% - 40px) / 3); } }
+@media(min-width:601px) and (max-width:900px) { .archiveDirectory > section > div > * { flex-basis:calc((100% - 40px) / 3); } }
+@media(max-width:900px) { .heroCopy h1 { font-size:60px; } .heroArt { width:75%; opacity:.65; } .summit.summit .program:has(.awardsFilm) { grid-template-columns:1fr; } }
+@media(max-width:600px) { .heroArt { width:100%; opacity:.55; } .summit .hero { min-height:480px; height:calc(100svh - 220px); padding:36px 24px 72px; } .heroCopy h1 { font-size:42px; } .heroCopy h1 span { font-size:24px; } .summit .heroCopy p { font-size:13px; } .summit > section:not(.hero) { padding-top:48px; padding-bottom:48px; } .summit > section:global(#about) h2 { font-size:28px; } .summit .heroCopy .eyebrow { font-size:10px; } .summit .powered { margin-top:28px; } .summit .program { grid-template-columns:1fr; gap:28px; } }
+@media(prefers-reduced-motion:reduce) { .summit * { scroll-behavior:auto; transition:none; } }
+
+/* Sept 21 meeting: 2025 recap film first, fewer features, schedule on the page, bigger 2025-style
+   portraits, and the Not Alone Program / no-solicitation block at the bottom. */
+.summit.summit .recap { text-align:center; background:linear-gradient(125deg,#222222,#111111); color:#fff; }
+.summit.summit .recap .eyebrow { color:#d0d4ea; }
+.summit.summit .recap h2 { font-size:32px; margin:0 0 24px; color:#fff; }
+.summit.summit .recap > div { max-width:960px; margin:0 auto 26px; }
+.summit.summit .recap > a { border-radius:4px; background:#8fb1e0; border-color:#8fb1e0; color:#fff; }
+.featuringTitle { margin:28px 0 12px; font-size:15px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#4a5faa; }
+.featuring { display:flex; flex-wrap:wrap; justify-content:center; gap:10px 14px; margin:0 0 32px; padding:0; list-style:none; }
+.featuring li { padding:8px 16px; border:1px solid #d0d4ea; border-radius:999px; background:#fff; color:#111111; font-size:15px; font-weight:600; }
+.summit.summit .scheduleBand { background:#d0d4ea; }
+.summit.summit .scheduleBand > h2 { text-align:center; font-size:32px; margin:0 0 6px; }
+.scheduleDates { text-align:center; color:#444444; margin:0 0 28px; }
+.summit.summit .scheduleBand > a { display:table; margin:28px auto 0; border-radius:4px; }
+.summit.summit .programFooter h2 { font-size:26px; margin:0 0 12px; }
+.summit.summit .programFooter p { color:#444444; max-width:68ch; }
+.programLinks { display:flex; flex-wrap:wrap; align-items:center; gap:12px 26px; margin-top:18px; }
+.programLinks a { display:inline-flex; align-items:center; gap:8px; border-radius:4px; }
+.summit.summit .noSolicitation { text-align:center; background:#d0d4ea; }
+.summit.summit .noSolicitation h2 { font-size:20px; margin:0 0 10px; }
+.summit.summit .noSolicitation p { max-width:600px; margin:0 auto; color:#444444; font-size:14px; line-height:1.7; }
+@media(min-width:901px) { .summit.summit:not(:has(.heroArchive)) :global(.peopleGrid > .personCard) { flex-basis:calc((100% - 40px) / 3); } }
+@media(max-width:600px) { .summit.summit .recap h2, .summit.summit .scheduleBand > h2 { font-size:26px; } .featuring li { font-size:13px; padding:6px 12px; } }
+.summit.summit .recapPlayer { max-width:960px; margin:0 auto 26px; text-align:left; }
+.summit.summit .recapPlayer p { color:#ffffff; }
+.summit.summit .recapPlayer a { color:#d0d4ea; background:none; border:0; }
+
+/* Owner (Sept 21): Summit hero in the Awards hero format (same sizes), over the 2025 recap. */
+.summit.summit .heroFormat { height:auto; min-height:min(760px, calc(100svh - 120px)); padding-top:40px; padding-bottom:48px; align-items:center; }
+.heroFormat::after { background:linear-gradient(90deg,#000000d9,#0000008c 45%,#00000026 78%),linear-gradient(0deg,#00000099,transparent 38%); }
+.heroFormat .heroCopy { max-width:920px; text-shadow:0 2px 18px #0009; }
+.heroLogo { margin:0 0 14px !important; line-height:0 !important; }
+.heroLogo img { width:250px; max-width:60vw; height:auto; filter:drop-shadow(0 2px 18px #000a); }
+.summit .heroCopy .heroPowered { margin:0 0 26px; color:#fff; font-size:22px; line-height:1.4; letter-spacing:.02em; }
+.heroPowered strong { display:block; font-size:42px; font-weight:600; line-height:1.15; letter-spacing:0; }
+.summit .heroCopy .heroDate { margin:0; color:#fff; font-size:25px; font-weight:500; line-height:1.5; }
+/* Owner (Sept 23): venue on the same line as the date, Awards-style. */
+.summit .heroCopy .heroDateVenue { font-weight:500; }
+.heroEdition { display:inline-block; margin-right:12px; padding-right:12px; border-right:1px solid #fff6; color:#8fb1e0; font-weight:600; }
+.summit .heroCopy .heroVenue { margin:8px 0 0; color:#fff; font-size:22px; line-height:1.5; }
+.summit .heroCopy .heroExtra { margin:6px 0 0; color:#ffffff; font-size:17px; line-height:1.5; }
+.heroButtons { display:flex; gap:16px; margin-top:28px; text-shadow:none; }
+.heroButton { display:inline-flex; align-items:center; justify-content:center; min-height:52px; padding:14px 34px; border-radius:4px; background:#fff; color:#111111; font-size:16px; font-weight:700; pointer-events:auto; }
+.heroButton:hover { background:#d0d4ea; }
+.heroButton:focus-visible { outline:3px solid #fff; outline-offset:3px; }
+/* The recap section is just the film, large. */
+.summit.summit .recap { padding-top:48px; padding-bottom:48px; }
+.summit.summit .recapPlayer { max-width:1180px; margin:0 auto; }
+@media(max-width:600px) {
+  .summit.summit .heroFormat { min-height:0; padding:96px 22px 40px; }
+  .heroLogo img { width:170px; }
+  .summit .heroCopy .heroPowered { font-size:16px; } .heroPowered strong { font-size:28px; }
+  .summit .heroCopy .heroDate { font-size:18px; } .summit .heroCopy .heroVenue { font-size:16px; } .summit .heroCopy .heroExtra { font-size:14px; }
+  .summit.summit .recap { padding:24px 0; }
+}
+/* ICF card style: photo over a black caption box with white name and role. */
+.summit.summit :global(.personCard), .summit.summit :global(.personCard > div:nth-child(2)) { background:#000; }
+.summit.summit :global(.personCard h4) { color:#fff; }
+.summit.summit :global(.personCard p) { color:#e6e6e6; }
+.summit.summit :global(.portrait) { background:linear-gradient(145deg,#d0d4ea,#8fb1e0); color:#fff; }
+.summit.summit .recap { background:#000; }
+.heroEdition { color:#8fb1e0; }
+/* ICF-style introduction under the hero (owner, Sept 21). */
+.summit.summit .introSplit { display:grid; grid-template-columns:minmax(0,657px) minmax(0,300px); justify-content:center; gap:90px; align-items:start; background:#fff; padding-top:96px; padding-bottom:110px; text-align:left; }
+.introText h2 { margin:0 0 32px; font-size:46px; font-weight:600; line-height:1.12; letter-spacing:-0.02em; color:#000; text-align:left; }
+.introAccent { color:#8fb1e0; }
+.summit.summit .introText p { max-width:none; margin:16px 0; color:#000; font-size:22px; line-height:1.5; text-align:left; }
+.introText a { color:#000; text-decoration:underline; text-underline-offset:3px; }
+.introLogo { width:300px; max-width:100%; height:auto; }
+@media(max-width:900px) { .summit.summit .introSplit { grid-template-columns:1fr; gap:36px; } .introLogo { width:220px; } .introText h2 { font-size:34px; } .summit.summit .introText p { font-size:18px; } }
+/* ICF blue for Summit call-to-action buttons (no purple). */
+.summit.summit .programLinks a:first-child { background:#8fb1e0; border-color:#8fb1e0; color:#fff; }
+.summit.summit .programLinks a:first-child:hover { background:#7aa1d8; border-color:#7aa1d8; }
+/* Owner (Sept 21): transparent Not Alone logo with a much larger Cohen Foundation credit. */
+.summit.summit .introSplit { grid-template-columns:minmax(0,640px) minmax(0,380px); background:transparent; }
+.introBrand { display:flex; flex-direction:column; align-items:center; text-align:center; }
+.summit.summit .introBrand img.introLogo { width:260px; max-width:100%; height:auto; margin:0; padding:0; background:none; border-radius:0; }
+.summit.summit .introBrand .introPowered { margin:22px 0 0; color:#000; font-size:20px; line-height:1.3; text-align:center; }
+.introPowered strong { display:block; margin-top:6px; font-size:34px; font-weight:600; line-height:1.15; }
+@media(max-width:900px) { .summit.summit .introBrand img.introLogo { width:200px; } .introPowered strong { font-size:26px; } }
+.summit.summit > section:global(#about).introSplit { background:#fff; text-align:left; }
+.summit.summit > section:global(#about) .introText h2 { max-width:none; margin:0 0 32px; font-size:46px; font-weight:600; line-height:1.12; letter-spacing:-0.02em; color:#000; text-align:left; }
+.summit.summit > section:global(#about) .introText h2 .introAccent { color:#8fb1e0; }
+.summit.summit > section:global(#about) .introText p { max-width:none; margin:16px 0; font-size:21px; line-height:1.5; color:#000; text-align:left; }
+.summit.summit > section:global(#about) .introBrand p { margin:22px 0 0; text-align:center; }
+@media(max-width:900px) { .summit.summit > section:global(#about) .introText h2 { font-size:32px; } .summit.summit > section:global(#about) .introText p { font-size:17px; } }
+
+/* Owner (Sept 22): on phones the introduction stacks (statement full width, logo centered below), never crushed. */
+@media (max-width: 900px) {
+  .summit.summit .introSplit, .summit.summit > section:global(#about).introSplit { grid-template-columns:1fr; gap:36px; padding-top:56px; padding-bottom:64px; }
+  .summit.summit > section:global(#about) .introText h2 { font-size:30px; line-height:1.15; overflow-wrap:normal; word-break:normal; hyphens:none; }
+  .summit.summit > section:global(#about) .introText p { font-size:17px; }
+  .summit.summit .introBrand { align-items:center; }
+  .summit.summit .introBrand img.introLogo { width:200px; }
+}
+/* Owner (Sept 22): on phones only, the introduction's Not Alone logo is hidden; the Cohen Foundation credit
+   stays. Desktop is unchanged, and no other logo on the site is affected. */
+@media (max-width: 900px) { .summit.summit > section:global(#about) .introBrand img.introLogo { display:none; } }
+/* Owner (Sept 22): on phones only, the introduction's "Powered by" credit is hidden as well (logo and credit
+   both gone from this one section on mobile); desktop and every other credit on the site are unchanged. */
+@media (max-width: 900px) { .summit.summit > section:global(#about) .introBrand { display:none; } }

@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 
-const routes = ["/", "/schedule", "/help", "/map", "/info"] as const;
+const routes = ["/", "/help", "/map", "/info"] as const;
 const forbiddenAttendeeResidue = /prototype|demo mode|room-level map coming soon|replace this with approved|published staff-controlled|published from the staff|my schedule/i;
 
 test("published data survives API outage and reconnect without accepting stale revisions", async ({ page, request }, testInfo) => {
@@ -9,14 +9,14 @@ test("published data survives API outage and reconnect without accepting stale r
   expect(response.ok()).toBeTruthy();
   const snapshot = await response.json();
   snapshot.revision += 100;
-  const item = snapshot.scheduleItems.find((entry: { title: string }) => entry.title.includes("Community Ride"));
+  const item = snapshot.scheduleItems.find((entry: { title: string }) => entry.title.includes("Poker Night"));
   expect(item).toBeTruthy();
   item.title = "Acceptance recovery session";
   let offline = false;
   await page.route("**/api/snapshot", route => offline
     ? route.abort("internetdisconnected")
     : route.fulfill({ json: { ...snapshot, serverTimeUtc: new Date().toISOString() } }));
-  await page.goto("/schedule");
+  await page.goto("/");
   await enterSummit(page);
   await expect(page.getByText(item.title, { exact: true })).toBeVisible();
   await expect.poll(() => page.evaluate(() => localStorage.getItem("not-alone.published-snapshot-cache.v1"))).toContain(item.title);
@@ -50,10 +50,10 @@ async function enterSummit(page: Page) {
   await expect(readyNavigation).toBeVisible();
 }
 
-test("the original five-tab app does not expose collaborator-added destinations", async ({ page }) => {
+test("the four-tab app (schedule on Home) does not expose collaborator-added destinations", async ({ page }) => {
   await page.goto("/");
   await enterSummit(page);
-  await expect(page.getByRole("tablist").last().getByRole("tab")).toHaveCount(5);
+  await expect(page.getByRole("tablist").last().getByRole("tab")).toHaveCount(4);
   await expect(page.getByRole("tab", { name: /^(People|Awards)$/ })).toHaveCount(0);
 });
 
@@ -80,7 +80,7 @@ for (const route of routes) {
     }));
 
     expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth + 1);
-    for (const label of ["Home", "Schedule", "Ask AI", "Map", "Info"]) {
+    for (const label of ["Home", "Ask AI", "Map", "Info"]) {
       await expect(page.getByRole("tab", { exact: true, name: label })).toBeVisible();
     }
 
@@ -123,13 +123,13 @@ test("the short-landscape opening greeting does not overlap its action", async (
 
 test("attendees see one event schedule without personal schedule controls", async ({ page }) => {
   const runtimeErrors = captureRuntimeErrors(page);
-  await page.goto("/schedule");
+  await page.goto("/");
   await enterSummit(page);
 
   await expect(page.getByText(/My Schedule/i)).toHaveCount(0);
   await expect(page.getByRole("button", { name: /save|bookmark/i })).toHaveCount(0);
 
-  await page.getByRole("link", { name: /Community Ride/i }).click();
+  await page.getByRole("link", { name: /Poker Night/i }).click();
   await expect(page.getByText(/My Schedule/i)).toHaveCount(0);
   await expect(page.getByRole("button", { name: /save|bookmark/i })).toHaveCount(0);
   await expect(page.getByText("Reminder", { exact: true })).toHaveCount(0);
@@ -138,27 +138,31 @@ test("attendees see one event schedule without personal schedule controls", asyn
 
 test("schedule days stay isolated and pending-only days remain accessible", async ({ page }) => {
   const runtimeErrors = captureRuntimeErrors(page);
-  await page.goto("/schedule");
+  await page.goto("/");
   await enterSummit(page);
 
-  await expect(page.getByText("Event schedule", { exact: true })).toBeInViewport();
-  await expect(page.getByText("2:00", { exact: true })).toHaveCount(1);
-  await expect(page.getByText("Mike's Bikes Community Ride", { exact: true })).toBeVisible();
+  await expect(page.getByText("Event Schedule", { exact: true }).first()).toBeInViewport();
+  await expect(page.getByText("10:30", { exact: true })).toHaveCount(1);
+  await expect(page.getByText("Molly's Game Poker Night", { exact: true })).toBeVisible();
+  await expect(page.getByText(/Mike's Bikes/)).toHaveCount(0);
   await page.getByRole("tab", { name: /Tue, Nov 3/ }).click();
   await expect(page.getByText("Tuesday, November 3", { exact: true })).toBeVisible();
-  await expect(page.getByText("Mike's Bikes Community Ride", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Molly's Game Poker Night", { exact: true })).toHaveCount(0);
   await expect(page.getByText(/Registration, Gifting Suite/i)).toHaveCount(0);
   await page.getByRole("tab", { name: /Thu, Nov 5/ }).click();
   await expect(page.getByText("Thursday, November 5", { exact: true })).toBeVisible();
-  await expect(page.getByText(/Tennis: 10:00 AM; end time to be confirmed/)).toBeVisible();
+  // Start-only ROS notes render like the website: title and start kept, no invented or "to be confirmed" end.
+  await expect(page.getByText("Tennis", { exact: true })).toBeVisible();
+  await expect(page.getByText("10:00 AM", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText(/end time to be confirmed/i)).toHaveCount(0);
   expect(runtimeErrors).toEqual([]);
 });
 
 test("session detail is concise and contains no editorial placeholders", async ({ page }) => {
   const runtimeErrors = captureRuntimeErrors(page);
-  await page.goto("/schedule");
+  await page.goto("/");
   await enterSummit(page);
-  await page.getByRole("link", { name: /Community Ride/i }).click();
+  await page.getByRole("link", { name: /Poker Night/i }).click();
 
   await expect(page.getByText("Session details", { exact: true })).toBeVisible();
   await expect(page.getByText("Access", { exact: true })).toHaveCount(1);
@@ -201,7 +205,7 @@ test("opening artwork covers the full viewport", async ({ page }) => {
 
 test("the rendered app is visibly nonblank", async ({ page }) => {
   const runtimeErrors = captureRuntimeErrors(page);
-  await page.goto("/schedule");
+  await page.goto("/");
   await enterSummit(page);
 
   const screenshot = await page.screenshot();

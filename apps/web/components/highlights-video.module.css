@@ -1,0 +1,18 @@
+/* Owner (Sept 21): the 2025 highlight film sits in its own colored band, framed in color, like the
+   earlier "film" section: lavender band + ICF blue frame on the Summit; dark plum band + gold frame on
+   the Awards. The player stays big. */
+.section { padding: 80px max(20px, calc((100% - 1240px) / 2)); background: #d0d4ea; text-align: center; }
+.section h2 { margin: 0 0 28px; color: #000; font-size: clamp(30px, 4vw, 46px); line-height: 1.1; }
+.dark { background: #1c1826; }
+.dark h2 { color: #fff; }
+.frame { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border: 8px solid #4a5faa; border-radius: 4px; background: #000; box-shadow: 0 24px 60px -30px #00000080; }
+.dark .frame { border-color: #f1dfbb; }
+.player { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.start { position: absolute; inset: 0; display: block; width: 100%; height: 100%; padding: 0; border: 0; background: #000; cursor: pointer; }
+.start img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s ease, filter .4s ease; }
+.start:hover img { transform: scale(1.02); filter: brightness(.9); }
+.play { position: absolute; top: 50%; left: 50%; display: grid; place-items: center; width: 96px; height: 96px; padding-left: 6px; border-radius: 50%; background: #ffffffee; color: #000; transform: translate(-50%, -50%); box-shadow: 0 10px 30px #0006; transition: transform .2s ease; }
+.start:hover .play, .start:focus-visible .play { transform: translate(-50%, -50%) scale(1.06); }
+.start:focus-visible { outline: 3px solid #8fb1e0; outline-offset: 4px; }
+@media (max-width: 600px) { .section { padding: 52px 16px; } .frame { border-width: 5px; } .play { width: 72px; height: 72px; } .play svg { width: 30px; height: 30px; } }
+@media (prefers-reduced-motion: reduce) { .start img, .play { transition: none; } }

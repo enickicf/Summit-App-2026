@@ -1,0 +1,27 @@
+# Checks the live public website from GitHub's servers every 30 minutes (and on demand), with no laptop,
+# no Claude session and no secrets involved: scripts/verify-live-site.mjs fetches notalonesummit.org and
+# notaloneawards.org exactly as a visitor would. When a check fails the job fails and GitHub emails the
+# repository owner (Settings → Notifications → Actions, "Send notifications for failed workflows only" is
+# the default). Scheduled workflows only run from the repository's default branch, so this file must be on
+# `main` to take effect. Inert until then (Sept 24, 2026: written, not yet pushed; the owner decides).
+name: Live site check
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live-site:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      # Ask AI is skipped so the schedule never spends the AI provider's credits; everything else is checked.
+      - run: node scripts/verify-live-site.mjs --skip-ask-ai

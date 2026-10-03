@@ -1,0 +1,26 @@
+.directory :global(.categoryTabs) { min-width: 0; }
+.directory :global(.categoryTabs a) { display: inline-flex; align-items: center; min-height: 44px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 4px; background: white; font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
+.directory :global(.categoryTabs a:hover) { background: #eef1f5; }
+.directory :global(.personCard), .directory :global(.personCard > div) { min-width: 0; }
+.directory .personName { overflow-wrap: anywhere; }
+.directory :global(.personCard p) { overflow-wrap: anywhere; }
+.directory :global(.searchBox) { min-width: 0; max-width: 100%; }
+.directory :global(.searchBox input) { min-width: 0; max-width: 100%; }
+.directory a:focus-visible, .directory input:focus-visible, .directory section:focus-visible { outline: 3px solid #4a5faa; outline-offset: 4px; }
+.simplified { padding:64px max(24px,calc((100% - 1180px)/2)); }
+.simplified :global(.sectionHeading) { max-width:none; margin-bottom:48px; text-align:center; }
+.simplified :global(.sectionHeading h2) { font-family:inherit; font-size:36px; font-weight:600; }
+.simplified :global(.directoryGroups) { gap:56px; }
+.simplified :global(.groupHeading) { padding-bottom:16px; margin-bottom:24px; }
+.simplified :global(.groupHeading .eyebrow) { display:none; }
+.simplified :global(.groupHeading h3) { font-family:inherit; font-size:26px; font-weight:600; }
+@media(max-width:600px) { .simplified { padding:48px 24px; } .simplified :global(.sectionHeading) { margin-bottom:32px; } .simplified :global(.sectionHeading h2) { font-size:28px; } .simplified :global(.groupHeading h3) { font-size:22px; } }
+@media (prefers-reduced-motion: reduce) {
+  .directory :global(.personCard) { transition: none; }
+  .directory :global(.personCard:hover) { transform: none; }
+}
+/* Owner (Sept 23): "more to be announced" right under the Who's Coming heading, as on the Awards site. */
+.announcement { margin: 10px 0 0; text-align: center; color: #4a5faa; font-size: 16px; font-weight: 700; }
+/* Owner (Sept 24): the line sat off-center because the page's generic "sectionHeading > p:last-child" rule caps
+   the paragraph at 700px inside the full-width centered heading block; let it span the block. */
+.simplified.simplified :global(.sectionHeading > p:last-child) { max-width: none; margin-left: auto; margin-right: auto; text-align: center; }

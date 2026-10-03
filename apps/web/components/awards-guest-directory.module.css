@@ -1,0 +1,17 @@
+.section .announcement { max-width: 800px; margin: 0 auto 12px; text-align: center; color: #e6d5fb; font-weight: 700; }
+.section .introduction { max-width: 800px; margin: 0 auto 40px; text-align: center; color: #ddd; }
+.portraitFallback { display: grid; place-items: center; width: 100%; aspect-ratio: 316 / 300; background: #18141e; color: #e6d5fb; font-size: 36px; }
+.nameSection { margin-top: 40px; }
+.nameGrid > a { display: flex; align-items: center; min-height: 72px; }
+.nameGrid h3 { margin-bottom: 0; }
+.section .empty { margin: 0; text-align: center; color: #ddd; }
+.category + .category { margin-top: 64px; }
+.category > h2 { text-align: center; margin-bottom: 32px; }
+.photoFrame { display:block; aspect-ratio:316 / 300; overflow:hidden; }
+.photoFrame img { display:block; width:100%; height:100%; object-fit:cover; }
+
+@media (max-width: 600px) {
+  .section .introduction { margin-bottom: 28px; }
+  .nameSection { margin-top: 28px; }
+}
+.section .more { margin: 40px auto 0; text-align: center; font-size: 22px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }

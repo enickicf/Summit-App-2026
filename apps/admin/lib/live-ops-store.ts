@@ -20,6 +20,7 @@ import {
   type ScheduleItem
 } from "@not-alone/validation";
 import { getBlockingPublishMessages } from "./schedule-quality";
+import type { ExperienceSignupRecord } from "./experience-signups";
 
 export const staffDraftSessionSchema = z.object({
   id: z.string().trim().min(1).max(200),
@@ -149,6 +150,8 @@ export type LiveOpsStore = {
     createdAt: string;
   }>;
   importJobs: DocumentImportJob[];
+  // Additive, staff-only key. Absent in stores written before experience sign-ups existed.
+  experienceSignups?: ExperienceSignupRecord[];
 };
 
 const storePath = resolve(process.cwd(), "../../work/live-ops-store.json");
@@ -425,6 +428,26 @@ export async function registerAttendeeDevice(registration: AttendeeDeviceRegistr
   };
   await writeLiveOpsStore(nextStore);
   return nextStore;
+}
+
+export async function mutateExperienceSignups<T>(
+  mutate: (records: ExperienceSignupRecord[], eventId: string) => {
+    records: ExperienceSignupRecord[];
+    result: T;
+    changed: boolean;
+    activity?: { action: string; actorRole: string; detail: string };
+  }
+): Promise<T> {
+  const store = await readLiveOpsStore();
+  const outcome = mutate(store.experienceSignups ?? [], store.eventId);
+  if (outcome.changed) {
+    await writeLiveOpsStore({
+      ...store,
+      experienceSignups: outcome.records,
+      activityLog: outcome.activity ? addActivity(store.activityLog, outcome.activity) : store.activityLog
+    });
+  }
+  return outcome.result;
 }
 
 export async function recordDocumentImport(job: DocumentImportJob) {

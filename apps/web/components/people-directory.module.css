@@ -1,0 +1,11 @@
+.directory { min-width: 0; }
+.directory :global(.directory-group > header) { align-items: baseline; }
+.directory :global(.directory-group > header h2) { min-width: 0; overflow-wrap: anywhere; }
+.directory :global(.directory-group > header span) { flex-shrink: 0; }
+.directory :global(.directory-grid p) { overflow-wrap: anywhere; }
+.dark { color: #f2ecfa; }
+.dark :global(.directory-group) { border-color: #57515f; }
+.dark :global(.directory-group > header h2) { color: #f2ecfa; }
+.dark :global(.directory-group > header span) { color: #e0c796; }
+.dark :global(.directory-grid article) { background: #18141e; border-color: #57515f; color: #f2ecfa; }
+.dark :global(.directory-grid p) { color: #ddd; }

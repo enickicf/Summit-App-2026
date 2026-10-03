@@ -1,0 +1,8 @@
+.years { display: flex; align-items: center; flex-wrap: wrap; gap: 16px 32px; padding: 20px 24px; color: #27232d; border-bottom: 1px solid #ddd; }
+.years :global(.year-tab-list) { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.years a { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 8px; min-height: 44px; padding: 8px 0; border-bottom: 2px solid transparent; }
+.years a[aria-current="page"] { border-bottom-color: currentColor; }
+.years a span { font-size: 13px; }
+.years a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.years a:focus-visible { outline: 3px solid currentColor; outline-offset: 4px; }
+.dark { color: #fff; border-color: #57515f; }

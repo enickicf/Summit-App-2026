@@ -1,0 +1,44 @@
+# Netlify build for the public Summit/Awards website (owner-approved new Netlify site, Sept 18 2026).
+# Netlify's Next.js runtime is detected automatically. No secrets live here: optional Ask AI
+# settings (ENABLE_AI, OPENAI_API_KEY, OPENAI_MODEL) and SITE_URL are set in the Netlify UI.
+[build]
+  command = "pnpm --filter @not-alone/web run build"
+  publish = "apps/web/.next"
+
+[build.environment]
+  NEXT_TELEMETRY_DISABLED = "1"
+
+# Owner (Sept 22, 2026): notaloneawards.org opens the Awards page; notalonesummit.org opens the Summit home.
+# Both domains are served by this one site, so every other path keeps working on either domain.
+[[redirects]]
+  from = "https://notaloneawards.org/"
+  to = "https://notaloneawards.org/awards/2026"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "https://www.notaloneawards.org/"
+  to = "https://notaloneawards.org/awards/2026"
+  status = 302
+  force = true
+
+# Owner (Sept 30, 2026): the RSVP, VIP RSVP and nomination pages get a normal address on the event domains
+# (notaloneawards.org/rsvp, /rsvp/<vip page>, /rsvp/nominate). They are still hosted on the separate RSVP site;
+# this site proxies /rsvp and /rsvp/* to it (status 200 = the address bar stays on our domain). The old
+# netlify.app addresses keep working, so links already sent out are unaffected.
+[[redirects]]
+  from = "/rsvp"
+  to = "https://not-alone-awards-rsvp-2026.netlify.app/"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/rsvp/*"
+  to = "https://not-alone-awards-rsvp-2026.netlify.app/:splat"
+  status = 200
+  force = true
+
+# Sept 28, 2026: the Next.js runtime is pinned (root package.json devDependency @netlify/plugin-nextjs@5.15.13) because
+# 5.16.0 fails this monorepo build with "Could not patch functions config manifest file". Netlify uses the installed version.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

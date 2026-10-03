@@ -1,29 +1,25 @@
-import Link from "next/link";
 import { groupPublishedProgramByDay } from "@not-alone/domain";
 import { ScheduleBrowser } from "../../components/schedule-browser";
-import { getPublicSnapshot, publicScheduleItems } from "../../lib/snapshot";
+import { getPublicSnapshotState } from "../../lib/snapshot";
+import { SnapshotSourceNotice } from "./snapshot-source-notice";
+import styles from "./schedule.module.css";
 
 export const metadata = { title: "Summit Schedule" };
 
 export default async function SchedulePage() {
-  const snapshot = await getPublicSnapshot();
-  const items = publicScheduleItems(snapshot);
-  const pendingDays = groupPublishedProgramByDay(snapshot).filter(day => day.notes.length).map(day => ({
-    key: day.date, label: day.dayLabel.split(",")[0]!, date: day.dayLabel.split(", ")[1]!,
-    notes: day.notes.map(note => ({ id: note.id, title: note.title, body: note.body }))
-  }));
+  const state = await getPublicSnapshotState();
+  const { snapshot } = state;
+  const days = groupPublishedProgramByDay(snapshot);
 
   return (
-    <main className="contentPage schedulePage">
-      <section className="pageIntro">
-        <div>
-          <p className="eyebrow">Published event schedule</p>
-          <h1>Plan the day at a glance.</h1>
-          <p>Times are shown in {snapshot.event.timeZone.replace("_", " ")}. Select a day to see only that day&apos;s programming.</p>
-        </div>
-        <Link className="primaryButton" href="/summit/live">Live companion</Link>
-      </section>
-      <ScheduleBrowser items={items} pendingDays={pendingDays} />
+    <main id="main-content" tabIndex={-1} className={styles.page}>
+      <header className={styles.intro}>
+        <p className={styles.eyebrow}>Not Alone Summit 2026</p>
+        <h1>Summit Schedule</h1>
+        <p className={styles.dates}>{snapshot.event.dateLabel}<span aria-hidden="true"> · </span><span className={styles.venue}>{snapshot.event.venueName}</span></p>
+      </header>
+      <SnapshotSourceNotice state={state} compact />
+      <ScheduleBrowser days={days} eventTimeZone={snapshot.event.timeZone} initialNowUtc={new Date().toISOString()} noticeSnapshot={state.source === "published" ? snapshot : null} />
     </main>
   );
 }

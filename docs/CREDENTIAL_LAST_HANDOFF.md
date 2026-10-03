@@ -1,5 +1,7 @@
 # Credentials-Last Handoff
 
+September 18 continuity: historical setup claims/actions below are LAST KNOWN, not fresh verification or approval. Current ACCESS_AND_AUTH, PRODUCTION_GUARDRAILS and DEPLOYMENTS_AND_PORTALS supersede them. No rotation/deploy/seed/activation/signing/resource creation allowed by migration. Verify actual existing targets and obtain scoped owner approval before any external action.
+
 Use this sequence only after the non-secret build and approved event content are ready. Never send secrets in chat, commit them, or place server values in `NEXT_PUBLIC_*` or `EXPO_PUBLIC_*` variables.
 
 ## 1. Deploy The Safe Baseline
