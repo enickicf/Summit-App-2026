@@ -10,6 +10,7 @@ export const cachedPublicPaths = [
   "/awards",
   "/awards/2025",
   "/awards/2026",
+  "/community-day",
   "/contact",
   "/donate",
   "/inspiring-children-socials",

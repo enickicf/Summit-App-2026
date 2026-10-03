@@ -12,7 +12,26 @@ import styles from "./ask-ai-widget.module.css";
 export function AskAiWidget() {
   const pathname = usePathname() ?? "/";
   const [open, setOpen] = useState(false);
+  const [actionsVisibleOnPhone, setActionsVisibleOnPhone] = useState(false);
   const panelId = useId();
+
+  useEffect(() => {
+    if (pathname !== "/community-day") return;
+    const actions = document.getElementById("community-day-actions");
+    if (!actions) return;
+    const phone = window.matchMedia("(max-width: 760px)");
+    const observer = new IntersectionObserver(([entry]) => {
+      setActionsVisibleOnPhone(Boolean(entry?.isIntersecting && phone.matches));
+    });
+    const onResize = () => setActionsVisibleOnPhone(phone.matches && actions.getBoundingClientRect().bottom > 0 && actions.getBoundingClientRect().top < window.innerHeight);
+    observer.observe(actions);
+    phone.addEventListener("change", onResize);
+    return () => {
+      observer.disconnect();
+      phone.removeEventListener("change", onResize);
+      setActionsVisibleOnPhone(false);
+    };
+  }, [pathname]);
 
   useEffect(() => {
     if (!open) return;
@@ -23,7 +42,7 @@ export function AskAiWidget() {
 
   if (pathname === "/ask-ai" || pathname.startsWith("/awards") || pathname.startsWith("/staff")) return null;
 
-  return <div className={styles.widget}>
+  return <div className={`${styles.widget}${actionsVisibleOnPhone && !open ? ` ${styles.hiddenByActions}` : ""}`}>
     {open && <section className={styles.panel} id={panelId} role="dialog" aria-label="Ask AI">
       <div className={styles.panelHeader}>
         <p className={styles.panelTitle}><Sparkles size={18} aria-hidden="true" /> Ask AI</p>

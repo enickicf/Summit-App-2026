@@ -1,5 +1,6 @@
 /* Floating Ask AI button + panel, bottom-right, like a chat widget (owner, Sept 23). */
 .widget { position: fixed; right: 20px; bottom: 20px; z-index: 70; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; font-family: "Original Poppins", sans-serif; }
+.hiddenByActions { visibility: hidden; pointer-events: none; }
 
 .launcher { position: relative; display: inline-flex; align-items: center; gap: 10px; min-height: 56px; padding: 0 22px 0 18px; border: 0; border-radius: 999px; background: #000000; color: #ffffff; font: inherit; font-size: 16px; font-weight: 700; line-height: 1; cursor: pointer; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28); }
 .launcher::before { content: ""; position: absolute; inset: -6px; border-radius: 999px; border: 2px solid #8fb1e0; opacity: 0.85; animation: askAiPulse 2.4s ease-out infinite; pointer-events: none; }

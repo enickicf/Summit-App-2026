@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { SummitNavigation } from "./summit-navigation";
+import { CommunityDayNavigation } from "./community-day-navigation";
 import { SummitLink } from "./summit-link";
 import { Heart } from "lucide-react";
 import { awards2026Editorial } from "../lib/awards-editorial";
@@ -22,6 +23,8 @@ export function SiteHeader() {
   if (pathname.startsWith("/staff")) return null;
   const awardsPage = pathname.startsWith("/awards") || (pathname.startsWith("/directory/") && fromAwards);
   if (siteVariant === "classic") return <ClassicHeader pathname={pathname} awards={awardsPage} />;
+  // Owner (Sept 29): Community Day has its own menu (no Summit, Schedule or Directory).
+  if (pathname === "/community-day") return <CommunityDayNavigation />;
   if (!awardsPage) return <SummitNavigation year={year} pathname={pathname} />;
   return <>
     {/* Owner (Sept 21): no logo bar; the Awards hero already carries the logo. */}
