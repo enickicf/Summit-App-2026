@@ -162,3 +162,10 @@
 @media(max-width:900px) { .communityDayHeader .communityDayNavigation { gap:36px; } }
 @media(max-width:600px) { .communityDayHeader .communityDayNavigation { gap:20px; } }
 @media(max-width:360px) { .communityDayHeader .communityDayNavigation { gap:12px; } }
+/* Owner (Oct 3, later): Community Day and Concert all the way left, Donate all the way right, lined up with the hero text. */
+.communityDayHeader .communityDayNavigation { justify-content:flex-start; max-width:none; gap:40px; padding-left:max(24px,calc((100% - 1180px)/2)); padding-right:max(24px,calc((100% - 1180px)/2)); }
+.communityDayHeader .communityDayNavigation .donateButton { margin-left:auto; }
+@media(max-width:900px) { .communityDayHeader .communityDayNavigation { gap:28px; padding-left:24px; padding-right:24px; } }
+@media(max-width:760px) { .communityDayHeader .communityDayNavigation { padding-left:16px; padding-right:16px; } }
+@media(max-width:600px) { .communityDayHeader .communityDayNavigation { gap:18px; } }
+@media(max-width:360px) { .communityDayHeader .communityDayNavigation { gap:12px; padding-left:16px; padding-right:16px; } }
