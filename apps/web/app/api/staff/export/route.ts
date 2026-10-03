@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { isStaffSession, staffCookieName } from "../../../../lib/staff/auth";
-import { getSubmissionStore, listAllRsvps, withRsvpForm, nominationCsvColumns, pokerCsvColumns, rsvpCsvColumns, toCsv, workshopCsvColumns } from "../../../../lib/staff/store";
+import { activeRsvps, getSubmissionStore, listAllRsvps, rsvpExportForms, rsvpsOfForm, type RsvpExportForm, withRsvpForm, nominationCsvColumns, pokerCsvColumns, rsvpCsvColumns, toCsv, workshopCsvColumns } from "../../../../lib/staff/store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -33,6 +33,12 @@ export async function GET(request: Request) {
   if (kind === "poker") {
     const csv = toCsv(await store.list("poker"), pokerCsvColumns);
     return new Response(csv, { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="all-in-poker-seat-requests-${stamp}.csv"`, "Cache-Control": "no-store" } });
+  }
+  // Owner (Oct 3): one seating spreadsheet per form (VIP / Lake Las Vegas / NAMI / Standard), active requests only.
+  const form = new URL(request.url).searchParams.get("form");
+  if (form && form in rsvpExportForms) {
+    const rows = rsvpsOfForm(activeRsvps(await listAllRsvps(store)), form as RsvpExportForm);
+    return new Response(toCsv(withRsvpForm(rows), rsvpCsvColumns), { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-rsvps-${form}-${stamp}.csv"`, "Cache-Control": "no-store" } });
   }
   const csv = toCsv(withRsvpForm(await listAllRsvps(store)), rsvpCsvColumns);
   return new Response(csv, { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-awards-tickets-${stamp}.csv"`, "Cache-Control": "no-store" } });

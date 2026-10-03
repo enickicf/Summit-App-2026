@@ -1,7 +1,7 @@
 import { SiteImage } from "./site-image";
 import { PortalViewSwitch } from "./portal-views";
 import { PortalAutoRefresh } from "./portal-auto-refresh";
-import { activeOf, activeRsvps, comingTo, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, rsvpForm, rsvpHeardFromLabels } from "../lib/staff/store";
+import { activeOf, activeRsvps, comingTo, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels } from "../lib/staff/store";
 import styles from "../app/staff/staff.module.css";
 
 export type LineupGroup = { title: string; people: { name: string; role: string; rank: number | null; tier: string | null; photo: boolean }[] };
@@ -11,10 +11,11 @@ const when = (iso: string) => new Date(iso).toLocaleString("en-US", { timeZone: 
 // Owner (Sept 23): red = Awards Show, blue = Community Day; both when a guest is coming to both.
 function ComingTo({ record }: { record: RsvpSubmission }) {
   const parts = comingTo(record);
-  if (!parts.length && !record.vip && record.partner !== "nami") return <span className={styles.muted}>—</span>;
+  if (!parts.length && !record.vip && record.partner !== "nami" && record.tier !== "lake-las-vegas") return <span className={styles.muted}>—</span>;
   return <span className={styles.badges}>
     {record.vip && <span className={`${styles.badge} ${styles.badgeVip}`}>VIP</span>}
     {record.partner === "nami" && <span className={`${styles.badge} ${styles.badgeNami}`}>NAMI</span>}
+    {record.tier === "lake-las-vegas" && <span className={`${styles.badge} ${styles.badgeLake}`}>Lake Las Vegas</span>}
     {parts.includes("awards") && <span className={`${styles.badge} ${styles.badgeAwards}`}>Awards</span>}
     {parts.includes("communityDay") && <span className={`${styles.badge} ${styles.badgeCommunity}`}>Community Day</span>}
   </span>;
@@ -92,6 +93,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
   const communityDay = active.filter(row => row.communityDay);
   const vip = vipRsvps(active);
   const nami = namiRsvps(active);
+  const lakeLasVegas = lakeLasVegasRsvps(active);
   const pokerActive = activeOf(poker);
   const pokerRemoved = removedOf(poker);
   const pokerCounts = pokerTotals(pokerActive);
@@ -119,12 +121,13 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
     </header>
 
     <div data-view="awards" id="awards">
-      <nav className={styles.sectionNav} aria-label="Awards sections"><a href="#vip">VIP</a><a href="#nami">NAMI</a><a href="#tickets">Tickets</a><a href="#community-day">Community Day</a><a href="#nominations">Nominations</a><a href="#removed">Removed</a><a href="#lineup">Lineup</a></nav>
+      <nav className={styles.sectionNav} aria-label="Awards sections"><a href="#vip">VIP</a><a href="#lake-las-vegas">Lake Las Vegas</a><a href="#nami">NAMI</a><a href="#tickets">Tickets</a><a href="#community-day">Community Day</a><a href="#nominations">Nominations</a><a href="#removed">Removed</a><a href="#lineup">Lineup</a></nav>
       <section className={styles.stats} aria-label="Ticket totals">
         <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{totals.ticketsRequested}</span><span className={styles.statLabel}>Tickets requested</span><span className={styles.statNote}>Party sizes of every ticket request, one per guest email</span></div>
         <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{totals.formsSubmitted}</span><span className={styles.statLabel}>Forms submitted</span><span className={styles.statNote}>Every RSVP submission received</span></div>
         {totals.moreInformation > 0 && <div className={styles.stat}><span className={styles.statValue}>{totals.moreInformation}</span><span className={styles.statLabel}>Asked for more information</span></div>}
         <div className={`${styles.stat} ${styles.statVip}`}><span className={styles.statValue}>{totals.vipTickets}</span><span className={styles.statLabel}>VIP tickets</span><span className={styles.statNote}>{totals.vipGuests} VIP {totals.vipGuests === 1 ? "guest" : "guests"} through the VIP link</span></div>
+        <div className={`${styles.stat} ${styles.statLake}`}><span className={styles.statValue}>{totals.lakeLasVegasTickets}</span><span className={styles.statLabel}>Lake Las Vegas tickets</span><span className={styles.statNote}>{totals.lakeLasVegasGuests} {totals.lakeLasVegasGuests === 1 ? "guest" : "guests"} through the Lake Las Vegas form</span></div>
         <div className={`${styles.stat} ${styles.statNami}`}><span className={styles.statValue}>{totals.namiTickets}</span><span className={styles.statLabel}>NAMI tickets</span><span className={styles.statNote}>{totals.namiGuests} NAMI {totals.namiGuests === 1 ? "guest" : "guests"} through the NAMI form</span></div>
         <div className={`${styles.stat} ${styles.statCommunity}`}><span className={styles.statValue}>{totals.communityDayTickets}</span><span className={styles.statLabel}>Community Day tickets</span><span className={styles.statNote}>{totals.communityDayGuests} {totals.communityDayGuests === 1 ? "guest" : "guests"} said yes to Community Day</span></div>
         <div className={styles.stat}><span className={styles.statValue}>{nominations.length}</span><span className={styles.statLabel}>Nominations</span></div>
@@ -132,15 +135,22 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
 
       {/* Owner (Oct 1): VIP requests (private VIP link) sit first in the one staff portal, with who invited them. */}
       <section className={styles.section} id="vip" aria-labelledby="vip-title">
-        <div className={styles.sectionHead}><h2 id="vip-title">VIP RSVPs</h2><span className={`${styles.badge} ${styles.badgeVip}`}>{totals.vipGuests} guests · {totals.vipTickets} tickets</span></div>
+        <div className={styles.sectionHead}><h2 id="vip-title">VIP RSVPs</h2><span className={`${styles.badge} ${styles.badgeVip}`}>{totals.vipGuests} guests · {totals.vipTickets} tickets</span><a className={styles.button} href="/api/staff/export?kind=rsvp&amp;form=vip">Download list</a></div>
         <p className={styles.help}>Requests from the private VIP RSVP link (artists, honorees, personal invitations). Organization, title and who invited them are required on that form. They also appear in the full list below with a <span className={`${styles.badge} ${styles.badgeVip}`}>VIP</span> badge.</p>
         {vip.length === 0 ? <p className={styles.empty}>No VIP RSVPs yet.</p> : <RsvpTable rows={vip} />}
       </section>
 
+      {/* Owner (Oct 3): requests from the private Lake Las Vegas RSVP form, with their own seating list. */}
+      <section className={styles.section} id="lake-las-vegas" aria-labelledby="lake-las-vegas-title">
+        <div className={styles.sectionHead}><h2 id="lake-las-vegas-title">Lake Las Vegas RSVPs</h2><span className={`${styles.badge} ${styles.badgeLake}`}>{totals.lakeLasVegasGuests} guests · {totals.lakeLasVegasTickets} tickets</span><a className={styles.button} href="/api/staff/export?kind=rsvp&amp;form=lake-las-vegas">Download list</a></div>
+        <p className={styles.help}>Requests from the private Lake Las Vegas RSVP link. They also appear in the full list below with a <span className={`${styles.badge} ${styles.badgeLake}`}>Lake Las Vegas</span> badge.</p>
+        {lakeLasVegas.length === 0 ? <p className={styles.empty}>No Lake Las Vegas RSVPs yet.</p> : <RsvpTable rows={lakeLasVegas} />}
+      </section>
+
       {/* Owner (Oct 2): requests from the NAMI form (/rsvp/nami), tagged NAMI; they also appear in the full list. */}
       <section className={styles.section} id="nami" aria-labelledby="nami-title">
-        <div className={styles.sectionHead}><h2 id="nami-title">NAMI RSVPs</h2><span className={`${styles.badge} ${styles.badgeNami}`}>{totals.namiGuests} guests · {totals.namiTickets} tickets</span></div>
-        <p className={styles.help}>Requests from NAMI's own RSVP form (notaloneawards.org/rsvp/nami, linked from notaloneawards.org/nami). They also appear in the full list below with a <span className={`${styles.badge} ${styles.badgeNami}`}>NAMI</span> badge.</p>
+        <div className={styles.sectionHead}><h2 id="nami-title">NAMI RSVPs</h2><span className={`${styles.badge} ${styles.badgeNami}`}>{totals.namiGuests} guests · {totals.namiTickets} tickets</span><a className={styles.button} href="/api/staff/export?kind=rsvp&amp;form=nami">Download list</a></div>
+        <p className={styles.help}>Requests from NAMI's private RSVP link. They also appear in the full list below with a <span className={`${styles.badge} ${styles.badgeNami}`}>NAMI</span> badge.</p>
         {nami.length === 0 ? <p className={styles.empty}>No NAMI RSVPs yet.</p> : <RsvpTable rows={nami} />}
       </section>
 

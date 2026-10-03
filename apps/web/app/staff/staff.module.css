@@ -103,3 +103,7 @@
 .statVip { border-color: #b8860b; background: #fff8e6; }
 .badgeNami { background: #3a8fd6; color: #ffffff; }       /* NAMI form (owner, Oct 2) */
 .statNami { border-color: #3a8fd6; background: #eef6fd; }
+
+/* Owner (Oct 3): Lake Las Vegas form (lake teal). */
+.badgeLake { background:#1f8a8a; color:#fff; }
+.statLake { border-color: #1f8a8a; background: #e9f6f6; }

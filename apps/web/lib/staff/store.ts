@@ -20,6 +20,9 @@ const email = z.string().trim().toLowerCase().max(254).regex(/^[^\s@]+@[^\s@]+\.
 export const rsvpPartners = ["", "nami"] as const;
 export type RsvpPartner = (typeof rsvpPartners)[number];
 export const rsvpPartnerLabels: Record<Exclude<RsvpPartner, "">, string> = { nami: "NAMI" };
+// Owner (Oct 3, 2026): private plain RSVP forms per group; the form's link tags the request (Lake Las Vegas).
+export const rsvpTiers = ["", "lake-las-vegas"] as const;
+export type RsvpTier = (typeof rsvpTiers)[number];
 // Owner (Oct 3, 2026): "How did you hear about us?" on the main RSVP form (required there; older or cached
 // forms that do not send it still work and store "").
 export const rsvpHeardFrom = ["", "inspiring-children", "nami", "lake-las-vegas", "other"] as const;
@@ -39,6 +42,7 @@ export const rsvpPayloadSchema = z.object({
   // (today only NAMI, via /rsvp/nami). They land with every other RSVP.
   partner: z.preprocess(value => String(value ?? "").trim().toLowerCase(), z.enum(rsvpPartners)).optional().default(""),
   heardFrom: z.preprocess(value => String(value ?? "").trim().toLowerCase(), z.enum(rsvpHeardFrom)).optional().default(""),
+  tier: z.preprocess(value => String(value ?? "").trim().toLowerCase(), z.enum(rsvpTiers)).optional().default(""),
   attendanceStatus: z.enum(attendanceStatuses),
   // Owner (Sept 23): a separate toggle for Community Day (doors 5:30 PM). The form sends "on" when checked.
   communityDay: z.preprocess(value => value === true || value === "on" || value === "yes" || value === "true", z.boolean()).optional().default(false),
@@ -107,7 +111,7 @@ export type Submission<T> = T & { id: string; submittedAt: string; source: "form
 // Owner (Sept 28): a request can be removed from the working lists (test entries) without being deleted; it
 // stays in the store with removedAt/removedReason and is shown under "Removed guests" in the portal.
 // invitedBy / vip arrived Sept 30; records stored before then have neither (read as "" / false).
-export type RsvpSubmission = Submission<Omit<RsvpPayload, "website" | "invitedBy" | "vip" | "partner" | "heardFrom">> & { invitedBy?: string; vip?: boolean; partner?: RsvpPartner; heardFrom?: RsvpHeardFrom; removedAt?: string; removedReason?: string };
+export type RsvpSubmission = Submission<Omit<RsvpPayload, "website" | "invitedBy" | "vip" | "partner" | "heardFrom" | "tier">> & { invitedBy?: string; vip?: boolean; partner?: RsvpPartner; heardFrom?: RsvpHeardFrom; tier?: RsvpTier; removedAt?: string; removedReason?: string };
 export type NominationSubmission = Submission<Omit<NominationPayload, "website">>;
 export type PokerSubmission = Submission<Omit<PokerPayload, "website">> & { removedAt?: string; removedReason?: string };
 export type WorkshopSubmission = Submission<Omit<WorkshopPayload, "website"> & { category: "workshop" | "siteVisit" }>;
@@ -250,7 +254,10 @@ export function rsvpTotals(records: RsvpSubmission[]) {
   const communityDay = latest.filter(record => record.communityDay);
   const vip = latest.filter(record => record.vip);
   const nami = latest.filter(record => record.partner === "nami");
+  const lakeLasVegas = latest.filter(record => record.tier === "lake-las-vegas");
   return {
+    lakeLasVegasGuests: lakeLasVegas.length,
+    lakeLasVegasTickets: lakeLasVegas.filter(requestsTickets).reduce((total, record) => total + record.guestCount, 0),
     namiGuests: nami.length,
     namiTickets: nami.filter(requestsTickets).reduce((total, record) => total + record.guestCount, 0),
     vipGuests: vip.length,
@@ -270,11 +277,16 @@ export function rsvpTotals(records: RsvpSubmission[]) {
 export const activeRsvps = (records: RsvpSubmission[]) => records.filter(record => !record.removedAt);
 export const vipRsvps = (records: RsvpSubmission[]) => records.filter(record => Boolean(record.vip));
 export const namiRsvps = (records: RsvpSubmission[]) => records.filter(record => record.partner === "nami");
+export const lakeLasVegasRsvps = (records: RsvpSubmission[]) => records.filter(record => record.tier === "lake-las-vegas");
 // Owner (Oct 2): every request shows which form it came through. NAMI wins over VIP if both were ever set.
-export type RsvpForm = "Standard" | "VIP" | "NAMI";
-export function rsvpForm(record: Pick<RsvpSubmission, "vip" | "partner">): RsvpForm {
-  return record.partner === "nami" ? "NAMI" : record.vip ? "VIP" : "Standard";
+export type RsvpForm = "Standard" | "VIP" | "NAMI" | "Lake Las Vegas";
+export function rsvpForm(record: Pick<RsvpSubmission, "vip" | "partner" | "tier">): RsvpForm {
+  return record.partner === "nami" ? "NAMI" : record.vip ? "VIP" : record.tier === "lake-las-vegas" ? "Lake Las Vegas" : "Standard";
 }
+// Owner (Oct 3): one spreadsheet per form, for seating.
+export const rsvpExportForms = { vip: "VIP", "lake-las-vegas": "Lake Las Vegas", nami: "NAMI", standard: "Standard" } as const;
+export type RsvpExportForm = keyof typeof rsvpExportForms;
+export const rsvpsOfForm = (records: RsvpSubmission[], form: RsvpExportForm) => records.filter(record => rsvpForm(record) === rsvpExportForms[form]);
 export const withRsvpForm = (records: RsvpSubmission[]) => records.map(record => ({ ...record, form: rsvpForm(record), heardFromLabel: record.heardFrom ? rsvpHeardFromLabels[record.heardFrom] : "" }));
 // Owner (Sept 30): the mass RSVP lists never include a VIP request, and the VIP portal reads only VIP requests.
 // Owner (Oct 1, 2026, superseding the Sept 30 split): "make the backend of the VIP RSVP the same now since
@@ -310,7 +322,7 @@ function csvCell(value: unknown): string {
 export function toCsv(rows: Record<string, unknown>[], columns: string[]): string {
   return [columns.join(","), ...rows.map(row => columns.map(column => csvCell(row[column])).join(","))].join("\r\n") + "\r\n";
 }
-export const rsvpCsvColumns = ["submittedAt", "form", "name", "email", "phone", "organization", "professionalRole", "invitedBy", "heardFromLabel", "vip", "partner", "attendanceStatus", "communityDay", "guestCount", "notes", "source", "id", "removedAt", "removedReason"];
+export const rsvpCsvColumns = ["submittedAt", "form", "name", "email", "phone", "organization", "professionalRole", "invitedBy", "heardFromLabel", "vip", "partner", "tier", "attendanceStatus", "communityDay", "guestCount", "notes", "source", "id", "removedAt", "removedReason"];
 
 // Which part(s) of the evening a request covers: the Awards Show (their response) and/or Community Day (the toggle).
 export function comingTo(record: Pick<RsvpSubmission, "attendanceStatus" | "communityDay">): ("awards" | "communityDay")[] {
