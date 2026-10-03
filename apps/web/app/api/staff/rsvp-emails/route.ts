@@ -30,7 +30,8 @@ export async function POST(request: Request) {
     const to = body.to?.trim();
     if (!to || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) return NextResponse.json({ ok: false, error: "Provide a valid test address in \"to\"." }, { status: 400, headers: noStore });
     const rendered = rsvpConfirmationEmail({ ...sampleRsvpForPreview, name: body.name?.trim() || sampleRsvpForPreview.name, email: to });
-    await sender({ to, ...rendered });
+    try { await sender({ to, ...rendered }); }
+    catch (error) { return NextResponse.json({ ok: false, error: `The mail server refused the message (${error instanceof Error ? error.message.slice(0, 160) : "unknown error"}).` }, { status: 502, headers: noStore }); }
     return NextResponse.json({ ok: true, sent: to }, { headers: noStore });
   }
   if (body.mode === "backfill") {

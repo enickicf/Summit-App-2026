@@ -1,6 +1,7 @@
 import { SiteImage } from "./site-image";
 import { PortalViewSwitch } from "./portal-views";
 import { PortalAutoRefresh } from "./portal-auto-refresh";
+import { RsvpEmailTools } from "./rsvp-email-tools";
 import { activeOf, activeRsvps, comingTo, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels } from "../lib/staff/store";
 import styles from "../app/staff/staff.module.css";
 
@@ -132,6 +133,8 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
         <div className={`${styles.stat} ${styles.statCommunity}`}><span className={styles.statValue}>{totals.communityDayTickets}</span><span className={styles.statLabel}>Community Day tickets</span><span className={styles.statNote}>{totals.communityDayGuests} {totals.communityDayGuests === 1 ? "guest" : "guests"} said yes to Community Day</span></div>
         <div className={styles.stat}><span className={styles.statValue}>{nominations.length}</span><span className={styles.statLabel}>Nominations</span></div>
       </section>
+
+      <RsvpEmailTools earlierCount={totals.uniqueGuests} />
 
       {/* Owner (Oct 1): VIP requests (private VIP link) sit first in the one staff portal, with who invited them. */}
       <section className={styles.section} id="vip" aria-labelledby="vip-title">

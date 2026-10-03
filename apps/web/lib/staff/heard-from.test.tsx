@@ -25,3 +25,10 @@ describe("How did you hear about us? (owner, Oct 3, 2026)", () => {
     expect(html).toContain("<th>Heard from</th>"); expect(html).toContain("<td>NAMI</td>");
   });
 });
+
+describe("confirmation email tools in the portal (owner, Oct 3, 2026)", () => {
+  it("shows the test and catch-up buttons", () => {
+    const html = renderToStaticMarkup(<StaffPortal rsvps={[]} nominations={[]} poker={[]} workshops={[]} lineup={[]} generatedAt="2026-10-03T12:00:00.000Z" />);
+    for (const text of ['id="confirmation-emails"', "Send test", "Send to earlier RSVPs", "Preview the email"]) expect(html).toContain(text);
+  });
+});
