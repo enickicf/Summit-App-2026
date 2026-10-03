@@ -44,7 +44,8 @@ export function siteMetadataPolicy(environment: MetadataEnvironment = process.en
   return {
     origin: configuredOrigin ?? new URL(existingOwnerSiteUrl),
     awardsOrigin: configuredOrigin ? new URL(awardsSiteUrl) : new URL(existingOwnerSiteUrl),
-    indexingAllowed: configuredOrigin !== null && environment.NODE_ENV === "production" && (environment.VERCEL_ENV === undefined || environment.VERCEL_ENV === "production")
+    // Oct 3, 2026: private review builds (NEXT_PUBLIC_REVIEW_BUILD=1, set only when building a review link) are never indexed.
+    indexingAllowed: configuredOrigin !== null && environment.NODE_ENV === "production" && (environment.VERCEL_ENV === undefined || environment.VERCEL_ENV === "production") && process.env.NEXT_PUBLIC_REVIEW_BUILD !== "1"
   };
 }
 

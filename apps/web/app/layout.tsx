@@ -28,7 +28,8 @@ export const viewport: Viewport = { themeColor: "#8177c9" };
 // Owner (Sept 22, 2026, tracking/SEO setup): Google Tag Manager loads only where the public container ID is
 // configured (production hosting env); GA4 is wired inside that container, not as a second tag here.
 export default function RootLayout({ children }: { children: ReactNode }) {
-  const gtmId = process.env.NEXT_PUBLIC_GTM_ID?.trim();
+  // Oct 3, 2026: private review builds never load Google Tag Manager, so reviewers are not counted as visitors.
+  const gtmId = process.env.NEXT_PUBLIC_REVIEW_BUILD === "1" ? undefined : process.env.NEXT_PUBLIC_GTM_ID?.trim();
   // Website event tracking (and its consent bar) exists only where the server can store events.
   const analytics = supabaseAnalyticsStore() !== null;
   return <html lang="en" data-scroll-behavior="smooth">{gtmId ? <GoogleTagManager gtmId={gtmId} /> : null}<body><a href="#main-content" className="skipLink">Skip to main content</a><Suspense fallback={<div className="siteHeader" aria-hidden="true" />}><SiteHeader /></Suspense>{children}<Suspense fallback={null}><SiteFooter /></Suspense><Suspense fallback={null}><AskAiWidget /></Suspense>{analytics ? <Suspense fallback={null}><AnalyticsProvider /></Suspense> : null}</body></html>;
