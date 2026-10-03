@@ -279,12 +279,15 @@ export const vipRsvps = (records: RsvpSubmission[]) => records.filter(record => 
 export const namiRsvps = (records: RsvpSubmission[]) => records.filter(record => record.partner === "nami");
 export const lakeLasVegasRsvps = (records: RsvpSubmission[]) => records.filter(record => record.tier === "lake-las-vegas");
 // Owner (Oct 2): every request shows which form it came through. NAMI wins over VIP if both were ever set.
-export type RsvpForm = "Standard" | "VIP" | "NAMI" | "Lake Las Vegas";
+// Owner (Oct 3): NAMI VIP and Lake Las Vegas VIP are private VIP forms tagged with their group as well.
+export type RsvpForm = "Standard" | "VIP" | "NAMI" | "NAMI VIP" | "Lake Las Vegas" | "Lake Las Vegas VIP";
 export function rsvpForm(record: Pick<RsvpSubmission, "vip" | "partner" | "tier">): RsvpForm {
-  return record.partner === "nami" ? "NAMI" : record.vip ? "VIP" : record.tier === "lake-las-vegas" ? "Lake Las Vegas" : "Standard";
+  if (record.partner === "nami") return record.vip ? "NAMI VIP" : "NAMI";
+  if (record.tier === "lake-las-vegas") return record.vip ? "Lake Las Vegas VIP" : "Lake Las Vegas";
+  return record.vip ? "VIP" : "Standard";
 }
 // Owner (Oct 3): one spreadsheet per form, for seating.
-export const rsvpExportForms = { vip: "VIP", "lake-las-vegas": "Lake Las Vegas", nami: "NAMI", standard: "Standard" } as const;
+export const rsvpExportForms = { vip: "VIP", "nami-vip": "NAMI VIP", "lake-las-vegas-vip": "Lake Las Vegas VIP", "lake-las-vegas": "Lake Las Vegas", nami: "NAMI", standard: "Standard" } as const;
 export type RsvpExportForm = keyof typeof rsvpExportForms;
 export const rsvpsOfForm = (records: RsvpSubmission[], form: RsvpExportForm) => records.filter(record => rsvpForm(record) === rsvpExportForms[form]);
 export const withRsvpForm = (records: RsvpSubmission[]) => records.map(record => ({ ...record, form: rsvpForm(record), heardFromLabel: record.heardFrom ? rsvpHeardFromLabels[record.heardFrom] : "" }));

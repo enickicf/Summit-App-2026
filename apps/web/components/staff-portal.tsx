@@ -135,8 +135,8 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
 
       {/* Owner (Oct 1): VIP requests (private VIP link) sit first in the one staff portal, with who invited them. */}
       <section className={styles.section} id="vip" aria-labelledby="vip-title">
-        <div className={styles.sectionHead}><h2 id="vip-title">VIP RSVPs</h2><span className={`${styles.badge} ${styles.badgeVip}`}>{totals.vipGuests} guests · {totals.vipTickets} tickets</span><a className={styles.button} href="/api/staff/export?kind=rsvp&amp;form=vip">Download list</a></div>
-        <p className={styles.help}>Requests from the private VIP RSVP link (artists, honorees, personal invitations). Organization, title and who invited them are required on that form. They also appear in the full list below with a <span className={`${styles.badge} ${styles.badgeVip}`}>VIP</span> badge.</p>
+        <div className={styles.sectionHead}><h2 id="vip-title">VIP RSVPs</h2><span className={`${styles.badge} ${styles.badgeVip}`}>{totals.vipGuests} guests · {totals.vipTickets} tickets</span><a className={styles.button} href="/api/staff/export?kind=rsvp&amp;form=vip">VIP list</a><a className={styles.button} href="/api/staff/export?kind=rsvp&amp;form=nami-vip">NAMI VIP list</a><a className={styles.button} href="/api/staff/export?kind=rsvp&amp;form=lake-las-vegas-vip">Lake Las Vegas VIP list</a></div>
+        <p className={styles.help}>Requests from the private VIP RSVP links: VIP (artists, honorees, personal invitations), NAMI VIP and Lake Las Vegas VIP (the Form column says which). Organization, title and who invited them are required on that form. They also appear in the full list below with a <span className={`${styles.badge} ${styles.badgeVip}`}>VIP</span> badge.</p>
         {vip.length === 0 ? <p className={styles.empty}>No VIP RSVPs yet.</p> : <RsvpTable rows={vip} />}
       </section>
 

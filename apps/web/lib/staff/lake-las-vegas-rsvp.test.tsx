@@ -27,6 +27,6 @@ describe("Lake Las Vegas RSVP form (owner, Oct 3, 2026)", () => {
     expect(rsvpTotals(active).lakeLasVegasTickets).toBe(2);
     expect(rsvpCsvColumns).toContain("tier"); expect(toCsv(withRsvpForm([lake]), rsvpCsvColumns)).toContain("Lake Las Vegas");
     const html = renderToStaticMarkup(<StaffPortal rsvps={[lake, vip]} nominations={[]} poker={[]} workshops={[]} lineup={[]} generatedAt="2026-10-03T12:00:00.000Z" />);
-    for (const text of ["Lake Las Vegas RSVPs", "Lake Las Vegas tickets", "form=lake-las-vegas", "form=vip", "form=nami"]) expect(html).toContain(text);
+    for (const text of ["Lake Las Vegas RSVPs", "Lake Las Vegas tickets", "form=lake-las-vegas", "form=vip", "form=nami", "form=nami-vip", "form=lake-las-vegas-vip"]) expect(html).toContain(text);
   });
 });
