@@ -7,7 +7,8 @@ import { newSubmission, type RsvpEmailRecord, type RsvpSubmission, type Submissi
 export type RsvpEmailInput = Pick<RsvpSubmission, "name" | "email" | "guestCount" | "communityDay" | "attendanceStatus">;
 export type RenderedEmail = { subject: string; text: string; html: string };
 
-const evening = "Doors open 5:30 PM · Community Day 6:00–7:30 PM · Awards Show 8:00–10:00 PM";
+// Aphrah (Oct 3, 2026): Community Day 5:45–7:15 PM; the Awards Show starts at 7:30 PM.
+const evening = "Doors open 5:30 PM · Community Day 5:45–7:15 PM · Awards Show 7:30–10:00 PM";
 const firstName = (name: string) => name.trim().split(/\s+/)[0] || "there";
 const esc = (value: string) => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 

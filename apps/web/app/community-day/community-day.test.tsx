@@ -61,7 +61,7 @@ describe("Community Day page", () => {
   it("lists the details in the Awards page's evening format, details only", () => {
     beforeEvent();
     const details = text(section(render(), "details-title"));
-    expect(details).toContain("The Details Date Monday, Nov 2 Doors Open 5:30 PM Community Day 5:45–7:15 PM Awards Show 8:00 PM Location Encore Theater, Wynn Las Vegas");
+    expect(details).toContain("The Details Date Monday, Nov 2 Doors Open 5:30 PM Community Day 5:45–7:15 PM Awards Show 7:30 PM Location Encore Theater, Wynn Las Vegas");
     expect(details).not.toMatch(/free|ticket/i);
   });
 
@@ -72,7 +72,7 @@ describe("Community Day page", () => {
     expect(page).not.toContain("Summit");
     expect(page).not.toContain("Who it's for");
     expect(page).not.toMatch(/different|not the Awards/i);
-    expect(page).toContain("Awards Show 8:00 PM");
+    expect(page).toContain("Awards Show 7:30 PM");
     for (const other of ["Highlights", "Loni Love", "iHeart", "Jewel", "Pre-Show", "pre-show", "No Solicitation", "lineup"]) expect(page).not.toContain(other);
     expect(html).not.toMatch(/<(video|iframe)\b/);
   });

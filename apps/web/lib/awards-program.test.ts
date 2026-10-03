@@ -8,7 +8,7 @@ const body = publishedAwardsProgram(event2026Snapshot)!.body;
 describe("Awards copy and canonical schedule", () => {
   it("applies the Sept 21 owner times only to the legacy doors and pre-show notes and hides pending promotional boilerplate", () => {
     const result = awardsPromotionalProgram(body, event2026Snapshot)!;
-    expect(result).toContain("Doors Open: 5:30 PM\nNevada Day: 6:00-7:30 PM\nPre-Show: 7:30-8:00 PM");
+    expect(result).toContain("Doors Open: 5:30 PM\nNevada Day: 5:45-7:15 PM\nPre-Show: 7:30-8:00 PM");
     expect(result).not.toContain("6:30 PM");
     expect(result).not.toContain("end time to be confirmed");
     expect(result).not.toContain("complete show lineup");

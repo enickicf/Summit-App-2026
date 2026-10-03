@@ -12,7 +12,9 @@ describe("owner's Google Doc schedule (Sept 22)", () => {
     expect(next.scheduleItems.map(item => item.title)).toEqual(expected);
     const at = (title: string) => next.scheduleItems.find(item => item.title === title)!;
     expect(at("Awards Show Doors Open").startUtc).toBe("2026-11-03T01:30:00.000Z"); // Nov 2, 5:30 PM PST
-    expect(at("Community Day").endUtc).toBe("2026-11-03T03:30:00.000Z"); // 7:30 PM
+    expect(at("Community Day").startUtc).toBe("2026-11-03T01:45:00.000Z"); // 5:45 PM
+    expect(at("Community Day").endUtc).toBe("2026-11-03T03:15:00.000Z"); // 7:15 PM
+    expect(at("Awards Show").startUtc).toBe("2026-11-03T03:30:00.000Z"); // 7:30 PM
     expect(at("Poker Night").locationName).toBe("Encore Poker Room"); // room kept from Airtable
     expect(next.scheduleItems.filter(item => item.title === "Summit Sessions")).toHaveLength(4);
     // An intentionally empty publication stays empty.

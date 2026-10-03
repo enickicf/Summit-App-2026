@@ -31,7 +31,7 @@ export const communityDay2026 = {
     { label: "Date", value: "Monday, Nov 2", note: null },
     { label: "Doors Open", value: "5:30 PM", note: null },
     { label: "Community Day", value: "5:45–7:15 PM", note: null },
-    { label: "Awards Show", value: "8:00 PM", note: null },
+    { label: "Awards Show", value: "7:30 PM", note: null },
     { label: "Location", value: "Encore Theater, Wynn Las Vegas", note: null }
   ],
   partners: [

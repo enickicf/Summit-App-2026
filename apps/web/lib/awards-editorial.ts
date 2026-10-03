@@ -9,7 +9,7 @@ export const awards2026Editorial = {
   // correction. A published staff session with the same title always wins over these lines.
   eveningTimes: [
     { label: "Doors Open", time: "5:30 PM" },
-    { label: "Nevada Day", time: "6:00-7:30 PM" },
+    { label: "Nevada Day", time: "5:45-7:15 PM" },
     { label: "Pre-Show", time: "7:30-8:00 PM" }
   ],
   // Owner (Sept 21, later): the Awards hero says only "Doors open 6:00 PM"; the rest of the evening
@@ -49,8 +49,8 @@ export const awards2025Winners = [
 // Owner (Sept 21, late): the Awards page's "The Evening" block, exactly as the owner wrote it.
 export const awards2026Evening = [
   { label: "Doors Open", time: "5:30 PM" },
-  { label: "Community Day", time: "6:00 PM-7:30 PM" },
-  { label: "Awards Show", time: "8:00 PM-10:00 PM" }
+  { label: "Community Day", time: "5:45 PM-7:15 PM" },
+  { label: "Awards Show", time: "7:30 PM-10:00 PM" }
 ] as const;
 
 // Sept 21 meeting direction, using ICF's own published wording (inspiringchildren.org/awards).

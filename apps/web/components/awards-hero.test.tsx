@@ -34,7 +34,7 @@ describe("Awards opening presentation", () => {
     expect(times()).toEqual([
       { label: "Red Carpet", time: "6:15 PM-7:30 PM" },
       { label: "Doors Open", time: "5:30 PM" },
-      { label: "Nevada Day", time: "6:00-7:30 PM" },
+      { label: "Nevada Day", time: "5:45-7:15 PM" },
       { label: "Pre-Show", time: "7:30-8:00 PM" },
       { label: "Awards Show", time: "8:00 PM-10:00 PM" }
     ]);
@@ -48,8 +48,8 @@ describe("Awards opening presentation", () => {
     // Owner (Sept 21, late): "The Evening" shows exactly two lines.
     const evening = schedule();
     expect(evening).toContain("<dt>Doors Open</dt><dd>5:30 PM</dd>");
-    expect(evening).toContain("<dt>Community Day</dt><dd>6:00 PM-7:30 PM</dd>");
-    expect(evening).toContain("<dt>Awards Show</dt><dd>8:00 PM-10:00 PM</dd>");
+    expect(evening).toContain("<dt>Community Day</dt><dd>5:45 PM-7:15 PM</dd>");
+    expect(evening).toContain("<dt>Awards Show</dt><dd>7:30 PM-10:00 PM</dd>");
     expect(evening).not.toContain("Pre-Show");
     expect(evening.match(/<dt>/g)).toHaveLength(3);
     expect(page()).not.toContain("Red Carpet");
@@ -90,7 +90,7 @@ describe("Awards opening presentation", () => {
     expect(page(snapshot)).not.toContain('id="evening"');
     expect(awardsHeroTimes(null, null)).toEqual([]);
     const withoutProgram = schedule(event2026Snapshot, false);
-    expect(withoutProgram).toContain("8:00 PM-10:00 PM");
+    expect(withoutProgram).toContain("7:30 PM-10:00 PM");
     expect(withoutProgram).not.toMatch(/<dt>(Pre-Show|Red Carpet)<\/dt>/); // Owner (Sept 22): The Evening opens with Doors Open 5:30
     expect(hero(event2026Snapshot, false)).toContain("<dt>Doors Open</dt><dd>5:30 PM</dd>");
   });
