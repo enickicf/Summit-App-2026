@@ -37,6 +37,15 @@ export default function CommunityDayPage() {
           <span className={styles.whenTime}>{day.heroTime}</span>
           <span className={styles.whenPlace}>{day.venue}</span>
         </p>}
+        {/* Aphrah (Oct 3): "Presented by ICF & NAMI" in the header, as a quiet logo lockup. */}
+        <div className={styles.presentedBy}>
+          <span className={styles.presentedLabel}>Presented by</span>
+          <span className={styles.presentedLogos}>
+            <img className={styles.presentedIcf} src="/images/icf-logo-white.png" alt="Inspiring Children Foundation" width={1500} height={1136} />
+            <span className={styles.presentedDivider} aria-hidden="true" />
+            <img className={styles.presentedNami} src="/2026-partners/nami-white.png" alt="NAMI, National Alliance on Mental Illness" width={1851} height={712} />
+          </span>
+        </div>
         <div className={styles.heroButtons} id="community-day-actions">
           {!over && <a className={styles.button} href={day.rsvpUrl}>Request free tickets</a>}
           {/* Scrolls down to the "What is Community Day?" section on this page. */}

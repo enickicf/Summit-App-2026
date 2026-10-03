@@ -25,12 +25,15 @@ describe("Community Day page", () => {
     beforeEvent();
     const html = render();
     const heroHtml = section(html, "community-day-title");
-    expect(heroHtml.match(/<img\b/g)).toHaveLength(1);
+    // The photo plus the "Presented by" ICF and NAMI logos (Aphrah, Oct 3).
+    expect(heroHtml.match(/<img\b/g)).toHaveLength(3);
+    expect(heroHtml).toContain('alt="Inspiring Children Foundation"');
+    expect(heroHtml).toContain('alt="NAMI, National Alliance on Mental Illness"');
     expect(heroHtml).not.toContain("Community Day partners");
     expect(heroHtml.replace(/&#x27;/g, "'")).toContain(`alt="${communityDay2026.heroPhotoAlt}"`);
     expect(heroHtml).toContain("encore-theater-community-day");
     const hero = text(heroHtml);
-    expect(hero).toContain("Community Day Monday, November 2 5:45–7:15 PM Encore Theater at Wynn Las Vegas Request free tickets Info");
+    expect(hero).toContain("Community Day Monday, November 2 5:45–7:15 PM Encore Theater at Wynn Las Vegas Presented by Request free tickets Info");
     expect(hero).not.toMatch(/Doors open|A free panel/);
   });
 
