@@ -1,7 +1,7 @@
 import { awards2026Editorial } from "../awards-editorial";
 import { newSubmission, type RsvpEmailRecord, type RsvpSubmission, type SubmissionStore } from "./store";
 
-// Owner (Sept 28, 2026): every Awards RSVP gets an automatic confirmation email. It thanks the guest,
+// Owner (Sept 28, 2026; wording Oct 3): every Awards RSVP gets an automatic confirmation email. It thanks the guest,
 // says plainly that the RSVP is not a ticket, that they are on the waiting list, and that the team will
 // reach out about their ticket. Facts here are the approved Awards facts only (date, venue, evening times).
 export type RsvpEmailInput = Pick<RsvpSubmission, "name" | "email" | "guestCount" | "communityDay" | "attendanceStatus">;
@@ -15,13 +15,13 @@ const esc = (value: string) => value.replace(/&/g, "&amp;").replace(/</g, "&lt;"
 export function rsvpConfirmationEmail(guest: RsvpEmailInput): RenderedEmail {
   const party = guest.guestCount === 1 ? "1 guest (you)" : `${guest.guestCount} guests`;
   const communityDay = guest.communityDay ? "Yes" : "No";
-  const subject = "Thank you for your RSVP – Not Alone Awards Show";
+  const subject = "We received your RSVP – Not Alone Awards Show";
   const lines = [
     `Hi ${firstName(guest.name)},`,
     "",
-    "Thank you for RSVPing to the Not Alone Awards Show. We are so glad you want to be part of the evening.",
+    "Thank you for your RSVP to the Not Alone Awards Show. This email confirms we received your submission.",
     "",
-    "One important note: this RSVP does not confirm your ticket. Seating at the Encore Theater is limited, so your request has been added to our ticket waiting list. Our team will reach out to you by email with information about your ticket as soon as we can. Nothing more is needed from you right now.",
+    "Your request is on our ticket waiting list. Seating at the Encore Theater is limited, and this RSVP is not a ticket. If you are removed from the waiting list, we will reach out by email with your tickets. Nothing more is needed from you right now.",
     "",
     "Your request",
     `Name: ${guest.name}`,
@@ -48,8 +48,8 @@ export function rsvpConfirmationEmail(guest: RsvpEmailInput): RenderedEmail {
 <tr><td style="background:#1c1a2e;padding:28px 32px;text-align:center"><img src="https://notaloneawards.org/images/na-awards-logo-white.png" alt="Not Alone Awards" width="220" style="width:220px;max-width:70%;height:auto;display:inline-block"><p style="margin:14px 0 0;color:#bdc7c5;font-size:13px;letter-spacing:0.04em;text-transform:uppercase">Powered by the Steven &amp; Alexandra Cohen Foundation</p></td></tr>
 <tr><td style="padding:32px 32px 8px;font-size:17px;line-height:1.6">
 <p style="margin:0 0 16px">Hi ${esc(firstName(guest.name))},</p>
-<p style="margin:0 0 16px">Thank you for RSVPing to the <strong>Not Alone Awards Show</strong>. We are so glad you want to be part of the evening.</p>
-<p style="margin:0 0 16px;padding:16px 18px;background:#f4f5fa;border-left:4px solid #4a5faa;border-radius:8px"><strong>One important note:</strong> this RSVP does not confirm your ticket. Seating at the Encore Theater is limited, so your request has been added to our <strong>ticket waiting list</strong>. Our team will reach out to you by email with information about your ticket as soon as we can. Nothing more is needed from you right now.</p>
+<p style="margin:0 0 16px">Thank you for your RSVP to the <strong>Not Alone Awards Show</strong>. This email confirms we received your submission.</p>
+<p style="margin:0 0 16px;padding:16px 18px;background:#f4f5fa;border-left:4px solid #4a5faa;border-radius:8px">Your request is on our <strong>ticket waiting list</strong>. Seating at the Encore Theater is limited, and this RSVP is not a ticket. <strong>If you are removed from the waiting list, we will reach out by email with your tickets.</strong> Nothing more is needed from you right now.</p>
 </td></tr>
 <tr><td style="padding:8px 32px">
 <table role="presentation" cellspacing="0" cellpadding="0" style="font-size:15px;line-height:1.6;color:#1c1a2e"><tr><td style="padding:0 0 6px;color:#4a5faa;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:0.06em">Your request</td></tr>
@@ -86,8 +86,9 @@ export function smtpSender(config: MailerConfig): Sender {
 }
 export function defaultSender(): Sender | null { const config = mailerFromEnv(); return config ? smtpSender(config) : null; }
 
-// Which RSVPs get the waiting-list confirmation: guests who plan to attend (the only ones requesting tickets).
-export const wantsConfirmation = (record: Pick<RsvpSubmission, "attendanceStatus">) => record.attendanceStatus === "attending";
+// Owner (Oct 3, 2026): everyone who fills out an RSVP form gets the confirmation (only a legacy explicit
+// "unable to attend" record, which the forms no longer offer, is skipped).
+export const wantsConfirmation = (record: Pick<RsvpSubmission, "attendanceStatus">) => record.attendanceStatus !== "declined";
 
 // Sends the confirmation for one stored RSVP and records that it was sent. Never throws to the caller's guest.
 export async function sendRsvpConfirmation(record: RsvpSubmission, store: SubmissionStore, sender: Sender | null = defaultSender()): Promise<"sent" | "skipped" | "no-mailer" | "failed"> {

@@ -6,11 +6,11 @@ import { handleRsvpPost } from "../../app/api/rsvp/route";
 const rsvp = (over: Partial<RsvpSubmission> = {}): RsvpSubmission => ({ ...newSubmission({ name: "Lisa Lundt", email: "lisa@example.com", phone: "", organization: "", professionalRole: "", attendanceStatus: "attending", communityDay: true, guestCount: 3, notes: "" }), ...over });
 
 describe("RSVP confirmation email (owner, Sept 28)", () => {
-  it("thanks the guest, says the RSVP is not a ticket, puts them on the waiting list and promises follow-up", () => {
+  it("confirms the submission, says it is not a ticket, puts them on the waiting list and promises tickets by email if they come off it", () => {
     const m = rsvpConfirmationEmail(rsvp());
-    expect(m.subject).toBe("Thank you for your RSVP – Not Alone Awards Show");
-    for (const part of ["Hi Lisa,", "Thank you for RSVPing to the Not Alone Awards Show", "does not confirm your ticket", "ticket waiting list", "reach out to you by email with information about your ticket", "Party size: 3 guests", "Community Day (before the show): Yes", "Monday, November 2, 2026", "Encore Theater at Wynn Las Vegas", "Doors open 5:30 PM", "This ticket is free. Your support makes it possible.", "https://www.inspiringchildren.org/donate"]) expect(m.text).toContain(part);
-    for (const part of ["Hi Lisa,", "does not confirm your ticket", "ticket waiting list", "Lisa Lundt &middot; 3 guests &middot; Community Day: Yes", "na-awards-logo-white.png", "inspiringchildren.org/donate"]) expect(m.html).toContain(part);
+    expect(m.subject).toBe("We received your RSVP – Not Alone Awards Show");
+    for (const part of ["Hi Lisa,", "This email confirms we received your submission", "this RSVP is not a ticket", "ticket waiting list", "If you are removed from the waiting list, we will reach out by email with your tickets.", "Party size: 3 guests", "Community Day (before the show): Yes", "Monday, November 2, 2026", "Encore Theater at Wynn Las Vegas", "Doors open 5:30 PM", "This ticket is free. Your support makes it possible.", "https://www.inspiringchildren.org/donate"]) expect(m.text).toContain(part);
+    for (const part of ["Hi Lisa,", "this RSVP is not a ticket", "ticket waiting list", "If you are removed from the waiting list, we will reach out by email with your tickets.", "Lisa Lundt &middot; 3 guests &middot; Community Day: Yes", "na-awards-logo-white.png", "inspiringchildren.org/donate"]) expect(m.html).toContain(part);
     expect(m.html).not.toMatch(/confirmed|your ticket is confirmed/i);
     expect(rsvpConfirmationEmail(rsvp({ guestCount: 1, communityDay: false })).text).toContain("Party size: 1 guest (you)");
     expect(rsvpConfirmationEmail(rsvp({ name: "<b>Evil</b>" })).html).toContain("&lt;b&gt;Evil&lt;/b&gt;");
@@ -18,7 +18,7 @@ describe("RSVP confirmation email (owner, Sept 28)", () => {
 
   it("only guests who plan to attend get the waiting-list email", () => {
     expect(wantsConfirmation(rsvp())).toBe(true);
-    expect(wantsConfirmation(rsvp({ attendanceStatus: "needs_follow_up" }))).toBe(false);
+    expect(wantsConfirmation(rsvp({ attendanceStatus: "needs_follow_up" }))).toBe(true); // owner, Oct 3: everyone who fills out the form
     expect(wantsConfirmation(rsvp({ attendanceStatus: "declined" }))).toBe(false);
   });
 
@@ -48,7 +48,7 @@ describe("RSVP confirmation email (owner, Sept 28)", () => {
     const response = await handleRsvpPost(request, store, async () => undefined, sender);
     expect(response.status).toBe(200);
     expect((await store.list("rsvp")).map(r => r.name)).toEqual(["Natasha Buonanno"]);
-    expect(sender).toHaveBeenCalledWith(expect.objectContaining({ to: "natasha@example.com", subject: "Thank you for your RSVP – Not Alone Awards Show" }));
+    expect(sender).toHaveBeenCalledWith(expect.objectContaining({ to: "natasha@example.com", subject: "We received your RSVP – Not Alone Awards Show" }));
   });
 
   it("backfill emails each earlier guest once (latest attending request per address), skipping those already emailed", async () => {
