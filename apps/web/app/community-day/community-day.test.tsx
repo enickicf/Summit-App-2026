@@ -33,7 +33,8 @@ describe("Community Day page", () => {
     expect(heroHtml.replace(/&#x27;/g, "'")).toContain(`alt="${communityDay2026.heroPhotoAlt}"`);
     expect(heroHtml).toContain("encore-theater-community-day");
     const hero = text(heroHtml);
-    expect(hero).toContain("Community Day Monday, November 2 5:45–7:15 PM Encore Theater at Wynn Las Vegas Presented by Request free tickets Info");
+    expect(hero).toContain("Presented by Community Day Monday, November 2 5:45–7:15 PM Encore Theater at Wynn Las Vegas Request free tickets Info");
+    expect(hero).not.toContain("Not Alone");
     expect(hero).not.toMatch(/Doors open|A free panel/);
   });
 

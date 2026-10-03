@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Heart } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { communityDay2026 as day } from "../../lib/community-day-2026";
 import { isPostEvent, postEventLabel } from "../../lib/event-phase";
 import heroPhoto from "./encore-theater-community-day.png";
@@ -22,22 +22,7 @@ export default function CommunityDayPage() {
       {/* Imported next to the page (not from /public) so Next measures and optimizes it at build time. */}
       <Image className={styles.heroPhoto} src={heroPhoto} alt={day.heroPhotoAlt} fill sizes="100vw" loading="eager" fetchPriority="high" unoptimized />
       <div className={styles.heroCopy}>
-        <h1 id="community-day-title" className={styles.heroTitleMark} aria-label={day.name}>
-          <span className={styles.notAloneMark}>
-            <Heart fill="url(#community-day-heart)" aria-hidden="true" strokeWidth={1.5}>
-              <defs><linearGradient id="community-day-heart" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#8fb1e0" /><stop offset="55%" stopColor="#b99edb" /><stop offset="100%" stopColor="#f1bf7b" /></linearGradient></defs>
-            </Heart>
-            Not Alone
-          </span>
-          <strong>Community<br />Day</strong>
-        </h1>
-        {/* Owner (Sept 29): the date and time must read at a glance the moment the page opens. */}
-        {over ? <p className={styles.when}>{postEventLabel}</p> : <p className={styles.when}>
-          <time className={styles.whenDate} dateTime={day.dateTime}>Monday, November 2</time>
-          <span className={styles.whenTime}>{day.heroTime}</span>
-          <span className={styles.whenPlace}>{day.venue}</span>
-        </p>}
-        {/* Aphrah (Oct 3): "Presented by ICF & NAMI" in the header, as a quiet logo lockup. */}
+        {/* Aphrah (Oct 3): "Presented by ICF & NAMI" in the header: the logo lockup sits above the title (owner, Oct 3: no "Not Alone" mark above the title). */}
         <div className={styles.presentedBy}>
           <span className={styles.presentedLabel}>Presented by</span>
           <span className={styles.presentedLogos}>
@@ -46,6 +31,15 @@ export default function CommunityDayPage() {
             <img className={styles.presentedNami} src="/2026-partners/nami-white.png" alt="NAMI, National Alliance on Mental Illness" width={1851} height={712} />
           </span>
         </div>
+        <h1 id="community-day-title" className={styles.heroTitleMark} aria-label={day.name}>
+          <strong>Community<br />Day</strong>
+        </h1>
+        {/* Owner (Sept 29): the date and time must read at a glance the moment the page opens. */}
+        {over ? <p className={styles.when}>{postEventLabel}</p> : <p className={styles.when}>
+          <time className={styles.whenDate} dateTime={day.dateTime}>Monday, November 2</time>
+          <span className={styles.whenTime}>{day.heroTime}</span>
+          <span className={styles.whenPlace}>{day.venue}</span>
+        </p>}
         <div className={styles.heroButtons} id="community-day-actions">
           {!over && <a className={styles.button} href={day.rsvpUrl}>Request free tickets</a>}
           {/* Scrolls down to the "What is Community Day?" section on this page. */}

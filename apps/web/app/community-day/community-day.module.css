@@ -147,3 +147,6 @@
   .presentedNami { height:32px !important; }
   .presentedDivider { height:36px; }
 }
+/* Owner (Oct 3): the lockup sits above the title. */
+.heroCopy > .presentedBy { margin:0 0 30px; }
+@media(max-width:760px) { .heroCopy > .presentedBy { margin:0 0 20px; } }
