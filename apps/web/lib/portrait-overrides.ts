@@ -10,7 +10,7 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   // Sept 21 late additions (sources in work/new-headshots-20260921/manifest.json).
   // Owner (Sept 21, late): a photo beats a name card. Hal Fisher and Sarah Steil use their own Airtable photos
   // (small originals, enlarged) until a sharper headshot is supplied.
-  "sarah steil": { file: "/2026-headshots/portraits/sarah-steil-2.jpg", source: "airtable", airtableBytes: 8055667 },
+  "sarah steil": { file: "/2026-headshots/portraits/sarah-steil-3.jpg", source: "airtable", airtableBytes: 8055667 },
   "sheri sobrato": { file: "/2026-headshots/portraits/sheri-sobrato.jpg", source: "web", credit: "Official portrait, sobrato.com/people/sheri-sobrato (courtesy The Sobrato Organization); Airtable only holds a 32px thumbnail" },
   "bob bryan": { file: "/2026-headshots/portraits/bob-bryan.jpg", source: "commons", credit: "Vbrunophotog, 2025 International Tennis Hall of Fame press conference, CC BY-SA 4.0" },
   "caroline silby": { file: "/2026-headshots/portraits/caroline-silby.jpg", source: "web", credit: "drsilby.com (her official site)" },
@@ -43,7 +43,7 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "jason kennedy": { file: "/2026-headshots/portraits/jason-kennedy-2.jpg", source: "icf-card" },
   "jeff levin": { file: "/2026-headshots/portraits/jeff-levin.jpg", source: "airtable", airtableBytes: 1141135 },
   "jen smorgon": { file: "/2026-headshots/portraits/jen-smorgon.jpg", source: "icf-card" },
-  "jessica edwards": { file: "/2026-headshots/portraits/jessica-edwards-2.jpg", source: "airtable", airtableBytes: 2107370 },
+  "jessica edwards": { file: "/2026-headshots/portraits/jessica-edwards-3.jpg", source: "airtable", airtableBytes: 2107370 },
   "jewel": { file: "/2026-headshots/portraits/jewel-2.jpg", source: "web", credit: "Official Shore Fire Media press photo, 2025. Photo credit: Lindsey Appolis (press-kit image; keep the credit)" },
   "jon hershfield": { file: "/2026-headshots/portraits/jon-hershfield-2.jpg", source: "airtable", airtableBytes: 0 }, // recut from Airtable, smeared band removed (Sept 21 late)
   "josh wolf": { file: "/2026-headshots/portraits/josh-wolf-3.jpg", source: "web", credit: "Jimmy Kimmel's Comedy Club residency page press photo (2023); the only sharp, centered, eyes-visible photo of him; he wears his cap in every current photo" },
@@ -68,7 +68,7 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "rachel platten": { file: "/2026-headshots/portraits/rachel-platten.jpg", source: "site-2026" },
   "rahil briggs": { file: "/2026-headshots/portraits/rahil-briggs-2.jpg", source: "airtable", airtableBytes: 688686 },
   "ray lewis": { file: "/2026-headshots/portraits/ray-lewis-2.jpg", source: "web", credit: "Official speaker promo photo, Washington Speakers Bureau (wsb.com/speakers/ray-lewis); courtesy image (owner asked for a better photo, Sept 21 late)" },
-  "ryan wolfington": { file: "/2026-headshots/portraits/ryan-wolfington-2.jpg", source: "icf-card", credit: "ICF Summit page headshot photo (500px original); owner (Sept 21) rejected the shoulder cut-out" },
+  "ryan wolfington": { file: "/2026-headshots/portraits/ryan-wolfington-3.jpg", source: "icf-card", credit: "ICF Summit page headshot photo (500px original); owner (Sept 21) rejected the shoulder cut-out" },
   "sally dewhurst": { file: "/2026-headshots/portraits/sally-dewhurst-2.jpg", source: "airtable", airtableBytes: 464971 },
   "sarah gilman": { file: "/2026-headshots/portraits/sarah-gilman-2.jpg", source: "icf-card" },
   "sean wolfington": { file: "/2026-headshots/portraits/sean-wolfington-2.jpg", source: "airtable", airtableBytes: 16970 },
@@ -77,7 +77,7 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "steve wozniak": { file: "/2026-headshots/portraits/steve-wozniak-2.jpg", source: "airtable", airtableBytes: 273110 },
   "taylor perry": { file: "/2026-headshots/portraits/taylor-perry.jpg", source: "airtable", airtableBytes: 65044 },
   "trent alenik": { file: "/2026-headshots/portraits/trent-alenik-2.jpg", source: "airtable", airtableBytes: 0 },
-  "trevor short": { file: "/2026-headshots/portraits/trevor-short-2.jpg", source: "airtable", airtableBytes: 0 },
+  "trevor short": { file: "/2026-headshots/portraits/trevor-short-3.jpg", source: "airtable", airtableBytes: 0 },
   "wendy oliver pyatt": { file: "/2026-headshots/portraits/wendy-oliver-pyatt-2.jpg", source: "icf-card" },
   "jay mcgraw": { file: "/2026-headshots/portraits/jay-erica-mcgraw.jpg", source: "airtable", airtableBytes: 78227 }, // Sept 28: couple composite (Jay left, Erica right) from both Airtable headshots
   "erica mcgraw": { file: "/2026-headshots/portraits/jay-erica-mcgraw.jpg", source: "airtable", airtableBytes: 247361 },
@@ -88,7 +88,7 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "raquelle stevens": { file: "/2026-headshots/portraits/raquelle-stevens.jpg", source: "airtable", airtableBytes: 238753 },
   "gavin magnus": { file: "/2026-headshots/portraits/gavin-magnus.jpg", source: "airtable", airtableBytes: 25987 },
   "clayton alenik": { file: "/2026-headshots/portraits/clayton-alenik.jpg", source: "airtable", airtableBytes: 1346880 },
-  "beth kojima": { file: "/2026-headshots/portraits/beth-kojima.jpg", source: "airtable", airtableBytes: 26074 },
+  "beth kojima": { file: "/2026-headshots/portraits/beth-kojima-2.jpg", source: "airtable", airtableBytes: 26074 },
   "jennifer donnelly": { file: "/2026-headshots/portraits/jennifer-donnelly-2.jpg", source: "airtable", airtableBytes: 241439 },
   "jeneva bell": { file: "/2026-headshots/portraits/jeneva-bell.jpg", source: "airtable", airtableBytes: 201591 },
   // Oct 3 Airtable re-read: new and replaced Airtable headshots (work/new-headshots-20261003/manifest.json).
@@ -105,7 +105,7 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "nicole kalhorn": { file: "/2026-headshots/portraits/nicole-kalhorn.jpg", source: "airtable", airtableBytes: 134401 },
   "jp saxe": { file: "/2026-headshots/portraits/jp-saxe.jpg", source: "airtable", airtableBytes: 574606 },
   "atz kilcher": { file: "/2026-headshots/portraits/atz-kilcher.jpg", source: "airtable", airtableBytes: 536096 },
-  "jennifer karson-strauss": { file: "/2026-headshots/portraits/jennifer-karson-strauss.jpg", source: "airtable", airtableBytes: 209410 },
+  "jennifer karson-strauss": { file: "/2026-headshots/portraits/jennifer-karson-strauss-2.jpg", source: "airtable", airtableBytes: 209410 },
   "alex banayan": { file: "/2026-headshots/portraits/alex-banayan.jpg", source: "airtable", airtableBytes: 93719 },
   "rohan thakkar": { file: "/2026-headshots/portraits/rohan-thakkar.jpg", source: "airtable", airtableBytes: 50626 },
   "alyson niemann": { file: "/2026-headshots/portraits/alyson-niemann.jpg", source: "airtable", airtableBytes: 686239 },

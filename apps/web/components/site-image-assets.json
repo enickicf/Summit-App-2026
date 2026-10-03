@@ -679,11 +679,6 @@
     "height": 900,
     "bytes": 102454
   },
-  "/2026-headshots/portraits/ryan-wolfington-2.jpg": {
-    "width": 948,
-    "height": 900,
-    "bytes": 139811
-  },
   "/2026-headshots/portraits/sally-dewhurst-2.jpg": {
     "width": 948,
     "height": 900,
@@ -743,11 +738,6 @@
     "width": 948,
     "height": 900,
     "bytes": 98949
-  },
-  "/2026-headshots/portraits/trevor-short-2.jpg": {
-    "width": 948,
-    "height": 900,
-    "bytes": 97753
   },
   "/2026-headshots/portraits/wendy-oliver-pyatt-2.jpg": {
     "width": 948,
@@ -2074,11 +2064,6 @@
     "height": 900,
     "bytes": 208555
   },
-  "/2026-headshots/portraits/beth-kojima.jpg": {
-    "width": 948,
-    "height": 900,
-    "bytes": 150988
-  },
   "/2026-headshots/portraits/jennifer-donnelly-2.jpg": {
     "width": 948,
     "height": 900,
@@ -2098,11 +2083,6 @@
     "width": 948,
     "height": 900,
     "bytes": 240035
-  },
-  "/2026-headshots/portraits/jessica-edwards-2.jpg": {
-    "width": 948,
-    "height": 900,
-    "bytes": 163554
   },
   "/2026-headshots/portraits/jay-erica-mcgraw.jpg": {
     "width": 900,
@@ -2128,11 +2108,6 @@
     "width": 948,
     "height": 900,
     "bytes": 217663
-  },
-  "/2026-headshots/portraits/sarah-steil-2.jpg": {
-    "width": 948,
-    "height": 900,
-    "bytes": 201951
   },
   "/2026-headshots/portraits/mario-martinez.jpg": {
     "width": 948,
@@ -2193,11 +2168,6 @@
     "width": 948,
     "height": 900,
     "bytes": 114285
-  },
-  "/2026-headshots/portraits/jennifer-karson-strauss.jpg": {
-    "width": 948,
-    "height": 900,
-    "bytes": 130259
   },
   "/2026-headshots/portraits/alex-banayan.jpg": {
     "width": 948,
@@ -2263,5 +2233,35 @@
     "width": 2694,
     "height": 567,
     "bytes": 72649
+  },
+  "/2026-headshots/portraits/sarah-steil-3.jpg": {
+    "width": 948,
+    "height": 900,
+    "bytes": 187048
+  },
+  "/2026-headshots/portraits/beth-kojima-2.jpg": {
+    "width": 948,
+    "height": 900,
+    "bytes": 140730
+  },
+  "/2026-headshots/portraits/jennifer-karson-strauss-2.jpg": {
+    "width": 948,
+    "height": 900,
+    "bytes": 124252
+  },
+  "/2026-headshots/portraits/ryan-wolfington-3.jpg": {
+    "width": 948,
+    "height": 900,
+    "bytes": 188007
+  },
+  "/2026-headshots/portraits/jessica-edwards-3.jpg": {
+    "width": 948,
+    "height": 900,
+    "bytes": 183700
+  },
+  "/2026-headshots/portraits/trevor-short-3.jpg": {
+    "width": 948,
+    "height": 900,
+    "bytes": 125812
   }
 }
