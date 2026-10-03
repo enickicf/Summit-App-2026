@@ -31,23 +31,27 @@ export default async function PartnersPage() {
   const all = (airtableOverlay(snapshot)?.partners ?? []).filter(partner => confirmed.test(partner.status));
   // Sept 22 meeting: Founding Partners first (the Cohen Foundation and NAMI; never Wynn), then Wynn and
   // Fanatics, then the brands in their Airtable groups with Vendors before the Gifting Suite.
-  const topNames = ["nami", "fanatics"];
-  const topAirtable = topNames.map(name => all.find(partner => partner.name.trim().toLowerCase() === name)).filter((p): p is NonNullable<typeof p> => Boolean(p));
+  // Oct 3: Airtable renamed Fanatics to "Fanatics Foundation"; either name takes the Sponsor spot.
+  const isNami = (name: string) => name.trim().toLowerCase() === "nami";
+  const isFanatics = (name: string) => ["fanatics", "fanatics foundation"].includes(name.trim().toLowerCase());
+  const topAirtable = [all.find(partner => isNami(partner.name)), all.find(partner => isFanatics(partner.name))].filter((p): p is NonNullable<typeof p> => Boolean(p));
   const partners = all.filter(partner => !topAirtable.includes(partner));
-  const groupOrder = ["Sponsors", "Partners", "Vendors", "Gifting Suite"];
-  const groups = [...new Set(partners.map(partner => partner.group || "Partners"))]
+  // Airtable's "Partner" (singular) joins the Partners group; "Curriculum Partner" follows it.
+  const groupOf = (partner: { group: string }) => !partner.group || partner.group === "Partner" ? "Partners" : partner.group;
+  const groupOrder = ["Sponsors", "Partners", "Curriculum Partner", "Vendors", "Gifting Suite"];
+  const groups = [...new Set(partners.map(groupOf))]
     .sort((a, b) => (groupOrder.indexOf(a) + 1 || 99) - (groupOrder.indexOf(b) + 1 || 99))
     .map(title => ({
       title: title === "Gifting Suite" ? "Gifting Suite Partners" : title,
-      partners: partners.filter(partner => (partner.group || "Partners") === title)
+      partners: partners.filter(partner => groupOf(partner) === title)
     }));
   // Sept 22 meeting: confirmed people grouped "Philanthropist" in Airtable, listed on this page.
   // Owner / Ryan (Sept 29): every founder is listed here as well, founders first, then the other philanthropists.
   const everyone = directoryPeople(snapshot);
   const founders = everyone.filter(isFounder);
   const philanthropists = [...founders, ...everyone.filter(person => person.categories.includes("Philanthropists") && !founders.includes(person))].filter((person, index, list) => list.findIndex(other => other.slug === person.slug) === index);
-  const nami = topAirtable.find(partner => partner.name.trim().toLowerCase() === "nami");
-  const fanatics = topAirtable.find(partner => partner.name.trim().toLowerCase() === "fanatics");
+  const nami = topAirtable.find(partner => isNami(partner.name));
+  const fanatics = topAirtable.find(partner => isFanatics(partner.name));
   const logoCard = (partner: { recordId: string; name: string }) => <div className={`${styles.card} ${styles.logoCard} ${styles.topCard}`}><SiteImage src={partnerLogo2026(partner.name)!} alt={partner.name} sizes="(max-width: 600px) 90vw, 420px" /></div>;
   return <main id="main-content" tabIndex={-1} className={styles.page}>
     <header className={styles.hero}>

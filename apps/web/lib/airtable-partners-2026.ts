@@ -2,8 +2,8 @@ import type { AirtablePartner } from "./airtable";
 
 // Partners from Airtable's "Simplified Partners" page (read-only), recorded so the 2026 Partners page
 // matches Airtable before AIRTABLE_TOKEN is configured; the live connection replaces it automatically.
-// Every row in Airtable's grid order (Sept 21, 2026): Select value as the group, Status as recorded.
-export const airtablePartnersRecordedAt = "2026-09-21";
+// Every row in Airtable's grid order (re-read Oct 3, 2026): Select value as the group, Status as recorded.
+export const airtablePartnersRecordedAt = "2026-10-03";
 export const airtablePartners2026: AirtablePartner[] = [
   { recordId: "reckbMxoUtbg9Wlrk", name: "NAMI", item: "", group: "", status: "Confirmed" },
   { recordId: "recGz6P1iS02UfniY", name: "Slow North", item: "100 - 6 oz gold tin candles in a variety of scents", group: "Gifting Suite", status: "Confirmed" },
@@ -32,7 +32,6 @@ export const airtablePartners2026: AirtablePartner[] = [
   { recordId: "recWvbOVgSb3zIfgP", name: "Lamy", item: "LAMY AL-star pens", group: "Gifting Suite", status: "Confirmed" },
   { recordId: "recqvusUkCWftBaOf", name: "Rishi Tea", item: "", group: "Gifting Suite", status: "Confirmed" },
   { recordId: "rec6nwDODCCYJZ0HX", name: "Sena Rituals", item: "Robes, hats and vouchers", group: "Gifting Suite", status: "Confirmed" },
-  { recordId: "recSPmvZzOswwl6OB", name: "Pure Parima", item: "Robes and Towels", group: "Gifting Suite", status: "Confirmed" },
   { recordId: "recbCnk62wvWjQsJA", name: "Sunsweet", item: "Dried Fruit", group: "Gifting Suite", status: "Confirmed" },
   { recordId: "rechfFdslqU9sd8F0", name: "Yes Bar", item: "Nut Bars", group: "Gifting Suite", status: "Confirmed" },
   { recordId: "recJsBMD1Inf3AEEh", name: "Smartwool", item: "Compression socks", group: "Gifting Suite", status: "Confirmed" },
@@ -43,9 +42,11 @@ export const airtablePartners2026: AirtablePartner[] = [
   { recordId: "recqetHvbM8Q2YGsS", name: "Sleep or Die", item: "Sleep Strip Supplement", group: "Gifting Suite", status: "Confirmed" },
   { recordId: "reccr7dLWSe2kvlHv", name: "May Lindstrom Skin", item: "Moisturizer", group: "Gifting Suite", status: "Confirmed" },
   { recordId: "recqt4URRNKAndMln", name: "NextSense", item: "Sleep Earbuds EEG", group: "Gifting Suite", status: "Confirmed" },
-  { recordId: "recHzsGo1E7VPmEgS", name: "Shiftwave", item: "3 Meditation chairs", group: "Vendors", status: "Confirmed" },
+  { recordId: "recLgeqs6LwADiZC9", name: "Paul Dalio's Book", item: "A Madman's Revelation. A Memoir of Psychosis and Prophecy", group: "Gifting Suite", status: "Confirmed" },
+  { recordId: "recLVGLjonmXrfLBL", name: "SugarBearPro", item: "200 SugarbearPRO® Sleep 5-HTP Amino Vegan Vitamin Gummies – Salon Exclusive Size 200 pairs of SugarbearPRO Cozy Sleep Socks", group: "Gifting Suite", status: "Confirmed" },
+  { recordId: "reczQVqfD26y3Tp4B", name: "Bee Harmony Honey", item: "3 oz. mini honey jars", group: "Gifting Suite", status: "Confirmed" },
+  { recordId: "recHzsGo1E7VPmEgS", name: "Shiftwave", item: "2 Meditation chairs (1 chair from ICF, 1 chair sending)", group: "Vendors", status: "Confirmed" },
   { recordId: "recSFAj9h31pJPEQM", name: "Somadome", item: "Two meditation pods", group: "Vendors", status: "Confirmed" },
-  { recordId: "recUZ5bDgnhBp9fVY", name: "Hugz", item: "Purple Turtles", group: "Vendors", status: "Confirmed" },
   { recordId: "recFVY299CiG4wCBI", name: "Body Balance System", item: "Red Light Bed", group: "Vendors", status: "Confirmed" },
   { recordId: "recDBppJN5gA8QDqy", name: "Pet Partners", item: "Therapy dogs", group: "Vendors", status: "Confirmed" },
   { recordId: "recGJmDUPjsm2PH59", name: "Radio Rental", item: "Radios for event", group: "Vendors", status: "Confirmed" },
@@ -54,7 +55,12 @@ export const airtablePartners2026: AirtablePartner[] = [
   { recordId: "recxMGVUFoYwsQgm2", name: "Sena Rituals", item: "Gift Vouchers to print for guests", group: "Vendors", status: "Confirmed" },
   { recordId: "rec5tGdTrpbNw71RG", name: "Woojer", item: "Haptic Vest and Vibracoustic wellness mat", group: "Vendors", status: "Confirmed" },
   { recordId: "rechMMx0JTbJuBv5o", name: "Hyperice", item: "Recovery Devices", group: "Vendors", status: "Confirmed" },
-  { recordId: "recTcwciArfKYH4HH", name: "Fanatics", item: "", group: "Sponsors", status: "Confirmed" },
+  { recordId: "recTcwciArfKYH4HH", name: "Fanatics Foundation", item: "", group: "Sponsors", status: "Confirmed" },
+  { recordId: "recY1Vs6yy8Q1g7po", name: "Resonance Foundation", item: "", group: "Sponsors", status: "Confirmed" },
+  { recordId: "recQyUsDF12jL70Zu", name: "Wise Friend", item: "", group: "Curriculum Partner", status: "Confirmed" },
+  { recordId: "recUZ5bDgnhBp9fVY", name: "Hugz", item: "Purple Turtles", group: "Partner", status: "Confirmed" },
+  { recordId: "rec8IXddbFuLA2D78", name: "Big League Wiffleball", item: "", group: "Partner", status: "Confirmed" },
+  { recordId: "rechflDQdf19FoGhE", name: "Atlys", item: "Waterbottles", group: "Partner", status: "Confirmed" },
   { recordId: "recDljLkKwdqQj9t0", name: "Razer", item: "", group: "Gifting Suite", status: "Pending" },
   { recordId: "recDtxbmVcl4M36xH", name: "Kashwére", item: "", group: "Gifting Suite", status: "Pending" },
   { recordId: "recN46PKDSXfJgQr5", name: "Nufs", item: "", group: "Gifting Suite", status: "Pending" },
@@ -85,13 +91,15 @@ export const airtablePartners2026: AirtablePartner[] = [
   { recordId: "recrEmQ9gHurI4sDY", name: "Versed", item: "", group: "Gifting Suite", status: "Pending" },
   { recordId: "recuxp2htnHdF8rGS", name: "True Botanicals", item: "", group: "Gifting Suite", status: "Pending" },
   { recordId: "recnxVJlnOCnXHBld", name: "Drink Magna", item: "", group: "Gifting Suite", status: "Pending" },
+  { recordId: "rec2yLbGsEGHcGIAn", name: "Go Favr", item: "", group: "Gifting Suite", status: "Pending" },
   { recordId: "recHXCEQnY4MUQHQc", name: "Ohm", item: "", group: "Gifting Suite", status: "Pending" },
   { recordId: "recVBzNbsRmZTiOaV", name: "Soar", item: "", group: "Gifting Suite", status: "Pending" },
-  { recordId: "rec7I4ntnROsiBQUO", name: "Dusq", item: "", group: "Gifting Suite", status: "Pending" },
   { recordId: "recIcBYpdo6Srop8F", name: "Duracell", item: "", group: "Gifting Suite", status: "Pending" },
   { recordId: "recQGFwHcmRZlwwh6", name: "ChargerGoGo", item: "", group: "Gifting Suite", status: "Pending" },
+  { recordId: "rece2xVX5Opyy0MoW", name: "BonWellness", item: "", group: "Gifting Suite", status: "Pending" },
   { recordId: "recNIpo3CvCAd8piV", name: "Montce", item: "", group: "Gifting Suite", status: "Pending" },
   { recordId: "recTaHYgOZyPkZ9Hx", name: "Summersalt", item: "", group: "Gifting Suite", status: "Pending" },
+  { recordId: "recdHmih7TwLSSIm5", name: "Swimwear World", item: "", group: "Gifting Suite", status: "Pending" },
   { recordId: "recmDelvNM6RAH433", name: "NovoTHOR", item: "", group: "Vendors", status: "Pending" },
   { recordId: "recxpAEvKHFgpeHwV", name: "Life Pro", item: "", group: "Vendors", status: "Pending" },
   { recordId: "receeWdaO8zLx2iRt", name: "Putt View", item: "", group: "Vendors", status: "Pending" },
@@ -99,7 +107,11 @@ export const airtablePartners2026: AirtablePartner[] = [
   { recordId: "recEpKR0bIwpn10FE", name: "Rapsodo", item: "", group: "Vendors", status: "Pending" },
   { recordId: "recil90mkgqnTRuNs", name: "Noonah", item: "", group: "Vendors", status: "Pending" },
   { recordId: "recIK0U3GrhpIgLkS", name: "Snap bar", item: "", group: "Vendors", status: "Pending" },
-  { recordId: "reczTRPA5iZAmxk0R", name: "Woojer", item: "", group: "Vendors", status: "Pending" },
   { recordId: "recxZK3qfmkbvtyhM", name: "Drii Float", item: "", group: "Vendors", status: "Pending" },
-  { recordId: "recb1GqYDbjTBxQ6c", name: "Benny", item: "Energy Drinks", group: "Sponsors", status: "Pending" }
+  { recordId: "recUtpyjnZSsgz1sM", name: "Partee Golf", item: "", group: "Vendors", status: "Pending" },
+  { recordId: "rec07o0qOYl2G0sk4", name: "Dryve Box", item: "", group: "Vendors", status: "Pending" },
+  { recordId: "recIlH8aa1xo6ABR8", name: "Straightshot Mobile Golf Simulator", item: "", group: "Vendors", status: "Pending" },
+  { recordId: "reckKSJXvFnJnWBab", name: "Duke City Golf", item: "call", group: "Vendors", status: "Pending" },
+  { recordId: "recsNuJoiHFc4tJLo", name: "Golf Garage Co", item: "call with izzy", group: "Vendors", status: "Pending" },
+  { recordId: "recb1GqYDbjTBxQ6c", name: "Benny", item: "Energy Drinks", group: "Sponsors", status: "Pending" },
 ];

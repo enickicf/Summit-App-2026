@@ -4,6 +4,19 @@ import { personNameKey } from "./person-portraits";
 // Airtable (which always wins), this short bio is shown. It states only what Airtable records about
 // them (role and organization); nothing is invented.
 const interimBios: Record<string, string> = {
+  // Oct 3, 2026 Airtable re-read: role-only lines for the new listable records that have no Airtable bio yet.
+  "Laura Brady": "Laura Brady is a confirmed guest of the 2026 Not Alone Summit with Boxing Bullies.",
+  "Tasha Rasolkhani-Kalhorn": "Tasha Rasolkhani-Kalhorn is a confirmed guest of the 2026 Not Alone Summit.",
+  "Lia Shelesh": "Lia Shelesh is a confirmed guest of the 2026 Not Alone Summit.",
+  "Theresa Magnus": "Theresa Magnus is a confirmed guest of the 2026 Not Alone Summit.",
+  "Lauren Ann": "Lauren Ann is a confirmed guest of the 2026 Not Alone Summit.",
+  "Donnelly - Expert": "Donnelly - Expert is a confirmed guest of the 2026 Not Alone Summit.",
+  "Julie Catineau": "Julie Catineau is a confirmed guest of the 2026 Not Alone Summit.",
+  "Blake Bonner": "Blake Bonner is a confirmed guest of the 2026 Not Alone Summit.",
+  "Caitlin Bonner": "Caitlin Bonner is a confirmed guest of the 2026 Not Alone Summit.",
+  "Rohan Thakkar": "Rohan Thakkar is a confirmed guest of the 2026 Not Alone Summit with Hugz.",
+  "Robert Goldstein": "Robert Goldstein is a confirmed guest of the 2026 Not Alone Summit.",
+  "Ann Morris": "Ann Morris is a confirmed guest of the 2026 Not Alone Summit with NAMI.",
   // Sept 29, 2026 Airtable re-read: role-only lines for the new records that have no Airtable bio yet.
   "Mike Posner": "Mike Posner is a speaker at the 2026 Not Alone Summit.",
   "Steven C. Hayes": "Steven C. Hayes is a confirmed guest of the 2026 Not Alone Summit.",

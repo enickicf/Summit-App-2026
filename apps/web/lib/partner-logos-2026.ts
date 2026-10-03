@@ -52,7 +52,16 @@ const partnerLogoFiles: Record<string, string> = {
   "tabl eau filtered water": "/2026-partners/tabl-eau-filtered-water.png",
   "woojer": "/2026-partners/woojer.png",
   "hyperice": "/2026-partners/hyperice.png",
-  "fanatics": "/2026-partners/fanatics.png"
+  "fanatics": "/2026-partners/fanatics.png",
+  // Oct 3: Airtable renamed the record "Fanatics Foundation"; same logo.
+  "fanatics foundation": "/2026-partners/fanatics.png",
+  // Oct 3 Airtable re-read: new confirmed partners (sources in work/partner-logos-20261003/manifest.json).
+  "resonance foundation": "/2026-partners/resonance-foundation.png",
+  "wise friend": "/2026-partners/wise-friend.png",
+  "big league wiffleball": "/2026-partners/big-league-wiffleball.png",
+  "atlys": "/2026-partners/atlys.png",
+  "paul dalio s book": "/2026-partners/paul-dalio-s-book.png",
+  "sugarbearpro": "/2026-partners/sugarbearpro.png"
 };
 
 export function partnerLogoKey(name: string): string {
