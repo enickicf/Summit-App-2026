@@ -156,3 +156,9 @@
     height:12px;
   }
 }
+/* Owner (Oct 3): the three menu items sit as one centered group with equal spacing between them. */
+.communityDayHeader .communityDayNavigation { display:flex; justify-content:center; align-items:center; gap:56px; }
+.communityDayHeader .communityDayNavigation a { justify-self:auto; }
+@media(max-width:900px) { .communityDayHeader .communityDayNavigation { gap:36px; } }
+@media(max-width:600px) { .communityDayHeader .communityDayNavigation { gap:20px; } }
+@media(max-width:360px) { .communityDayHeader .communityDayNavigation { gap:12px; } }

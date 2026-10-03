@@ -33,6 +33,8 @@ export function SiteHeader() {
           Nominate to ICF's nominations page, Summit, and the Donate sticker on the far right. */}
       <div className={styles.navMenu}><Link href="/awards/2026" aria-current={pathname === "/awards/2026" ? "page" : undefined} data-active={year === 2026 || undefined} aria-haspopup="true">Awards</Link>
         <div className={styles.navMenuList}><Link href="/awards/2026">2026</Link><Link href="/awards/2025" aria-current={pathname === "/awards/2025" ? "page" : undefined} data-active={year === 2025 || undefined}>2025</Link></div></div>
+      {/* Owner (Oct 3): the Community Day page is in the Awards menu. */}
+      <Link href="/community-day">Community Day</Link>
       <a href={awards2026Editorial.rsvpUrl}>Tickets</a>
       <a href={awards2026Editorial.nominateUrl}>Nominate</a>
       <SummitLink href={summit}>Summit</SummitLink>

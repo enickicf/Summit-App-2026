@@ -92,7 +92,7 @@ describe("shared site navigation", () => {
     const html = headerAt(`/awards/${year}`);
     const footer = renderToStaticMarkup(<SiteFooter />);
     expect(html).not.toContain("NotAloneAwards_Logo_White.png");
-    expect([...html.matchAll(/<a[^>]*>([^<]+)<\/a>/g)].map(match => match[1])).toEqual(["Awards", "2026", "2025", "Tickets", "Nominate", "Summit"]); // Owner (Sept 23)
+    expect([...html.matchAll(/<a[^>]*>([^<]+)<\/a>/g)].map(match => match[1])).toEqual(["Awards", "2026", "2025", "Community Day", "Tickets", "Nominate", "Summit"]); // Owner (Sept 23)
     expect(html.match(/<a[^>]*aria-current="page"[^>]*>/)?.[0]).toContain(`href="/awards/${year}"`);
     for (const href of ["/schedule", "/map", "/ask-ai", "/summit/live"]) expect(html + footer).not.toContain(`href="${href}"`);
     expect(html).not.toContain("NotAloneChallenge");
@@ -103,9 +103,9 @@ describe("shared site navigation", () => {
     const html = headerAt(`/awards/${year}`);
     const nav = html.match(/<nav[^>]*aria-label="Awards navigation"[^>]*>([\s\S]*?)<\/nav>/)?.[1] ?? "";
     // Owner (Sept 23): Awards (2026 / 2025), Tickets (RSVP form), Nominate (ICF nominations), Summit; Donate is a sticker at the far right.
-    expect([...nav.matchAll(/<a[^>]*>([^<]+)<\/a>/g)].map(match => match[1])).toEqual(["Awards", "2026", "2025", "Tickets", "Nominate", "Summit"]);
+    expect([...nav.matchAll(/<a[^>]*>([^<]+)<\/a>/g)].map(match => match[1])).toEqual(["Awards", "2026", "2025", "Community Day", "Tickets", "Nominate", "Summit"]);
     expect([...nav.matchAll(/href="([^"]+)"/g)].map(match => match[1])).toEqual([
-      "/awards/2026", "/awards/2026", "/awards/2025", "https://notaloneawards.org/rsvp", "https://notaloneawards.org/rsvp/nominate", year === 2025 ? "/2025" : "/", "https://www.inspiringchildren.org/donate"
+      "/awards/2026", "/awards/2026", "/awards/2025", "/community-day", "https://notaloneawards.org/rsvp", "https://notaloneawards.org/rsvp/nominate", year === 2025 ? "/2025" : "/", "https://www.inspiringchildren.org/donate"
     ]);
     expect(nav).toMatch(/<a class="[^"]*donateButton[^"]*" href="https:\/\/www\.inspiringchildren\.org\/donate"><svg[\s\S]*?<\/svg>Donate<\/a>/);
     expect(nav).not.toContain('>RSVP</a>');
