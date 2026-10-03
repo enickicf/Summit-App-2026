@@ -169,3 +169,9 @@
 @media(max-width:760px) { .communityDayHeader .communityDayNavigation { padding-left:16px; padding-right:16px; } }
 @media(max-width:600px) { .communityDayHeader .communityDayNavigation { gap:18px; } }
 @media(max-width:360px) { .communityDayHeader .communityDayNavigation { gap:12px; padding-left:16px; padding-right:16px; } }
+/* Owner (Oct 3, latest): back to one centered line with equal spacing; Donate is a plain link like the others. */
+.communityDayHeader .communityDayNavigation { justify-content:center; gap:56px; padding-left:24px; padding-right:24px; }
+.communityDayHeader .communityDayNavigation a { margin-left:0; }
+@media(max-width:900px) { .communityDayHeader .communityDayNavigation { gap:36px; } }
+@media(max-width:600px) { .communityDayHeader .communityDayNavigation { gap:24px; padding-left:12px; padding-right:12px; } .communityDayHeader .communityDayNavigation a { font-size:13px; } }
+@media(max-width:360px) { .communityDayHeader .communityDayNavigation { gap:16px; } }

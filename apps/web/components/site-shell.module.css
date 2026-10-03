@@ -74,3 +74,32 @@
 @media(max-width:1100px) { .awardsNavigation { padding-right:150px; padding-left:150px; } }
 @media(max-width:900px) { .awardsNavigation { padding-right:24px; padding-left:24px; } .awardsNavigation .donateButton { position:static; transform:none; margin-left:8px; padding:8px 18px; font-size:14px; } }
 @media(max-width:600px) { .awardsNavigation .donateButton { margin-left:4px; padding:7px 14px; font-size:12px; } }
+/* Owner (Oct 3): on phones the Awards menu stays on one straight line (no stacking). If a very narrow
+   phone cannot fit it, the line scrolls sideways instead of wrapping. */
+@media(max-width:600px) {
+  .awardsNavigation { flex-wrap:nowrap; justify-content:safe center; gap:0 12px; padding:8px 10px; overflow-x:auto; scrollbar-width:none; }
+  .awardsNavigation::-webkit-scrollbar { display:none; }
+  .awardsNavigation a { flex:none; font-size:12px; padding:8px 1px; }
+  .awardsNavigation .donateButton { flex:none; margin-left:2px; padding:6px 11px; font-size:12px; gap:5px; }
+  .awardsNavigation .donateButton svg { width:12px; height:12px; }
+}
+@media(max-width:400px) {
+  .awardsNavigation { gap:0 9px; padding:8px 8px; }
+  .awardsNavigation a { font-size:11px; }
+  .awardsNavigation .donateButton { padding:5px 9px; font-size:11px; }
+}
+@media(max-width:440px) {
+  .awardsNavigation { gap:0 7px; padding:8px 6px; }
+  .awardsNavigation a { font-size:11px; letter-spacing:-.01em; padding:8px 0; }
+  .awardsNavigation .donateButton { padding:5px 8px; font-size:11px; gap:0; margin-left:0; }
+  .awardsNavigation .donateButton svg { display:none; }
+}
+@media(max-width:380px) {
+  .awardsNavigation { gap:0 5px; padding:8px 4px; }
+  .awardsNavigation a { font-size:10px; }
+  .awardsNavigation .donateButton { padding:4px 7px; font-size:10px; }
+}
+@media(max-width:340px) {
+  .awardsNavigation { gap:0 3px; padding:8px 2px; }
+  .awardsNavigation .donateButton { padding:4px 6px; }
+}
