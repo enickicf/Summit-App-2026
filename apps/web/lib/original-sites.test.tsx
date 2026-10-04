@@ -78,7 +78,7 @@ describe("source-faithful, year-separated event pages", () => {
       expect(html).not.toContain("Awards RSVP");
     }
   });
-  it("keeps every original producer credited with their portrait on both 2025 pages", () => {
+  it("keeps every original producer credited on both 2025 pages; only Executive Producers keep portraits (owner, Oct 4)", () => {
     const sourceCredits = source.summit.sections[13]!;
     for (const html of [renderToStaticMarkup(<OriginalSummitPage year={2025} />), renderToStaticMarkup(<OriginalAwardsPage year={2025} />)]) {
       const credits = html.match(/<section[^>]*id="producers"[^>]*>([\s\S]*?)<\/section>/)?.[1] ?? "";
@@ -90,7 +90,8 @@ describe("source-faithful, year-separated event pages", () => {
         for (const person of group.people) expect(credits).toContain(`<h3>${escape(person.name)}</h3><p>${escape(person.role)}</p>`);
       }
       sourceCredits.blocks.filter(block => block.tag === "h4").forEach((person, index) => {
-        expect(hasPortrait(credits, originalAsset(sourceCredits.images[index]!.src), person.text)).toBe(true);
+        const executive = originalProducerCredit(person.text)?.category === "Executive Producers";
+        expect(hasPortrait(credits, originalAsset(sourceCredits.images[index]!.src), person.text)).toBe(executive);
       });
     }
   });

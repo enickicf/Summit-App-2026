@@ -157,13 +157,17 @@ function Leadership(props: LeadershipProps) {
   if (!groups.length) return null;
   const { producers = false } = props;
   return <section className={`${styles.band} ${styles.leadership}`} id={producers ? "producers" : props.hostsOnly ? "hosts" : "leadership"}>
-    {groups.map(group => <div key={group.title}><h2>{group.title}</h2><div className={styles.leaders}>
+    {groups.map(group => {
+      // Owner (Oct 4): in the producer credits only Executive Producers keep headshots; Producers are name cards.
+      const photos = !(producers && group.title === "Producers");
+      return <div key={group.title}><h2>{group.title}</h2><div className={photos ? styles.leaders : styles.creditNames}>
       {group.people.map(person => {
         const profile = props.awardsProfiles?.find(profile => normalizePersonName(profile.name) === normalizePersonName(person.name));
-        const card = <><SiteImage src={person.image} alt={person.name} sizes="(max-width: 600px) 230px, 250px" /><h3>{person.name}</h3><p>{person.role}</p></>;
+        const card = <>{photos && <SiteImage src={person.image} alt={person.name} sizes="(max-width: 600px) 230px, 250px" />}<h3>{person.name}</h3><p>{person.role}</p></>;
         return <article key={person.name}>{profile ? <Link href={`/directory/${encodeURIComponent(profile.slug)}?from=awards`} prefetch={false} aria-label={`Meet ${person.name}`}>{card}</Link> : card}</article>;
       })}
-    </div></div>)}
+    </div></div>;
+    })}
   </section>;
 }
 
