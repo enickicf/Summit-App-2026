@@ -46,7 +46,9 @@ function GuestName({ person, category }: { person: SummitPerson; category?: stri
 // Categories listed in the people sections (co-chairs and producers have their own sections).
 const listed: PersonCategory[] = [...awardsGuestCategories, "Hosts", "Attendees"];
 
-export function AwardsGuestDirectory({ people, available = true }: { people: SummitPerson[]; available?: boolean }) {
+// foundingPartners (owner, Oct 4): the Community Day page leaves out the Founding Partners block because its own
+// "Presented With Our Community Partners" section already shows them.
+export function AwardsGuestDirectory({ people, available = true, foundingPartners = true }: { people: SummitPerson[]; available?: boolean; foundingPartners?: boolean }) {
   const seen = new Set<string>();
   const confirmed = available ? orderAwardsGuests(people.flatMap(person => {
     const selected = awardsPerson(person) ?? person;
@@ -72,7 +74,7 @@ export function AwardsGuestDirectory({ people, available = true }: { people: Sum
           <GuestPortrait person={person} /><GuestName person={{ ...person, role }} />
         </Link>)}
       </div>}
-        </section>{/* Owner (Sept 23): Founding Partners right under the Founders section. */}{title === "Founders" && <FoundingPartners variant="awards" />}</Fragment>;
+        </section>{/* Owner (Sept 23): Founding Partners right under the Founders section. */}{title === "Founders" && foundingPartners && <FoundingPartners variant="awards" />}</Fragment>;
       })}
       {/* Owner (Sept 22): no "+ More to be announced" line below the lineup; the note at the top already says it. */}
       {!confirmed.length && <p className={styles.empty}>{!available ? "The guest list is temporarily unavailable. Please try again shortly." : "Confirmed guest details will appear after event-team approval."}</p>}

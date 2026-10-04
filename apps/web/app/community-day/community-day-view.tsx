@@ -52,7 +52,7 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
     </section>
 
     <div className={`${eventStyles.page} ${eventStyles.awards} ${eventStyles.currentAwards} ${styles.lineup}`}>
-      <AwardsGuestDirectory people={awardsDisplayPeople(snapshot)} available={snapshot?.event.directoryEnabled ?? false} />
+      <AwardsGuestDirectory people={awardsDisplayPeople(snapshot)} available={snapshot?.event.directoryEnabled ?? false} foundingPartners={false} />
     </div>
 
     <section className={styles.mission} id="what-is-community-day" aria-labelledby="mission-title">

@@ -85,6 +85,8 @@ describe("Community Day page", () => {
     expect(html.indexOf("The 2026 Lineup")).toBeGreaterThan(html.indexOf('id="community-day-actions"'));
     expect(html.indexOf("The 2026 Lineup")).toBeLessThan(html.indexOf('id="what-is-community-day"'));
     expect(html).toContain('id="schedule"');
+    // Owner (Oct 4): no Founding Partners block under the lineup (the partners section already shows them).
+    expect(page).not.toContain("Founding Partners");
     expect(html).not.toMatch(/<(video|iframe)\b/);
   });
 
