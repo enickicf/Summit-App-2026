@@ -185,7 +185,8 @@ function ProducerCredits2026({ confirmedNames, profiles, awardsContext = false, 
         const profile = profiles.find(entry => normalizePersonName(entry.name) === normalizePersonName(person.name));
         return { name: person.name, role: person.title || person.occupation, image: profile?.image };
       }) }))
-    : (["Producers", "Executive Producers"] as const).map(title => ({ title, photos: true,
+    // Owner (Oct 4): headshots only for Executive Producers; every other producer credit is a name card.
+    : (["Producers", "Executive Producers"] as const).map(title => ({ title, photos: title === "Executive Producers",
       people: producerCredits2026.filter(person => person.category === title && confirmedNames.has(normalizePersonName(person.name)))
         .map(person => ({ name: person.name, role: described(person.name), image: section.images[heads.indexOf(person.name)]?.src })) }));
   // Owner (Sept 23, Awards site): a "Producer" heading (singular) for Ryan Oz and Deb Cullen sits above
@@ -196,7 +197,7 @@ function ProducerCredits2026({ confirmedNames, profiles, awardsContext = false, 
     const producerNames = new Set(producer.map(person => normalizePersonName(person.name)));
     for (const group of groups) group.people = group.people.filter(person => !producerNames.has(normalizePersonName(person.name)));
     const at = groups.findIndex(group => group.title === "Producers");
-    groups.splice(at === -1 ? groups.length : at, 0, { title: "Producer", photos: true, people: producer });
+    groups.splice(at === -1 ? groups.length : at, 0, { title: "Producer", photos: false, people: producer });
   }
   const shown = groups.filter(group => group.people.length);
   if (!shown.length) return null;

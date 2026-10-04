@@ -196,7 +196,9 @@ describe("source-faithful, year-separated event pages", () => {
     for (const [kind, html] of [["summit", renderToStaticMarkup(<OriginalSummitPage year={2026} snapshot={event2026Snapshot} />)], ["awards", renderToStaticMarkup(<OriginalAwardsPage year={2026} snapshot={event2026Snapshot} />)]] as const) {
       section.blocks.filter(block => block.tag === "h4").forEach((block, index) => {
         if (block.text === "Jewel") return;
-        expect(hasPortrait(html, originalAsset(section.images[index]!.src), block.text)).toBe(confirmed.has(block.text));
+        // Owner (Oct 4): the producer credits show headshots only for Executive Producers; a 2026 Producer is a name card.
+        const nameOnly = producerCredit2026(block.text)?.category === "Producers";
+        expect(hasPortrait(html, originalAsset(section.images[index]!.src), block.text)).toBe(confirmed.has(block.text) && !nameOnly);
       });
       for (const group of [...summit2025Leadership.filter(group => group.title === "Co-Chairs"), ...summit2025Directory.filter(group => /Producers/.test(group.title))]) {
         for (const person of group.people) {
