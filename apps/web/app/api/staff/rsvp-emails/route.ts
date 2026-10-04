@@ -22,14 +22,14 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   if (!(await signedIn())) return NextResponse.json({ ok: false, error: "Sign in required." }, { status: 401, headers: noStore });
-  let body: { mode?: string; to?: string; name?: string } = {};
+  let body: { mode?: string; to?: string; name?: string; communityDay?: boolean } = {};
   try { body = await request.json(); } catch { /* empty body */ }
   const sender = defaultSender();
   if (!sender) return NextResponse.json({ ok: false, error: "No email sender is configured (RSVP_EMAIL_SMTP_USER / RSVP_EMAIL_SMTP_PASS)." }, { status: 503, headers: noStore });
   if (body.mode === "test") {
     const to = body.to?.trim();
     if (!to || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) return NextResponse.json({ ok: false, error: "Provide a valid test address in \"to\"." }, { status: 400, headers: noStore });
-    const rendered = rsvpConfirmationEmail({ ...sampleRsvpForPreview, name: body.name?.trim() || sampleRsvpForPreview.name, email: to });
+    const rendered = rsvpConfirmationEmail({ ...sampleRsvpForPreview, name: body.name?.trim() || sampleRsvpForPreview.name, email: to, ...(typeof body.communityDay === "boolean" ? { communityDay: body.communityDay } : {}) });
     try { await sender({ to, ...rendered }); }
     catch (error) { return NextResponse.json({ ok: false, error: `The mail server refused the message (${error instanceof Error ? error.message.slice(0, 160) : "unknown error"}).` }, { status: 502, headers: noStore }); }
     return NextResponse.json({ ok: true, sent: to }, { headers: noStore });

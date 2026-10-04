@@ -8,11 +8,18 @@ const rsvp = (over: Partial<RsvpSubmission> = {}): RsvpSubmission => ({ ...newSu
 describe("RSVP confirmation email (owner, Sept 28)", () => {
   it("confirms the submission, says it is not a ticket, puts them on the waiting list and promises tickets by email if they come off it", () => {
     const m = rsvpConfirmationEmail(rsvp());
-    expect(m.subject).toBe("We received your RSVP – Not Alone Awards Show");
-    for (const part of ["Hi Lisa,", "This email confirms we received your submission", "this RSVP is not a ticket", "ticket waiting list", "If you are removed from the waiting list, we will reach out by email with your tickets.", "Party size: 3 guests", "Community Day (before the show): Yes", "Monday, November 2, 2026", "Encore Theater at Wynn Las Vegas", "Doors open 5:30 PM", "This ticket is free. Your support makes it possible.", "https://www.inspiringchildren.org/donate"]) expect(m.text).toContain(part);
-    for (const part of ["Hi Lisa,", "this RSVP is not a ticket", "ticket waiting list", "If you are removed from the waiting list, we will reach out by email with your tickets.", "Lisa Lundt &middot; 3 guests &middot; Community Day: Yes", "na-awards-logo-white.png", "inspiringchildren.org/donate"]) expect(m.html).toContain(part);
+    expect(m.subject).toBe("We received your RSVP – Community Day & Not Alone Awards Show");
+    for (const part of ["Hi Lisa,", "This email confirms we received your submission", "this RSVP is not a ticket", "ticket waiting list", "If you are removed from the waiting list, we will reach out by email with your tickets.", "Party size: 3 guests", "Attending: Community Day + Not Alone Awards Show", "Thank you for your RSVP to Community Day and the Not Alone Awards Show.", "Monday, November 2, 2026", "Encore Theater at Wynn Las Vegas", "Doors open 5:30 PM", "This ticket is free. Your support makes it possible.", "https://www.inspiringchildren.org/donate"]) expect(m.text).toContain(part);
+    for (const part of ["Hi Lisa,", "this RSVP is not a ticket", "ticket waiting list", "If you are removed from the waiting list, we will reach out by email with your tickets.", "Lisa Lundt &middot; 3 guests &middot; Community Day + Not Alone Awards Show", "na-awards-logo-white.png", "inspiringchildren.org/donate"]) expect(m.html).toContain(part);
     expect(m.html).not.toMatch(/confirmed|your ticket is confirmed/i);
-    expect(rsvpConfirmationEmail(rsvp({ guestCount: 1, communityDay: false })).text).toContain("Party size: 1 guest (you)");
+    const showOnly = rsvpConfirmationEmail(rsvp({ guestCount: 1, communityDay: false }));
+    expect(showOnly.text).toContain("Party size: 1 guest (you)");
+    expect(showOnly.subject).toBe("We received your RSVP – Not Alone Awards Show");
+    expect(showOnly.text).toContain("Thank you for your RSVP to the Not Alone Awards Show.");
+    expect(showOnly.text).toContain("Attending: Not Alone Awards Show");
+    expect(showOnly.text).not.toContain("Community Day");
+    expect(showOnly.html).not.toContain("Community Day");
+    expect(rsvpConfirmationEmail(rsvp()).subject).toBe("We received your RSVP – Community Day & Not Alone Awards Show");
     expect(rsvpConfirmationEmail(rsvp({ name: "<b>Evil</b>" })).html).toContain("&lt;b&gt;Evil&lt;/b&gt;");
   });
 
