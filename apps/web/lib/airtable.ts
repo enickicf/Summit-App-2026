@@ -200,8 +200,12 @@ export const foundersListedRegardless = new Set([
   // Owner (Sept 23): Jennifer Donnelly, added by hand until she is in Airtable.
   "jennifer donnelly"
 ]);
+// Owner (Oct 4, 2026): listed on the websites by the owner's direction while Airtable's status is not yet
+// "Confirmed" (Aloe Blacc: A-Talent, Airtable status "Pending"). Remove a name once Airtable confirms it.
+export const ownerListedRegardless = new Set(["aloe blacc"]);
 export function isPublicAirtablePerson(person: AirtablePerson): boolean {
   // Sept 22 meeting: every founder is listed whatever the invitation status; everyone else must be confirmed.
   const founderRegardless = person.groups.includes("Founder");
-  return (founderRegardless || /confirmed/i.test(person.status)) && airtableCategories(person.groups).length > 0;
+  const ownerListed = ownerListedRegardless.has(person.name.trim().toLowerCase());
+  return (founderRegardless || ownerListed || /confirmed/i.test(person.status)) && airtableCategories(person.groups).length > 0;
 }

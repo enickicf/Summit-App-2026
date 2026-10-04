@@ -2268,5 +2268,15 @@
     "width": 1500,
     "height": 1136,
     "bytes": 128529
+  },
+  "/2026-headshots/portraits/logan-paul.jpg": {
+    "width": 948,
+    "height": 900,
+    "bytes": 166866
+  },
+  "/2026-headshots/portraits/aloe-blacc.jpg": {
+    "width": 948,
+    "height": 900,
+    "bytes": 328789
   }
 }

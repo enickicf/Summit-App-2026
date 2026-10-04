@@ -11,6 +11,7 @@ import { archiveProfile } from "./archive-profile";
 import { ProfilePortrait } from "./portrait";
 import { CurrentEventUpdates } from "../../../components/current-event-updates";
 import { awards2026Editorial } from "../../../lib/awards-editorial";
+import { portraitAttribution2026 } from "../../../lib/portrait-overrides";
 import styles from "./profile.module.css";
 
 export const dynamic = "force-dynamic";
@@ -106,6 +107,8 @@ export default async function PersonPage({ params, searchParams }: ProfilePagePr
   const returnToProduction = fromAwards && !archived && !returnToChairs && Boolean(archived ? originalProducerCredit(person.name) : producerCredit2026(person.name));
   const awardsHost = fromAwards && !archived && person.name === awards2026Editorial.host;
   const returnHref = archived ? archiveDirectory : returnToChairs ? "/awards/2026#leadership" : returnToProduction ? "/awards/2026#producers" : currentDirectory;
+  // A freely licensed photo (Creative Commons) carries its required credit under the bio.
+  const photoCredit = archived ? null : portraitAttribution2026(person.name, person.image);
   const normalizedRole = person.role.trim().replace(/\s+/g, " ").toLowerCase();
   const visibleCategories = person.categories.filter(category => {
     const label = category.trim().replace(/\s+/g, " ").toLowerCase();
@@ -121,6 +124,7 @@ export default async function PersonPage({ params, searchParams }: ProfilePagePr
         {!awardsHost && visibleCategories.length > 0 && <p className={styles.categories}>{visibleCategories.join(" · ")}</p>}
         {(awardsHost || person.role.trim()) && <p className="profileRole">{awardsHost ? "Host, Not Alone Awards 2026" : person.role}</p>}
         {person.bio.trim() && <p className="profileBio">{person.bio}</p>}
+        {photoCredit && <p className={styles.photoCredit}>Photo: <a href={photoCredit.href} target="_blank" rel="noreferrer">{photoCredit.label}</a></p>}
         {fromAwards && !archived && awardsBiographies[person.name] && !snapshot?.speakers.find(speaker => speaker.id === person.slug)?.bio.trim() && <a href={awardsBiographies[person.name]!.source}>Biography source</a>}
         {fromAwards && !archived && !awardsHost && <p className={styles.attendanceNote}>Confirmed Summit attendance does not confirm an Awards appearance, performance, or honor.</p>}
       </div>

@@ -5,7 +5,8 @@
 // middle). Airtable photos are used only when they are the best. Cut-outs keep their transparency (PNG).
 // Sources: airtable = the person's Airtable headshot; icf-card / icf-leader = inspiringchildren.org;
 // site-2026 = a portrait already approved for the site; commons / web = a public photo (credit noted).
-export type PortraitOverride = { file: string; source: string; airtableBytes?: number; credit?: string };
+// attribution: the credit a freely licensed photo must show; it appears under the bio on the person's profile.
+export type PortraitOverride = { file: string; source: string; airtableBytes?: number; credit?: string; attribution?: { label: string; href: string } };
 export const portraitOverrides2026: Record<string, PortraitOverride> = {
   // Sept 21 late additions (sources in work/new-headshots-20260921/manifest.json).
   // Owner (Sept 21, late): a photo beats a name card. Hal Fisher and Sarah Steil use their own Airtable photos
@@ -93,6 +94,9 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "jeneva bell": { file: "/2026-headshots/portraits/jeneva-bell.jpg", source: "airtable", airtableBytes: 201591 },
   // Oct 3 Airtable re-read: new and replaced Airtable headshots (work/new-headshots-20261003/manifest.json).
   "king trot": { file: "/2026-headshots/portraits/king-trot.jpg", source: "airtable", airtableBytes: 594979 },
+  // Oct 4 (owner): Logan Paul (his Airtable headshot, a tight portrait) and Aloe Blacc (no Airtable photo yet).
+  "logan paul": { file: "/2026-headshots/portraits/logan-paul.jpg", source: "airtable", airtableBytes: 335560 },
+  "aloe blacc": { file: "/2026-headshots/portraits/aloe-blacc.jpg", source: "commons", credit: "Web Summit Rio, Corporate Innovation Summit, Rio de Janeiro, April 28, 2025, CC BY 2.0 (cropped), https://commons.wikimedia.org/wiki/File:Aloe_Blacc_Corporate_Innovation_Summit_event_Rio_de_Janeiro_Riocentro_Web_Summit_Rio_20258310_(54483438773).jpg", attribution: { label: "Web Summit Rio, CC BY 2.0 (cropped)", href: "https://commons.wikimedia.org/wiki/File:Aloe_Blacc_Corporate_Innovation_Summit_event_Rio_de_Janeiro_Riocentro_Web_Summit_Rio_20258310_(54483438773).jpg" } },
   "mario martinez": { file: "/2026-headshots/portraits/mario-martinez.jpg", source: "airtable", airtableBytes: 217762 },
   "mike posner": { file: "/2026-headshots/portraits/mike-posner.jpg", source: "airtable", airtableBytes: 217258 },
   "casey caruso": { file: "/2026-headshots/portraits/casey-caruso.jpg", source: "airtable", airtableBytes: 3053415 },
@@ -125,6 +129,12 @@ function personNameKey(name: string): string {
 // Owner (Sept 21, late): everyone listed shows a photo when any certain-identity photo exists. Jen Whalen and
 // Mario Martinez have no photo anywhere (Airtable or public) and no page establishes which person they are.
 export const noApprovedPortrait2026 = new Set<string>([].map(personNameKey));
+
+// The visible credit for a freely licensed portrait, only while that portrait is the photo being shown.
+export function portraitAttribution2026(name: string, image: string | undefined): { label: string; href: string } | null {
+  const override = portraitOverrides2026[personNameKey(name)];
+  return override?.attribution && override.file === image ? override.attribution : null;
+}
 
 export function portrait2026(name: string): string | null | undefined {
   const key = personNameKey(name);

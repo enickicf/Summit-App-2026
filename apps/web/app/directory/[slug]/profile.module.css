@@ -12,6 +12,9 @@
 .page :global(.backLink) { display: inline-flex; align-items: center; min-height: 44px; }
 .page .categories { color: #555; font-size: 14px; line-height: 1.6; }
 .page .attendanceNote { border-top: 1px solid #ddd; padding-top: 20px; margin-top: 28px; }
+/* Required credit for a freely licensed (Creative Commons) portrait. */
+.page .photoCredit { margin-top: 18px; color: #6b6b6b; font-size: 12px; line-height: 1.5; }
+.page .photoCredit a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; margin-top: 24px; }
 .actions a { max-width: 100%; }
 .page a:focus-visible { outline: 3px solid #4a5faa; outline-offset: 5px; }
@@ -19,6 +22,7 @@
 .page.awards h1 { color: #fff; }
 .page.awards :global(.profileRole), .page.awards :global(.eyebrow), .page.awards :global(.backLink) { color: #e4cfa5; }
 .page.awards .categories, .page.awards .attendanceNote, .page.awards :global(.profileBio) { color: #c9c5cf; }
+.page.awards .photoCredit { color: #a39ead; }
 .page.awards .attendanceNote { border-color: #3b3640; }
 .page.awards a:focus-visible { outline-color: #e4cfa5; }
 @media (max-width: 700px) {

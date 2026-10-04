@@ -83,6 +83,7 @@ export const airtableHeadshotCrops: Record<string, { bytes: number | null; file:
   recWZqOFK1ZeWCkYH: { bytes: 201591, file: "/2026-headshots/portraits/jeneva-bell.jpg" },
   // Oct 3 Airtable re-read (work/new-headshots-20261003/manifest.json).
   recEQlvX1qbFabpY4: { bytes: 594979, file: "/2026-headshots/portraits/king-trot.jpg" },
+  recdzSGvhKKSIHyLs: { bytes: 335560, file: "/2026-headshots/portraits/logan-paul.jpg" },
   recbeWStw87AVilsf: { bytes: 217762, file: "/2026-headshots/portraits/mario-martinez.jpg" },
   receXlSPuLrmW4ySi: { bytes: 217258, file: "/2026-headshots/portraits/mike-posner.jpg" },
   recJUrsEWJQ4y3T85: { bytes: 3053415, file: "/2026-headshots/portraits/casey-caruso.jpg" },
