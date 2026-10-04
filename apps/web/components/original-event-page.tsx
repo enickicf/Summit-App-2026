@@ -289,7 +289,7 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
   </main>;
 }
 
-// rsvpUrl (owner, Oct 4): the private partner copies of this page (/nami, /nami/vip) send their RSVP
+// rsvpUrl (owner, Oct 4): the private partner copies of this page (/nami, /lakelasvegas, ...) send their RSVP
 // buttons to that group's own form; everything else is identical.
 type AwardsPageProps = { year: 2025 | 2026; program?: EventSnapshot["contentPages"][number] | null; snapshot?: EventSnapshot | null; rsvpUrl?: string | undefined };
 
