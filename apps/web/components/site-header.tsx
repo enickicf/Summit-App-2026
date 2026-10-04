@@ -9,13 +9,12 @@ import { Heart } from "lucide-react";
 import { awards2026Editorial } from "../lib/awards-editorial";
 import { ClassicHeader } from "./classic-header";
 import { siteVariant } from "../lib/site-variant";
-import { partnerSiteByKey, partnerSiteByPath } from "../lib/awards-partner-sites";
+import { partnerCommunityDayPath, partnerSiteByCommunityDayPath, partnerSiteByPath } from "../lib/awards-partner-sites";
 import styles from "./site-shell.module.css";
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const from = useSearchParams().get("from");
-  const fromAwards = from === "awards";
+  const fromAwards = useSearchParams().get("from") === "awards";
   // Owner (Oct 4): the private partner copies of the Awards site keep the Awards menu, with Tickets (and the
   // Awards link) staying inside that partner's site.
   const partner = partnerSiteByPath(pathname);
@@ -29,7 +28,8 @@ export function SiteHeader() {
   const awardsPage = pathname.startsWith("/awards") || (pathname.startsWith("/directory/") && fromAwards) || Boolean(partner);
   if (siteVariant === "classic") return <ClassicHeader pathname={pathname} awards={awardsPage} />;
   // Owner (Sept 29): Community Day has its own menu (no Summit, Schedule or Directory).
-  if (pathname === "/community-day") return <CommunityDayNavigation partner={partnerSiteByKey(from)} />;
+  const communityDayPartner = partnerSiteByCommunityDayPath(pathname);
+  if (pathname === "/community-day" || communityDayPartner) return <CommunityDayNavigation partner={communityDayPartner} />;
   if (!awardsPage) return <SummitNavigation year={year} pathname={pathname} />;
   return <>
     {/* Owner (Sept 21): no logo bar; the Awards hero already carries the logo. */}
@@ -39,7 +39,7 @@ export function SiteHeader() {
       <div className={styles.navMenu}><Link href={partner?.path ?? "/awards/2026"} aria-current={pathname === "/awards/2026" || partner ? "page" : undefined} data-active={year === 2026 || undefined} aria-haspopup="true">Awards</Link>
         <div className={styles.navMenuList}><Link href={partner?.path ?? "/awards/2026"}>2026</Link><Link href="/awards/2025" aria-current={pathname === "/awards/2025" ? "page" : undefined} data-active={year === 2025 || undefined}>2025</Link></div></div>
       {/* Owner (Oct 3): the Community Day page is in the Awards menu. */}
-      <Link href={partner ? `/community-day?from=${partner.key}` : "/community-day"}>Community Day</Link>
+      <Link href={partner ? partnerCommunityDayPath(partner) : "/community-day"}>Community Day</Link>
       <a href={partner?.rsvpUrl ?? awards2026Editorial.rsvpUrl}>Tickets</a>
       <a href={awards2026Editorial.nominateUrl}>Nominate</a>
       <SummitLink href={summit}>Summit</SummitLink>

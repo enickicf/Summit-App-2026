@@ -532,10 +532,12 @@
 .currentAwards .iheartBand { display: flex; flex-direction: column; align-items: center; gap: 26px; padding-top: 76px; padding-bottom: 76px; text-align: center; background: radial-gradient(ellipse at 50% 0%, rgb(198 0 43 / 22%), transparent 62%), #0b0a0e; border-top: 1px solid rgb(255 255 255 / 8%); border-bottom: 1px solid rgb(255 255 255 / 8%); }
 .iheartKicker { margin: 0; color: #d9d2c3; font-size: 14px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
 .iheartLogo { display: block; width: min(560px, 78vw); height: auto; }
-.iheartStream { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 64px; padding: 0 34px; border: 1px solid #f05b78; border-radius: 999px; background: #c6002b; color: #fff; font-size: 18px; font-weight: 800; letter-spacing: .03em; text-decoration: none; box-shadow: 0 14px 40px rgb(198 0 43 / 35%); transition: background 160ms ease, transform 160ms ease; }
+.iheartStream { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 68px; padding: 0 40px; border: 1px solid #f05b78; border-radius: 999px; background: #c6002b; color: #fff; font-size: 20px; font-weight: 800; letter-spacing: .03em; text-decoration: none; box-shadow: 0 14px 40px rgb(198 0 43 / 35%); transition: background 160ms ease, transform 160ms ease; }
 .iheartStream:hover { background: #e2103f; transform: translateY(-1px); }
 @media (max-width: 600px) {
-  .infoButton { width: 168px; height: 52px; font-size: 15px; }
+  .infoButton { width: min(168px, calc(50% - 8px)); height: 52px; font-size: 15px; }
+  .currentAwards .awardsActions { flex-wrap: nowrap; gap: 0 16px; }
+  .currentAwards .awardsActions .action { width: min(168px, calc(50% - 8px)); }
   .heroScheduleLink { margin-top: 10px; font-size: 13px; }
   .currentAwards .iheartBand { gap: 20px; padding-top: 52px; padding-bottom: 52px; }
   .iheartKicker { font-size: 12px; }

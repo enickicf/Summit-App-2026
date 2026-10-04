@@ -1,11 +1,13 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import CommunityDayPage, { metadata } from "./page";
+import { metadata } from "./page";
+import { CommunityDayView } from "./community-day-view";
+import { partnerSiteByKey } from "../../lib/awards-partner-sites";
 import { awards2026Editorial, awards2026Evening } from "../../lib/awards-editorial";
 import { communityDay2026 } from "../../lib/community-day-2026";
 import { postEventLabel } from "../../lib/event-phase";
 
-const render = async (from?: string) => renderToStaticMarkup(await CommunityDayPage(from ? { searchParams: Promise.resolve({ from }) } : {}));
+const render = async (partner?: string) => renderToStaticMarkup(await CommunityDayView({ partner: partnerSiteByKey(partner) }));
 const text = (html: string) => html.replace(/<[^>]+>/g, " ").replace(/&amp;/g, "&").replace(/&#x27;|&#39;|&rsquo;|’/g, "'").replace(/\s+/g, " ");
 const section = (html: string, id: string) => html.slice(html.indexOf(`aria-labelledby="${id}"`), html.indexOf("</section>", html.indexOf(`aria-labelledby="${id}"`)));
 const beforeEvent = () => { vi.useFakeTimers(); vi.setSystemTime(new Date("2026-09-28T18:00:00Z")); };
@@ -130,7 +132,7 @@ describe("Community Day page", () => {
     expect(text(html)).toContain("What is Community Day?");
   });
 
-  it("keeps ticket links inside a private partner site when reached from one (owner, Oct 4)", async () => {
+  it("keeps ticket links inside a private partner copy of the page (owner, Oct 4)", async () => {
     beforeEvent();
     const html = await render("nami-vip");
     expect(html).toContain('href="https://notaloneawards.org/rsvp/nami-vip-zton04cqu1"');

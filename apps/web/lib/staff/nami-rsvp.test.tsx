@@ -46,6 +46,10 @@ describe("private partner copies of the Awards site (owner, Oct 4; supersedes Oc
       const source = readFileSync(join(__dirname, "../../app", site.path.slice(1), "page.tsx"), "utf8");
       expect(source).toContain("robots: { index: false, follow: false }");
       expect(source).toContain(`partnerSiteByKey("${site.key}")`);
+      // Its own Community Day page (a route, never a query string: the public page is edge-cached).
+      const communityDay = readFileSync(join(__dirname, "../../app", site.path.slice(1), "community-day/page.tsx"), "utf8");
+      expect(communityDay).toContain("robots: { index: false, follow: false }");
+      expect(communityDay).toContain(`partnerSiteByKey("${site.key}")`);
     }
     // No public page, menu, footer, sitemap or cache list names a partner path or a private form address.
     for (const file of ["components/site-header.tsx", "components/site-footer.tsx", "components/summit-navigation.tsx", "components/original-event-page.tsx", "lib/page-cache.ts", "lib/awards-editorial.ts", "app/sitemap.ts", "app/page.tsx", "app/awards/2026/page.tsx"]) {

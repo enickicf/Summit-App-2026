@@ -14,3 +14,6 @@ export const awardsPartnerSites: AwardsPartnerSite[] = [
 ];
 export const partnerSiteByPath = (pathname: string) => awardsPartnerSites.find(site => site.path === pathname.replace(/\/$/, "")) ?? null;
 export const partnerSiteByKey = (key: string | null | undefined) => awardsPartnerSites.find(site => site.key === key) ?? null;
+// Each partner copy has its own Community Day page at <path>/community-day.
+export const partnerCommunityDayPath = (site: AwardsPartnerSite) => `${site.path}/community-day`;
+export const partnerSiteByCommunityDayPath = (pathname: string) => awardsPartnerSites.find(site => partnerCommunityDayPath(site) === pathname.replace(/\/$/, "")) ?? null;
