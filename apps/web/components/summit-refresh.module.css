@@ -74,104 +74,21 @@
 @media(max-width:900px) { .summitHeader .navigation { padding-left:24px; padding-right:130px; } .summitHeader .navigation .donateButton { right:24px; padding:8px 18px; font-size:14px; } }
 @media(max-width:600px) { .summitHeader .navigation { gap:4px 6px; padding:8px 92px 8px 10px; } .summitHeader .navigation a { font-size:10.5px; padding:8px 1px; letter-spacing:-.01em; } .summitHeader .navigation .donateButton { right:10px; gap:5px; padding:7px 10px; font-size:12px; letter-spacing:0; } }
 
-/* Community Day keeps the existing one-row menu, with a larger, easier-to-read scale. */
-.communityDayHeader .communityDayNavigation {
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  width:100%;
-  max-width:900px;
-  margin-inline:auto;
-  gap:0;
-  padding-top:12px;
-  padding-bottom:12px;
-}
-.communityDayHeader .communityDayNavigation a {
-  justify-self:center;
-  min-height:44px;
-  padding:6px 5px;
-  font-size:20px;
-}
-.communityDayHeader .communityDayNavigation .donateButton {
-  position:static;
-  transform:none;
-  gap:9px;
-  padding:13px 26px;
-  border-radius:18px;
-  font-size:18px;
-}
-.communityDayHeader .communityDayNavigation .donateButton svg {
-  width:19px;
-  height:19px;
-}
+/* Community Day menu: plain links on one centered line with equal gaps (owner, Oct 3): Community Day,
+   Schedule (owner, Oct 4: scrolls down to the schedule), Concert and Donate. Sized so the four stay on one
+   row down to a 320px screen. */
+.communityDayHeader .communityDayNavigation { display:flex; justify-content:center; align-items:center; width:100%; max-width:none; margin-inline:auto; gap:56px; padding:12px 24px; }
+.communityDayHeader .communityDayNavigation a { min-height:44px; margin-left:0; padding:6px 5px; font-size:20px; }
 @media(max-width:900px) {
-  .communityDayHeader .communityDayNavigation {
-    padding-top:8px;
-    padding-bottom:8px;
-    padding-left:20px;
-    padding-right:20px;
-  }
-  .communityDayHeader .communityDayNavigation a {
-    min-height:40px;
-    padding:5px 3px;
-    font-size:16px;
-  }
-  .communityDayHeader .communityDayNavigation .donateButton {
-    right:20px;
-    padding:11px 20px;
-    font-size:16px;
-  }
+  .communityDayHeader .communityDayNavigation { gap:36px; padding-top:8px; padding-bottom:8px; }
+  .communityDayHeader .communityDayNavigation a { min-height:40px; padding:5px 3px; font-size:16px; }
 }
 @media(max-width:600px) {
-  .communityDayHeader .communityDayNavigation {
-    gap:0;
-    padding:4px 8px;
-  }
-  .communityDayHeader .communityDayNavigation a {
-    min-height:36px;
-    padding:4px 1px;
-    font-size:11.5px;
-    letter-spacing:-.015em;
-  }
-  .communityDayHeader .communityDayNavigation .donateButton {
-    right:8px;
-    gap:5px;
-    padding:9px 11px;
-    border-radius:16px;
-    font-size:13px;
-    letter-spacing:0;
-  }
-  .communityDayHeader .communityDayNavigation .donateButton svg {
-    width:15px;
-    height:15px;
-  }
+  .communityDayHeader .communityDayNavigation { gap:22px; padding:4px 12px; }
+  .communityDayHeader .communityDayNavigation a { min-height:36px; padding:4px 1px; font-size:13px; letter-spacing:-.015em; }
 }
-@media(max-width:360px) {
-  .communityDayHeader .communityDayNavigation .donateButton {
-    gap:4px;
-    padding:7px 5px;
-    font-size:11px;
-  }
-  .communityDayHeader .communityDayNavigation .donateButton svg {
-    width:12px;
-    height:12px;
-  }
+@media(max-width:400px) { .communityDayHeader .communityDayNavigation { gap:16px; } }
+@media(max-width:350px) {
+  .communityDayHeader .communityDayNavigation { gap:11px; padding-left:8px; padding-right:8px; }
+  .communityDayHeader .communityDayNavigation a { font-size:12px; }
 }
-/* Owner (Oct 3): the three menu items sit as one centered group with equal spacing between them. */
-.communityDayHeader .communityDayNavigation { display:flex; justify-content:center; align-items:center; gap:56px; }
-.communityDayHeader .communityDayNavigation a { justify-self:auto; }
-@media(max-width:900px) { .communityDayHeader .communityDayNavigation { gap:36px; } }
-@media(max-width:600px) { .communityDayHeader .communityDayNavigation { gap:20px; } }
-@media(max-width:360px) { .communityDayHeader .communityDayNavigation { gap:12px; } }
-/* Owner (Oct 3, later): Community Day and Concert all the way left, Donate all the way right, lined up with the hero text. */
-.communityDayHeader .communityDayNavigation { justify-content:flex-start; max-width:none; gap:40px; padding-left:max(24px,calc((100% - 1180px)/2)); padding-right:max(24px,calc((100% - 1180px)/2)); }
-.communityDayHeader .communityDayNavigation .donateButton { margin-left:auto; }
-@media(max-width:900px) { .communityDayHeader .communityDayNavigation { gap:28px; padding-left:24px; padding-right:24px; } }
-@media(max-width:760px) { .communityDayHeader .communityDayNavigation { padding-left:16px; padding-right:16px; } }
-@media(max-width:600px) { .communityDayHeader .communityDayNavigation { gap:18px; } }
-@media(max-width:360px) { .communityDayHeader .communityDayNavigation { gap:12px; padding-left:16px; padding-right:16px; } }
-/* Owner (Oct 3, latest): back to one centered line with equal spacing; Donate is a plain link like the others. */
-.communityDayHeader .communityDayNavigation { justify-content:center; gap:56px; padding-left:24px; padding-right:24px; }
-.communityDayHeader .communityDayNavigation a { margin-left:0; }
-@media(max-width:900px) { .communityDayHeader .communityDayNavigation { gap:36px; } }
-@media(max-width:600px) { .communityDayHeader .communityDayNavigation { gap:24px; padding-left:12px; padding-right:12px; } .communityDayHeader .communityDayNavigation a { font-size:13px; } }
-@media(max-width:360px) { .communityDayHeader .communityDayNavigation { gap:16px; } }
