@@ -2278,5 +2278,15 @@
     "width": 948,
     "height": 900,
     "bytes": 328789
+  },
+  "/images/iheartradio-logo.svg": {
+    "width": 98,
+    "height": 29,
+    "bytes": 7810
+  },
+  "/images/iheartradio-logo-white.svg": {
+    "width": 98,
+    "height": 29,
+    "bytes": 7810
   }
 }

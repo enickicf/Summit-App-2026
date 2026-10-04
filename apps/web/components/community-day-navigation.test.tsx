@@ -7,16 +7,17 @@ vi.mock("next/navigation", () => ({ usePathname: () => route.pathname, useSearch
 const links = (html: string) => [...html.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/g)].map(([, href, label]) => [label!.replace(/<[^>]+>/g, ""), href]);
 
 describe("Community Day menu", () => {
-  it("shows only Community Day, Concert (the Awards page) and Donate", () => {
+  it("shows only Community Day, Schedule (scrolls down this page), Concert (the Awards page) and Donate", () => {
     route.pathname = "/community-day";
     const html = renderToStaticMarkup(<SiteHeader />);
     expect(html.match(/<nav\b/g)).toHaveLength(1);
     expect(links(html)).toEqual([
       ["Community Day", "/community-day"],
+      ["Schedule", "#schedule"],
       ["Concert", "https://notaloneawards.org/awards/2026"],
       ["Donate", "https://www.inspiringchildren.org/donate"]
     ]);
-    for (const gone of ["Summit", "Schedule", "Directory", "Venue", "Awards<", "/venue"]) expect(html).not.toContain(gone);
+    for (const gone of ["Summit", "/schedule", "Directory", "Venue", "Awards<", "/venue"]) expect(html).not.toContain(gone);
   });
 
   it("leaves the Summit menu unchanged everywhere else", () => {

@@ -522,3 +522,23 @@
 /* Owner (Sept 22): the hero's RSVP and iHeartRadio buttons are exactly the same size. */
 .currentAwards .awardsActions .action, .currentAwards .awardsActions .streamButton { box-sizing: border-box; width: 232px; height: 64px; min-height: 0; padding: 0 18px; justify-content: center; }
 @media (max-width: 600px) { .currentAwards .awardsActions .action, .currentAwards .awardsActions .streamButton { width: 168px; height: 52px; padding: 0 12px; } }
+
+/* Owner (Oct 4, 2026): hero = RSVP + Info (same size), a small "View full schedule" link under them; the
+   iHeartRadio broadcast band (large logo + stream button) sits right before the lineup. */
+.infoButton { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; width: 232px; height: 64px; border: 1px solid #f1dfbb; border-radius: 4px; background: rgb(16 14 20 / 38%); color: #f1dfbb; font-size: 18px; font-weight: 800; letter-spacing: .04em; text-decoration: none; text-shadow: none; }
+.infoButton:hover { background: #f1dfbb; color: #17141a; }
+.heroScheduleLink { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; color: #f1dfbb; font-size: 14px; font-weight: 600; letter-spacing: .03em; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: rgb(241 223 187 / 55%); text-shadow: none; }
+.heroScheduleLink:hover { color: #fff; text-decoration-color: #fff; }
+.currentAwards .iheartBand { display: flex; flex-direction: column; align-items: center; gap: 26px; padding-top: 76px; padding-bottom: 76px; text-align: center; background: radial-gradient(ellipse at 50% 0%, rgb(198 0 43 / 22%), transparent 62%), #0b0a0e; border-top: 1px solid rgb(255 255 255 / 8%); border-bottom: 1px solid rgb(255 255 255 / 8%); }
+.iheartKicker { margin: 0; color: #d9d2c3; font-size: 14px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
+.iheartLogo { display: block; width: min(560px, 78vw); height: auto; }
+.iheartStream { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 64px; padding: 0 34px; border: 1px solid #f05b78; border-radius: 999px; background: #c6002b; color: #fff; font-size: 18px; font-weight: 800; letter-spacing: .03em; text-decoration: none; box-shadow: 0 14px 40px rgb(198 0 43 / 35%); transition: background 160ms ease, transform 160ms ease; }
+.iheartStream:hover { background: #e2103f; transform: translateY(-1px); }
+@media (max-width: 600px) {
+  .infoButton { width: 168px; height: 52px; font-size: 15px; }
+  .heroScheduleLink { margin-top: 10px; font-size: 13px; }
+  .currentAwards .iheartBand { gap: 20px; padding-top: 52px; padding-bottom: 52px; }
+  .iheartKicker { font-size: 12px; }
+  .iheartStream { min-height: 54px; padding: 0 24px; font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) { .iheartStream { transition: none; } .iheartStream:hover { transform: none; } }

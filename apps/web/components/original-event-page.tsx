@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SummitLink } from "./summit-link";
-import { ArrowUpRight, Play } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Play } from "lucide-react";
 import type { EventSnapshot } from "@not-alone/validation";
 import source from "../lib/original-sites.json";
 import { summit2025Leadership, summit2025Directory, summit2025Recap, ownerApprovedCoChairs2026 } from "../lib/content";
@@ -24,6 +24,7 @@ import { groupPublishedProgramByDay } from "@not-alone/domain";
 import styles from "./original-event-page.module.css";
 import { HeroRecap, SummitVideo } from "./summit-video";
 import { HighlightsVideo } from "./highlights-video";
+import { AwardsInfoButton } from "./awards-info-button";
 import summitStyles from "./summit-theme.module.css";
 
 type SourceSection = (typeof source.summit.sections)[number];
@@ -288,9 +289,11 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
   </main>;
 }
 
-type AwardsPageProps = { year: 2025 | 2026; program?: EventSnapshot["contentPages"][number] | null; snapshot?: EventSnapshot | null };
+// rsvpUrl (owner, Oct 4): the private partner copies of this page (/nami, /lakelasvegas, ...) send their RSVP
+// buttons to that group's own form; everything else is identical.
+type AwardsPageProps = { year: 2025 | 2026; program?: EventSnapshot["contentPages"][number] | null; snapshot?: EventSnapshot | null; rsvpUrl?: string | undefined };
 
-function CurrentAwardsPage({ program, snapshot = null }: Omit<AwardsPageProps, "year">) {
+function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }: Omit<AwardsPageProps, "year">) {
   const reviewedPeople = awardsPeople(snapshot);
   const displayPeople = awardsDisplayPeople(snapshot);
   const confirmedNames = new Set(reviewedPeople.map(person => normalizePersonName(person.name)));
@@ -323,16 +326,26 @@ function CurrentAwardsPage({ program, snapshot = null }: Omit<AwardsPageProps, "
         {/* Owner (Sept 21): only the doors time up top; the rest of the evening is further down. */}
         {show && !canceled && <dl className={styles.heroScheduleTimes} aria-label="Doors open"><div><dt>Doors Open</dt><dd>{awards2026Editorial.heroDoorsOpen}</dd></div></dl>}
         {!canceled && show && !/to be confirmed/i.test(show.eligibilityScope.label) && <p className={styles.heroInvitation}>{show.eligibilityScope.label}</p>}
+        {/* Owner (Oct 4): RSVP and Info up top; Info scrolls to the mission + schedule, and the iHeartRadio
+            stream button moved to its own band right before the lineup. */}
         <div className={styles.awardsActions}>
-          {!canceled && <a className={styles.action} href={awardsRsvpUrl} aria-label="RSVP for the Not Alone Awards">RSVP</a>}
-          <a className={styles.streamButton} href={awards2026Editorial.iHeartUrl} target="_blank" rel="noreferrer" aria-label="Stream live on iHeartRadio's YouTube channel (opens in a new tab)">
-            <Play size={18} fill="currentColor" aria-hidden="true" />
-            <span><span className={styles.streamLabel}>Stream live on</span><span className={styles.streamName}>iHeartRadio</span></span>
-          </a>
+          {!canceled && <a className={styles.action} href={rsvpUrl} aria-label="RSVP for the Not Alone Awards">RSVP</a>}
+          <AwardsInfoButton className={styles.infoButton}>Info</AwardsInfoButton>
         </div>
+        {eveningTimes.length > 0 && <a className={styles.heroScheduleLink} href="#evening">View full schedule<ArrowDown size={15} aria-hidden="true" /></a>}
       </div>
       {!/wynn las vegas/i.test(venue) && <div className={styles.heroFootnote}><p>Wynn Las Vegas · 2025 venue</p></div>}
     </section>
+    {/* Owner (Oct 4): the broadcast gets its own band right before the lineup: a large iHeartRadio logo and
+        the stream button. The lineup follows immediately; the mission and the schedule come after it. */}
+    <section className={`${styles.band} ${styles.iheartBand}`} id="broadcast" aria-labelledby="broadcast-title">
+      <p className={styles.iheartKicker} id="broadcast-title">Broadcast live on</p>
+      <img className={styles.iheartLogo} src="/images/iheartradio-logo-white.svg" alt="iHeartRadio" width={392} height={116} />
+      <a className={styles.iheartStream} href={awards2026Editorial.iHeartUrl} target="_blank" rel="noreferrer" aria-label="Stream live on iHeartRadio's YouTube channel (opens in a new tab)">
+        <Play size={20} fill="currentColor" aria-hidden="true" />Stream live on iHeartRadio
+      </a>
+    </section>
+    <AwardsGuestDirectory people={displayPeople} available={available} />
     {/* Owner (Sept 21): last year's mission statement (ICF's Awards page, word for word) stays at the top
         until it is replaced later. */}
     <section className={`${styles.band} ${styles.awardsIntroduction} ${styles.awardsMission}`} id="mission" aria-label="About the Not Alone Awards">
@@ -344,7 +357,6 @@ function CurrentAwardsPage({ program, snapshot = null }: Omit<AwardsPageProps, "
       <h2 id="evening-title">The Evening</h2>
       <dl>{eveningTimes.map(item => <div key={item.label}><dt>{item.label}</dt><dd>{item.time}</dd></div>)}</dl>
     </section>}
-    <AwardsGuestDirectory people={displayPeople} available={available} />
     {/* Owner (Sept 21, late): the host sits below the Speakers. */}
     {host && !canceled && <section className={`${styles.band} ${styles.hostFeature}`} id="awards-host" aria-labelledby="awards-host-title">
       <h2 id="awards-host-title">Your 2026 Host</h2>
@@ -383,8 +395,8 @@ function CurrentAwardsPage({ program, snapshot = null }: Omit<AwardsPageProps, "
   </main>;
 }
 
-export function OriginalAwardsPage({ year, program = null, snapshot = null }: AwardsPageProps) {
-  if (year === 2026) return <CurrentAwardsPage program={program} snapshot={snapshot} />;
+export function OriginalAwardsPage({ year, program = null, snapshot = null, rsvpUrl }: AwardsPageProps) {
+  if (year === 2026) return <CurrentAwardsPage program={program} snapshot={snapshot} rsvpUrl={rsvpUrl} />;
   // Owner (Sept 21): the 2025 archive uses the 2026 Awards format (logo hero over the 2025 highlights),
   // winners above the host, no-solicitation at the bottom, and no "registration closed" block.
   return <main id="main-content" tabIndex={-1} className={`${styles.page} ${styles.awards} ${styles.currentAwards}`}>

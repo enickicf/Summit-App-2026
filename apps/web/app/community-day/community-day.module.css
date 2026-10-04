@@ -150,3 +150,8 @@
 /* Owner (Oct 3): the lockup sits above the title. */
 .heroCopy > .presentedBy { margin:0 0 30px; }
 @media(max-width:760px) { .heroCopy > .presentedBy { margin:0 0 20px; } }
+
+/* Owner (Oct 4, 2026): the Awards lineup sits on this page in its own dark look; the menu's Schedule link and
+   the Info button land with the section heading clear of the top edge. */
+.page .lineup h2, .page .lineup h3 { color:inherit; }
+.page .details, .page .mission { scroll-margin-top:24px; }

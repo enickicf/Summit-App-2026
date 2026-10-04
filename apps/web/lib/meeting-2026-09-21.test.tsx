@@ -23,9 +23,10 @@ describe("Sept 21 meeting website direction", () => {
   const awards = renderToStaticMarkup(<OriginalAwardsPage year={2026} snapshot={live} program={publishedAwardsProgram(live)} />);
   const summit = renderToStaticMarkup(<OriginalSummitPage year={2026} snapshot={live} />);
 
-  it("orders the Awards page: logo, mission, lineup, founders, awards, winners, Challenge, no-solicitation", () => {
+  it("orders the Awards page: logo, broadcast, lineup, founders, mission, winners, Challenge, no-solicitation", () => {
     // Owner (Sept 21): last year's full mission statement stays at the top until it is replaced.
-    const positions = order(awards, ['id="awards-program"', 'id="mission"', "Presenting the Not Alone Awards Show", 'aria-label="Lineup"', 'aria-label="Founders"', 'id="winners"', 'id="not-alone-challenge"', 'id="no-solicitation"']);
+    // Owner (Oct 4): the lineup comes right after the hero and the iHeartRadio band; the mission follows it.
+    const positions = order(awards, ['id="awards-program"', 'id="broadcast"', 'aria-label="Lineup"', 'aria-label="Founders"', 'id="mission"', "Presenting the Not Alone Awards Show", 'id="winners"', 'id="not-alone-challenge"', 'id="no-solicitation"']);
     expect([...positions].sort((a, b) => a - b)).toEqual(positions);
     // Owner (Sept 21): broadcast line removed; RSVP button reads just "RSVP"; venue sits with the date.
     expect(awards).not.toContain(escape(awards2026Program.broadcast));

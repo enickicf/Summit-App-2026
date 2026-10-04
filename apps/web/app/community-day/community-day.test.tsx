@@ -5,7 +5,7 @@ import { awards2026Editorial, awards2026Evening } from "../../lib/awards-editori
 import { communityDay2026 } from "../../lib/community-day-2026";
 import { postEventLabel } from "../../lib/event-phase";
 
-const render = () => renderToStaticMarkup(<CommunityDayPage />);
+const render = async (from?: string) => renderToStaticMarkup(await CommunityDayPage(from ? { searchParams: Promise.resolve({ from }) } : {}));
 const text = (html: string) => html.replace(/<[^>]+>/g, " ").replace(/&amp;/g, "&").replace(/&#x27;|&#39;|&rsquo;|’/g, "'").replace(/\s+/g, " ");
 const section = (html: string, id: string) => html.slice(html.indexOf(`aria-labelledby="${id}"`), html.indexOf("</section>", html.indexOf(`aria-labelledby="${id}"`)));
 const beforeEvent = () => { vi.useFakeTimers(); vi.setSystemTime(new Date("2026-09-28T18:00:00Z")); };
@@ -13,17 +13,17 @@ const beforeEvent = () => { vi.useFakeTimers(); vi.setSystemTime(new Date("2026-
 describe("Community Day page", () => {
   afterEach(() => vi.useRealTimers());
 
-  it("has one focusable main landmark and its own title", () => {
-    const html = render();
+  it("has one focusable main landmark and its own title", async () => {
+    const html = await render();
     expect(metadata.title).toBe("Community Day");
     expect(html.match(/<main\b/g)).toHaveLength(1);
     expect(html).toMatch(/<main\b[^>]*id="main-content"[^>]*tabindex="-1"/);
     expect(html.match(/<h1\b/g)).toHaveLength(1);
   });
 
-  it("shows the date and time at a glance at the top, over ICF's community photo", () => {
+  it("shows the date and time at a glance at the top, over ICF's community photo", async () => {
     beforeEvent();
-    const html = render();
+    const html = await render();
     const heroHtml = section(html, "community-day-title");
     // The photo plus the "Presented by" ICF and NAMI logos (Aphrah, Oct 3).
     expect(heroHtml.match(/<img\b/g)).toHaveLength(3);
@@ -38,57 +38,62 @@ describe("Community Day page", () => {
     expect(hero).not.toMatch(/Doors open|A free panel/);
   });
 
-  it("has an Info button that scrolls down to \"What is Community Day?\" on the same page", () => {
+  it("has an Info button that scrolls down to \"What is Community Day?\" on the same page", async () => {
     beforeEvent();
-    const html = render();
+    const html = await render();
     expect(html).toMatch(/<a class="[^"]*" href="#what-is-community-day">Info<\/a>/);
     expect(html).toContain('<section class="_mission_');
     expect(html).toMatch(/<section [^>]*id="what-is-community-day"[^>]*aria-labelledby="mission-title"/);
   });
 
-  it("opens the explanation with Nevada Mental Health Day", () => {
+  it("opens the explanation with Nevada Mental Health Day", async () => {
     beforeEvent();
-    const html = render();
+    const html = await render();
     expect(text(section(html, "mission-title")).trim()).toBe(`aria-labelledby="mission-title"> What is Community Day? In honor of Nevada Mental Health Day ${communityDay2026.about}`);
     expect(communityDay2026.about).toMatch(/^The Not Alone Community Day is /);
     expect(text(html)).not.toContain("Our mission");
   });
 
-  it("puts the explanation, partners, then details under the hero", () => {
+  it("puts the explanation, partners, then details under the hero", async () => {
     beforeEvent();
-    const html = render();
+    const html = await render();
     const order = ["community-day-title", "mission-title", "community-partners-title", "details-title", "tickets-title"].map(id => html.indexOf(`aria-labelledby="${id}"`));
     expect(order.every(index => index >= 0)).toBe(true);
     expect([...order].sort((a, b) => a - b)).toEqual(order);
   });
 
-  it("lists the details in the Awards page's evening format, details only", () => {
+  it("lists the details in the Awards page's evening format, details only", async () => {
     beforeEvent();
-    const details = text(section(render(), "details-title"));
+    const details = text(section(await render(), "details-title"));
     expect(details).toContain("The Details Date Monday, Nov 2 Doors Open 5:30 PM Community Day 5:45–7:15 PM Awards Show 7:30 PM Location Encore Theater, Wynn Las Vegas");
     expect(details).not.toMatch(/free|ticket/i);
   });
 
-  it("shows the complete evening without unrelated Awards program content", () => {
+  it("shows the complete evening without unrelated Awards program content", async () => {
     beforeEvent();
-    const html = render();
+    const html = await render();
     const page = text(html);
     expect(page).not.toContain("Summit");
     expect(page).not.toContain("Who it's for");
     expect(page).not.toMatch(/different|not the Awards/i);
     expect(page).toContain("Awards Show 7:30 PM");
-    for (const other of ["Highlights", "Loni Love", "iHeart", "Jewel", "Pre-Show", "pre-show", "No Solicitation", "lineup"]) expect(page).not.toContain(other);
+    // Owner (Oct 4): the talent lineup is on this page too; the rest of the Awards program is not.
+    for (const other of ["Highlights", "iHeart", "Pre-Show", "pre-show", "No Solicitation"]) expect(page).not.toContain(other);
+    for (const name of ["The 2026 Lineup", "Jewel", "Steve Wozniak", "Loni Love"]) expect(page).toContain(name);
+    expect(html.indexOf("The 2026 Lineup")).toBeGreaterThan(html.indexOf('id="community-day-actions"'));
+    expect(html.indexOf("The 2026 Lineup")).toBeLessThan(html.indexOf('id="what-is-community-day"'));
+    expect(html).toContain('id="schedule"');
     expect(html).not.toMatch(/<(video|iframe)\b/);
   });
 
-  it("features ICF and the approved community partners", () => {
+  it("features ICF and the approved community partners", async () => {
     beforeEvent();
-    const partners = text(section(render(), "community-partners-title"));
+    const partners = text(section(await render(), "community-partners-title"));
     expect(partners).toContain("Presented With Our Community Partners Powered by Presented by Community partner Host venue");
-    for (const name of ["Inspiring Children Foundation", "Steven & Alexandra Cohen Foundation", "NAMI, National Alliance on Mental Illness", "Wynn Las Vegas"]) expect(render().replace(/&amp;/g, "&")).toContain(`alt="${name}"`);
+    for (const name of ["Inspiring Children Foundation", "Steven & Alexandra Cohen Foundation", "NAMI, National Alliance on Mental Illness", "Wynn Las Vegas"]) expect((await render()).replace(/&amp;/g, "&")).toContain(`alt="${name}"`);
   });
 
-  it("keeps its times in step with the Awards page's evening block", () => {
+  it("keeps its times in step with the Awards page's evening block", async () => {
     const dash = (value: string) => value.replace(/ ?PM(?=-)/, "").replace("-", "–");
     const awards = Object.fromEntries(awards2026Evening.map(item => [item.label, dash(item.time)]));
     const details = Object.fromEntries(communityDay2026.details.map(item => [item.label, item.value]));
@@ -101,9 +106,9 @@ describe("Community Day page", () => {
     expect(communityDay2026.heroTime).toBe("5:45–7:15 PM");
   });
 
-  it("sends ticket requests to the live RSVP form and repeats its waiting-list notice word for word", () => {
+  it("sends ticket requests to the live RSVP form and repeats its waiting-list notice word for word", async () => {
     beforeEvent();
-    const html = render();
+    const html = await render();
     expect(html.match(new RegExp(`href="${awards2026Editorial.rsvpUrl}"`, "g"))).toHaveLength(2);
     const page = text(html);
     expect(page).toContain("Submitting this RSVP does not guarantee admission and is not a ticket. Your request will be added to our ticket waiting list. We will email you if your ticket is approved.");
@@ -115,13 +120,21 @@ describe("Community Day page", () => {
     expect(html).toContain('href="/contact"');
   });
 
-  it("drops the ticket request once the event is over", () => {
+  it("drops the ticket request once the event is over", async () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-11-06T08:00:00Z"));
-    const html = render();
+    const html = await render();
     expect(html).not.toContain(awards2026Editorial.rsvpUrl);
     expect(html).not.toContain('id="tickets"');
     expect(text(html)).toContain(postEventLabel);
     expect(text(html)).toContain("What is Community Day?");
+  });
+
+  it("keeps ticket links inside a private partner site when reached from one (owner, Oct 4)", async () => {
+    beforeEvent();
+    const html = await render("nami-vip");
+    expect(html).toContain('href="https://notaloneawards.org/rsvp/nami-vip-zton04cqu1"');
+    expect(html).not.toContain(`href="${communityDay2026.rsvpUrl}"`);
+    expect(await render("unknown")).toContain(`href="${communityDay2026.rsvpUrl}"`);
   });
 });

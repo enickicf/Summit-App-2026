@@ -60,9 +60,8 @@ describe("Awards opening presentation", () => {
     expect(page().match(/Monday, November 2</g)).toHaveLength(1);
   });
 
-  it("emphasizes streaming with a compact button under the ICF Awards logo and its foundation credit", () => {
+  it("opens with RSVP and Info, and gives the iHeartRadio broadcast its own band right before the lineup (owner, Oct 4)", () => {
     const html = decodeURIComponent(hero());
-    expect(html).not.toContain("/images/iheartradio-primary.png");
     expect(html).not.toContain("/images/cohen-foundation.webp");
     // Sept 21 meeting: the foundation credit sits directly under the ICF Awards logo, larger than before.
     expect(html).toContain("/images/na-awards-logo-white.png");
@@ -72,12 +71,26 @@ describe("Awards opening presentation", () => {
     expect(html.match(/<img /g)).toHaveLength(2);
     expect(html).not.toContain("hero-awards-start.jpg");
     expect(html).toContain("background:#1c1a2e");
-    expect(html).toContain('href="https://www.youtube.com/@iHeartRadio/streams" target="_blank" rel="noreferrer"');
-    expect(html).toContain(`class="${styles.streamButton}"`);
-    expect(html).toContain(`class="${styles.streamLabel}">Stream live on</span>`);
-    expect(html).toContain(`class="${styles.streamName}">iHeartRadio</span>`);
-    expect(html).toContain('aria-label="Stream live on iHeartRadio&#x27;s YouTube channel (opens in a new tab)"');
-    expect(html).not.toMatch(/live now|watch live|live stream/i);
+    // The hero's second button is Info (scrolls to the mission + schedule); a smaller schedule link sits under it.
+    expect(html).toMatch(/>RSVP<\/a><a class="[^"]*" href="#mission">Info<\/a><\/div><a class="[^"]*" href="#evening">View full schedule/);
+    expect(html).not.toMatch(/iHeart|Stream live/);
+    const whole = page();
+    const band = whole.slice(whole.indexOf('id="broadcast"'), whole.indexOf('id="directory"'));
+    expect(band).toContain('src="/images/iheartradio-logo-white.svg" alt="iHeartRadio"');
+    expect(band).toContain('href="https://www.youtube.com/@iHeartRadio/streams" target="_blank" rel="noreferrer"');
+    expect(band).toContain("Stream live on iHeartRadio</a>");
+    expect(band).toContain('aria-label="Stream live on iHeartRadio&#x27;s YouTube channel (opens in a new tab)"');
+    // Lineup right after the hero and the broadcast band; the mission and the schedule follow it, together.
+    const order = ['id="awards-program"', 'id="broadcast"', 'id="directory"', 'id="mission"', 'id="evening"', 'id="awards-host"'].map(part => whole.indexOf(part));
+    expect(order.every(index => index >= 0)).toBe(true);
+    expect([...order].sort((x, y) => x - y)).toEqual(order);
+    expect(whole).not.toMatch(/live now|watch live|live stream/i);
+  });
+
+  it("points every RSVP button of a private partner copy at that group's form (owner, Oct 4)", () => {
+    const html = renderToStaticMarkup(<OriginalAwardsPage year={2026} program={program} snapshot={event2026Snapshot} rsvpUrl="https://notaloneawards.org/rsvp/nami-9wvfjfkt40dd" />);
+    expect(html).toContain('href="https://notaloneawards.org/rsvp/nami-9wvfjfkt40dd" aria-label="RSVP for the Not Alone Awards">RSVP</a>');
+    expect(html).not.toContain('href="https://notaloneawards.org/rsvp"');
   });
 
   it("keeps canceled, unpublished and unavailable times out of the hero's timing line", () => {

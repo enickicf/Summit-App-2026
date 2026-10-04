@@ -31,12 +31,27 @@ describe("NAMI RSVPs land in the staff portal tagged NAMI (owner, Oct 2, 2026)",
   });
 });
 
-describe("no NAMI page on the public website (owner, Oct 2: only its own private link)", () => {
-  it("has no /nami route and no public link to the NAMI form", async () => {
+describe("private partner copies of the Awards site (owner, Oct 4; supersedes Oct 2 'no /nami route')", () => {
+  it("exist at /nami, /nami/vip, /lakelasvegas and /lakelasvegas/vip, unlisted and unlinked from the public site", async () => {
     const { existsSync, readFileSync } = await import("node:fs");
     const { join } = await import("node:path");
-    expect(existsSync(join(__dirname, "../../app/nami"))).toBe(false);
-    for (const file of ["components/site-header.tsx", "components/site-footer.tsx", "components/summit-navigation.tsx", "lib/page-cache.ts", "lib/awards-editorial.ts"]) expect(readFileSync(join(__dirname, "../..", file), "utf8")).not.toMatch(/nami-[a-z0-9]{8,}|\/nami\b/);
+    const { awardsPartnerSites } = await import("../awards-partner-sites");
+    expect(awardsPartnerSites.map(site => [site.path, site.rsvpUrl])).toEqual([
+      ["/nami", "https://notaloneawards.org/rsvp/nami-9wvfjfkt40dd"],
+      ["/nami/vip", "https://notaloneawards.org/rsvp/nami-vip-zton04cqu1"],
+      ["/lakelasvegas", "https://notaloneawards.org/rsvp/lake-las-vegas-3u3hr0lqil"],
+      ["/lakelasvegas/vip", "https://notaloneawards.org/rsvp/lake-las-vegas-vip-vh8gglzs5l"]
+    ]);
+    for (const site of awardsPartnerSites) {
+      const source = readFileSync(join(__dirname, "../../app", site.path.slice(1), "page.tsx"), "utf8");
+      expect(source).toContain("robots: { index: false, follow: false }");
+      expect(source).toContain(`partnerSiteByKey("${site.key}")`);
+    }
+    // No public page, menu, footer, sitemap or cache list names a partner path or a private form address.
+    for (const file of ["components/site-header.tsx", "components/site-footer.tsx", "components/summit-navigation.tsx", "components/original-event-page.tsx", "lib/page-cache.ts", "lib/awards-editorial.ts", "app/sitemap.ts", "app/page.tsx", "app/awards/2026/page.tsx"]) {
+      if (!existsSync(join(__dirname, "../..", file))) continue;
+      expect(readFileSync(join(__dirname, "../..", file), "utf8")).not.toMatch(/nami-[a-z0-9]{8,}|lake-las-vegas-[a-z0-9]{8,}|["'`]\/nami\b|["'`]\/lakelasvegas\b/);
+    }
   });
 });
 

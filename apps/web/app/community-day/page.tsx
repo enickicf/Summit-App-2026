@@ -4,6 +4,11 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { communityDay2026 as day } from "../../lib/community-day-2026";
 import { isPostEvent, postEventLabel } from "../../lib/event-phase";
+import { AwardsGuestDirectory } from "../../components/awards-guest-directory";
+import eventStyles from "../../components/original-event-page.module.css";
+import { awardsDisplayPeople } from "../../lib/awards-people";
+import { partnerSiteByKey } from "../../lib/awards-partner-sites";
+import { getSiteSnapshot } from "../../lib/snapshot";
 import heroPhoto from "./encore-theater-community-day.png";
 import styles from "./community-day.module.css";
 
@@ -15,8 +20,14 @@ export const metadata: Metadata = {
 // "2027 — To Be Announced Soon.", like the other 2026 heroes (lib/event-phase.ts).
 export const dynamic = "force-dynamic";
 
-export default function CommunityDayPage() {
+export default async function CommunityDayPage({ searchParams }: { searchParams?: Promise<{ from?: string | string[] }> }) {
   const over = isPostEvent();
+  // Owner (Oct 4): reached from a private partner copy of the Awards site (?from=nami, ...), the ticket
+  // buttons keep going to that group's own RSVP form.
+  const from = (await searchParams)?.from;
+  const rsvpUrl = partnerSiteByKey(Array.isArray(from) ? from[0] : from)?.rsvpUrl ?? day.rsvpUrl;
+  // Owner (Oct 4): the whole talent lineup (the Awards page's list) is on this page too.
+  const snapshot = await getSiteSnapshot();
   return <main id="main-content" tabIndex={-1} className={styles.page}>
     <section className={styles.hero} aria-labelledby="community-day-title">
       {/* Imported next to the page (not from /public) so Next measures and optimizes it at build time. */}
@@ -41,12 +52,16 @@ export default function CommunityDayPage() {
           <span className={styles.whenPlace}>{day.venue}</span>
         </p>}
         <div className={styles.heroButtons} id="community-day-actions">
-          {!over && <a className={styles.button} href={day.rsvpUrl}>Request free tickets</a>}
+          {!over && <a className={styles.button} href={rsvpUrl}>Request free tickets</a>}
           {/* Scrolls down to the "What is Community Day?" section on this page. */}
           <a className={`${styles.button} ${styles.outline}`} href="#what-is-community-day">Info</a>
         </div>
       </div>
     </section>
+
+    <div className={`${eventStyles.page} ${eventStyles.awards} ${eventStyles.currentAwards} ${styles.lineup}`}>
+      <AwardsGuestDirectory people={awardsDisplayPeople(snapshot)} available={snapshot?.event.directoryEnabled ?? false} />
+    </div>
 
     <section className={styles.mission} id="what-is-community-day" aria-labelledby="mission-title">
       <h2 id="mission-title">What is Community Day?</h2>
@@ -69,7 +84,7 @@ export default function CommunityDayPage() {
       </div>
     </section>
 
-    <section className={styles.details} aria-labelledby="details-title">
+    <section className={styles.details} id="schedule" aria-labelledby="details-title">
       <h2 id="details-title">The Details</h2>
       <dl>{day.details.map(item => <div key={item.label}><dt>{item.label}</dt><dd className={item.label === "Location" ? styles.locationValue : undefined}>{item.value}{item.note && <span>{item.note}</span>}</dd></div>)}</dl>
     </section>
@@ -77,7 +92,7 @@ export default function CommunityDayPage() {
     {!over && <section className={styles.tickets} id="tickets" aria-labelledby="tickets-title">
       <h2 id="tickets-title">Request free tickets</h2>
       <ol className={styles.steps}>{day.tickets.steps.map(step => <li key={step.title}><h3>{step.title}</h3><p>{step.detail}</p></li>)}</ol>
-      <a className={`${styles.button} ${styles.solid}`} href={day.rsvpUrl}>Open the RSVP form<ArrowUpRight size={18} aria-hidden="true" /></a>
+      <a className={`${styles.button} ${styles.solid}`} href={rsvpUrl}>Open the RSVP form<ArrowUpRight size={18} aria-hidden="true" /></a>
       <p className={styles.notice}>{day.tickets.waitingList}</p>
       <p className={styles.questions}>Questions? <Link href="/contact">Contact the Inspiring Children Foundation</Link></p>
     </section>}
