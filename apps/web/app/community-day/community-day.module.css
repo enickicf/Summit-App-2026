@@ -19,7 +19,8 @@
 .heroPhoto { z-index:-2; object-fit:cover; object-position:50% 70%; filter:saturate(.82) contrast(.96) brightness(.94); }
 .hero::before { content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg,#0c111c0a 52%,#0c111c4d 100%),linear-gradient(90deg,#121827f5 0%,#121827e6 30%,#1218278f 47%,#12182726 66%,#12182714 100%); }
 .heroCopy { max-width:560px; }
-.hero h1 { margin:0; color:#ffffff; font-size:clamp(48px,6.4vw,84px); font-weight:700; line-height:1; }
+/* Owner (Oct 4): the title a bit smaller, the "Presented by" ICF and NAMI logos a bit bigger, at every size. */
+.hero h1 { margin:0; color:#ffffff; font-size:clamp(40px,5.2vw,68px); font-weight:700; line-height:1; }
 .hero h1.heroTitleMark { display:flex; flex-direction:column; align-items:flex-start; gap:10px; }
 .heroTitleMark > .notAloneMark { display:inline-flex; align-items:center; gap:10px; color:#ffffff; font-size:clamp(13px,1.35vw,17px); font-weight:700; letter-spacing:.18em; line-height:1; text-transform:uppercase; }
 .notAloneMark svg { width:1.4em; height:1.4em; color:#ffffff; }
@@ -115,14 +116,14 @@
 }
 /* Very narrow phones (320-360px): smaller title and date so nothing touches the screen edge. */
 @media(max-width:360px) {
-  .hero h1 { font-size:40px; }
+  .hero h1 { font-size:34px; }
   .whenDate, .whenTime { font-size:24px; }
   .heroButtons { gap:10px; }
   .hero .button { padding:14px 18px; }
 }
 @media(max-width:360px) and (max-height:620px) {
   .hero { --band:220px; padding-bottom:24px; }
-  .hero h1 { font-size:36px; }
+  .hero h1 { font-size:31px; }
   .hero h1.heroTitleMark { gap:7px; }
   .when { margin-top:18px; }
   .whenDate, .whenTime { font-size:22px; }
@@ -132,20 +133,20 @@
 }
 
 /* Aphrah (Oct 3): "Presented by ICF & NAMI" lockup under the date and venue. */
-.presentedBy { display:flex; flex-direction:column; gap:10px; margin-top:26px; }
-.presentedLabel { color:rgba(255,255,255,.72); font-size:12px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; }
-.presentedLogos { display:flex; align-items:center; gap:22px; }
+.presentedBy { display:flex; flex-direction:column; gap:12px; margin-top:26px; }
+.presentedLabel { color:rgba(255,255,255,.78); font-size:15px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; }
+.presentedLogos { display:flex; align-items:center; gap:26px; }
 .presentedLogos img { display:block; width:auto; height:auto; }
-.presentedIcf { height:58px !important; }
-.presentedNami { height:40px !important; }
-.presentedDivider { width:1px; height:44px; background:rgba(255,255,255,.4); }
+.presentedIcf { height:78px !important; }
+.presentedNami { height:54px !important; }
+.presentedDivider { width:1px; height:58px; background:rgba(255,255,255,.4); }
 @media(max-width:760px) {
-  .presentedBy { margin-top:20px; gap:8px; }
-  .presentedLabel { font-size:11px; }
-  .presentedLogos { gap:16px; }
-  .presentedIcf { height:46px !important; }
-  .presentedNami { height:32px !important; }
-  .presentedDivider { height:36px; }
+  .presentedBy { margin-top:20px; gap:10px; }
+  .presentedLabel { font-size:13px; }
+  .presentedLogos { gap:18px; }
+  .presentedIcf { height:60px !important; }
+  .presentedNami { height:42px !important; }
+  .presentedDivider { height:46px; }
 }
 /* Owner (Oct 3): the lockup sits above the title. */
 .heroCopy > .presentedBy { margin:0 0 30px; }
