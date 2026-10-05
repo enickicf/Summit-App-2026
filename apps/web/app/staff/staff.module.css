@@ -45,6 +45,10 @@
 .nowrap { white-space: nowrap; }
 .center { text-align: center; }
 .strong { font-weight: 600; }
+/* The additional people in a party (Oct 5), listed under the person who sent the request. */
+.partyGuests { margin: 6px 0 0; padding: 0; list-style: none; font-size: 12px; font-weight: 400; color: #555; }
+.partyGuests li { white-space: nowrap; line-height: 1.6; }
+.partyGuests li span { font-weight: 600; color: #222; }
 .muted { color: #666666; }
 .notes { min-width: 220px; max-width: 360px; white-space: pre-wrap; }
 .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; background: #eef0f6; }

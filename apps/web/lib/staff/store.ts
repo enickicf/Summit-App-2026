@@ -28,6 +28,12 @@ export type RsvpTier = (typeof rsvpTiers)[number];
 export const rsvpHeardFrom = ["", "inspiring-children", "nami", "lake-las-vegas", "other"] as const;
 export type RsvpHeardFrom = (typeof rsvpHeardFrom)[number];
 export const rsvpHeardFromLabels: Record<Exclude<RsvpHeardFrom, "">, string> = { "inspiring-children": "Inspiring Children", nami: "NAMI", "lake-las-vegas": "Lake Las Vegas", other: "Other" };
+// Owner (Oct 5, 2026): a request can cover up to ten people, and the form collects the name, email and phone of
+// every additional person in the party (the person filling in the form is the first). "guests" holds those
+// additional people. Forms from before Oct 5 sent no list, so the field is optional and older records have none.
+export const maxPartySize = 10;
+export const partyGuestSchema = z.object({ name: personName(180), email, phone: required(80) }).strip();
+export type PartyGuest = z.infer<typeof partyGuestSchema>;
 export const rsvpPayloadSchema = z.object({
   name: personName(180),
   email,
@@ -46,11 +52,17 @@ export const rsvpPayloadSchema = z.object({
   attendanceStatus: z.enum(attendanceStatuses),
   // Owner (Sept 23): a separate toggle for Community Day (doors 5:30 PM). The form sends "on" when checked.
   communityDay: z.preprocess(value => value === true || value === "on" || value === "yes" || value === "true", z.boolean()).optional().default(false),
-  guestCount: z.coerce.number().int().min(1).max(10).optional().default(1),
+  guestCount: z.coerce.number().int().min(1).max(maxPartySize).optional().default(1),
+  guests: z.array(partyGuestSchema).max(maxPartySize - 1).optional(),
   notes: text(900).optional().default(""),
   website: text(200).optional().default("") // honeypot: bots fill it, people never see it
 }).strip();
 export type RsvpPayload = z.infer<typeof rsvpPayloadSchema>;
+// True when a form that sends the guest list (Oct 5 onward) does not name everyone in the party. A form from
+// before Oct 5 sends no list at all and is still accepted, so a tab left open is never turned away.
+export const partyGuestsIncomplete = (payload: Pick<RsvpPayload, "guestCount" | "guests">) => payload.guests !== undefined && payload.guests.length !== payload.guestCount - 1;
+// One line per additional guest, for the portal and the spreadsheet: "Name <email> phone".
+export const partyGuestLine = (guest: PartyGuest) => `${guest.name} <${guest.email}> ${guest.phone}`;
 
 export const nominationPayloadSchema = z.object({
   nominatorName: personName(180),
@@ -290,7 +302,7 @@ export function rsvpForm(record: Pick<RsvpSubmission, "vip" | "partner" | "tier"
 export const rsvpExportForms = { vip: "VIP", "nami-vip": "NAMI VIP", "lake-las-vegas-vip": "Lake Las Vegas VIP", "lake-las-vegas": "Lake Las Vegas", nami: "NAMI", standard: "Standard" } as const;
 export type RsvpExportForm = keyof typeof rsvpExportForms;
 export const rsvpsOfForm = (records: RsvpSubmission[], form: RsvpExportForm) => records.filter(record => rsvpForm(record) === rsvpExportForms[form]);
-export const withRsvpForm = (records: RsvpSubmission[]) => records.map(record => ({ ...record, form: rsvpForm(record), heardFromLabel: record.heardFrom ? rsvpHeardFromLabels[record.heardFrom] : "" }));
+export const withRsvpForm = (records: RsvpSubmission[]) => records.map(record => ({ ...record, form: rsvpForm(record), heardFromLabel: record.heardFrom ? rsvpHeardFromLabels[record.heardFrom] : "", guestDetails: (record.guests ?? []).map(partyGuestLine).join("; ") }));
 // Owner (Sept 30): the mass RSVP lists never include a VIP request, and the VIP portal reads only VIP requests.
 // Owner (Oct 1, 2026, superseding the Sept 30 split): "make the backend of the VIP RSVP the same now since
 // we are upping security, but make the forms still different". All RSVPs, VIP or not, live under "rsvp" and
@@ -325,7 +337,7 @@ function csvCell(value: unknown): string {
 export function toCsv(rows: Record<string, unknown>[], columns: string[]): string {
   return [columns.join(","), ...rows.map(row => columns.map(column => csvCell(row[column])).join(","))].join("\r\n") + "\r\n";
 }
-export const rsvpCsvColumns = ["submittedAt", "form", "name", "email", "phone", "organization", "professionalRole", "invitedBy", "heardFromLabel", "vip", "partner", "tier", "attendanceStatus", "communityDay", "guestCount", "notes", "source", "id", "removedAt", "removedReason"];
+export const rsvpCsvColumns = ["submittedAt", "form", "name", "email", "phone", "organization", "professionalRole", "invitedBy", "heardFromLabel", "vip", "partner", "tier", "attendanceStatus", "communityDay", "guestCount", "guestDetails", "notes", "source", "id", "removedAt", "removedReason"];
 
 // Which part(s) of the evening a request covers: the Awards Show (their response) and/or Community Day (the toggle).
 export function comingTo(record: Pick<RsvpSubmission, "attendanceStatus" | "communityDay">): ("awards" | "communityDay")[] {

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSubmissionStore, missingVipFields, newSubmission, rsvpPayloadSchema, type SubmissionStore } from "../../../lib/staff/store";
+import { getSubmissionStore, missingVipFields, newSubmission, partyGuestsIncomplete, rsvpPayloadSchema, type SubmissionStore } from "../../../lib/staff/store";
 import { sendRsvpConfirmation, type Sender } from "../../../lib/staff/rsvp-email";
 
 export const runtime = "nodejs";
@@ -28,11 +28,13 @@ export async function handleRsvpPost(request: Request, store?: SubmissionStore, 
   const parsed = rsvpPayloadSchema.safeParse(body);
   if (!parsed.success) {
     const issue = parsed.error.issues[0];
-    const message = issue?.path[0] === "name" ? "Please enter your full name." : issue?.path[0] === "email" ? "Please enter a valid email address." : issue?.path[0] === "attendanceStatus" ? "Please select a valid response." : "Please check the form and try again.";
+    const message = issue?.path[0] === "name" ? "Please enter your full name." : issue?.path[0] === "email" ? "Please enter a valid email address." : issue?.path[0] === "attendanceStatus" ? "Please select a valid response." : issue?.path[0] === "guests" ? partyGuestsMessage : "Please check the form and try again.";
     return NextResponse.json({ ok: false, error: message }, { status: 400, headers });
   }
   const { website, ...payload } = parsed.data;
   if (website) return NextResponse.json({ ok: true }, { headers }); // honeypot: pretend success, store nothing
+  // Owner (Oct 5): every additional person in the party needs a name, an email and a phone number.
+  if (partyGuestsIncomplete(payload)) return NextResponse.json({ ok: false, error: partyGuestsMessage }, { status: 400, headers });
   const missing = missingVipFields(payload);
   if (missing.length) return NextResponse.json({ ok: false, error: `Please add ${missing.join(", ")} so the team can seat you.` }, { status: 400, headers });
   const target = store ?? await getSubmissionStore();
@@ -43,10 +45,18 @@ export async function handleRsvpPost(request: Request, store?: SubmissionStore, 
     console.error("rsvp store failed", error instanceof Error ? error.message : error);
     return NextResponse.json({ ok: false, error: "We could not save your RSVP. Please try again." }, { status: 500, headers });
   }
-  await forward(body).catch(() => undefined);
+  // The previous backend keeps receiving exactly the fields it always did (no guest list).
+  await forward(withoutGuestList(body)).catch(() => undefined);
   // Owner (Sept 28): automatic waiting-list confirmation email; best effort, never fails the guest's RSVP.
   await (sender === undefined ? sendRsvpConfirmation(record, target) : sendRsvpConfirmation(record, target, sender)).catch(() => undefined);
   return NextResponse.json({ ok: true }, { headers });
+}
+
+const partyGuestsMessage = "Please add the full name, a valid email and a phone number for every person in your party.";
+function withoutGuestList(body: unknown): unknown {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return body;
+  const { guests: _guests, ...rest } = body as Record<string, unknown>;
+  return rest;
 }
 
 async function forwardToLegacy(payload: unknown): Promise<void> {

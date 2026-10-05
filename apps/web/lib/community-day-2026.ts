@@ -42,7 +42,7 @@ export const communityDay2026 = {
   ],
   tickets: {
     steps: [
-      { title: "Open the RSVP form", detail: "Add your name, email and phone, and choose how many are in your party (up to ten per request)." },
+      { title: "Open the RSVP form", detail: "Add your name, email and phone, choose how many are in your party (up to ten per request), and add the name, email and phone of each guest." },
       { title: "Note your organization", detail: "Enter your organization in the Organization field." },
       { title: "Turn on Community Day", detail: "Switch on “Yes, I plan to attend Community Day before the Awards Show.”" }
     ],
