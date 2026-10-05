@@ -544,3 +544,5 @@
   .iheartStream { min-height: 54px; padding: 0 24px; font-size: 15px; }
 }
 @media (prefers-reduced-motion: reduce) { .iheartStream { transition: none; } .iheartStream:hover { transform: none; } }
+/* Owner (Oct 5): on phones the Awards lettering starts right under the menu (no 120px empty band). */
+@media (max-width: 600px) { .currentAwards .awardsHero { padding-top: 28px; } }

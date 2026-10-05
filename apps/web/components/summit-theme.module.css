@@ -242,3 +242,5 @@
 /* Owner (Sept 22): on phones only, the introduction's "Powered by" credit is hidden as well (logo and credit
    both gone from this one section on mobile); desktop and every other credit on the site are unchanged. */
 @media (max-width: 900px) { .summit.summit > section:global(#about) .introBrand { display:none; } }
+/* Owner (Oct 5): on phones the Summit lettering starts right under the menu (no 96px empty band). */
+@media(max-width:600px) { .summit.summit .heroFormat { padding-top:28px; } }
