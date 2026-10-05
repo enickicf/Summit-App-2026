@@ -238,16 +238,20 @@ export function journaledStore(store: SubmissionStore, journal: { setJSON(key: s
   } as SubmissionStore;
 }
 
-let cached: SubmissionStore | null = null;
+// On Netlify the store is created for each request and never kept. Netlify gives every request a fresh,
+// short-lived storage token, and a Blobs store keeps the token it was created with. Until Oct 5, 2026 one store
+// was kept for the life of a server instance, so about half an hour in every storage call on that instance began
+// to fail ("Failed to decode token: Token expired", HTTP 401) until the instance was replaced: the staff portal
+// and its export returned errors in bursts, and RSVP saves failed on Sept 28-30 (Netlify function log). Only the
+// local file store (development and tests) is kept, since it has no token.
+let cachedFileStore: SubmissionStore | null = null;
 export async function getSubmissionStore(): Promise<SubmissionStore> {
-  if (cached) return cached;
   if (process.env.NETLIFY === "true" || process.env.NETLIFY_BLOBS_CONTEXT) {
     const { getStore } = await import("@netlify/blobs");
-    cached = journaledStore(netlifyBlobsSubmissionStore(getStore({ name: "staff-portal", consistency: "strong" })), getStore({ name: "staff-portal-journal", consistency: "strong" }));
-    return cached;
+    return journaledStore(netlifyBlobsSubmissionStore(getStore({ name: "staff-portal", consistency: "strong" })), getStore({ name: "staff-portal-journal", consistency: "strong" }));
   }
-  cached = fileSubmissionStore(process.env.STAFF_PORTAL_FILE ?? join(process.cwd(), "work", "staff-portal-store.json"));
-  return cached;
+  cachedFileStore ??= fileSubmissionStore(process.env.STAFF_PORTAL_FILE ?? join(process.cwd(), "work", "staff-portal-store.json"));
+  return cachedFileStore;
 }
 
 export function newSubmission<T extends object>(payload: T, now: Date = new Date()): Submission<T> {
