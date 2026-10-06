@@ -28,7 +28,7 @@ describe("owner additions, Oct 4: Logan Paul (Founder) and Aloe Blacc (A-Talent)
       expect(everywhere(variant).filter(entry => entry.endsWith(":Logan Paul")), variant).toEqual(["Founders:Logan Paul"]);
     }
     const logan = awardsPeople.find(person => person.name === "Logan Paul")!;
-    expect(logan.image).toBe("/2026-headshots/portraits/logan-paul.jpg");
+    expect(logan.image).toBe("/2026-headshots/portraits/logan-paul-c.jpg");
     expect(logan.role).toBe("Entertainer, WWE Superstar & Co-Founder of PRIME");
     expect(logan.bio).toContain("co-founded the beverage company PRIME");
     expect(logan.bio).not.toContain("is a founder of the Not Alone Summit"); // the interim line is replaced
@@ -50,7 +50,7 @@ describe("owner additions, Oct 4: Logan Paul (Founder) and Aloe Blacc (A-Talent)
     expect(lineup.indexOf("Aloe Blacc")).toBeGreaterThan(lineup.indexOf("Caroline Jones")); // rank 10
     expect(lineup.indexOf("Aloe Blacc")).toBeLessThan(lineup.indexOf("Harry Hudson")); // B - talent
     const aloe = awardsPeople.find(person => person.name === "Aloe Blacc")!;
-    expect(aloe.image).toBe("/2026-headshots/portraits/aloe-blacc.jpg");
+    expect(aloe.image).toBe("/2026-headshots/portraits/aloe-blacc-c.jpg");
     expect(aloe.role).toBe("Grammy-Nominated Singer-Songwriter");
   });
 
@@ -62,11 +62,11 @@ describe("owner additions, Oct 4: Logan Paul (Founder) and Aloe Blacc (A-Talent)
   });
 
   it("shows the required credit for Aloe Blacc's Creative Commons photo only while that photo is displayed", () => {
-    expect(portraitAttribution2026("Aloe Blacc", "/2026-headshots/portraits/aloe-blacc.jpg")).toEqual({
+    expect(portraitAttribution2026("Aloe Blacc", "/2026-headshots/portraits/aloe-blacc-c.jpg")).toEqual({
       label: "Web Summit Rio, CC BY 2.0 (cropped)",
       href: "https://commons.wikimedia.org/wiki/File:Aloe_Blacc_Corporate_Innovation_Summit_event_Rio_de_Janeiro_Riocentro_Web_Summit_Rio_20258310_(54483438773).jpg"
     });
     expect(portraitAttribution2026("Aloe Blacc", "/somewhere/else.jpg")).toBeNull();
-    expect(portraitAttribution2026("Logan Paul", "/2026-headshots/portraits/logan-paul.jpg")).toBeNull();
+    expect(portraitAttribution2026("Logan Paul", "/2026-headshots/portraits/logan-paul-c.jpg")).toBeNull();
   });
 });

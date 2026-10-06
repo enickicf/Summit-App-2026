@@ -23,7 +23,7 @@ describe.each([
     expect(section).toContain("<h2>Co-Chairs</h2>");
     expect(section).toContain("<h3>Cherrial Odell</h3><p>Inspiring Children Alumna</p>");
     // Owner-supplied photo (Sept 21) replaces the ICF cutout.
-    expect(section.match(/<img[^>]*alt="Cherrial Odell"[^>]*>/)?.[0]).toContain("cherrial-odell-2.jpg");
+    expect(section.match(/<img[^>]*alt="Cherrial Odell"[^>]*>/)?.[0]).toContain("cherrial-odell-2-c.jpg");
     expect(html.replace(section, "")).not.toContain("Cherrial Odell");
     expect(directoryPeople(snapshot).map(person => person.name)).not.toContain("Cherrial Odell");
     expect(confirmedSummitGuests2026).not.toContain("Cherrial Odell");

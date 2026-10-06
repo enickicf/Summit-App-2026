@@ -52,7 +52,7 @@ describe("website reviewed directory", () => {
   it("uses the reviewed 2026 Airtable portraits without copying expiring attachment URLs", () => {
     expect(personPortrait("Dr. Wendy Oliver-Pyatt")).toBe("/2026-headshots/portraits/wendy-oliver-pyatt-2.jpg");
     expect(personPortrait("Jon Hershfield")).toBe("/2026-headshots/portraits/jon-hershfield-2.jpg");
-    expect(personPortrait("Steve Wozniak")).toBe("/2026-headshots/portraits/steve-wozniak-2.jpg");
+    expect(personPortrait("Steve Wozniak")).toBe("/2026-headshots/portraits/steve-wozniak-2-c.jpg");
     expect(personPortrait("Dr. Blaise Aguirre")).toBe("/2026-headshots/portraits/blaise-aguirre.jpg");
   });
 });
