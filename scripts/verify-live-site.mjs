@@ -49,7 +49,7 @@ export const pageExpectations = Object.freeze({
   "/2025": { minImages: 40, text: ["Meet Our Guests"] },
   "/awards/2026": { minPersonLinks: 40, text: ["The 2026 Lineup", "Founders"], site: "awards" },
   "/awards/2025": { minPersonLinks: 40, text: ["2025 Award Winners"], site: "awards" },
-  "/partners": { minImages: 40, text: ["Founding Partners"] },
+  "/partners": { minImages: 40, text: ["Presented by"] }, // Oct 5: "Founding Partners" wording retired
   "/partners/2025": { minImages: 15 },
   "/schedule": { minSessions: 15, text: ["November"] },
   "/venue": { text: ["Wynn"] },
