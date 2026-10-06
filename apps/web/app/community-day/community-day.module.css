@@ -34,7 +34,8 @@
 .when { display:flex; flex-direction:column; margin:24px 0 0; color:#ffffff; }
 .whenDate { font-size:clamp(28px,3vw,42px); font-weight:700; line-height:1.2; }
 .whenTime { margin-top:2px; font-size:clamp(28px,3vw,42px); font-weight:700; line-height:1.2; color:#d0d4ea; font-variant-numeric:tabular-nums; }
-.whenAwards { margin-top:6px; font-size:clamp(20px,2.1vw,28px); font-weight:700; line-height:1.2; color:#ffffff; font-variant-numeric:tabular-nums; }
+/* Owner (Oct 6): both time lines in the same blue, so the times read as one pair. */
+.whenAwards { margin-top:6px; font-size:clamp(20px,2.1vw,28px); font-weight:700; line-height:1.2; color:#d0d4ea; font-variant-numeric:tabular-nums; }
 .whenPlace { margin-top:12px; font-size:18px; font-weight:500; line-height:1.5; }
 /* Trent (Oct 6): the Awards Show block after the details. */
 .awardsInfo { padding:72px max(24px,calc((100% - 900px)/2)) 80px; background:#1c1a2e; color:#ffffff; text-align:center; }
