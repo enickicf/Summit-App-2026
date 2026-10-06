@@ -19,7 +19,7 @@ export const communityDay2026 = {
   // Owner (Oct 1): Community Day runs 5:45–7:15 PM; doors remain 5:30 PM.
   heroTime: "5:45–7:15 PM",
   // Owner (Oct 6): the Awards Show time sits in the header too, so an Awards guest landing here sees both.
-  heroAwardsShowTime: "7:30–10:00 PM",
+  heroAwardsTime: "Awards Show 7:30–10:00 PM",
   time: "5:45–7:15 PM",
   doors: "5:30 PM",
   venue: awards2026Editorial.venue,

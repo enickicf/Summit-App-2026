@@ -38,15 +38,12 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
         </h1>
         <p className={styles.heroPowered}>Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong></p>
         {/* Owner (Sept 29): the date and time must read at a glance the moment the page opens. */}
-        {/* Owner (Oct 6): date and venue on one line, then the two parts of the evening each with its name, times in blue,
-            so nothing in the header has to be guessed at. */}
-        {over ? <p className={styles.when}>{postEventLabel}</p> : <div className={styles.when}>
-          <p className={styles.whenLine}><time className={styles.whenDate} dateTime={day.dateTime}>Monday, November 2</time><span className={styles.whenPlace}>{day.venue}</span></p>
-          <dl className={styles.whenTimes}>
-            <div><dt>Nevada Mental Health Day</dt><dd>{day.heroTime}</dd></div>
-            <div><dt>Not Alone Awards Show</dt><dd>{day.heroAwardsShowTime}</dd></div>
-          </dl>
-        </div>}
+        {over ? <p className={styles.when}>{postEventLabel}</p> : <p className={styles.when}>
+          <time className={styles.whenDate} dateTime={day.dateTime}>Monday, November 2</time>
+          <span className={styles.whenTime}>{day.heroTime}</span>
+          <span className={styles.whenAwards}>{day.heroAwardsTime}</span>
+          <span className={styles.whenPlace}>{day.venue}</span>
+        </p>}
         <div className={styles.heroButtons} id="community-day-actions">
           {!over && <a className={styles.button} href={rsvpUrl} target="_blank" rel="noopener">Request free tickets</a>}
           {/* Scrolls down to the "What is Community Day?" section on this page. */}

@@ -35,7 +35,8 @@ describe("Community Day page", () => {
     expect(heroHtml.replace(/&#x27;/g, "'")).toContain(`alt="${communityDay2026.heroPhotoAlt}"`);
     expect(heroHtml).toContain("encore-theater-community-day");
     const hero = text(heroHtml);
-    expect(hero).toContain("Presented by Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Monday, November 2 Encore Theater at Wynn Las Vegas Nevada Mental Health Day 5:45–7:15 PM Not Alone Awards Show 7:30–10:00 PM Request free tickets Info");
+    expect(hero).toContain("Presented by Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Monday, November 2 5:45–7:15 PM Awards Show 7:30–10:00 PM Encore Theater at Wynn Las Vegas Request free tickets Info");
+    expect(hero).not.toContain("Not Alone");
     expect(hero).not.toMatch(/Doors open|A free panel/);
   });
 
@@ -93,7 +94,7 @@ describe("Community Day page", () => {
     // Trent (Oct 6): the Awards Show information (when, where, host, broadcast) IS on this page, after the details.
     for (const other of ["Highlights", "Pre-Show", "pre-show", "No Solicitation"]) expect(page).not.toContain(other);
     expect(text(section(html, "awards-show-title"))).toContain("The Not Alone Awards Show");
-    expect(page).toContain("Not Alone Awards Show 7:30–10:00 PM");
+    expect(page).toContain("Awards Show 7:30–10:00 PM");
     expect(html.indexOf('id="awards-show"')).toBeGreaterThan(html.indexOf('id="schedule"'));
     for (const name of ["The 2026 Lineup", "Jewel", "Steve Wozniak", "Loni Love"]) expect(page).toContain(name);
     expect(html.indexOf("The 2026 Lineup")).toBeGreaterThan(html.indexOf('id="community-day-actions"'));
