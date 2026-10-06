@@ -137,7 +137,7 @@ describe("Community Day page", () => {
     expect(page).toContain("Submitting this RSVP does not guarantee admission and is not a ticket. Your request will be added to our ticket waiting list. We will email you if your ticket is approved.");
     expect(page).toContain("up to ten per request");
     expect(page).toContain("Enter your organization in the Organization field.");
-    expect(page).toContain("Turn on one of the three: both Nevada Mental Health Day and the Awards Show, only Nevada Mental Health Day, or only the Awards Show.");
+    expect(page).toContain("Turn on one of the three: both Nevada Mental Health Day and the Awards Show, only Nevada Mental Health Day, or only the Awards Show (and not Nevada Mental Health Day).");
     // No personal contact details on the page; questions go to ICF's contact page.
     expect(html).not.toMatch(/tel:|mailto:/);
     expect(html).toContain('href="/contact"');
