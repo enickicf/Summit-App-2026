@@ -1,7 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn() }), usePathname: () => "/schedule", useSearchParams: () => new URLSearchParams() }));
-import { isWorkshopSignup, siteVisitActivity, workshopCategory, workshopExclusivityNote } from "./morning-workshops";
+import { isWorkshopSignup, siteVisitActivity, workshopCategory, workshopExclusivityNote, workshopSignupsOpen } from "./morning-workshops";
 import { handleWorkshopPost } from "../app/api/workshops/route";
 import { memorySubmissionStore, newSubmission, workshopPayloadSchema, type WorkshopSubmission } from "./staff/store";
 import { StaffPortal, groupSiteVisit, groupWorkshops } from "../components/staff-portal";
@@ -14,6 +14,9 @@ describe("workshop + Tennis / High Tea sign-ups (owner, Sept 28)", () => {
     expect(workshopCategory("Tennis (ICF Site Visit)")).toBe("siteVisit");
     expect(workshopCategory("High Tea (ICF Site Visit)")).toBe("siteVisit");
     for (const title of ["Summit Sessions", "Lunch", "Awards Show", "Poker Night", "Founders Dinner", "Break"]) expect(isWorkshopSignup({ title }), title).toBe(false);
+    // Owner (Oct 5): sign-ups are closed for now, so no session shows a Sign up button.
+    expect(workshopSignupsOpen).toBe(false);
+    for (const title of ["Wellness & Community Programming", "Wellness Activity", "Tennis (ICF Site Visit)", "High Tea (ICF Site Visit)"]) expect(isWorkshopSignup({ title }), title).toBe(false);
     expect(siteVisitActivity("Tennis (ICF Site Visit)")).toBe("tennis");
     expect(siteVisitActivity("High Tea (ICF Site Visit)")).toBe("highTea");
   });
@@ -27,18 +30,14 @@ describe("workshop + Tennis / High Tea sign-ups (owner, Sept 28)", () => {
     expect(workshopExclusivityNote).toContain("will be removed");
   });
 
-  it("stores a sign-up with its category, rejects other sessions and missing names, drops honeypot submissions", async () => {
+  it("refuses new sign-ups while they are closed (owner, Oct 5) and keeps the payload rules for when they reopen", async () => {
     const store = memorySubmissionStore();
     const post = (body: unknown) => handleWorkshopPost(new Request("https://notalonesummit.org/api/workshops", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }), store);
-    expect((await post({ sessionId: "s1", sessionTitle: "Wellness Activity", sessionDay: "Tuesday, November 3", sessionTime: "8:00 AM", name: "Lisa Lundt" })).status).toBe(200);
-    expect((await post({ sessionId: "t1", sessionTitle: "Tennis (ICF Site Visit)", sessionDay: "Thursday, November 5", sessionTime: "10:00 AM", name: "Lisa Lundt" })).status).toBe(200);
-    expect((await post({ sessionId: "x", sessionTitle: "Summit Sessions", name: "Lisa Lundt" })).status).toBe(400);
-    expect((await post({ sessionId: "s1", sessionTitle: "Wellness Activity", name: "L" })).status).toBe(400);
-    expect((await post({ sessionId: "s1", sessionTitle: "Wellness Activity", name: "Bot", website: "spam" })).status).toBe(200);
-    const rows = await store.list("workshop");
-    expect(rows.map(r => [r.name, r.category])).toEqual(expect.arrayContaining([["Lisa Lundt", "workshop"], ["Lisa Lundt", "siteVisit"]]));
-    expect(rows).toHaveLength(2);
+    expect((await post({ sessionId: "s1", sessionTitle: "Wellness Activity", sessionDay: "Tuesday, November 3", sessionTime: "8:00 AM", name: "Lisa Lundt" })).status).toBe(410);
+    expect((await post({ sessionId: "t1", sessionTitle: "Tennis (ICF Site Visit)", sessionDay: "Thursday, November 5", sessionTime: "10:00 AM", name: "Lisa Lundt" })).status).toBe(410);
+    expect(await store.list("workshop")).toHaveLength(0);
     expect(workshopPayloadSchema.safeParse({ sessionId: "s1", sessionTitle: "Wellness Activity", name: "Ok Name" }).success).toBe(true);
+    expect(workshopPayloadSchema.safeParse({ sessionId: "s1", sessionTitle: "Wellness Activity", name: "L" }).success).toBe(false);
   });
 
   it("portal: workshops grouped by session; Tennis / High Tea per person with badges for one or both", () => {

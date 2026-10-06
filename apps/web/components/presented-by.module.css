@@ -1,0 +1,42 @@
+/* "Presented by" lockup: Inspiring Children Foundation | NAMI (Aphrah, Oct 3; owner, Oct 5: on every 2026 page). */
+.presentedBy { display:flex; flex-direction:column; align-items:flex-start; gap:12px; }
+.label { color:rgba(255,255,255,.78); font-size:15px; font-weight:700; letter-spacing:.2em; line-height:1; text-transform:uppercase; }
+.logos { display:flex; align-items:center; gap:26px; }
+.logos img { display:block; width:auto; height:auto; }
+/* Community Day title size (owner, Oct 4: the logos a bit bigger than the first version). */
+.icf { height:78px !important; }
+.nami { height:54px !important; }
+.divider { width:1px; height:58px; background:rgba(255,255,255,.4); }
+@media (max-width:760px) {
+  .presentedBy { gap:10px; }
+  .label { font-size:13px; }
+  .logos { gap:18px; }
+  .icf { height:60px !important; }
+  .nami { height:42px !important; }
+  .divider { height:46px; }
+}
+
+/* Hero size: above the Awards / Summit logo. Smaller than the Community Day title version so the event logo
+   stays the lead mark and the stack keeps its balance; still large enough to read both logos at a glance. */
+.heroSize { gap:10px; margin:0 0 22px; }
+.heroSize .label { font-size:12px; letter-spacing:.22em; }
+.heroSize .logos { gap:20px; }
+.heroSize .icf { height:58px !important; }
+.heroSize .nami { height:40px !important; }
+.heroSize .divider { height:44px; }
+@media (max-width:600px) {
+  .heroSize { gap:8px; margin-bottom:16px; }
+  .heroSize .label { font-size:11px; }
+  .heroSize .logos { gap:14px; }
+  .heroSize .icf { height:44px !important; }
+  .heroSize .nami { height:30px !important; }
+  .heroSize .divider { height:34px; }
+}
+@media (max-width:360px) {
+  .heroSize .icf { height:38px !important; }
+  .heroSize .nami { height:26px !important; }
+}
+
+/* On a light page the logos are the dark files and the label/divider turn dark. */
+.onLight .label { color:rgba(0,0,0,.6); }
+.onLight .divider { background:rgba(0,0,0,.25); }

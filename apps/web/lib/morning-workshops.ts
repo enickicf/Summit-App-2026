@@ -5,6 +5,9 @@
 // Sign-ups are name-only; the sign-up is exclusive to Summit attendees (invitation-only) and staff remove
 // anyone not on the guest list.
 export type WorkshopCategory = "workshop" | "siteVisit";
+// Owner (Oct 5, 2026): sign-ups are closed for now ("we're going to sit on this"): no Sign up button on the schedule
+// and the API refuses new sign-ups. Flip to true to bring them back (the portal section and stored sign-ups stay).
+export const workshopSignupsOpen = false;
 export const workshopExclusivityNote = "This is exclusive to attendees of the Not Alone Summit, an invitation-only event. Sign-ups from anyone not on our guest list will be removed.";
 
 export function workshopCategory(title: string): WorkshopCategory | null {
@@ -13,7 +16,7 @@ export function workshopCategory(title: string): WorkshopCategory | null {
   if (/^tennis\b/.test(t) || /^high tea\b/.test(t)) return "siteVisit";
   return null;
 }
-export const isWorkshopSignup = (item: { title: string }) => workshopCategory(item.title) !== null;
+export const isWorkshopSignup = (item: { title: string }) => workshopSignupsOpen && workshopCategory(item.title) !== null;
 export function siteVisitActivity(title: string): "tennis" | "highTea" | null {
   const t = title.trim().toLowerCase();
   return /^tennis\b/.test(t) ? "tennis" : /^high tea\b/.test(t) ? "highTea" : null;

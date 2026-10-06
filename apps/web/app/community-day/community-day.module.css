@@ -66,18 +66,6 @@
   .details dd, .details dd.locationValue { font-size:26px; }
 }
 
-/* The Cohen Foundation leads the partnership block; the three supporting organizations share equal cards. */
-.partners { padding:72px max(24px,calc((100% - 1120px)/2)) 80px; background:#eef1f8; text-align:center; }
-.page .partners h2 { margin:0 auto 40px; max-width:760px; font-size:clamp(34px,4vw,50px); line-height:1.08; text-wrap:balance; }
-.partnerGrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; }
-.partnerCard { display:flex; min-width:0; min-height:190px; padding:24px; flex-direction:column; align-items:center; justify-content:center; gap:18px; border:1px solid #d0d4ea; border-radius:14px; background:#ffffff; }
-.partnerCard > span { color:#4a5faa; font-size:14px; font-weight:700; letter-spacing:.06em; line-height:1.2; text-transform:uppercase; }
-.featuredPartner { grid-column:1 / -1; min-height:260px; }
-.partnerLogo { position:relative; width:min(100%,280px); height:110px; }
-.partnerLogo img { object-fit:contain; }
-.featuredPartner .partnerLogo { width:min(100%,380px); height:170px; }
-.icfPartner .partnerLogo { width:min(100%,250px); height:130px; }
-.wynnPartner .partnerLogo { width:min(100%,320px); height:124px; }
 
 .tickets { padding:80px max(24px,calc((100% - 860px)/2)) 88px; background:#f4f5fa; }
 .steps { margin:28px 0 32px; padding:0; list-style:none; counter-reset:step; }
@@ -103,15 +91,6 @@
   .details dt { font-size:17px; }
   .details dd { font-size:24px; }
   .details dd span { margin-top:6px; font-size:16px; }
-  .partners { padding:56px 16px 64px; }
-  .page .partners h2 { margin-bottom:30px; font-size:34px; }
-  .partnerGrid { grid-template-columns:1fr; gap:16px; }
-  .featuredPartner { grid-column:auto; min-height:220px; }
-  .partnerCard { min-height:170px; padding:22px 18px; }
-  .featuredPartner .partnerLogo { width:min(78vw,340px); height:150px; }
-  .partnerLogo { width:min(72vw,280px); height:105px; }
-  .icfPartner .partnerLogo { width:min(66vw,240px); height:128px; }
-  .wynnPartner .partnerLogo { width:min(78vw,310px); height:116px; }
   .tickets { padding:56px 16px 64px; }
 }
 /* Very narrow phones (320-360px): smaller title and date so nothing touches the screen edge. */
@@ -132,22 +111,6 @@
   .hero .button { min-height:46px; padding:11px 12px; font-size:14px; }
 }
 
-/* Aphrah (Oct 3): "Presented by ICF & NAMI" lockup under the date and venue. */
-.presentedBy { display:flex; flex-direction:column; gap:12px; margin-top:26px; }
-.presentedLabel { color:rgba(255,255,255,.78); font-size:15px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; }
-.presentedLogos { display:flex; align-items:center; gap:26px; }
-.presentedLogos img { display:block; width:auto; height:auto; }
-.presentedIcf { height:78px !important; }
-.presentedNami { height:54px !important; }
-.presentedDivider { width:1px; height:58px; background:rgba(255,255,255,.4); }
-@media(max-width:760px) {
-  .presentedBy { margin-top:20px; gap:10px; }
-  .presentedLabel { font-size:13px; }
-  .presentedLogos { gap:18px; }
-  .presentedIcf { height:60px !important; }
-  .presentedNami { height:42px !important; }
-  .presentedDivider { height:46px; }
-}
 /* Owner (Oct 3): the lockup sits above the title. */
 .heroCopy > .presentedBy { margin:0 0 30px; }
 @media(max-width:760px) { .heroCopy > .presentedBy { margin:0 0 20px; } }

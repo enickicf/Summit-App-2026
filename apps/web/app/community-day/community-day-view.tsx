@@ -10,6 +10,8 @@ import type { AwardsPartnerSite } from "../../lib/awards-partner-sites";
 import { getSiteSnapshot } from "../../lib/snapshot";
 import heroPhoto from "./encore-theater-community-day.png";
 import styles from "./community-day.module.css";
+import { PresentedBy } from "../../components/presented-by";
+import { EventPartners } from "../../components/event-partners";
 
 
 // Owner (Oct 4): the private partner copies (/nami/community-day, ...) are this same page with the ticket
@@ -26,14 +28,7 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
       <Image className={styles.heroPhoto} src={heroPhoto} alt={day.heroPhotoAlt} fill sizes="100vw" loading="eager" fetchPriority="high" unoptimized />
       <div className={styles.heroCopy}>
         {/* Aphrah (Oct 3): "Presented by ICF & NAMI" in the header: the logo lockup sits above the title (owner, Oct 3: no "Not Alone" mark above the title). */}
-        <div className={styles.presentedBy}>
-          <span className={styles.presentedLabel}>Presented by</span>
-          <span className={styles.presentedLogos}>
-            <img className={styles.presentedIcf} src="/images/icf-logo-white.png" alt="Inspiring Children Foundation" width={1500} height={1136} />
-            <span className={styles.presentedDivider} aria-hidden="true" />
-            <img className={styles.presentedNami} src="/2026-partners/nami-white.png" alt="NAMI, National Alliance on Mental Illness" width={1851} height={712} />
-          </span>
-        </div>
+        <PresentedBy className={styles.presentedBy} />
         <h1 id="community-day-title" className={styles.heroTitleMark} aria-label={day.name}>
           <strong>Community<br />Day</strong>
         </h1>
@@ -44,7 +39,7 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
           <span className={styles.whenPlace}>{day.venue}</span>
         </p>}
         <div className={styles.heroButtons} id="community-day-actions">
-          {!over && <a className={styles.button} href={rsvpUrl}>Request free tickets</a>}
+          {!over && <a className={styles.button} href={rsvpUrl} target="_blank" rel="noopener">Request free tickets</a>}
           {/* Scrolls down to the "What is Community Day?" section on this page. */}
           <a className={`${styles.button} ${styles.outline}`} href="#what-is-community-day">Info</a>
         </div>
@@ -61,20 +56,8 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
       <p className={styles.missionDescription}>{day.about}</p>
     </section>
 
-    <section className={styles.partners} aria-labelledby="community-partners-title">
-      <h2 id="community-partners-title">Presented With Our Community Partners</h2>
-      <div className={styles.partnerGrid}>
-        {day.partners.map(partner => <div
-          className={`${styles.partnerCard} ${partner.featured ? styles.featuredPartner : ""} ${partner.name === "Wynn Las Vegas" ? styles.wynnPartner : ""} ${partner.name === "Inspiring Children Foundation" ? styles.icfPartner : ""}`}
-          key={partner.name}
-        >
-          <span>{partner.role}</span>
-          <div className={styles.partnerLogo}>
-            <Image src={partner.logo} alt={partner.name} fill sizes={partner.featured ? "(max-width: 760px) 72vw, 380px" : "(max-width: 760px) 64vw, 280px"} />
-          </div>
-        </div>)}
-      </div>
-    </section>
+    {/* Owner (Oct 5): the shared partner block (Cohen "Powered by", ICF x NAMI "Presented by" in one box, Wynn). */}
+    <EventPartners tone="light" id="community-day-partners" />
 
     <section className={styles.details} id="schedule" aria-labelledby="details-title">
       <h2 id="details-title">The Details</h2>
@@ -84,7 +67,7 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
     {!over && <section className={styles.tickets} id="tickets" aria-labelledby="tickets-title">
       <h2 id="tickets-title">Request free tickets</h2>
       <ol className={styles.steps}>{day.tickets.steps.map(step => <li key={step.title}><h3>{step.title}</h3><p>{step.detail}</p></li>)}</ol>
-      <a className={`${styles.button} ${styles.solid}`} href={rsvpUrl}>Open the RSVP form<ArrowUpRight size={18} aria-hidden="true" /></a>
+      <a className={`${styles.button} ${styles.solid}`} href={rsvpUrl} target="_blank" rel="noopener">Open the RSVP form<ArrowUpRight size={18} aria-hidden="true" /></a>
       <p className={styles.notice}>{day.tickets.waitingList}</p>
       <p className={styles.questions}>Questions? <Link href="/contact">Contact the Inspiring Children Foundation</Link></p>
     </section>}

@@ -44,7 +44,8 @@ export function HeroRecap({ video = "summit", className }: { video?: "summit" | 
     reduce.addEventListener("change", update);
     return () => reduce.removeEventListener("change", update);
   }, []);
-  const wrapper = `${styles.backgroundVideo} ${styles.recapBackground}${className ? ` ${className}` : ""}`;
+  // The film class picks the face focus line for the crop (summit-refresh.module.css .recapSummit / .recapAwards).
+  const wrapper = `${styles.backgroundVideo} ${styles.recapBackground} ${video === "summit" ? styles.recapSummit : styles.recapAwards}${className ? ` ${className}` : ""}`;
   if (file) return <div className={wrapper} style={{ background: heroColors[video] }} aria-hidden="true">
     <video className={styles.recapPoster} src={file} autoPlay muted loop playsInline preload="auto" disablePictureInPicture tabIndex={-1} />
   </div>;

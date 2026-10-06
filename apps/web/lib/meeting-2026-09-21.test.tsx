@@ -72,10 +72,12 @@ describe("Sept 21 meeting website direction", () => {
     expect([...positions].sort((a, b) => a - b)).toEqual(positions);
     // Owner (Sept 21): the Featuring list and Cohen logo are removed from the home page.
     expect(summit).not.toContain(">Featuring<");
-    // Owner (Sept 23): the Cohen logo is back on the home page, but only inside the Founding Partners block under Founders.
+    // Owner (Sept 23 / Oct 5): the Cohen logo is back on the home page, but only inside the "Our Partners" block
+    // (id="summit-partners") under Founders.
     const cohenLogos = [...summit.matchAll(/alt="Steven &amp; Alexandra Cohen Foundation"/g)].length;
     expect(cohenLogos).toBe(1);
-    expect(summit.slice(summit.indexOf('id="founding-partners"'))).toContain('alt="Steven &amp; Alexandra Cohen Foundation"');
+    expect(summit.indexOf('id="summit-partners"')).toBeGreaterThan(-1);
+    expect(summit.slice(summit.indexOf('id="summit-partners"'))).toContain('alt="Steven &amp; Alexandra Cohen Foundation"');
     expect(summit).toContain(`href="${awards2026Program.challengeUrl}"`);
     expect(summit).toContain(`href="${awards2026Program.toolkitUrl}"`);
   });

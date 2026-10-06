@@ -41,9 +41,11 @@ describe("curated Awards people", () => {
 
   it("renders Awards display people once, grouping the Wolfingtons without changing canonical records", () => {
     const html = renderToStaticMarkup(<OriginalAwardsPage year={2026} snapshot={event2026Snapshot} />);
-    const joint = awardsDisplayPeople(event2026Snapshot).find(person => person.name === "Sean & Ana Wolfington")!;
+    // Owner (Oct 5): couples read with "and", not an ampersand.
+    const joint = awardsDisplayPeople(event2026Snapshot).find(person => person.name === "Sean and Ana Wolfington")!;
     // Owner (Sept 22): a non-celebrity founder appears in the Founders section only, so the joint card shows once.
-    expect(html.split("<h3>Sean &amp; Ana Wolfington</h3>")).toHaveLength(2);
+    expect(html.split("<h3>Sean and Ana Wolfington</h3>")).toHaveLength(2);
+    expect(html).not.toContain("Sean &amp; Ana Wolfington");
     expect(html.split(`href="/directory/${joint.slug}?from=awards"`)).toHaveLength(2);
     expect(html).not.toContain("<h3>Sean Wolfington</h3>");
     expect(html).not.toContain("<h3>Ana Wolfington</h3>");

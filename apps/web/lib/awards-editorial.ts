@@ -14,7 +14,6 @@ export const awards2026Editorial = {
   ],
   // Owner (Sept 21, later): the Awards hero says only "Doors open 6:00 PM"; the rest of the evening
   // is listed further down the page.
-  heroDoorsOpen: "5:30 PM", // owner, Sept 22
   timeZone: "America/Los_Angeles",
   rsvpUrl: "https://notaloneawards.org/rsvp", // Sept 30: normal address; proxied to the RSVP site (netlify.toml)
   // Owner (Sept 23): the nomination form lives beside the RSVP form and feeds the staff portal.

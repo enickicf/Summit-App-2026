@@ -17,9 +17,12 @@ describe("2026 partners page", () => {
   it("keeps the presenting and premier sponsors and lists Airtable partners by their Select group", async () => {
     const { default: PartnersPage } = await import("./page");
     const html = renderToStaticMarkup(await PartnersPage());
-    // Sept 22 meeting: Founding Partners (Cohen Foundation, NAMI) first, then Wynn, then the brands with Vendors before the Gifting Suite.
-    expect(html).toContain("Founding Partners");
-    expect(html.indexOf("Founding Partners")).toBeLessThan(html.indexOf("Premier Sponsor"));
+    // Owner (Oct 5): "Powered by" (Cohen Foundation) then "Presented by" (ICF x NAMI) first, then Wynn, then the brands
+    // with Vendors before the Gifting Suite. No "Founding Partners" or "community partner" wording anywhere.
+    expect(html).not.toContain("Founding Partners");
+    expect(html.toLowerCase()).not.toContain("community partner");
+    expect(html.indexOf(">Powered by<")).toBeLessThan(html.indexOf(">Presented by<"));
+    expect(html.indexOf(">Presented by<")).toBeLessThan(html.indexOf("Premier Sponsor"));
     expect(html).toContain("Premier Sponsor");
     expect(html).not.toContain("Presenting Sponsor");
     expect(html.indexOf(">Vendors<")).toBeLessThan(html.indexOf("Gifting Suite Partners"));

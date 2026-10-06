@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { SummitLink } from "./summit-link";
 import { ArrowDown, ArrowUpRight, Play } from "lucide-react";
 import type { EventSnapshot } from "@not-alone/validation";
 import source from "../lib/original-sites.json";
@@ -25,6 +24,8 @@ import styles from "./original-event-page.module.css";
 import { HeroRecap, SummitVideo } from "./summit-video";
 import { HighlightsVideo } from "./highlights-video";
 import { AwardsInfoButton } from "./awards-info-button";
+import { PresentedBy } from "./presented-by";
+import { awardsShowStart2026 } from "../lib/event-partners-2026";
 import summitStyles from "./summit-theme.module.css";
 
 type SourceSection = (typeof source.summit.sections)[number];
@@ -83,7 +84,8 @@ function uniquePeople(people: ReturnType<typeof directoryPeople>) {
 export function YearNavigation({ year }: { year: 2025 | 2026 }) {
   return <nav className={styles.years} aria-label="Summit year">
     {([2026, 2025] as const).map(value => <Link key={value} aria-current={year === value ? "page" : undefined} href={value === 2025 ? "/2025" : "/"}>{value}{value === 2025 ? " archive" : ""}</Link>)}
-    <Link href={`/awards/${year}`}>Awards</Link>
+    {/* Owner (Oct 5): the Summit links to the Awards in a new tab. */}
+    <a href={`/awards/${year}`} target="_blank" rel="noopener">Awards</a>
     {year === 2026 && <Link href="/schedule">Event schedule</Link>}
   </nav>;
 }
@@ -236,6 +238,8 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     <section className={`${summitStyles.hero} ${summitStyles.heroFormat}`} aria-labelledby="summit-title">
       <SummitVideo background />
       <div className={summitStyles.heroCopy}>
+        {/* Owner (Oct 5): "Presented by" Inspiring Children x NAMI above the Summit logo, as on Community Day. */}
+        {!archive && <PresentedBy size="hero" />}
         <h1 id="summit-title" className={summitStyles.heroLogo}>
           <SiteImage src="/images/summit-logo.png" alt="" sizes="(max-width: 600px) 170px, 250px" loading="eager" fetchPriority="high" />
           <span className={styles.hidden}>Not Alone Summit {year}</span>
@@ -290,7 +294,7 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
         </div>
       </div></section>
     </>}
-    <section className={`${styles.band} ${styles.closing}`} id="rsvp"><SiteImage src={summit[14]!.images[1]!.src} alt="" sizes="250px" /><h2>Thank you for your interest!</h2><p>{archive ? "Explore the 2025 Not Alone Awards and the people behind the gathering." : "Please contact us to inquire about attendance."}</p><Link href={archive ? "/awards/2025" : "/contact"} className={styles.action}>{archive ? "2025 Not Alone Awards" : "Contact Us"}</Link></section>
+    <section className={`${styles.band} ${styles.closing}`} id="rsvp"><SiteImage src={summit[14]!.images[1]!.src} alt="" sizes="250px" /><h2>Thank you for your interest!</h2><p>{archive ? "Explore the 2025 Not Alone Awards and the people behind the gathering." : "Please contact us to inquire about attendance."}</p>{archive ? <a href="/awards/2025" className={styles.action} target="_blank" rel="noopener">2025 Not Alone Awards</a> : <Link href="/contact" className={styles.action}>Contact Us</Link>}</section>
   </main>;
 }
 
@@ -321,6 +325,9 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
           only for visitors who ask their device to reduce motion. */}
       <HeroRecap video="awards" poster={null} className={styles.heroVideo} />
       <div className={styles.heroContent}>
+        {/* Owner (Oct 5): "Presented by" Inspiring Children x NAMI above the Awards logo (the Community Day lockup);
+            the Cohen Foundation "Powered by" credit below the logo is unchanged. */}
+        <PresentedBy size="hero" />
         <h1 id="awards-title" className={styles.awardsLogo}>
           <SiteImage src="/images/na-awards-logo-white.png" alt="" sizes="(max-width: 600px) 180px, 250px" loading="eager" fetchPriority="high" />
           <span className={styles.hidden}>Not Alone Awards 2026</span>
@@ -328,13 +335,13 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
         <p className={styles.heroPowered}>Powered by<strong>{awards2026Editorial.foundation}</strong></p>
         {/* Owner (Sept 23): from Nov 6, 2026 the date line reads "2027 — To Be Announced Soon." automatically. */}
         <p className={styles.heroDate}>{isPostEvent() ? postEventLabel : <>{show && !canceled ? <time dateTime={show.startUtc}>{withoutYear(date, 2026)}</time> : withoutYear(date, 2026)}<span className={styles.heroDateVenue}> · {venue}</span></>}</p>
-        {/* Owner (Sept 21): only the doors time up top; the rest of the evening is further down. */}
-        {show && !canceled && <dl className={styles.heroScheduleTimes} aria-label="Doors open"><div><dt>Doors Open</dt><dd>{awards2026Editorial.heroDoorsOpen}</dd></div></dl>}
+        {/* Owner (Oct 5): the Awards Show time up top (7:30 PM everywhere); the rest of the evening is further down. */}
+        {show && !canceled && <dl className={styles.heroScheduleTimes} aria-label="Awards Show start"><div><dt>Awards Show</dt><dd>{awardsShowStart2026}</dd></div></dl>}
         {!canceled && show && !/to be confirmed/i.test(show.eligibilityScope.label) && <p className={styles.heroInvitation}>{show.eligibilityScope.label}</p>}
         {/* Owner (Oct 4): RSVP and Info up top; Info scrolls to the mission + schedule, and the iHeartRadio
             stream button moved to its own band right before the lineup. */}
         <div className={styles.awardsActions}>
-          {!canceled && <a className={styles.action} href={rsvpUrl} aria-label="RSVP for the Not Alone Awards">RSVP</a>}
+          {!canceled && <a className={styles.action} href={rsvpUrl} target="_blank" rel="noopener" aria-label="RSVP for the Not Alone Awards (opens in a new tab)">RSVP</a>}
           <AwardsInfoButton className={styles.infoButton}>Info</AwardsInfoButton>
         </div>
         {eveningTimes.length > 0 && <a className={styles.heroScheduleLink} href="#evening">View full schedule<ArrowDown size={15} aria-hidden="true" /></a>}
@@ -394,7 +401,6 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
         <a className={styles.action} href={awards2026Program.challengeUrl} target="_blank" rel="noreferrer">Join the Challenge <ArrowUpRight size={17} aria-hidden="true" /></a>
         <a className={styles.textAction} href={awards2026Program.toolkitUrl} target="_blank" rel="noreferrer">Get the free Not Alone toolkit <ArrowUpRight size={17} aria-hidden="true" /></a>
       </div>
-      <SummitLink href="/" className={styles.textAction}>Explore the Not Alone Summit</SummitLink>
     </section>
     <section className={`${styles.band} ${styles.policy}`} id="no-solicitation" aria-labelledby="no-solicitation-title"><h2 id="no-solicitation-title">{awards2026Program.noSolicitation.title}</h2><p>{awards2026Program.noSolicitation.body}</p></section>
   </main>;

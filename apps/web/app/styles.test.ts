@@ -54,7 +54,11 @@ function literalClasses(path: string) {
   const source = ts.createSourceFile(path, readFileSync(path, "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
   const classes = new Set<string>();
   const collect = (node: ts.Node) => {
-    if (ts.isStringLiteralLike(node) || ts.isTemplateHead(node) || ts.isTemplateMiddle(node) || ts.isTemplateTail(node)) {
+    // A literal compared inside the expression (`size === "hero" ? styles.heroSize : ""`) is a prop value,
+    // not a class name applied to the element.
+    const comparisons = [ts.SyntaxKind.EqualsEqualsEqualsToken, ts.SyntaxKind.ExclamationEqualsEqualsToken, ts.SyntaxKind.EqualsEqualsToken, ts.SyntaxKind.ExclamationEqualsToken];
+    const compared = ts.isBinaryExpression(node.parent) && comparisons.includes(node.parent.operatorToken.kind);
+    if (!compared && (ts.isStringLiteralLike(node) || ts.isTemplateHead(node) || ts.isTemplateMiddle(node) || ts.isTemplateTail(node))) {
       node.text.split(/\s+/).filter(Boolean).forEach(value => classes.add(value));
     }
     ts.forEachChild(node, collect);

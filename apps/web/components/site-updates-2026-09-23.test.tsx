@@ -58,25 +58,36 @@ describe("Sept 23 site updates", () => {
     expect(html).not.toContain("heroVenue");
   });
 
-  it("Founding Partners (Cohen Foundation + NAMI) sit right under Founders on both sites, with transparent logos", () => {
+  // Owner (Oct 5): the Sept 23 "Founding Partners" block is replaced by "Our Partners" (components/event-partners.tsx):
+  // Powered by (Cohen Foundation), Presented by (ICF x NAMI in one card) and Host venue (Wynn), in the same spot.
+  it("Our Partners (Powered by Cohen / Presented by ICF x NAMI / Host venue Wynn) sit right under Founders on both sites", () => {
     const s = summit();
     const foundersAt = s.indexOf("-founders");
-    const foundingAt = s.indexOf('id="founding-partners"');
+    const partnersAt = s.indexOf('id="summit-partners"');
     const attendeesAt = s.indexOf("-attendees");
     expect(foundersAt).toBeGreaterThan(-1);
-    expect(foundingAt).toBeGreaterThan(foundersAt);
-    expect(attendeesAt).toBeGreaterThan(foundingAt);
+    expect(partnersAt).toBeGreaterThan(foundersAt);
+    expect(attendeesAt).toBeGreaterThan(partnersAt);
     expect(s).toContain("cohen-foundation-give.png");
-    expect(s).toContain("nami.png");
+    expect(s).toContain("/2026-partners/nami.png");
+    expect(s).toContain("/images/icf-logo.webp");
+    expect(s).toContain("/images/wynn-las-vegas-logo.png");
     const a = awards();
     const founders = a.indexOf('aria-label="Founders"');
-    const founding = a.indexOf('id="founding-partners"');
+    const partners = a.indexOf('id="awards-partners"');
     expect(founders).toBeGreaterThan(-1);
-    expect(founding).toBeGreaterThan(founders);
-    expect(founding).toBeLessThan(a.indexOf('id="awards-host"'));
+    expect(partners).toBeGreaterThan(founders);
+    expect(partners).toBeLessThan(a.indexOf('id="awards-host"'));
     expect(a).toContain("cohen-foundation-give-white.png");
     expect(a).toContain("nami-white.png");
-    expect(a).not.toContain("Wynn Las Vegas.png");
+    expect(a).toContain("/images/wynn-las-vegas-logo.png");
+    for (const html of [s, a]) {
+      const block = html.slice(html.indexOf('id="summit-partners"') >= 0 ? html.indexOf('id="summit-partners"') : html.indexOf('id="awards-partners"'));
+      expect(block).toMatch(/>Our Partners<\/h[23]>/);
+      expect(block).toMatch(/>Powered by<\/span>[^]*?>Presented by<\/span>[^]*?alt="Inspiring Children Foundation"[^]*?>×<\/span>[^]*?alt="NAMI, National Alliance on Mental Illness"[^]*?>Host venue<\/span>/);
+      expect(html).not.toMatch(/Founding Partners|community partner/i);
+      expect(html).not.toContain('id="founding-partners"');
+    }
   });
 
   it("says more talent and guests are to be announced right under Who's Coming, as on the Awards site", () => {
@@ -107,10 +118,11 @@ describe("Sept 23 site updates", () => {
     const a = awards();
     expect(a).not.toContain('aria-label="Founders names"');
     expect(a).not.toContain('aria-label="Lineup names"');
-    const founders = a.slice(a.indexOf('aria-label="Founders"'), a.indexOf('id="founding-partners"'));
-    // Sept 28: the McGraws now have a photo (couple composite from Airtable) inside the same grid.
-    expect(founders).toMatch(/jay-erica-mcgraw[^"]*"[^>]*><div><h3>Jay &amp; Erica McGraw<\/h3>/);
-    expect(founders).not.toMatch(/portraitFallback[^"]*" aria-hidden="true">JM</);
+    const founders = a.slice(a.indexOf('aria-label="Founders"'), a.indexOf('id="awards-partners"'));
+    // Owner (Oct 5): the McGraws are two individual Founder name cards (no photo), monogram squares inside the same grid.
+    expect(founders).toMatch(/portraitFallback[^"]*" aria-hidden="true">JM<\/span><div><h3>Jay McGraw<\/h3>/);
+    expect(founders).toMatch(/portraitFallback[^"]*" aria-hidden="true">EM<\/span><div><h3>Erica McGraw<\/h3>/);
+    expect(founders).not.toMatch(/Jay &amp; Erica McGraw|jay-erica-mcgraw/);
     expect(founders.match(/data-awards-guest=/g)?.length).toBeGreaterThan(10);
   });
 

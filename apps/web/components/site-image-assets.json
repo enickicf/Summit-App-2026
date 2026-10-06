@@ -2084,11 +2084,6 @@
     "height": 900,
     "bytes": 240035
   },
-  "/2026-headshots/portraits/jay-erica-mcgraw.jpg": {
-    "width": 900,
-    "height": 900,
-    "bytes": 165341
-  },
   "/2026-headshots/portraits/karena-dawn-2.jpg": {
     "width": 948,
     "height": 900,
@@ -2288,5 +2283,10 @@
     "width": 98,
     "height": 29,
     "bytes": 7810
+  },
+  "/2026-partners/wise-friend-wordmark.png": {
+    "width": 1200,
+    "height": 948,
+    "bytes": 268608
   }
 }

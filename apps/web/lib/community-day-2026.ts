@@ -34,12 +34,6 @@ export const communityDay2026 = {
     { label: "Awards Show", value: "7:30 PM", note: null },
     { label: "Location", value: "Encore Theater, Wynn Las Vegas", note: null }
   ],
-  partners: [
-    { role: "Powered by", name: "Steven & Alexandra Cohen Foundation", logo: "/images/cohen-foundation-give.png", heroLogo: "/images/cohen-foundation-give-white.png", featured: true },
-    { role: "Presented by", name: "Inspiring Children Foundation", logo: "/images/icf-logo.webp", heroLogo: "/images/icf-logo.webp", featured: false },
-    { role: "Community partner", name: "NAMI, National Alliance on Mental Illness", logo: "/2026-partners/nami.png", heroLogo: "/2026-partners/nami-white.png", featured: false },
-    { role: "Host venue", name: "Wynn Las Vegas", logo: "/images/wynn-las-vegas-logo.png", heroLogo: "/images/wynn-las-vegas-logo.png", featured: false }
-  ],
   tickets: {
     steps: [
       { title: "Open the RSVP form", detail: "Add your name, email and phone, choose how many are in your party (up to ten per request), and add the name, email and phone of each guest." },

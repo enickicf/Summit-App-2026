@@ -1,0 +1,46 @@
+/* Partner block (owner, Oct 5, 2026): the Community Day card layout on every 2026 page. Light = Community Day /
+   Summit (ICF palette); dark = the Awards page's black and gold. */
+.partners { padding:72px max(24px,calc((100% - 1120px)/2)) 80px; background:#eef1f8; color:#000000; text-align:center; font-family:"Original Poppins",sans-serif; }
+.partners .heading, .partners h3.heading { margin:0 auto 40px; max-width:760px; color:#000000; text-align:center; font-family:inherit; font-size:clamp(34px,4vw,50px); font-weight:600; line-height:1.08; text-wrap:balance; }
+.grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+.card { display:flex; min-width:0; min-height:190px; padding:24px; flex-direction:column; align-items:center; justify-content:center; gap:18px; border:1px solid #d0d4ea; border-radius:14px; background:#ffffff; }
+.role { color:#4a5faa; font-size:14px; font-weight:700; letter-spacing:.06em; line-height:1.2; text-transform:uppercase; }
+.featured { grid-column:1 / -1; min-height:260px; }
+/* Each logo sits in a fixed box (width x height) and is contained inside it; the box wins over any page-level
+   img rule, so the logos cannot blow up to the card width. */
+.logo { display:block; position:relative; flex:0 1 auto; max-width:100%; }
+.logo img { display:block !important; width:100% !important; max-width:100% !important; height:100% !important; margin:0 !important; object-fit:contain; }
+.cohen { width:min(100%,300px); height:150px; }
+/* ICF x NAMI share one box: both read at the same visual weight, joined by a small multiplication sign. */
+.pair { display:flex; align-items:center; justify-content:center; gap:22px; min-width:0; }
+.icf { width:min(100%,156px); height:118px; }
+.nami { width:min(100%,162px); height:62px; }
+.times { color:#4a5faa; font-size:30px; font-weight:500; line-height:1; }
+.wynn { width:min(100%,214px); height:96px; }
+
+/* Awards page: black, hairline gold borders, white logos (the Wynn mark is inverted to white). */
+.dark { background:#090909; color:#ffffff; }
+.dark .heading { color:#ffffff; }
+.dark .card { border-color:#d2b47b66; background:#141414; }
+.dark .role { color:#d2b47b; }
+.dark .times { color:#d2b47b; }
+.dark .wynn img { filter:brightness(0) invert(1); }
+
+@media (max-width:760px) {
+  .partners { padding:56px 16px 64px; }
+  .heading { margin-bottom:30px; font-size:34px; }
+  .grid { grid-template-columns:1fr; gap:16px; }
+  .featured { grid-column:auto; min-height:220px; }
+  .card { min-height:170px; padding:22px 18px; }
+  .cohen { width:min(100%,248px); height:124px; }
+  .pair { gap:16px; }
+  .icf { width:min(100%,127px); height:96px; }
+  .nami { width:min(100%,130px); height:50px; }
+  .times { font-size:24px; }
+  .wynn { width:min(100%,182px); height:82px; }
+}
+@media (max-width:360px) {
+  .icf { width:106px; height:80px; }
+  .nami { width:109px; height:42px; }
+  .pair { gap:12px; }
+}

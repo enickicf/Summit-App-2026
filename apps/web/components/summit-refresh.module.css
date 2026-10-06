@@ -24,7 +24,14 @@
 @media(max-width:600px) { .navigationLogo img { height:44px; } .navigation { gap:4px 16px; padding:10px 16px; } .navigation a { font-size:12px; } }
 .recapBackground { overflow:hidden; container-type:size; background:#111111; }
 .recapPoster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-.recapFrame { position:absolute; top:50%; left:50%; width:max(100cqw, 177.78cqh); height:max(56.25cqw, 100cqh); transform:translate(-50%,-50%); border:0; pointer-events:none; opacity:0; transition:opacity 500ms ease; }
+/* Owner (Oct 5, 2026): the film is cropped around the faces on every screen shape. Measured over both hero loops
+   (36 + 30 frames, Vision face boxes): faces sit at about 30% (Awards) and 34% (Summit) of the frame height, so that
+   line (--focus) is held at the hero's vertical center instead of the frame's middle; on wide screens the bodies are
+   cropped, never the heads. The frame still covers the hero: top is clamped so no edge shows, and at least 6% of the
+   frame stays hidden above so YouTube's title gradient never appears. */
+.recapFrame { --oversize:1.12; --focus:0.5; --fw:calc(max(100cqw, 177.78cqh) * var(--oversize)); --fh:calc(max(56.25cqw, 100cqh) * var(--oversize)); position:absolute; left:50%; top:clamp(calc(100cqh - var(--fh)), calc(50cqh - var(--focus) * var(--fh)), calc(-0.06 * var(--fh))); width:var(--fw); height:var(--fh); transform:translateX(-50%); border:0; pointer-events:none; opacity:0; transition:opacity 500ms ease; }
+.recapSummit .recapFrame { --focus:0.34; }
+.recapAwards .recapFrame { --focus:0.30; }
 .recapFrameReady { opacity:1; }
 /* Owner (Sept 21): header and menu at the Awards site's sizes. */
 .summitHeader .summitLogoBar { background:none; border:0; }
@@ -47,7 +54,7 @@
 @media(max-width:600px) { .summitLogoBar { min-height:80px; padding:8px 20px; } }
 /* Oversize the background player just enough that YouTube's title bar and edges fall outside the hero.
    Owner (Sept 21, late): 1.3x cropped too much of the picture; 1.12x shows far more of each frame. */
-.recapFrame { width:calc(max(100cqw, 177.78cqh) * 1.12); height:calc(max(56.25cqw, 100cqh) * 1.12); }
+/* (Oct 5: the 1.12x oversize now lives in --oversize above.) */
 
 /* Owner (Sept 21): the hero opens on a still of the film's first frame, cropped like the film (the
    film is shown 1.3x to keep YouTube's edges out of view), with a slow push-in until the film fades in. */

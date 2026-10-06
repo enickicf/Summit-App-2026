@@ -21,7 +21,8 @@ export function SummitNavigation({ year, pathname }: { year: 2025 | 2026; pathna
           <Link href="/partners#philanthropists">Philanthropists</Link>
         </div></div>
       <Link href="/venue" aria-current={pathname === "/venue" ? "page" : undefined}>Venue</Link>
-      <Link href={`/awards/${year}`}>Awards</Link>
+      {/* Owner (Oct 5): the Awards open in a new tab, so the Summit page stays where it was. */}
+      <a href={`/awards/${year}`} target="_blank" rel="noopener">Awards</a>
       <a className={styles.donateButton} href="https://www.inspiringchildren.org/donate"><Heart size={16} fill="currentColor" aria-hidden="true" />Donate</a>
     </nav>
   </div>;

@@ -5,7 +5,7 @@ import { Fragment, useState } from "react";
 import type { PersonCategory, SummitPerson } from "../lib/people";
 import { awardsGuestCategories, awardsPerson } from "../lib/awards-people";
 import { isKeynote, peopleSections } from "../lib/people-sections";
-import { FoundingPartners } from "./founding-partners";
+import { EventPartners } from "./event-partners";
 import { personInitials, personNameKey, portraitImageStyle } from "../lib/person-portraits";
 import styles from "./awards-guest-directory.module.css";
 import eventStyles from "./original-event-page.module.css";
@@ -74,7 +74,7 @@ export function AwardsGuestDirectory({ people, available = true, foundingPartner
           <GuestPortrait person={person} /><GuestName person={{ ...person, role }} />
         </Link>)}
       </div>}
-        </section>{/* Owner (Sept 23): Founding Partners right under the Founders section. */}{title === "Founders" && foundingPartners && <FoundingPartners variant="awards" />}</Fragment>;
+        </section>{/* Owner (Sept 23 / Oct 5): the partner block right under the Founders section. */}{title === "Founders" && foundingPartners && <EventPartners tone="dark" id="awards-partners" />}</Fragment>;
       })}
       {/* Owner (Sept 22): no "+ More to be announced" line below the lineup; the note at the top already says it. */}
       {!confirmed.length && <p className={styles.empty}>{!available ? "The guest list is temporarily unavailable. Please try again shortly." : "Confirmed guest details will appear after event-team approval."}</p>}

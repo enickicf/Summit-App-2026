@@ -71,7 +71,8 @@ describe("source-faithful, year-separated event pages", () => {
     }
     const current = renderToStaticMarkup(<OriginalAwardsPage year={2026} />);
     const program = current.split('id="awards-program"')[1]?.split('</section>')[0];
-    expect(program).toContain(`href="${url}" aria-label="RSVP for the Not Alone Awards">RSVP</a>`);
+    // Owner (Oct 5): the RSVP form opens in a new tab.
+    expect(program).toContain(`href="${url}" target="_blank" rel="noopener" aria-label="RSVP for the Not Alone Awards (opens in a new tab)">RSVP</a>`);
     expect(current.match(new RegExp(`href="${url}"`, "g"))).toHaveLength(1);
     for (const html of [renderToStaticMarkup(<OriginalSummitPage year={2025} />), renderToStaticMarkup(<OriginalAwardsPage year={2025} />)]) {
       expect(html).not.toContain(url);
@@ -295,7 +296,9 @@ describe("source-faithful, year-separated event pages", () => {
     expect(html).not.toContain("8:00 PM-10:00 PM");
     expect(html).not.toContain(">RSVP</a>");
     expect(html).not.toContain("Date to be confirmed");
-    expect(html).toContain('href="/"');
+    // Owner (Oct 5): the Awards site no longer links to the Summit (no "Explore the Not Alone Summit" link).
+    expect(html).not.toContain('href="/"');
+    expect(html).not.toContain("Explore the Not Alone Summit");
     expect(html).not.toContain('href="/schedule"');
     const summit = renderToStaticMarkup(<OriginalSummitPage year={2026} snapshot={snapshot} />);
     expect(summit).not.toContain("Awards RSVP");
@@ -312,7 +315,11 @@ describe("source-faithful, year-separated event pages", () => {
     expect(summit).toContain("Updated approved venue");
     expect(summit).not.toContain("hosted at Wynn");
     expect(summit).not.toContain('alt="Wynn Resorts"');
-    expect(summit).not.toContain('alt="Wynn Las Vegas"');
+    // Owner (Oct 5): the "Our Partners" block (id="summit-partners") credits Wynn Las Vegas as host venue on every
+    // 2026 page; outside that block the Wynn logo still follows the published venue.
+    const withoutPartners = summit.replace(/<section[^>]*id="summit-partners"[\s\S]*?<\/section>/, "");
+    expect(withoutPartners).not.toContain('alt="Wynn Las Vegas"');
+    expect(summit.match(/alt="Wynn Las Vegas"/g)).toHaveLength(1);
     const awards = renderToStaticMarkup(<OriginalAwardsPage year={2026} snapshot={snapshot} />);
     expect(awards).toContain("Updated approved access");
     expect(awards).toContain("Wynn Las Vegas · 2025 venue");

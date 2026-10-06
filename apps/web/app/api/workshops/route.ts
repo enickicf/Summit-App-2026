@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSubmissionStore, newSubmission, workshopPayloadSchema, type SubmissionStore } from "../../../lib/staff/store";
-import { workshopCategory } from "../../../lib/morning-workshops";
+import { workshopCategory, workshopSignupsOpen } from "../../../lib/morning-workshops";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -9,6 +9,8 @@ export const dynamic = "force-dynamic";
 // Stored for the staff portal's "Summit workshops" section; staff remove anyone not on the guest list.
 export async function handleWorkshopPost(request: Request, store?: SubmissionStore): Promise<Response> {
   const headers = { "Cache-Control": "no-store" };
+  // Owner (Oct 5): sign-ups are closed for now.
+  if (!workshopSignupsOpen) return NextResponse.json({ ok: false, error: "Sign-ups are not open at the moment." }, { status: 410, headers });
   if (Number(request.headers.get("content-length") ?? 0) > 10_000) return NextResponse.json({ ok: false, error: "Request is too large." }, { status: 413, headers });
   let body: unknown;
   try { body = await request.json(); } catch { return NextResponse.json({ ok: false, error: "Invalid request." }, { status: 400, headers }); }

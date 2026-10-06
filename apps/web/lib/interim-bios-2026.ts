@@ -28,6 +28,8 @@ const interimBios: Record<string, string> = {
   "Alyson Niemann": "Alyson Niemann is the CEO of Mindful Philanthropy and a confirmed guest of the 2026 Not Alone Summit.",
   // Sept 28, 2026 Airtable re-read: role-only lines for records that still have no Airtable bio.
   "Ben Maxwell": "Ben Maxwell is a confirmed guest of the 2026 Not Alone Summit.",
+  // Oct 5: listed because Airtable holds space for her (owner: any Hold Space status counts); no title or photo yet, so no card.
+  "Dr. Shashita Inamdar": "Dr. Shashita Inamdar is holding a place at the 2026 Not Alone Summit.",
   "Casey Caruso": "Casey Caruso is an associate producer of the 2026 Not Alone Summit.",
   "Payton McDonald": "Payton McDonald is an associate producer of the 2026 Not Alone Summit.",
   "Seth Porter Winterton": "Seth Porter Winterton is an associate producer of the 2026 Not Alone Summit.",
@@ -57,8 +59,8 @@ const interimBios: Record<string, string> = {
   "Steven Cohen": "The Steven & Alexandra Cohen Foundation powers the Not Alone Summit and Awards; Steven and Alexandra Cohen are founders of the Not Alone Summit.",
   "Alexandra Cohen": "The Steven & Alexandra Cohen Foundation powers the Not Alone Summit and Awards; Steven and Alexandra Cohen are founders of the Not Alone Summit.",
   // Paige/owner, Sept 22: founder couples credited together; the shared card de-duplicates the sentence.
-  "Jay McGraw": "Jay and Erica McGraw are founders of the Not Alone Summit.",
-  "Erica McGraw": "Jay and Erica McGraw are founders of the Not Alone Summit.",
+  "Jay McGraw": "Jay McGraw is a founder of the Not Alone Summit.",
+  "Erica McGraw": "Erica McGraw is a founder of the Not Alone Summit.",
   "Melony Lewis": "Melony and Adam Lewis are founders of the Not Alone Summit.",
   "Adam Lewis": "Melony and Adam Lewis are founders of the Not Alone Summit.",
   "Winston Kelly": "Winston and Cameron Kelly are founders of the Not Alone Summit.",

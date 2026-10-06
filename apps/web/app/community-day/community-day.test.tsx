@@ -59,7 +59,7 @@ describe("Community Day page", () => {
   it("puts the explanation, partners, then details under the hero", async () => {
     beforeEvent();
     const html = await render();
-    const order = ["community-day-title", "mission-title", "community-partners-title", "details-title", "tickets-title"].map(id => html.indexOf(`aria-labelledby="${id}"`));
+    const order = ["community-day-title", "mission-title", "community-day-partners-title", "details-title", "tickets-title"].map(id => html.indexOf(`aria-labelledby="${id}"`));
     expect(order.every(index => index >= 0)).toBe(true);
     expect([...order].sort((a, b) => a - b)).toEqual(order);
   });
@@ -90,11 +90,15 @@ describe("Community Day page", () => {
     expect(html).not.toMatch(/<(video|iframe)\b/);
   });
 
-  it("features ICF and the approved community partners", async () => {
+  it("credits the partners the owner's way: Cohen powered by, ICF x NAMI presented by in one box, Wynn host venue; never a community partner (owner, Oct 5)", async () => {
     beforeEvent();
-    const partners = text(section(await render(), "community-partners-title"));
-    expect(partners).toContain("Presented With Our Community Partners Powered by Presented by Community partner Host venue");
-    for (const name of ["Inspiring Children Foundation", "Steven & Alexandra Cohen Foundation", "NAMI, National Alliance on Mental Illness", "Wynn Las Vegas"]) expect((await render()).replace(/&amp;/g, "&")).toContain(`alt="${name}"`);
+    const html = await render();
+    const partners = text(section(html, "community-day-partners-title"));
+    expect(partners).toContain("Our Partners Powered by Presented by × Host venue");
+    expect(html.toLowerCase()).not.toContain("community partner");
+    for (const name of ["Inspiring Children Foundation", "Steven & Alexandra Cohen Foundation", "NAMI, National Alliance on Mental Illness", "Wynn Las Vegas"]) expect(html.replace(/&amp;/g, "&")).toContain(`alt="${name}"`);
+    // The hero lockup above the title is the shared "Presented by" component.
+    expect(html.indexOf("Presented by")).toBeLessThan(html.indexOf('id="community-day-title"'));
   });
 
   it("keeps its times in step with the Awards page's evening block", async () => {

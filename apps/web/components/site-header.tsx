@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { SummitNavigation } from "./summit-navigation";
 import { CommunityDayNavigation } from "./community-day-navigation";
-import { SummitLink } from "./summit-link";
 import { Heart } from "lucide-react";
 import { awards2026Editorial } from "../lib/awards-editorial";
 import { ClassicHeader } from "./classic-header";
@@ -21,7 +20,6 @@ export function SiteHeader() {
   const archive = ["/2025", "/summit/2025", "/awards/2025", "/partners/2025"].includes(pathname)
     || /^\/directory\/2025-[^/]+\/?$/.test(pathname);
   const year = archive ? 2025 : 2026;
-  const summit = archive ? "/2025" : "/";
   const awards = `/awards/${year}`;
   // Owner (Sept 23): the staff portal has its own chrome.
   if (pathname.startsWith("/staff")) return null;
@@ -35,14 +33,15 @@ export function SiteHeader() {
     {/* Owner (Sept 21): no logo bar; the Awards hero already carries the logo. */}
     <nav id="main-navigation" className={styles.awardsNavigation} aria-label="Awards navigation">
       {/* Owner (Sept 23): "Awards" with a hover/tap list (2026 / 2025), Tickets straight to the RSVP form,
-          Nominate to ICF's nominations page, Summit, and the Donate sticker on the far right. */}
+          Nominate, and the Donate sticker on the far right. Owner (Oct 5): the Awards site no longer links to the
+          Summit (the Summit is invitation-only; the Summit links here, not the other way), and every form link
+          opens in a new tab so guests never need the back arrow. */}
       <div className={styles.navMenu}><Link href={partner?.path ?? "/awards/2026"} aria-current={pathname === "/awards/2026" || partner ? "page" : undefined} data-active={year === 2026 || undefined} aria-haspopup="true">Awards</Link>
         <div className={styles.navMenuList}><Link href={partner?.path ?? "/awards/2026"}>2026</Link><Link href="/awards/2025" aria-current={pathname === "/awards/2025" ? "page" : undefined} data-active={year === 2025 || undefined}>2025</Link></div></div>
       {/* Owner (Oct 3): the Community Day page is in the Awards menu. */}
       <Link href={partner ? partnerCommunityDayPath(partner) : "/community-day"}>Community Day</Link>
-      <a href={partner?.rsvpUrl ?? awards2026Editorial.rsvpUrl}>Tickets</a>
-      <a href={awards2026Editorial.nominateUrl}>Nominate</a>
-      <SummitLink href={summit}>Summit</SummitLink>
+      <a href={partner?.rsvpUrl ?? awards2026Editorial.rsvpUrl} target="_blank" rel="noopener">Tickets</a>
+      <a href={awards2026Editorial.nominateUrl} target="_blank" rel="noopener">Nominate</a>
       <a className={styles.donateButton} href="https://www.inspiringchildren.org/donate"><Heart size={16} fill="currentColor" aria-hidden="true" />Donate</a>
     </nav>
   </>;

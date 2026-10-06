@@ -13,7 +13,7 @@ const page = (snapshot = event2026Snapshot, published = true) => renderToStaticM
 );
 const hero = (snapshot = event2026Snapshot, published = true) => page(snapshot, published)
   .match(/<section[^>]*aria-labelledby="awards-title"[^>]*>([\s\S]*?)<\/section>/)![1]!;
-// Owner (Sept 21): the hero shows only "Doors Open 6:00 PM"; the rest of the evening sits below it.
+// Owner (Oct 5): the hero shows only the Awards Show start (7:30 PM); the rest of the evening sits below it.
 const schedule = (snapshot = event2026Snapshot, published = true) => page(snapshot, published)
   .match(/<section[^>]*id="evening"[^>]*>[\s\S]*?<dl>([\s\S]*?)<\/dl>/)?.[1] ?? "";
 
@@ -30,7 +30,7 @@ describe("Awards opening presentation", () => {
     expect(html).toContain("2025 archive");
   });
 
-  it("shows only doors in the hero and the rest of the evening below, without the red carpet", () => {
+  it("shows only the Awards Show start in the hero and the rest of the evening below, without the red carpet", () => {
     expect(times()).toEqual([
       { label: "Red Carpet", time: "6:15 PM-7:30 PM" },
       { label: "Doors Open", time: "5:30 PM" },
@@ -43,8 +43,9 @@ describe("Awards opening presentation", () => {
     expect(html).not.toContain(">2026</span>");
     expect(html).toContain("Monday, November 2</time>");
     expect(html).not.toContain("Monday, November 2, 2026");
-    expect(html).toContain('<dl class="' + styles.heroScheduleTimes + '" aria-label="Doors open"><div><dt>Doors Open</dt><dd>5:30 PM</dd></div></dl>');
-    expect(html).not.toMatch(/Nevada Day|Pre-Show|8:00 PM-10:00 PM/);
+    // Owner (Oct 5): the hero's one timing line is the Awards Show start; Doors Open moved down to "The Evening".
+    expect(html).toContain('<dl class="' + styles.heroScheduleTimes + '" aria-label="Awards Show start"><div><dt>Awards Show</dt><dd>7:30 PM</dd></div></dl>');
+    expect(html).not.toMatch(/Doors Open|Nevada Day|Pre-Show|8:00 PM-10:00 PM/);
     // Owner (Sept 21, late): "The Evening" shows exactly two lines.
     const evening = schedule();
     expect(evening).toContain("<dt>Doors Open</dt><dd>5:30 PM</dd>");
@@ -66,9 +67,11 @@ describe("Awards opening presentation", () => {
     // Sept 21 meeting: the foundation credit sits directly under the ICF Awards logo, larger than before.
     expect(html).toContain("/images/na-awards-logo-white.png");
     expect(html).toMatch(/na-awards-logo-white[^]*<\/h1><p class="[^"]*">Powered by<strong>Steven &amp; Alexandra Cohen Foundation<\/strong><\/p>/);
-    // The logo and the Wynn photo (reduced motion only); no still of the film: the hero opens on a
-    // plain color and the film cross-fades in once it is really playing.
-    expect(html.match(/<img /g)).toHaveLength(2);
+    // The Wynn photo (reduced motion only), the "Presented by" ICF and NAMI logos (owner, Oct 5) and the
+    // Awards logo; no still of the film: the hero opens on a plain color and the film cross-fades in once
+    // it is really playing.
+    expect(html.match(/<img /g)).toHaveLength(4);
+    expect(html).toMatch(/Presented by[^]*alt="Inspiring Children Foundation"[^]*alt="NAMI, National Alliance on Mental Illness"[^]*<h1 id="awards-title"/);
     expect(html).not.toContain("hero-awards-start.jpg");
     expect(html).toContain("background:#1c1a2e");
     // The hero's second button is Info (scrolls to the mission + schedule); a smaller schedule link sits under it.
@@ -89,7 +92,8 @@ describe("Awards opening presentation", () => {
 
   it("points every RSVP button of a private partner copy at that group's form (owner, Oct 4)", () => {
     const html = renderToStaticMarkup(<OriginalAwardsPage year={2026} program={program} snapshot={event2026Snapshot} rsvpUrl="https://notaloneawards.org/rsvp/nami-9wvfjfkt40dd" />);
-    expect(html).toContain('href="https://notaloneawards.org/rsvp/nami-9wvfjfkt40dd" aria-label="RSVP for the Not Alone Awards">RSVP</a>');
+    // Owner (Oct 5): the RSVP form opens in a new tab.
+    expect(html).toContain('href="https://notaloneawards.org/rsvp/nami-9wvfjfkt40dd" target="_blank" rel="noopener" aria-label="RSVP for the Not Alone Awards (opens in a new tab)">RSVP</a>');
     expect(html).not.toContain('href="https://notaloneawards.org/rsvp"');
   });
 
@@ -105,7 +109,7 @@ describe("Awards opening presentation", () => {
     const withoutProgram = schedule(event2026Snapshot, false);
     expect(withoutProgram).toContain("7:30 PM-10:00 PM");
     expect(withoutProgram).not.toMatch(/<dt>(Pre-Show|Red Carpet)<\/dt>/); // Owner (Sept 22): The Evening opens with Doors Open 5:30
-    expect(hero(event2026Snapshot, false)).toContain("<dt>Doors Open</dt><dd>5:30 PM</dd>");
+    expect(hero(event2026Snapshot, false)).toContain("<dt>Awards Show</dt><dd>7:30 PM</dd>");
   });
 
   it("omits an empty timetable when the published snapshot is unavailable", () => {

@@ -92,21 +92,26 @@ describe("shared site navigation", () => {
     const html = headerAt(`/awards/${year}`);
     const footer = renderToStaticMarkup(<SiteFooter />);
     expect(html).not.toContain("NotAloneAwards_Logo_White.png");
-    expect([...html.matchAll(/<a[^>]*>([^<]+)<\/a>/g)].map(match => match[1])).toEqual(["Awards", "2026", "2025", "Community Day", "Tickets", "Nominate", "Summit"]); // Owner (Sept 23)
+    // Owner (Oct 5): the Awards site no longer links to the Summit (no "Summit" item); the Summit links here instead.
+    expect([...html.matchAll(/<a[^>]*>([^<]+)<\/a>/g)].map(match => match[1])).toEqual(["Awards", "2026", "2025", "Community Day", "Tickets", "Nominate"]);
     expect(html.match(/<a[^>]*aria-current="page"[^>]*>/)?.[0]).toContain(`href="/awards/${year}"`);
-    for (const href of ["/schedule", "/map", "/ask-ai", "/summit/live"]) expect(html + footer).not.toContain(`href="${href}"`);
+    for (const href of ["/schedule", "/map", "/ask-ai", "/summit/live", "/", "/2025"]) expect(html + footer).not.toContain(`href="${href}"`);
     expect(html).not.toContain("NotAloneChallenge");
     expect(footer).toContain("Steven &amp; Alexandra Cohen Foundation");
   });
 
-  it.each([2025, 2026])("uses one four-link Awards %s row below the brand with no separate menu", year => {
+  it.each([2025, 2026])("uses one Awards %s row (Awards, Community Day, Tickets, Nominate) below the brand with no separate menu or Summit link", year => {
     const html = headerAt(`/awards/${year}`);
     const nav = html.match(/<nav[^>]*aria-label="Awards navigation"[^>]*>([\s\S]*?)<\/nav>/)?.[1] ?? "";
-    // Owner (Sept 23): Awards (2026 / 2025), Tickets (RSVP form), Nominate (ICF nominations), Summit; Donate is a sticker at the far right.
-    expect([...nav.matchAll(/<a[^>]*>([^<]+)<\/a>/g)].map(match => match[1])).toEqual(["Awards", "2026", "2025", "Community Day", "Tickets", "Nominate", "Summit"]);
+    // Owner (Sept 23): Awards (2026 / 2025), Tickets (RSVP form), Nominate (ICF nominations); Donate is a sticker at the far right.
+    // Owner (Oct 3): Community Day joins the row. Owner (Oct 5): no Summit link; Tickets and Nominate open in a new tab.
+    expect([...nav.matchAll(/<a[^>]*>([^<]+)<\/a>/g)].map(match => match[1])).toEqual(["Awards", "2026", "2025", "Community Day", "Tickets", "Nominate"]);
     expect([...nav.matchAll(/href="([^"]+)"/g)].map(match => match[1])).toEqual([
-      "/awards/2026", "/awards/2026", "/awards/2025", "/community-day", "https://notaloneawards.org/rsvp", "https://notaloneawards.org/rsvp/nominate", year === 2025 ? "/2025" : "/", "https://www.inspiringchildren.org/donate"
+      "/awards/2026", "/awards/2026", "/awards/2025", "/community-day", "https://notaloneawards.org/rsvp", "https://notaloneawards.org/rsvp/nominate", "https://www.inspiringchildren.org/donate"
     ]);
+    expect(nav).toContain('<a href="https://notaloneawards.org/rsvp" target="_blank" rel="noopener">Tickets</a>');
+    expect(nav).toContain('<a href="https://notaloneawards.org/rsvp/nominate" target="_blank" rel="noopener">Nominate</a>');
+    expect(nav).not.toContain(">Summit</a>");
     expect(nav).toMatch(/<a class="[^"]*donateButton[^"]*" href="https:\/\/www\.inspiringchildren\.org\/donate"><svg[\s\S]*?<\/svg>Donate<\/a>/);
     expect(nav).not.toContain('>RSVP</a>');
     expect(html.match(/<nav\b/g)).toHaveLength(1);

@@ -218,17 +218,20 @@ export function awardsPeople(snapshot: EventSnapshot | null): SummitPerson[] {
 
 // The public Awards display intentionally recognizes the Wolfingtons together.
 // Canonical people remain separate for the Summit and all operational data.
+// Owner (Oct 5, 2026): couples read "Sean and Ana Wolfington" (the word "and", not an ampersand).
 export function awardsDisplayPeople(snapshot: EventSnapshot | null): SummitPerson[] {
   let people = awardsPeople(snapshot);
   const couples: { first: string; second: string; name: string; slug: string; bio: string; image?: string }[] = [
-    { first: "Sean Wolfington", second: "Ana Wolfington", name: "Sean & Ana Wolfington", slug: "2026-sean-ana-wolfington", bio: "Sean and Ana Wolfington are entrepreneurs and philanthropists. Inspiring Children Foundation's public Awards and Summit materials recognize their shared philanthropic work and support for youth development." },
-    { first: "Melinda Springer", second: "Noah Springer", name: "Melinda & Noah Springer", slug: "2026-melinda-noah-springer", bio: "Melinda and Noah Springer are recognized together among the founders on Inspiring Children Foundation's public Awards website, with their affiliation listed as Pickle Pro Labs." },
-    // Sept 22 (Paige/owner): three more founder couples from Airtable, credited together like ICF's 2025 site.
-    { first: "Jay McGraw", second: "Erica McGraw", name: "Jay & Erica McGraw", slug: "2026-jay-erica-mcgraw", bio: "Jay and Erica McGraw are founders of the Not Alone Summit.", image: "/2026-headshots/portraits/jay-erica-mcgraw.jpg" }, // Sept 28: side-by-side composite of their Airtable headshots (work/new-headshots-20260928/)
-    { first: "Melony Lewis", second: "Adam Lewis", name: "Melony & Adam Lewis", slug: "2026-melony-adam-lewis", bio: "Melony and Adam Lewis are founders of the Not Alone Summit." },
-    { first: "Winston Kelly", second: "Cameron Kelly", name: "Winston & Cameron Kelly", slug: "2026-winston-cameron-kelly", bio: "Winston and Cameron Kelly are founders of the Not Alone Summit." },
+    { first: "Sean Wolfington", second: "Ana Wolfington", name: "Sean and Ana Wolfington", slug: "2026-sean-ana-wolfington", bio: "Sean and Ana Wolfington are entrepreneurs and philanthropists. Inspiring Children Foundation's public Awards and Summit materials recognize their shared philanthropic work and support for youth development." },
+    { first: "Melinda Springer", second: "Noah Springer", name: "Melinda and Noah Springer", slug: "2026-melinda-noah-springer", bio: "Melinda and Noah Springer are recognized together among the founders on Inspiring Children Foundation's public Awards website, with their affiliation listed as Pickle Pro Labs." },
+    // Sept 22 (Paige/owner): founder couples from Airtable, credited together like ICF's 2025 site.
+    // Owner (Oct 5): Jay and Erica McGraw are NOT a couple card any more: no photo of the two of them exists that we
+    // may publish, and a card must never be two photos side by side. They are two individual Founder cards (name
+    // cards until each has a usable headshot; see lib/portrait-overrides.ts).
+    { first: "Melony Lewis", second: "Adam Lewis", name: "Melony and Adam Lewis", slug: "2026-melony-adam-lewis", bio: "Melony and Adam Lewis are founders of the Not Alone Summit." },
+    { first: "Winston Kelly", second: "Cameron Kelly", name: "Winston and Cameron Kelly", slug: "2026-winston-cameron-kelly", bio: "Winston and Cameron Kelly are founders of the Not Alone Summit." },
     // Sept 22: Airtable now holds Steven and Alexandra as two records; the website keeps ICF's joint card and photo.
-    { first: "Steven Cohen", second: "Alexandra Cohen", name: "Steven & Alexandra Cohen", slug: "2026-steven-alexandra-cohen", bio: "The Steven & Alexandra Cohen Foundation powers the Not Alone Summit and Awards; Steven and Alexandra Cohen are founders of the Not Alone Summit.", image: "/original-2025/020a823cfe4f160d93b0.png" }
+    { first: "Steven Cohen", second: "Alexandra Cohen", name: "Steven and Alexandra Cohen", slug: "2026-steven-alexandra-cohen", bio: "The Steven & Alexandra Cohen Foundation powers the Not Alone Summit and Awards; Steven and Alexandra Cohen are founders of the Not Alone Summit.", image: "/original-2025/020a823cfe4f160d93b0.png" }
   ];
   for (const couple of couples) {
     const first = people.find(person => person.name === couple.first);
@@ -251,6 +254,26 @@ export function awardsDisplayPeople(snapshot: EventSnapshot | null): SummitPerso
         categories: [...new Set([...first.categories, ...second.categories])], featured: Boolean(first.featured || second.featured),
         order: Math.min(first.order ?? Number.MAX_SAFE_INTEGER, second.order ?? Number.MAX_SAFE_INTEGER), ...best, ...(image ? { image } : {}) }
       : { ...first, name: couple.name, slug: couple.slug, bio: couple.bio };
+    people = people.flatMap(person => person.name === couple.first ? [shared] : person.name === couple.second ? [] : [person]);
+  }
+  return people;
+}
+
+// Owner (Oct 5, 2026): on the Partners page's Philanthropists section a couple is one card ("Steve and Janet
+// Wozniak"), never two profiles. Steve is a co-chair and keynote elsewhere, so this pairing applies only there;
+// the photo is ICF's own picture of the two of them (2025 site).
+export const philanthropistCouples = [
+  { first: "Steve Wozniak", second: "Janet Wozniak", name: "Steve and Janet Wozniak", slug: "2026-steve-janet-wozniak",
+    image: originalAsset("https://static1.squarespace.com/static/628691b65c3a24383d0eac0a/t/68ec81e77594567546cc159d/1760330215338/Steve+and+Janet+Wozniak+sq.jpg?format=500w") }
+] as const;
+export function philanthropistDisplayPeople(people: SummitPerson[]): SummitPerson[] {
+  for (const couple of philanthropistCouples) {
+    const first = people.find(person => person.name === couple.first);
+    const second = people.find(person => person.name === couple.second);
+    if (!first || !second) continue;
+    const roles = [...new Set([first.role, second.role].map(role => role.trim()).filter(Boolean))];
+    const shared: SummitPerson = { ...second, name: couple.name, slug: couple.slug, image: couple.image, role: roles.join(" · "),
+      categories: [...new Set([...first.categories, ...second.categories])] };
     people = people.flatMap(person => person.name === couple.first ? [shared] : person.name === couple.second ? [] : [person]);
   }
   return people;

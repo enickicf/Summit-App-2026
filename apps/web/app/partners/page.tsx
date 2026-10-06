@@ -6,7 +6,7 @@ import { partnerWithUsUrl, summitPartnerTiers, type SummitPartner } from "../../
 import { getPublicSnapshotState } from "../../lib/snapshot";
 import { airtableOverlay } from "../../lib/airtable-shared";
 import { partnerLogo2026 } from "../../lib/partner-logos-2026";
-import { directoryPeople } from "../../lib/people";
+import { awardsDisplayPeople, philanthropistDisplayPeople } from "../../lib/awards-people";
 import { personInitials } from "../../lib/person-portraits";
 import styles from "./partners.module.css";
 
@@ -47,12 +47,13 @@ export default async function PartnersPage() {
     }));
   // Sept 22 meeting: confirmed people grouped "Philanthropist" in Airtable, listed on this page.
   // Owner / Ryan (Sept 29): every founder is listed here as well, founders first, then the other philanthropists.
-  const everyone = directoryPeople(snapshot);
+  // Owner (Oct 5): couples are one card here ("Sean and Ana Wolfington", "Steve and Janet Wozniak"), as in Founders.
+  const everyone = philanthropistDisplayPeople(awardsDisplayPeople(snapshot));
   const founders = everyone.filter(isFounder);
   const philanthropists = [...founders, ...everyone.filter(person => person.categories.includes("Philanthropists") && !founders.includes(person))].filter((person, index, list) => list.findIndex(other => other.slug === person.slug) === index);
   const nami = topAirtable.find(partner => isNami(partner.name));
   const fanatics = topAirtable.find(partner => isFanatics(partner.name));
-  const logoCard = (partner: { recordId: string; name: string }) => <div className={`${styles.card} ${styles.logoCard} ${styles.topCard}`}><SiteImage src={partnerLogo2026(partner.name)!} alt={partner.name} sizes="(max-width: 600px) 90vw, 420px" /></div>;
+  const logoCard = (partner: { recordId: string; name: string }, logo = partnerLogo2026(partner.name)!) => <div className={`${styles.card} ${styles.logoCard} ${styles.topCard}`}><SiteImage src={logo} alt={partner.name} sizes="(max-width: 600px) 90vw, 420px" /></div>;
   return <main id="main-content" tabIndex={-1} className={styles.page}>
     <header className={styles.hero}>
       <p>Not Alone Summit 2026</p>
@@ -61,10 +62,18 @@ export default async function PartnersPage() {
       <p className={styles.lead}>The partners who make the Not Alone Summit possible.</p>
     </header>
     <div className={styles.body}>
+      {/* Owner (Oct 5): no "Founding Partners" / "community partner" wording anywhere: the Cohen Foundation is
+          "Powered by" and the Inspiring Children Foundation x NAMI are "Presented by". */}
       <section className={styles.tier} id="founding-partners" aria-labelledby="tier-founding">
-        <h2 id="tier-founding">Founding Partners</h2>
+        <h2 id="tier-founding">Powered by</h2>
         <div className={styles.featured}>
           <PartnerCard partner={featured[0]!.partners[0]!} featured />
+        </div>
+      </section>
+      <section className={styles.tier} id="presented-by" aria-labelledby="tier-presented">
+        <h2 id="tier-presented">Presented by</h2>
+        <div className={styles.featured}>
+          {logoCard({ recordId: "icf", name: "Inspiring Children Foundation" }, "/images/icf-logo.webp")}
           {nami && logoCard(nami)}
         </div>
       </section>
