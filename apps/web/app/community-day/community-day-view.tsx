@@ -31,8 +31,8 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
         <PresentedBy className={styles.presentedBy} />
         {/* Ryan via Aphrah/Paige (Oct 5 night): the page is titled "Nevada Mental Health Day", with "Community Day" as its
             label; the ICF x NAMI "Presented by" lockup stays on top and the Cohen Foundation credit sits under the title. */}
-        <h1 id="community-day-title" className={styles.heroTitleMark} aria-label={`${day.title}, ${day.name}`}>
-          <span className={styles.heroKicker}>{day.name}</span>
+        {/* Owner (Oct 6): no "Community Day" label above the title; the title alone. */}
+        <h1 id="community-day-title" className={styles.heroTitleMark} aria-label={day.title}>
           <strong>Nevada Mental<br />Health Day</strong>
         </h1>
         <p className={styles.heroPowered}>Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong></p>

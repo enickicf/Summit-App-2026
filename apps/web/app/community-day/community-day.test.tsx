@@ -35,7 +35,7 @@ describe("Community Day page", () => {
     expect(heroHtml.replace(/&#x27;/g, "'")).toContain(`alt="${communityDay2026.heroPhotoAlt}"`);
     expect(heroHtml).toContain("encore-theater-community-day");
     const hero = text(heroHtml);
-    expect(hero).toContain("Presented by Community Day Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Monday, November 2 5:45–7:15 PM Encore Theater at Wynn Las Vegas Request free tickets Info");
+    expect(hero).toContain("Presented by Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Monday, November 2 5:45–7:15 PM Encore Theater at Wynn Las Vegas Request free tickets Info");
     expect(hero).not.toContain("Not Alone");
     expect(hero).not.toMatch(/Doors open|A free panel/);
   });
@@ -48,12 +48,12 @@ describe("Community Day page", () => {
     expect(html).toMatch(/<section [^>]*id="what-is-community-day"[^>]*aria-labelledby="mission-title"/);
   });
 
-  it("titles the page Nevada Mental Health Day with Community Day as its label and the Cohen credit under it (Ryan, Oct 5)", async () => {
+  it("titles the page Nevada Mental Health Day (no Community Day label, owner Oct 6) with the Cohen credit under it", async () => {
     beforeEvent();
     const html = await render();
     const hero = section(html, "community-day-title");
     expect(hero).toContain("Nevada Mental<br/>Health Day");
-    expect(hero).toContain(">Community Day<");
+    expect(hero).not.toContain(">Community Day<");
     expect(hero).toContain("Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong>");
     expect(html.indexOf("Presented by")).toBeLessThan(html.indexOf("Nevada Mental<br/>Health Day"));
     expect(html.indexOf("Nevada Mental<br/>Health Day")).toBeLessThan(html.indexOf("Powered by<strong>"));
