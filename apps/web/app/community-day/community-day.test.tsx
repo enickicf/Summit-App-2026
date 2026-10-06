@@ -133,7 +133,7 @@ describe("Community Day page", () => {
     expect(page).toContain("Submitting this RSVP does not guarantee admission and is not a ticket. Your request will be added to our ticket waiting list. We will email you if your ticket is approved.");
     expect(page).toContain("up to ten per request");
     expect(page).toContain("Enter your organization in the Organization field.");
-    expect(page).toContain("Yes, I plan to attend Community Day before the Awards Show");
+    expect(page).toContain("Pick “Awards Show + Community Day” or “Community Day only.”");
     // No personal contact details on the page; questions go to ICF's contact page.
     expect(html).not.toMatch(/tel:|mailto:/);
     expect(html).toContain('href="/contact"');

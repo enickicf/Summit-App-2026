@@ -91,7 +91,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
   const active = activeRsvps(rsvps);
   const removed = removedRsvps(rsvps);
   const totals = rsvpTotals(active);
-  const communityDay = active.filter(row => row.communityDay);
+  const communityDay = active.filter(row => comingTo(row).includes("communityDay"));
   const vip = vipRsvps(active);
   const nami = namiRsvps(active);
   const lakeLasVegas = lakeLasVegasRsvps(active);
@@ -124,13 +124,13 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
     <div data-view="awards" id="awards">
       <nav className={styles.sectionNav} aria-label="Awards sections"><a href="#vip">VIP</a><a href="#lake-las-vegas">Lake Las Vegas</a><a href="#nami">NAMI</a><a href="#tickets">Tickets</a><a href="#community-day">Community Day</a><a href="#nominations">Nominations</a><a href="#removed">Removed</a><a href="#lineup">Lineup</a></nav>
       <section className={styles.stats} aria-label="Ticket totals">
-        <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{totals.ticketsRequested}</span><span className={styles.statLabel}>Tickets requested</span><span className={styles.statNote}>Party sizes of every ticket request, one per guest email</span></div>
+        <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{totals.ticketsRequested}</span><span className={styles.statLabel}>Awards Show tickets</span><span className={styles.statNote}>Party sizes of every Awards Show request, one per guest email (Community Day-only requests are counted below)</span></div>
         <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{totals.formsSubmitted}</span><span className={styles.statLabel}>Forms submitted</span><span className={styles.statNote}>Every RSVP submission received</span></div>
         {totals.moreInformation > 0 && <div className={styles.stat}><span className={styles.statValue}>{totals.moreInformation}</span><span className={styles.statLabel}>Asked for more information</span></div>}
         <div className={`${styles.stat} ${styles.statVip}`}><span className={styles.statValue}>{totals.vipTickets}</span><span className={styles.statLabel}>VIP tickets</span><span className={styles.statNote}>{totals.vipGuests} VIP {totals.vipGuests === 1 ? "guest" : "guests"} through the VIP link</span></div>
         <div className={`${styles.stat} ${styles.statLake}`}><span className={styles.statValue}>{totals.lakeLasVegasTickets}</span><span className={styles.statLabel}>Lake Las Vegas tickets</span><span className={styles.statNote}>{totals.lakeLasVegasGuests} {totals.lakeLasVegasGuests === 1 ? "guest" : "guests"} through the Lake Las Vegas form</span></div>
         <div className={`${styles.stat} ${styles.statNami}`}><span className={styles.statValue}>{totals.namiTickets}</span><span className={styles.statLabel}>NAMI tickets</span><span className={styles.statNote}>{totals.namiGuests} NAMI {totals.namiGuests === 1 ? "guest" : "guests"} through the NAMI form</span></div>
-        <div className={`${styles.stat} ${styles.statCommunity}`}><span className={styles.statValue}>{totals.communityDayTickets}</span><span className={styles.statLabel}>Community Day tickets</span><span className={styles.statNote}>{totals.communityDayGuests} {totals.communityDayGuests === 1 ? "guest" : "guests"} said yes to Community Day</span></div>
+        <div className={`${styles.stat} ${styles.statCommunity}`}><span className={styles.statValue}>{totals.communityDayTickets}</span><span className={styles.statLabel}>Community Day tickets</span><span className={styles.statNote}>{totals.communityDayGuests} {totals.communityDayGuests === 1 ? "guest" : "guests"} said yes to Community Day{totals.communityDayOnlyGuests > 0 ? ` · ${totals.communityDayOnlyGuests} Community Day only (${totals.communityDayOnlyTickets} ${totals.communityDayOnlyTickets === 1 ? "ticket" : "tickets"})` : ""}</span></div>
         <div className={styles.stat}><span className={styles.statValue}>{nominations.length}</span><span className={styles.statLabel}>Nominations</span></div>
       </section>
 

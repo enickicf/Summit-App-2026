@@ -32,7 +32,7 @@ describe("staff portal store and totals", () => {
       rsvp({ id: "r4", submittedAt: "2026-09-19T10:00:00.000Z", email: "seth@example.com", attendanceStatus: "needs_follow_up", guestCount: 2 }),
       rsvp({ id: "r5", submittedAt: "2026-09-18T10:00:00.000Z", email: "al@example.com", attendanceStatus: "declined" })
     ]);
-    expect(totals).toEqual({ lakeLasVegasGuests: 0, lakeLasVegasTickets: 0, namiGuests: 0, namiTickets: 0, vipGuests: 0, vipTickets: 0, formsSubmitted: 5, uniqueGuests: 4, ticketsRequested: 9, attending: 2, moreInformation: 1, unable: 1, communityDayGuests: 0, communityDayTickets: 0 });
+    expect(totals).toEqual({ lakeLasVegasGuests: 0, lakeLasVegasTickets: 0, namiGuests: 0, namiTickets: 0, vipGuests: 0, vipTickets: 0, formsSubmitted: 5, uniqueGuests: 4, ticketsRequested: 9, attending: 2, moreInformation: 1, unable: 1, communityDayGuests: 0, communityDayTickets: 0, communityDayOnlyGuests: 0, communityDayOnlyTickets: 0 });
     // Community Day is its own count: party sizes of the latest request per email that switched it on.
     const withCommunity = rsvpTotals([rsvp({ communityDay: true }), rsvp({ id: "c2", email: "brian@example.com", attendanceStatus: "declined", communityDay: true, guestCount: 2 })]);
     expect(withCommunity).toMatchObject({ ticketsRequested: 3, communityDayGuests: 2, communityDayTickets: 5 });
@@ -122,7 +122,7 @@ describe("staff portal page", () => {
   it("shows the running totals at the top, every RSVP field, nominations in their own section and the lineup", () => {
     const html = renderToStaticMarkup(<StaffPortal rsvps={[rsvp({ communityDay: true }), rsvp({ id: "r2", submittedAt: "2026-09-20T10:00:00.000Z", email: "brian@example.com", name: "Brian Goldfus", guestCount: 4, notes: "Table near the stage", source: "import" })]} nominations={[nomination()]} poker={[]} lineup={[{ title: "Lineup", people: [{ name: "Jewel", role: "Singer-Songwriter", rank: 1, tier: "A", photo: true }] }, { title: "Founders", people: [{ name: "Jay & Erica McGraw", role: "", rank: null, tier: null, photo: false }] }]} generatedAt="2026-09-23T20:00:00.000Z" />);
     const stats = html.slice(html.indexOf('aria-label="Ticket totals"'), html.indexOf('id="tickets"'));
-    expect(stats).toMatch(/>7<[\s\S]*?Tickets requested/);
+    expect(stats).toMatch(/>7<[\s\S]*?Awards Show tickets/);
     expect(stats).toMatch(/>2<[\s\S]*?Forms submitted/);
     expect(html.indexOf('aria-label="Ticket totals"')).toBeLessThan(html.indexOf('id="tickets"'));
     for (const text of ["Lisa Lundt", "lisa@example.com", "702-555-0100", "Brian Goldfus", "Table near the stage", "Previous portal"]) expect(html).toContain(text);

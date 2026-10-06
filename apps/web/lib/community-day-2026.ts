@@ -40,7 +40,7 @@ export const communityDay2026 = {
     steps: [
       { title: "Open the RSVP form", detail: "Add your name, email and phone, choose how many are in your party (up to ten per request), and add the name, email and phone of each guest." },
       { title: "Note your organization", detail: "Enter your organization in the Organization field." },
-      { title: "Turn on Community Day", detail: "Switch on “Yes, I plan to attend Community Day before the Awards Show.”" }
+      { title: "Choose what you are attending", detail: "Pick “Awards Show + Community Day” or “Community Day only.”" }
     ],
     // Word for word from the live RSVP form (Sept 28, 2026).
     waitingList: "Submitting this RSVP does not guarantee admission and is not a ticket. Your request will be added to our ticket waiting list. We will email you if your ticket is approved."

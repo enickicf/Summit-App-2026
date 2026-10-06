@@ -9,6 +9,13 @@ import type { Store } from "@netlify/blobs";
 // database credentials involved) and in a local JSON file in development and tests.
 
 export const attendanceStatuses = ["attending", "needs_follow_up", "declined"] as const;
+export const rsvpAttending = ["", "both", "awards", "community-day"] as const;
+export type RsvpAttending = (typeof rsvpAttending)[number];
+export const rsvpAttendingLabels: Record<RsvpAttending, string> = { "": "", both: "Awards Show + Community Day", awards: "Awards Show only", "community-day": "Community Day only" };
+// Community Day is requested when the form says so (both / community-day) or the older toggle was on.
+export const wantsCommunityDay = (record: { attending?: RsvpAttending | undefined; communityDay: boolean }) => record.attending === "both" || record.attending === "community-day" || (!record.attending && record.communityDay);
+// The Awards Show is requested unless the guest chose Community Day only.
+export const wantsAwardsShow = (record: { attending?: RsvpAttending | undefined }) => record.attending !== "community-day";
 export type AttendanceStatus = (typeof attendanceStatuses)[number];
 
 const text = (max: number) => z.string().trim().max(max);
@@ -50,6 +57,10 @@ export const rsvpPayloadSchema = z.object({
   heardFrom: z.preprocess(value => String(value ?? "").trim().toLowerCase(), z.enum(rsvpHeardFrom)).optional().default(""),
   tier: z.preprocess(value => String(value ?? "").trim().toLowerCase(), z.enum(rsvpTiers)).optional().default(""),
   attendanceStatus: z.enum(attendanceStatuses),
+  // Owner (Oct 6, 2026): "What are you attending?" on every form: Awards Show + Community Day, Awards Show only, or
+  // Community Day only (a guest may come to Community Day and not the show). Forms from before Oct 6 send only the
+  // Community Day toggle (communityDay=on), which still works: no answer means the Awards Show as before.
+  attending: z.preprocess(value => value === undefined || value === null ? undefined : String(value).trim().toLowerCase(), z.enum(rsvpAttending)).optional(),
   // Owner (Sept 23): a separate toggle for Community Day (doors 5:30 PM). The form sends "on" when checked.
   communityDay: z.preprocess(value => value === true || value === "on" || value === "yes" || value === "true", z.boolean()).optional().default(false),
   guestCount: z.coerce.number().int().min(1).max(maxPartySize).optional().default(1),
@@ -261,13 +272,15 @@ export function newSubmission<T extends object>(payload: T, now: Date = new Date
 // The portal's headline numbers. Owner (Sept 30): a ticket request means the guest plans to attend, so
 // tickets requested = party sizes of every request (only an explicit legacy "unable to attend" is left out),
 // counting each email once (its latest request) so a repeat submission does not double count.
-export const requestsTickets = (record: Pick<RsvpSubmission, "attendanceStatus">) => record.attendanceStatus !== "declined";
+// Oct 6: Awards Show tickets only; a "Community Day only" request counts under Community Day, not here.
+export const requestsTickets = (record: Pick<RsvpSubmission, "attendanceStatus"> & { attending?: RsvpAttending | undefined }) => record.attendanceStatus !== "declined" && wantsAwardsShow(record);
 export function rsvpTotals(records: RsvpSubmission[]) {
   const latestByEmail = new Map<string, RsvpSubmission>();
   for (const record of byNewest(records)) if (!latestByEmail.has(record.email)) latestByEmail.set(record.email, record);
   const latest = [...latestByEmail.values()];
   const count = (status: AttendanceStatus) => latest.filter(record => record.attendanceStatus === status).length;
-  const communityDay = latest.filter(record => record.communityDay);
+  const communityDay = latest.filter(wantsCommunityDay);
+  const communityDayOnly = communityDay.filter(record => !wantsAwardsShow(record));
   const vip = latest.filter(record => record.vip);
   const nami = latest.filter(record => record.partner === "nami");
   const lakeLasVegas = latest.filter(record => record.tier === "lake-las-vegas");
@@ -286,7 +299,10 @@ export function rsvpTotals(records: RsvpSubmission[]) {
     unable: count("declined"),
     // Community Day is asked separately (from Sept 23); requests before that have no answer and count as "no".
     communityDayGuests: communityDay.length,
-    communityDayTickets: communityDay.reduce((total, record) => total + record.guestCount, 0)
+    communityDayTickets: communityDay.reduce((total, record) => total + record.guestCount, 0),
+    // Oct 6: guests coming to Community Day but not the Awards Show.
+    communityDayOnlyGuests: communityDayOnly.length,
+    communityDayOnlyTickets: communityDayOnly.reduce((total, record) => total + record.guestCount, 0)
   };
 }
 
@@ -306,7 +322,7 @@ export function rsvpForm(record: Pick<RsvpSubmission, "vip" | "partner" | "tier"
 export const rsvpExportForms = { vip: "VIP", "nami-vip": "NAMI VIP", "lake-las-vegas-vip": "Lake Las Vegas VIP", "lake-las-vegas": "Lake Las Vegas", nami: "NAMI", standard: "Standard" } as const;
 export type RsvpExportForm = keyof typeof rsvpExportForms;
 export const rsvpsOfForm = (records: RsvpSubmission[], form: RsvpExportForm) => records.filter(record => rsvpForm(record) === rsvpExportForms[form]);
-export const withRsvpForm = (records: RsvpSubmission[]) => records.map(record => ({ ...record, form: rsvpForm(record), heardFromLabel: record.heardFrom ? rsvpHeardFromLabels[record.heardFrom] : "", guestDetails: (record.guests ?? []).map(partyGuestLine).join("; ") }));
+export const withRsvpForm = (records: RsvpSubmission[]) => records.map(record => ({ ...record, form: rsvpForm(record), attendingLabel: record.attending ? rsvpAttendingLabels[record.attending] : (record.communityDay ? rsvpAttendingLabels.both : ""), heardFromLabel: record.heardFrom ? rsvpHeardFromLabels[record.heardFrom] : "", guestDetails: (record.guests ?? []).map(partyGuestLine).join("; ") }));
 // Owner (Sept 30): the mass RSVP lists never include a VIP request, and the VIP portal reads only VIP requests.
 // Owner (Oct 1, 2026, superseding the Sept 30 split): "make the backend of the VIP RSVP the same now since
 // we are upping security, but make the forms still different". All RSVPs, VIP or not, live under "rsvp" and
@@ -341,11 +357,11 @@ function csvCell(value: unknown): string {
 export function toCsv(rows: Record<string, unknown>[], columns: string[]): string {
   return [columns.join(","), ...rows.map(row => columns.map(column => csvCell(row[column])).join(","))].join("\r\n") + "\r\n";
 }
-export const rsvpCsvColumns = ["submittedAt", "form", "name", "email", "phone", "organization", "professionalRole", "invitedBy", "heardFromLabel", "vip", "partner", "tier", "attendanceStatus", "communityDay", "guestCount", "guestDetails", "notes", "source", "id", "removedAt", "removedReason"];
+export const rsvpCsvColumns = ["submittedAt", "form", "name", "email", "phone", "organization", "professionalRole", "invitedBy", "heardFromLabel", "vip", "partner", "tier", "attendanceStatus", "attendingLabel", "communityDay", "guestCount", "guestDetails", "notes", "source", "id", "removedAt", "removedReason"];
 
 // Which part(s) of the evening a request covers: the Awards Show (their response) and/or Community Day (the toggle).
-export function comingTo(record: Pick<RsvpSubmission, "attendanceStatus" | "communityDay">): ("awards" | "communityDay")[] {
-  return [...(requestsTickets(record) ? ["awards" as const] : []), ...(record.communityDay ? ["communityDay" as const] : [])];
+export function comingTo(record: Pick<RsvpSubmission, "attendanceStatus" | "communityDay"> & { attending?: RsvpAttending | undefined }): ("awards" | "communityDay")[] {
+  return [...(requestsTickets(record) ? ["awards" as const] : []), ...(wantsCommunityDay(record) ? ["communityDay" as const] : [])];
 }
 export const nominationCsvColumns = ["submittedAt", "nomineeName", "nomineeOrganization", "category", "reason", "links", "nominatorName", "nominatorEmail", "nominatorPhone", "relationship", "source", "id"];
 
