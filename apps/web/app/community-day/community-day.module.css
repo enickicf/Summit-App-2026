@@ -30,24 +30,15 @@
 .heroPowered { margin:18px 0 0; color:#ffffff; font-size:16px; line-height:1.4; letter-spacing:.02em; }
 .heroPowered strong { display:block; font-size:clamp(22px,2.4vw,30px); font-weight:600; line-height:1.2; letter-spacing:0; }
 .hero h1.heroTitleMark { font-size:clamp(36px,4.6vw,60px); }
-/* The date and time, large enough to read at a glance. */
-.when { display:flex; flex-direction:column; margin:24px 0 0; color:#ffffff; }
-.whenDate { font-size:clamp(28px,3vw,42px); font-weight:700; line-height:1.2; }
-.whenTime { margin-top:2px; font-size:clamp(28px,3vw,42px); font-weight:700; line-height:1.2; color:#d0d4ea; font-variant-numeric:tabular-nums; }
-/* Owner (Oct 6): both time lines in the same blue, so the times read as one pair. */
-.whenAwards { margin-top:6px; font-size:clamp(20px,2.1vw,28px); font-weight:700; line-height:1.2; color:#d0d4ea; font-variant-numeric:tabular-nums; }
-.whenPlace { margin-top:12px; font-size:18px; font-weight:500; line-height:1.5; }
-/* Trent (Oct 6): the Awards Show block after the details. */
-.awardsInfo { padding:72px max(24px,calc((100% - 900px)/2)) 80px; background:#1c1a2e; color:#ffffff; text-align:center; }
-.page .awardsInfo h2 { margin:0 0 14px; color:#ffffff; font-size:clamp(34px,4vw,48px); line-height:1.08; }
-.awardsInfoLead { margin:0 auto 28px; max-width:640px; color:#d0d4ea; font-size:18px; line-height:1.55; text-wrap:balance; }
-.awardsInfoFacts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px 32px; margin:0 auto 32px; max-width:760px; text-align:left; }
-.awardsInfoFacts > div { display:flex; flex-direction:column; gap:4px; }
-.awardsInfoFacts dt { color:#f1dfbb; font-size:13px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
-.awardsInfoFacts dd { margin:0; color:#ffffff; font-size:18px; font-weight:500; line-height:1.4; }
-.awardsInfo .button.solid { border-color:#f1dfbb; background:#f1dfbb; color:#17141a; }
-.awardsInfo .button.solid:hover { border-color:#ffffff; background:#ffffff; }
-@media(max-width:760px) { .awardsInfo { padding:56px 16px 64px; } .awardsInfoFacts { grid-template-columns:1fr; gap:14px; } .whenAwards { font-size:20px; } }
+/* The date and venue on one line, then the two parts of the evening, each named, times in blue (owner, Oct 6). */
+.when { display:flex; flex-direction:column; gap:14px; margin:24px 0 0; color:#ffffff; }
+.whenLine { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 14px; margin:0; }
+.whenDate { font-size:clamp(26px,2.6vw,36px); font-weight:700; line-height:1.2; }
+.whenPlace { font-size:clamp(15px,1.4vw,18px); font-weight:500; line-height:1.5; color:rgba(255,255,255,.88); }
+.whenTimes { display:grid; grid-template-columns:repeat(2,max-content); gap:10px 36px; margin:0; }
+.whenTimes > div { display:flex; flex-direction:column; gap:2px; min-width:0; }
+.whenTimes dt { color:rgba(255,255,255,.82); font-size:13px; font-weight:700; letter-spacing:.08em; line-height:1.3; text-transform:uppercase; }
+.whenTimes dd { margin:0; color:#d0d4ea; font-size:clamp(24px,2.5vw,34px); font-weight:700; line-height:1.15; font-variant-numeric:tabular-nums; }
 .heroButtons { display:flex; flex-wrap:wrap; gap:14px; margin-top:32px; }
 
 /* The purpose comes immediately after the hero, with the Nevada observance called out first. */
@@ -102,7 +93,8 @@
   .heroButtons { margin-top:26px; }
   .hero .button { flex:1 1 auto; }
   .mission { padding:64px 16px 56px; }
-  .whenPlace { font-size:16px; }
+  .whenPlace { font-size:15px; }
+  .whenTimes { grid-template-columns:1fr; gap:10px; }
   .details { padding:28px 16px 32px; }
   .page .details h2 { margin-bottom:14px; font-size:36px; }
   .details dl > div { padding:14px 8px; }
@@ -115,7 +107,7 @@
 @media(max-width:360px) {
   .hero h1, .hero h1.heroTitleMark { font-size:31px; }
   .heroPowered strong { font-size:20px; }
-  .whenDate, .whenTime { font-size:24px; }
+  .whenDate { font-size:24px; } .whenTimes dd { font-size:22px; }
   .heroButtons { gap:10px; }
   .hero .button { padding:14px 18px; }
 }
@@ -124,7 +116,7 @@
   .hero h1 { font-size:31px; }
   .hero h1.heroTitleMark { gap:7px; }
   .when { margin-top:18px; }
-  .whenDate, .whenTime { font-size:22px; }
+  .whenDate { font-size:22px; } .whenTimes dd { font-size:20px; }
   .whenPlace { margin-top:8px; font-size:14px; }
   .heroButtons { margin-top:18px; }
   .hero .button { min-height:46px; padding:11px 12px; font-size:14px; }
