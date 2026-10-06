@@ -25,6 +25,11 @@
 .heroTitleMark > .notAloneMark { display:inline-flex; align-items:center; gap:10px; color:#ffffff; font-size:clamp(13px,1.35vw,17px); font-weight:700; letter-spacing:.18em; line-height:1; text-transform:uppercase; }
 .notAloneMark svg { width:1.4em; height:1.4em; color:#ffffff; }
 .heroTitleMark strong { color:#ffffff; font:inherit; letter-spacing:-.035em; line-height:.94; text-transform:uppercase; }
+/* "Community Day" label above the Nevada Mental Health Day title, and the Cohen credit under it (Awards hero format). */
+.heroKicker { display:inline-block; color:#d0d4ea; font-size:clamp(14px,1.4vw,18px); font-weight:700; letter-spacing:.22em; line-height:1; text-transform:uppercase; }
+.heroPowered { margin:18px 0 0; color:#ffffff; font-size:16px; line-height:1.4; letter-spacing:.02em; }
+.heroPowered strong { display:block; font-size:clamp(22px,2.4vw,30px); font-weight:600; line-height:1.2; letter-spacing:0; }
+.hero h1.heroTitleMark { font-size:clamp(36px,4.6vw,60px); }
 /* The date and time, large enough to read at a glance. */
 .when { display:flex; flex-direction:column; margin:24px 0 0; color:#ffffff; }
 .whenDate { font-size:clamp(28px,3vw,42px); font-weight:700; line-height:1.2; }
@@ -95,7 +100,8 @@
 }
 /* Very narrow phones (320-360px): smaller title and date so nothing touches the screen edge. */
 @media(max-width:360px) {
-  .hero h1 { font-size:34px; }
+  .hero h1, .hero h1.heroTitleMark { font-size:31px; }
+  .heroPowered strong { font-size:20px; }
   .whenDate, .whenTime { font-size:24px; }
   .heroButtons { gap:10px; }
   .hero .button { padding:14px 18px; }

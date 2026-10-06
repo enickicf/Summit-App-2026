@@ -17,7 +17,7 @@ describe("Community Day page", () => {
 
   it("has one focusable main landmark and its own title", async () => {
     const html = await render();
-    expect(metadata.title).toBe("Community Day");
+    expect(metadata.title).toBe("Nevada Mental Health Day – Community Day");
     expect(html.match(/<main\b/g)).toHaveLength(1);
     expect(html).toMatch(/<main\b[^>]*id="main-content"[^>]*tabindex="-1"/);
     expect(html.match(/<h1\b/g)).toHaveLength(1);
@@ -35,7 +35,7 @@ describe("Community Day page", () => {
     expect(heroHtml.replace(/&#x27;/g, "'")).toContain(`alt="${communityDay2026.heroPhotoAlt}"`);
     expect(heroHtml).toContain("encore-theater-community-day");
     const hero = text(heroHtml);
-    expect(hero).toContain("Presented by Community Day Monday, November 2 5:45–7:15 PM Encore Theater at Wynn Las Vegas Request free tickets Info");
+    expect(hero).toContain("Presented by Community Day Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Monday, November 2 5:45–7:15 PM Encore Theater at Wynn Las Vegas Request free tickets Info");
     expect(hero).not.toContain("Not Alone");
     expect(hero).not.toMatch(/Doors open|A free panel/);
   });
@@ -48,10 +48,21 @@ describe("Community Day page", () => {
     expect(html).toMatch(/<section [^>]*id="what-is-community-day"[^>]*aria-labelledby="mission-title"/);
   });
 
-  it("opens the explanation with Nevada Mental Health Day", async () => {
+  it("titles the page Nevada Mental Health Day with Community Day as its label and the Cohen credit under it (Ryan, Oct 5)", async () => {
     beforeEvent();
     const html = await render();
-    expect(text(section(html, "mission-title")).trim()).toBe(`aria-labelledby="mission-title"> What is Community Day? In honor of Nevada Mental Health Day ${communityDay2026.about}`);
+    const hero = section(html, "community-day-title");
+    expect(hero).toContain("Nevada Mental<br/>Health Day");
+    expect(hero).toContain(">Community Day<");
+    expect(hero).toContain("Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong>");
+    expect(html.indexOf("Presented by")).toBeLessThan(html.indexOf("Nevada Mental<br/>Health Day"));
+    expect(html.indexOf("Nevada Mental<br/>Health Day")).toBeLessThan(html.indexOf("Powered by<strong>"));
+  });
+
+  it("opens the explanation without repeating the Nevada Mental Health Day line", async () => {
+    beforeEvent();
+    const html = await render();
+    expect(text(section(html, "mission-title")).trim()).toBe(`aria-labelledby="mission-title"> What is Community Day? ${communityDay2026.about}`);
     expect(communityDay2026.about).toMatch(/^The Not Alone Community Day is /);
     expect(text(html)).not.toContain("Our mission");
   });

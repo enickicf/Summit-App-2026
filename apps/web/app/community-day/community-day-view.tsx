@@ -29,9 +29,13 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
       <div className={styles.heroCopy}>
         {/* Aphrah (Oct 3): "Presented by ICF & NAMI" in the header: the logo lockup sits above the title (owner, Oct 3: no "Not Alone" mark above the title). */}
         <PresentedBy className={styles.presentedBy} />
-        <h1 id="community-day-title" className={styles.heroTitleMark} aria-label={day.name}>
-          <strong>Community<br />Day</strong>
+        {/* Ryan via Aphrah/Paige (Oct 5 night): the page is titled "Nevada Mental Health Day", with "Community Day" as its
+            label; the ICF x NAMI "Presented by" lockup stays on top and the Cohen Foundation credit sits under the title. */}
+        <h1 id="community-day-title" className={styles.heroTitleMark} aria-label={`${day.title}, ${day.name}`}>
+          <span className={styles.heroKicker}>{day.name}</span>
+          <strong>Nevada Mental<br />Health Day</strong>
         </h1>
+        <p className={styles.heroPowered}>Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong></p>
         {/* Owner (Sept 29): the date and time must read at a glance the moment the page opens. */}
         {over ? <p className={styles.when}>{postEventLabel}</p> : <p className={styles.when}>
           <time className={styles.whenDate} dateTime={day.dateTime}>Monday, November 2</time>
@@ -52,7 +56,6 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
 
     <section className={styles.mission} id="what-is-community-day" aria-labelledby="mission-title">
       <h2 id="mission-title">What is Community Day?</h2>
-      <p className={styles.occasion}>In honor of Nevada Mental Health Day</p>
       <p className={styles.missionDescription}>{day.about}</p>
     </section>
 

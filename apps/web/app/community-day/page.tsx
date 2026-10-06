@@ -3,7 +3,7 @@ import { communityDay2026 as day } from "../../lib/community-day-2026";
 import { CommunityDayView } from "./community-day-view";
 
 export const metadata: Metadata = {
-  title: "Community Day",
+  title: "Nevada Mental Health Day – Community Day",
   description: `${day.name}, ${day.date}, ${day.heroTime} at ${day.venue}. ${day.about}`
 };
 // Checks the clock on every request: from Nov 6, 2026 the ticket request leaves the page and the hero reads

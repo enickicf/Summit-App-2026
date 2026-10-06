@@ -12,6 +12,8 @@ import { awards2026Editorial } from "./awards-editorial";
 // The "What is Community Day?" statement was written for the owner's review (Sept 29) from those same facts.
 export const communityDay2026 = {
   name: "Community Day",
+  // Ryan (Oct 5, via Aphrah and Paige): the page title is "Nevada Mental Health Day"; "Community Day" is the label.
+  title: "Nevada Mental Health Day",
   date: awards2026Editorial.date,
   dateTime: "2026-11-02T17:30:00-08:00",
   // Owner (Oct 1): Community Day runs 5:45–7:15 PM; doors remain 5:30 PM.
