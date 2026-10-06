@@ -34,7 +34,19 @@
 .when { display:flex; flex-direction:column; margin:24px 0 0; color:#ffffff; }
 .whenDate { font-size:clamp(28px,3vw,42px); font-weight:700; line-height:1.2; }
 .whenTime { margin-top:2px; font-size:clamp(28px,3vw,42px); font-weight:700; line-height:1.2; color:#d0d4ea; font-variant-numeric:tabular-nums; }
+.whenAwards { margin-top:6px; font-size:clamp(20px,2.1vw,28px); font-weight:700; line-height:1.2; color:#ffffff; font-variant-numeric:tabular-nums; }
 .whenPlace { margin-top:12px; font-size:18px; font-weight:500; line-height:1.5; }
+/* Trent (Oct 6): the Awards Show block after the details. */
+.awardsInfo { padding:72px max(24px,calc((100% - 900px)/2)) 80px; background:#1c1a2e; color:#ffffff; text-align:center; }
+.page .awardsInfo h2 { margin:0 0 14px; color:#ffffff; font-size:clamp(34px,4vw,48px); line-height:1.08; }
+.awardsInfoLead { margin:0 auto 28px; max-width:640px; color:#d0d4ea; font-size:18px; line-height:1.55; text-wrap:balance; }
+.awardsInfoFacts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px 32px; margin:0 auto 32px; max-width:760px; text-align:left; }
+.awardsInfoFacts > div { display:flex; flex-direction:column; gap:4px; }
+.awardsInfoFacts dt { color:#f1dfbb; font-size:13px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+.awardsInfoFacts dd { margin:0; color:#ffffff; font-size:18px; font-weight:500; line-height:1.4; }
+.awardsInfo .button.solid { border-color:#f1dfbb; background:#f1dfbb; color:#17141a; }
+.awardsInfo .button.solid:hover { border-color:#ffffff; background:#ffffff; }
+@media(max-width:760px) { .awardsInfo { padding:56px 16px 64px; } .awardsInfoFacts { grid-template-columns:1fr; gap:14px; } .whenAwards { font-size:20px; } }
 .heroButtons { display:flex; flex-wrap:wrap; gap:14px; margin-top:32px; }
 
 /* The purpose comes immediately after the hero, with the Nevada observance called out first. */

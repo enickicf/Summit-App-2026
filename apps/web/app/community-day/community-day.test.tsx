@@ -35,7 +35,7 @@ describe("Community Day page", () => {
     expect(heroHtml.replace(/&#x27;/g, "'")).toContain(`alt="${communityDay2026.heroPhotoAlt}"`);
     expect(heroHtml).toContain("encore-theater-community-day");
     const hero = text(heroHtml);
-    expect(hero).toContain("Presented by Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Monday, November 2 5:45–7:15 PM Encore Theater at Wynn Las Vegas Request free tickets Info");
+    expect(hero).toContain("Presented by Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Monday, November 2 5:45–7:15 PM Awards Show 7:30–10:00 PM Encore Theater at Wynn Las Vegas Request free tickets Info");
     expect(hero).not.toContain("Not Alone");
     expect(hero).not.toMatch(/Doors open|A free panel/);
   });
@@ -91,7 +91,11 @@ describe("Community Day page", () => {
     expect(page).not.toMatch(/different|not the Awards/i);
     expect(page).toContain("Awards Show 7:30 PM");
     // Owner (Oct 4): the talent lineup is on this page too; the rest of the Awards program is not.
-    for (const other of ["Highlights", "iHeart", "Pre-Show", "pre-show", "No Solicitation"]) expect(page).not.toContain(other);
+    // Trent (Oct 6): the Awards Show information (when, where, host, broadcast) IS on this page, after the details.
+    for (const other of ["Highlights", "Pre-Show", "pre-show", "No Solicitation"]) expect(page).not.toContain(other);
+    expect(text(section(html, "awards-show-title"))).toContain("The Not Alone Awards Show");
+    expect(page).toContain("Awards Show 7:30–10:00 PM");
+    expect(html.indexOf('id="awards-show"')).toBeGreaterThan(html.indexOf('id="schedule"'));
     for (const name of ["The 2026 Lineup", "Jewel", "Steve Wozniak", "Loni Love"]) expect(page).toContain(name);
     expect(html.indexOf("The 2026 Lineup")).toBeGreaterThan(html.indexOf('id="community-day-actions"'));
     expect(html.indexOf("The 2026 Lineup")).toBeLessThan(html.indexOf('id="what-is-community-day"'));
@@ -133,7 +137,7 @@ describe("Community Day page", () => {
     expect(page).toContain("Submitting this RSVP does not guarantee admission and is not a ticket. Your request will be added to our ticket waiting list. We will email you if your ticket is approved.");
     expect(page).toContain("up to ten per request");
     expect(page).toContain("Enter your organization in the Organization field.");
-    expect(page).toContain("Pick “Awards Show + Community Day” or “Community Day only.”");
+    expect(page).toContain("Turn on one of the three: both Nevada Mental Health Day and the Awards Show, only Nevada Mental Health Day, or only the Awards Show.");
     // No personal contact details on the page; questions go to ICF's contact page.
     expect(html).not.toMatch(/tel:|mailto:/);
     expect(html).toContain('href="/contact"');
