@@ -32,7 +32,8 @@
 .hero h1.heroTitleMark { font-size:clamp(36px,4.6vw,60px); }
 /* The date and venue on one line, then the two parts of the evening, each named, times in blue (owner, Oct 6). */
 .when { display:flex; flex-direction:column; gap:14px; margin:24px 0 0; color:#ffffff; }
-.whenLine { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 14px; margin:0; }
+/* Owner (Oct 6): the venue sits on its own line under the date at every size. */
+.whenLine { display:flex; flex-direction:column; gap:4px; margin:0; }
 .whenDate { font-size:clamp(26px,2.6vw,36px); font-weight:700; line-height:1.2; }
 .whenPlace { font-size:clamp(15px,1.4vw,18px); font-weight:500; line-height:1.5; color:rgba(255,255,255,.88); }
 .whenTimes { display:grid; grid-template-columns:repeat(2,max-content); gap:10px 36px; margin:0; }
