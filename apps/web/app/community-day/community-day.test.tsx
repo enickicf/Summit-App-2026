@@ -90,11 +90,9 @@ describe("Community Day page", () => {
     expect(page).not.toMatch(/different|not the Awards/i);
     expect(page).toContain("Awards Show 7:30 PM");
     // Owner (Oct 4): the talent lineup is on this page too; the rest of the Awards program is not.
-    // Trent (Oct 6): the Awards Show information (when, where, host, broadcast) IS on this page, after the details.
-    for (const other of ["Highlights", "Pre-Show", "pre-show", "No Solicitation"]) expect(page).not.toContain(other);
-    expect(text(section(html, "awards-show-title"))).toContain("The Not Alone Awards Show");
-    expect(page).toContain("Not Alone Awards Show 7:30–10:00 PM");
-    expect(html.indexOf('id="awards-show"')).toBeGreaterThan(html.indexOf('id="schedule"'));
+    // Owner (Oct 6): no Awards Show information block on this page (removed the same day it was added).
+    for (const other of ["Highlights", "iHeart", "Pre-Show", "pre-show", "No Solicitation"]) expect(page).not.toContain(other);
+    expect(html).not.toContain('id="awards-show"');
     for (const name of ["The 2026 Lineup", "Jewel", "Steve Wozniak", "Loni Love"]) expect(page).toContain(name);
     expect(html.indexOf("The 2026 Lineup")).toBeGreaterThan(html.indexOf('id="community-day-actions"'));
     expect(html.indexOf("The 2026 Lineup")).toBeLessThan(html.indexOf('id="what-is-community-day"'));
