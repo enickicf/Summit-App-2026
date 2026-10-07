@@ -61,7 +61,7 @@ export const airtableHeadshotCrops: Record<string, { bytes: number | null; file:
   receSWnJ8DYQS1FLC: { bytes: null, file: "/2026-headshots/portraits/nick-kislinger.jpg" },
   recarnqgsNyehnKZo: { bytes: null, file: "/2026-headshots/portraits/paul-dalio-2-c.jpg" },
   recMzTDCDVD2xkeK2: { bytes: 688686, file: "/2026-headshots/portraits/rahil-briggs-2-c.jpg" },
-  rec6BVFGDrWyj743W: { bytes: null, file: "/2026-headshots/portraits/ryan-wolfington-3-c.jpg" },
+  rec6BVFGDrWyj743W: { bytes: null, file: "/2026-headshots/portraits/ryan-wolfington-4.jpg" },
   recHg8FKPKU0mEgmT: { bytes: null, file: "/2026-headshots/portraits/sarah-gilman-2-c.jpg" },
   reciHZAZxnu1f2EuS: { bytes: null, file: "/2026-headshots/portraits/silas-luke-jones-2-c.jpg" },
   recei8qxO98rmafrn: { bytes: null, file: "/2026-headshots/portraits/trent-alenik-2-c.jpg" },

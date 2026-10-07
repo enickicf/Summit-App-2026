@@ -70,7 +70,7 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "rahil briggs": { file: "/2026-headshots/portraits/rahil-briggs-2-c.jpg", source: "airtable", airtableBytes: 688686 },
   "ray lewis": { file: "/2026-headshots/portraits/ray-lewis-3.jpg", source: "web", // Oct 7 (owner): looser cut, face a touch above center (40%) so head and shoulders show instead of a giant head
      credit: "Official speaker promo photo, Washington Speakers Bureau (wsb.com/speakers/ray-lewis); courtesy image (owner asked for a better photo, Sept 21 late)" },
-  "ryan wolfington": { file: "/2026-headshots/portraits/ryan-wolfington-3-c.jpg", source: "icf-card", credit: "ICF Summit page headshot photo (500px original); owner (Sept 21) rejected the shoulder cut-out" },
+  "ryan wolfington": { file: "/2026-headshots/portraits/ryan-wolfington-4.jpg", source: "airtable", credit: "Airtable headshot uploaded by Oct 7, 2026 (1169x1346; owner asked for the new one, perfectly centered)" },
   "sally dewhurst": { file: "/2026-headshots/portraits/sally-dewhurst-2.jpg", source: "airtable", airtableBytes: 464971 },
   "sarah gilman": { file: "/2026-headshots/portraits/sarah-gilman-2-c.jpg", source: "icf-card" },
   "sean wolfington": { file: "/2026-headshots/portraits/sean-wolfington-2.jpg", source: "airtable", airtableBytes: 16970 },

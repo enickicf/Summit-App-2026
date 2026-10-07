@@ -129,7 +129,7 @@ describe("Community Day page", () => {
     expect(details["Awards Show Doors"]).toBe(awards["Doors Open"]);
     expect(details["Awards Show"]).toBe(awards["Awards Show"]);
     expect(notes["Awards Show"]).toContain(`Pre-Show ${awards["Pre-Show"]}`);
-    expect(communityDay2026.heroAwardsLine.link).toContain(`doors ${awards["Doors Open"]}`);
+    expect(communityDay2026.heroAwardsLine.after).toContain(`doors ${awards["Doors Open"]}`);
     expect(communityDay2026.doors).toBe("12:00 PM");
     expect(communityDay2026.time).toBe("12:00–6:30 PM");
     expect(communityDay2026.dateTime).toBe("2026-11-02T12:00:00-08:00");
