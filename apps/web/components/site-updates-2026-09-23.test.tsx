@@ -119,9 +119,10 @@ describe("Sept 23 site updates", () => {
     expect(a).not.toContain('aria-label="Founders names"');
     expect(a).not.toContain('aria-label="Lineup names"');
     const founders = a.slice(a.indexOf('aria-label="Founders"'), a.indexOf('id="awards-partners"'));
-    // Owner (Oct 5): the McGraws are two individual Founder name cards (no photo), monogram squares inside the same grid.
-    expect(founders).toMatch(/portraitFallback[^"]*" aria-hidden="true">JM<\/span><div><h3>Jay McGraw<\/h3>/);
-    expect(founders).toMatch(/portraitFallback[^"]*" aria-hidden="true">EM<\/span><div><h3>Erica McGraw<\/h3>/);
+    // Owner (Oct 5): the McGraws are two individual Founder cards; Oct 7: each with the owner's own headshot, never a composite.
+    expect(founders).toMatch(/jay-mcgraw-2\.jpg[^]*?<h3>Jay McGraw<\/h3>/);
+    expect(founders).toMatch(/erica-mcgraw-2\.jpg[^]*?<h3>Erica McGraw<\/h3>/);
+    expect(founders).not.toMatch(/aria-hidden="true">(JM|EM)<\/span>/);
     expect(founders).not.toMatch(/Jay &amp; Erica McGraw|jay-erica-mcgraw/);
     expect(founders.match(/data-awards-guest=/g)?.length).toBeGreaterThan(10);
   });

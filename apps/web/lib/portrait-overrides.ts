@@ -71,6 +71,10 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "ray lewis": { file: "/2026-headshots/portraits/ray-lewis-3.jpg", source: "web", // Oct 7 (owner): looser cut, face a touch above center (40%) so head and shoulders show instead of a giant head
      credit: "Official speaker promo photo, Washington Speakers Bureau (wsb.com/speakers/ray-lewis); courtesy image (owner asked for a better photo, Sept 21 late)" },
   "ryan wolfington": { file: "/2026-headshots/portraits/ryan-wolfington-4.jpg", source: "airtable", credit: "Airtable headshot uploaded by Oct 7, 2026 (1169x1346; owner asked for the new one, perfectly centered)" },
+  // Owner (Oct 7): two individual founder cards with the photos the owner sent in chat (743x743 and 1151x1151, both
+  // Photoshop exports dated Oct 7); Airtable still holds the 182px PNG and the full-body beach photo.
+  "jay mcgraw": { file: "/2026-headshots/portraits/jay-mcgraw-2.jpg", source: "owner", credit: "Headshot supplied by the owner Oct 7, 2026 (work/new-headshots-20261007/owner-upload-2.jpg), face-centered" },
+  "erica mcgraw": { file: "/2026-headshots/portraits/erica-mcgraw-2.jpg", source: "owner", credit: "Headshot supplied by the owner Oct 7, 2026 (work/new-headshots-20261007/owner-upload-1.jpg), face-centered" },
   "sally dewhurst": { file: "/2026-headshots/portraits/sally-dewhurst-2.jpg", source: "airtable", airtableBytes: 464971 },
   "sarah gilman": { file: "/2026-headshots/portraits/sarah-gilman-2-c.jpg", source: "icf-card" },
   "sean wolfington": { file: "/2026-headshots/portraits/sean-wolfington-2.jpg", source: "airtable", airtableBytes: 16970 },
@@ -144,11 +148,10 @@ export function portrait2026(name: string): string | null | undefined {
 // Owner (Sept 21, late): anyone without a photo is left off the site for now, and Hal Fisher is left off
 // until a proper headshot is supplied. Their Airtable records are untouched; they return when this changes.
 export const hiddenFromSite2026 = new Set(["hal fisher"].map(personNameKey));
-// Owner (Sept 22): Jay & Erica McGraw are credited as founders now, before a photo exists (name card).
-// Owner (Oct 5): the McGraw composite is retired; Jay's Airtable file is 182 px wide (a face-centered cut would be a
-// blurry 1.3-face-height crop) and Erica's is a full-body beach photo, so both are name cards until the team supplies
-// real headshots (no licensed public photo of either exists; see docs/NEXT_TASKS.md).
-export const listedWithoutPhoto2026 = new Set<string>(["jay mcgraw", "erica mcgraw"]);
+// Owner (Sept 22): Jay & Erica McGraw were credited as founders before a photo existed (name cards).
+// Owner (Oct 7): the owner supplied a headshot of each (work/new-headshots-20261007/owner-upload-*.jpg), so both are
+// photo cards now (entries above) and nobody is listed without a photo. The set stays for the next such case.
+export const listedWithoutPhoto2026 = new Set<string>([]);
 export function hiddenUntilPhoto2026(name: string, image: string | undefined): boolean {
   const key = personNameKey(name);
   return hiddenFromSite2026.has(key) || (!image && !listedWithoutPhoto2026.has(key));

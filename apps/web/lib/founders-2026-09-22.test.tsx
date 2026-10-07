@@ -54,11 +54,12 @@ describe("founder couples added Sept 22", async () => {
     for (const name of mcgraws) expect(people.find(person => person.name === name)?.bio).not.toContain("Jay and Erica McGraw are founders of the Not Alone Summit.");
   });
 
-  it("reuses ICF's 2025 couple photos for the Lewises and Kellys; the McGraws are name cards without a photo (owner, Oct 5)", () => {
+  it("reuses ICF's 2025 couple photos for the Lewises and Kellys; the McGraws each show the owner's Oct 7 headshot", () => {
     const people = awardsDisplayPeople(snapshot);
     expect(people.find(person => person.name === "Melony and Adam Lewis")?.image).toBe("/original-2025/e980901947b9a080f2b3.jpg");
     expect(people.find(person => person.name === "Winston and Cameron Kelly")?.image).toBe("/original-2025/b6752c35de4a68857221.jpg");
-    for (const name of mcgraws) expect(people.find(person => person.name === name)?.image).toBeUndefined();
+    expect(people.find(person => person.name === "Jay McGraw")?.image).toBe("/2026-headshots/portraits/jay-mcgraw-2.jpg");
+    expect(people.find(person => person.name === "Erica McGraw")?.image).toBe("/2026-headshots/portraits/erica-mcgraw-2.jpg");
     expect(awards).not.toContain("jay-erica-mcgraw");
     // The no-photo rule still hides non-founders without a photo.
     expect(directoryPeople(snapshot).map(person => person.name)).not.toContain("Jen Whalen");
