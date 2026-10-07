@@ -73,13 +73,30 @@ export function isCompleteCard(person: SummitPerson) {
   return photo && Boolean(person.role.trim()) && Boolean(person.bio.trim());
 }
 
+// Owner (Oct 7, 2026): in the Founders list the Cohens sit fourth, and Janet Wozniak sits right after Steve (they have
+// separate headshots, so they stay two cards side by side). Everyone else keeps Airtable's order.
+export function founderOrder2026(founders: SummitPerson[]): SummitPerson[] {
+  const list = [...founders];
+  const move = (match: (p: SummitPerson) => boolean, to: number) => {
+    const from = list.findIndex(match);
+    if (from === -1) return;
+    const [person] = list.splice(from, 1);
+    list.splice(Math.min(to, list.length), 0, person!);
+  };
+  const janet = list.findIndex(person => personNameKey(person.name) === "janet wozniak");
+  const steve = list.findIndex(person => personNameKey(person.name) === "steve wozniak");
+  if (janet !== -1 && steve !== -1) move(person => personNameKey(person.name) === "janet wozniak", janet < steve ? steve : steve + 1);
+  move(person => /cohen/i.test(person.name), 3);
+  return list;
+}
+
 export function peopleSections(people: SummitPerson[], variant: SectionVariant = "summit"): PeopleSection[] {
   const seen = new Set<string>();
   const unique = people.filter(person => { const key = personNameKey(person.name); if (seen.has(key)) return false; seen.add(key); return true; });
   const cards = unique.filter(person => (!creditOnly(person) || isKeynote(person)) && isCompleteCard(person));
   const top = cards.filter(isKeynote).sort((a, b) => a.rank! - b.rank!);
   const tiered = cards.filter(person => !isKeynote(person) && (person.tier || (variant === "summit" && inSummitLineup(person))) && (!isFounder(person) || isHeadline(person))).sort(byTier);
-  const founders = cards.filter(isFounder).sort(byAirtable);
+  const founders = founderOrder2026(cards.filter(isFounder).sort(byAirtable));
   const attendees = cards.filter(person => person.categories.includes("Attendees") && !isKeynote(person) && !person.tier && !isFounder(person) && !inSummitLineup(person)).sort(byAirtable);
   const entry = (person: SummitPerson) => ({ person, role: publicRole(person) });
   const founderSection: PeopleSection = { title: "Founders", people: founders.map(person => ({ person, role: roleFor(person, founderCategories) })) };

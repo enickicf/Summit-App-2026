@@ -142,3 +142,13 @@ describe("Airtable Website Grouping rules", () => {
     expect(isPublicAirtablePerson(record("Staff", ["Staff"]))).toBe(false);
   });
 });
+
+describe("Founders order (owner, Oct 7)", () => {
+  it("puts the Cohens fourth and Janet right after Steve", async () => {
+    const { founderOrder2026 } = await import("./people-sections");
+    const mk = (name: string) => ({ name } as unknown as import("./people").SummitPerson);
+    const ordered = founderOrder2026(["Janet Wozniak", "A", "B", "C", "D", "Steven and Alexandra Cohen", "E", "Steve Wozniak", "F"].map(mk)).map(p => p.name);
+    expect(ordered.indexOf("Steven and Alexandra Cohen")).toBe(3);
+    expect(ordered.indexOf("Janet Wozniak")).toBe(ordered.indexOf("Steve Wozniak") + 1);
+  });
+});
