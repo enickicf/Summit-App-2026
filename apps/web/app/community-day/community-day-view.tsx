@@ -44,7 +44,7 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
           <dl className={styles.whenTimes}>
             {day.heroBlocks.map(block => <div key={block.label}><dt>{block.label}</dt><dd>{block.time}</dd></div>)}
           </dl>
-          <p className={styles.whenAwardsLine}>{day.heroAwardsLine}</p>
+          <p className={styles.whenAwardsLine}>{day.heroAwardsLine.before}<a href={partner?.path ?? "/awards/2026"} target="_blank" rel="noopener">{day.heroAwardsLine.link}</a>{day.heroAwardsLine.after}</p>
         </div>}
         <div className={styles.heroButtons} id="community-day-actions">
           {!over && <a className={styles.button} href={rsvpUrl} target="_blank" rel="noopener">Request free tickets</a>}

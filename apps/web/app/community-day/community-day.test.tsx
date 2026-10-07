@@ -36,7 +36,7 @@ describe("Community Day page", () => {
     expect(heroHtml).toContain("encore-theater-community-day");
     const hero = text(heroHtml);
     // Aphrah (Oct 7): date, venue, the two daytime blocks, then the Awards Show pointer line.
-    expect(hero).toContain("Presented by Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Monday, November 2 Wynn Las Vegas Wellness & Check-In 12–3 PM Summit Sessions 3:30–6:30 PM The Not Alone Awards Show follows at the Encore Theater · doors 6:30 PM Request free tickets Info");
+    expect(hero).toContain("Presented by Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Monday, November 2 Wynn Las Vegas Wellness & Check-In 12–3 PM Summit Sessions 3:30–6:30 PM Stay for the Not Alone Awards Show at the Encore Theater · doors 6:30 PM · choose it on the ticket form Request free tickets Info");
     expect(hero).not.toMatch(/Encore Theater at Wynn|A free panel/);
   });
 
@@ -129,7 +129,7 @@ describe("Community Day page", () => {
     expect(details["Awards Show Doors"]).toBe(awards["Doors Open"]);
     expect(details["Awards Show"]).toBe(awards["Awards Show"]);
     expect(notes["Awards Show"]).toContain(`Pre-Show ${awards["Pre-Show"]}`);
-    expect(communityDay2026.heroAwardsLine).toContain(`doors ${awards["Doors Open"]}`);
+    expect(communityDay2026.heroAwardsLine.link).toContain(`doors ${awards["Doors Open"]}`);
     expect(communityDay2026.doors).toBe("12:00 PM");
     expect(communityDay2026.time).toBe("12:00–6:30 PM");
     expect(communityDay2026.dateTime).toBe("2026-11-02T12:00:00-08:00");

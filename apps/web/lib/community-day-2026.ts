@@ -23,7 +23,8 @@ export const communityDay2026 = {
     { label: "Wellness & Check-In", time: "12–3 PM" },
     { label: "Summit Sessions", time: "3:30–6:30 PM" }
   ],
-  heroAwardsLine: "The Not Alone Awards Show follows at the Encore Theater · doors 6:30 PM",
+  // Owner (Oct 7): one self-explanatory line: they are welcome at the show, where, when, how; the show name is a link.
+  heroAwardsLine: { before: "Stay for the ", link: "Not Alone Awards Show", after: " at the Encore Theater · doors 6:30 PM · choose it on the ticket form" },
   time: "12:00–6:30 PM",
   doors: "12:00 PM",
   venue: "Wynn Las Vegas",
