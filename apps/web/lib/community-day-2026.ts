@@ -24,10 +24,12 @@ export const communityDay2026 = {
     { label: "Summit Sessions", time: "3:30–6:30 PM" }
   ],
   // Owner (Oct 7): one self-explanatory line: they are welcome at the show, where, when, how; the show name is a link.
-  heroAwardsLine: { before: "Stay for the ", link: "Not Alone Awards Show", after: " at the Encore Theater · doors 6:30 PM · choose it on the ticket form" },
+  // Owner (Oct 7, later): just the pointer, no "choose it on the ticket form".
+  heroAwardsLine: { before: "Stay for the ", link: "Not Alone Awards Show", after: " at the Encore Theater · doors open 6:30 PM" },
   time: "12:00–6:30 PM",
   doors: "12:00 PM",
-  venue: "Wynn Las Vegas",
+  // Owner (Oct 7, later): the header names the day's room, then the resort (check-in is in LaFleur; see details).
+  venue: "Margaux Ballroom, Wynn Las Vegas",
   // Owner (Oct 7): this page's tickets go to its own form (Community Day & Awards Show), not the Awards Show form.
   rsvpUrl: "https://notaloneawards.org/rsvp/nevada-mental-health-day",
   // This page's own menu has no Summit, Schedule, Directory or Venue tab. The Awards page is labelled "Concert".
