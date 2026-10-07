@@ -13,7 +13,7 @@ const page = (snapshot = event2026Snapshot, published = true) => renderToStaticM
 );
 const hero = (snapshot = event2026Snapshot, published = true) => page(snapshot, published)
   .match(/<section[^>]*aria-labelledby="awards-title"[^>]*>([\s\S]*?)<\/section>/)![1]!;
-// Owner (Oct 5): the hero shows only the Awards Show start (7:30 PM); the rest of the evening sits below it.
+// Owner (Oct 7, Aphrah's times): the hero shows Doors Open 6:30 PM and the Awards Show start 8:00 PM; the rest of the evening sits below it.
 const schedule = (snapshot = event2026Snapshot, published = true) => page(snapshot, published)
   .match(/<section[^>]*id="evening"[^>]*>[\s\S]*?<dl>([\s\S]*?)<\/dl>/)?.[1] ?? "";
 
@@ -30,11 +30,10 @@ describe("Awards opening presentation", () => {
     expect(html).toContain("2025 archive");
   });
 
-  it("shows only the Awards Show start in the hero and the rest of the evening below, without the red carpet", () => {
+  it("shows doors and the Awards Show start in the hero and the rest of the evening below, without the red carpet", () => {
     expect(times()).toEqual([
       { label: "Red Carpet", time: "6:15 PM-7:30 PM" },
-      { label: "Doors Open", time: "5:30 PM" },
-      { label: "Nevada Day", time: "5:45-7:15 PM" },
+      { label: "Doors Open", time: "6:30 PM" },
       { label: "Pre-Show", time: "7:30-8:00 PM" },
       { label: "Awards Show", time: "8:00 PM-10:00 PM" }
     ]);
@@ -43,15 +42,15 @@ describe("Awards opening presentation", () => {
     expect(html).not.toContain(">2026</span>");
     expect(html).toContain("Monday, November 2</time>");
     expect(html).not.toContain("Monday, November 2, 2026");
-    // Owner (Oct 5): the hero's one timing line is the Awards Show start; Doors Open moved down to "The Evening".
-    expect(html).toContain('<dl class="' + styles.heroScheduleTimes + '" aria-label="Awards Show start"><div><dt>Awards Show</dt><dd>7:30 PM</dd></div></dl>');
-    expect(html).not.toMatch(/Doors Open|Nevada Day|Pre-Show|8:00 PM-10:00 PM/);
-    // Owner (Sept 21, late): "The Evening" shows exactly two lines.
+    // Owner (Oct 7): the hero's timing line is Doors Open 6:30 and the Awards Show start 8:00; the full evening sits in "The Evening".
+    expect(html).toContain('<dl class="' + styles.heroScheduleTimes + '" aria-label="Doors and Awards Show start"><div><dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>8:00 PM</dd></div></dl>');
+    expect(html).not.toMatch(/Nevada Day|Community Day|Pre-Show|8:00 PM-10:00 PM/);
+    // Aphrah (Oct 7): "The Evening" shows exactly three lines; Community Day is no longer part of it.
     const evening = schedule();
-    expect(evening).toContain("<dt>Doors Open</dt><dd>5:30 PM</dd>");
-    expect(evening).toContain("<dt>Community Day</dt><dd>5:45 PM-7:15 PM</dd>");
-    expect(evening).toContain("<dt>Awards Show</dt><dd>7:30 PM-10:00 PM</dd>");
-    expect(evening).not.toContain("Pre-Show");
+    expect(evening).toContain("<dt>Doors Open</dt><dd>6:30 PM</dd>");
+    expect(evening).toContain("<dt>Pre-Show</dt><dd>7:30 PM</dd>");
+    expect(evening).toContain("<dt>Awards Show</dt><dd>8:00 PM-10:00 PM</dd>");
+    expect(evening).not.toContain("Community Day");
     expect(evening.match(/<dt>/g)).toHaveLength(3);
     expect(page()).not.toContain("Red Carpet");
     expect(page()).toContain('<h2 id="evening-title">The Evening</h2>');
@@ -107,9 +106,9 @@ describe("Awards opening presentation", () => {
     expect(page(snapshot)).not.toContain('id="evening"');
     expect(awardsHeroTimes(null, null)).toEqual([]);
     const withoutProgram = schedule(event2026Snapshot, false);
-    expect(withoutProgram).toContain("7:30 PM-10:00 PM");
-    expect(withoutProgram).not.toMatch(/<dt>(Pre-Show|Red Carpet)<\/dt>/); // Owner (Sept 22): The Evening opens with Doors Open 5:30
-    expect(hero(event2026Snapshot, false)).toContain("<dt>Awards Show</dt><dd>7:30 PM</dd>");
+    expect(withoutProgram).toContain("8:00 PM-10:00 PM");
+    expect(withoutProgram).not.toMatch(/<dt>(Community Day|Red Carpet)<\/dt>/); // Aphrah (Oct 7): The Evening opens with Doors Open 6:30
+    expect(hero(event2026Snapshot, false)).toContain("<dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>8:00 PM</dd>");
   });
 
   it("omits an empty timetable when the published snapshot is unavailable", () => {

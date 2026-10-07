@@ -28,7 +28,8 @@ export const rsvpPartners = ["", "nami"] as const;
 export type RsvpPartner = (typeof rsvpPartners)[number];
 export const rsvpPartnerLabels: Record<Exclude<RsvpPartner, "">, string> = { nami: "NAMI" };
 // Owner (Oct 3, 2026): private plain RSVP forms per group; the form's link tags the request (Lake Las Vegas).
-export const rsvpTiers = ["", "lake-las-vegas"] as const;
+// Owner (Oct 7): the Nevada Mental Health Day page's own form ("Community Day & Awards Show") is tagged community-day.
+export const rsvpTiers = ["", "lake-las-vegas", "community-day"] as const;
 export type RsvpTier = (typeof rsvpTiers)[number];
 // Owner (Oct 3, 2026): "How did you hear about us?" on the main RSVP form (required there; older or cached
 // forms that do not send it still work and store "").
@@ -312,10 +313,11 @@ export const namiRsvps = (records: RsvpSubmission[]) => records.filter(record =>
 export const lakeLasVegasRsvps = (records: RsvpSubmission[]) => records.filter(record => record.tier === "lake-las-vegas");
 // Owner (Oct 2): every request shows which form it came through. NAMI wins over VIP if both were ever set.
 // Owner (Oct 3): NAMI VIP and Lake Las Vegas VIP are private VIP forms tagged with their group as well.
-export type RsvpForm = "Standard" | "VIP" | "NAMI" | "NAMI VIP" | "Lake Las Vegas" | "Lake Las Vegas VIP";
+export type RsvpForm = "Standard" | "VIP" | "NAMI" | "NAMI VIP" | "Lake Las Vegas" | "Lake Las Vegas VIP" | "Community Day";
 export function rsvpForm(record: Pick<RsvpSubmission, "vip" | "partner" | "tier">): RsvpForm {
   if (record.partner === "nami") return record.vip ? "NAMI VIP" : "NAMI";
   if (record.tier === "lake-las-vegas") return record.vip ? "Lake Las Vegas VIP" : "Lake Las Vegas";
+  if (record.tier === "community-day") return "Community Day";
   return record.vip ? "VIP" : "Standard";
 }
 // Owner (Oct 3): one spreadsheet per form, for seating.

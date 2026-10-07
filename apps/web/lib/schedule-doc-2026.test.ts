@@ -11,10 +11,17 @@ describe("owner's Google Doc schedule (Sept 22)", () => {
     const expected = [...scheduleDoc2026].sort((a, b) => `${a.date} ${a.start}`.localeCompare(`${b.date} ${b.start}`)).map(row => row.title);
     expect(next.scheduleItems.map(item => item.title)).toEqual(expected);
     const at = (title: string) => next.scheduleItems.find(item => item.title === title)!;
-    expect(at("Awards Show Doors Open").startUtc).toBe("2026-11-03T01:30:00.000Z"); // Nov 2, 5:30 PM PST
-    expect(at("Community Day").startUtc).toBe("2026-11-03T01:45:00.000Z"); // 5:45 PM
-    expect(at("Community Day").endUtc).toBe("2026-11-03T03:15:00.000Z"); // 7:15 PM
-    expect(at("Awards Show").startUtc).toBe("2026-11-03T03:30:00.000Z"); // 7:30 PM
+    // Aphrah (Oct 7): daytime Nevada Mental Health Day, then doors 6:30, Pre-Show 7:30, Awards Show 8:00-10:00.
+    expect(at("Wellness Activities & Check-In").startUtc).toBe("2026-11-02T20:00:00.000Z"); // Nov 2, 12:00 PM PST
+    expect(at("Wellness Activities & Check-In").endUtc).toBe("2026-11-02T23:00:00.000Z"); // 3:00 PM
+    expect(at("Nevada Mental Health Day").startUtc).toBe("2026-11-02T23:30:00.000Z"); // 3:30 PM
+    expect(at("Nevada Mental Health Day").endUtc).toBe("2026-11-03T02:30:00.000Z"); // 6:30 PM
+    expect(next.scheduleItems.find(item => item.title === "Community Day")).toBeUndefined();
+    expect(at("Awards Show Doors Open").startUtc).toBe("2026-11-03T02:30:00.000Z"); // 6:30 PM
+    expect(at("Pre-Show").startUtc).toBe("2026-11-03T03:30:00.000Z"); // 7:30 PM
+    expect(at("Pre-Show").endUtc).toBe("2026-11-03T04:00:00.000Z"); // 8:00 PM
+    expect(at("Awards Show").startUtc).toBe("2026-11-03T04:00:00.000Z"); // 8:00 PM
+    expect(at("Awards Show").endUtc).toBe("2026-11-03T06:00:00.000Z"); // 10:00 PM
     expect(at("Poker Night").locationName).toBe("Encore Poker Room"); // room kept from Airtable
     expect(next.scheduleItems.filter(item => item.title === "Summit Sessions")).toHaveLength(4);
     // An intentionally empty publication stays empty.

@@ -8,8 +8,7 @@ export const awards2026Editorial = {
   // NAS web meeting, September 21, 2026 (Ryan/Offra). Supersedes the Sept 17 7:00 PM pre-show
   // correction. A published staff session with the same title always wins over these lines.
   eveningTimes: [
-    { label: "Doors Open", time: "5:30 PM" },
-    { label: "Nevada Day", time: "5:45-7:15 PM" },
+    { label: "Doors Open", time: "6:30 PM" },
     { label: "Pre-Show", time: "7:30-8:00 PM" }
   ],
   // Owner (Sept 21, later): the Awards hero says only "Doors open 6:00 PM"; the rest of the evening
@@ -46,10 +45,12 @@ export const awards2025Winners = [
 ] as const;
 
 // Owner (Sept 21, late): the Awards page's "The Evening" block, exactly as the owner wrote it.
+// Aphrah (Oct 7, 2026; Airtable run of show): Doors 6:30, Pre-Show 7:30, Awards Show 8:00-10:00 at the Encore Theater.
+// Community Day (now Nevada Mental Health Day, daytime, in the Margaux ballroom) is no longer on the Awards page.
 export const awards2026Evening = [
-  { label: "Doors Open", time: "5:30 PM" },
-  { label: "Community Day", time: "5:45 PM-7:15 PM" },
-  { label: "Awards Show", time: "7:30 PM-10:00 PM" }
+  { label: "Doors Open", time: "6:30 PM" },
+  { label: "Pre-Show", time: "7:30 PM" },
+  { label: "Awards Show", time: "8:00 PM-10:00 PM" }
 ] as const;
 
 // Sept 21 meeting direction, using ICF's own published wording (inspiringchildren.org/awards).

@@ -6,10 +6,11 @@ import { awardsPromotionalProgram, publicAwardsShow, reconcileAwardsProgram } fr
 const body = publishedAwardsProgram(event2026Snapshot)!.body;
 
 describe("Awards copy and canonical schedule", () => {
-  it("applies the Sept 21 owner times only to the legacy doors and pre-show notes and hides pending promotional boilerplate", () => {
+  it("applies the Oct 7 owner times only to the legacy doors and pre-show notes and hides pending promotional boilerplate", () => {
     const result = awardsPromotionalProgram(body, event2026Snapshot)!;
-    expect(result).toContain("Doors Open: 5:30 PM\nNevada Day: 5:45-7:15 PM\nPre-Show: 7:30-8:00 PM");
-    expect(result).not.toContain("6:30 PM");
+    // Aphrah (Oct 7): Doors 6:30, Pre-Show 7:30-8:00, Awards Show 8:00-10:00; no Nevada Day / Community Day line.
+    expect(result).toContain("Doors Open: 6:30 PM\nPre-Show: 7:30-8:00 PM\nAwards Show: 8:00 PM-10:00 PM");
+    expect(result).not.toMatch(/Nevada Day|Community Day|5:30 PM/);
     expect(result).not.toContain("end time to be confirmed");
     expect(result).not.toContain("complete show lineup");
     expect(event2026Snapshot.contentPages.find(page => page.slug === "schedule-pending-2026-11-02")!.body).toContain("Pre-Show: 7:30 PM");

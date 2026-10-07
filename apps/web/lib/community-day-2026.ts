@@ -15,28 +15,33 @@ export const communityDay2026 = {
   // Ryan (Oct 5, via Aphrah and Paige): the page title is "Nevada Mental Health Day"; "Community Day" is the label.
   title: "Nevada Mental Health Day",
   date: awards2026Editorial.date,
-  dateTime: "2026-11-02T17:30:00-08:00",
-  // Owner (Oct 1): Community Day runs 5:45–7:15 PM; doors remain 5:30 PM.
-  heroTime: "5:45–7:15 PM",
-  // Owner (Oct 6): the Awards Show time sits in the header too, so an Awards guest landing here sees both.
-  heroAwardsShowTime: "7:30–10:00 PM",
-  time: "5:45–7:15 PM",
-  doors: "5:30 PM",
-  venue: awards2026Editorial.venue,
-  rsvpUrl: awards2026Editorial.rsvpUrl,
+  dateTime: "2026-11-02T12:00:00-08:00",
+  // Aphrah (Oct 7, 2026; Airtable run of show): the day moves into the Wynn's meeting wing: Wellness Activities & Check-In
+  // 12:00-3:00 PM (LaFleur), Summit Sessions 3:30-6:30 PM (Margaux ballroom); the Awards Show follows at the Encore
+  // Theater (doors 6:30, Pre-Show 7:30, show 8:00-10:00). Owner (Oct 7): the rooms are public on this page only.
+  heroBlocks: [
+    { label: "Wellness & Check-In", time: "12–3 PM" },
+    { label: "Summit Sessions", time: "3:30–6:30 PM" }
+  ],
+  heroAwardsLine: "The Not Alone Awards Show follows at the Encore Theater · doors 6:30 PM",
+  time: "12:00–6:30 PM",
+  doors: "12:00 PM",
+  venue: "Wynn Las Vegas",
+  // Owner (Oct 7): this page's tickets go to its own form (Community Day & Awards Show), not the Awards Show form.
+  rsvpUrl: "https://notaloneawards.org/rsvp/nevada-mental-health-day",
   // This page's own menu has no Summit, Schedule, Directory or Venue tab. The Awards page is labelled "Concert".
   menu: {
     concertUrl: "https://notaloneawards.org/awards/2026"
   },
   // Owner (Sept 29): "What is Community Day?" is answered in one statement that doubles as the mission.
-  about: "The Not Alone Community Day is a free evening dedicated to the Las Vegas organizations making an impact in mental health, with a panel and a community activation that honors the people behind the work.",
+  about: "Nevada Mental Health Day is a free day at the Not Alone Summit dedicated to the Las Vegas organizations making an impact in mental health: wellness rooms and check-in from noon, then panels and conversations that honor the people behind the work.",
   // The details block, in the Awards page's "The Evening" format (label above a large value).
   details: [
     { label: "Date", value: "Monday, Nov 2", note: null },
-    { label: "Doors Open", value: "5:30 PM", note: null },
-    { label: "Community Day", value: "5:45–7:15 PM", note: null },
-    { label: "Awards Show", value: "7:30 PM", note: null },
-    { label: "Location", value: "Encore Theater, Wynn Las Vegas", note: null }
+    { label: "Wellness & Check-In", value: "12–3 PM", note: "LaFleur, Wynn Las Vegas" },
+    { label: "Summit Sessions", value: "3:30–6:30 PM", note: "Margaux Ballroom, Wynn Las Vegas" },
+    { label: "Awards Show Doors", value: "6:30 PM", note: "Encore Theater" },
+    { label: "Awards Show", value: "8:00–10:00 PM", note: "Encore Theater · Pre-Show 7:30 PM" }
   ],
   tickets: {
     steps: [

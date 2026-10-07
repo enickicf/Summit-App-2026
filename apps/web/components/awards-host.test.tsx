@@ -41,13 +41,15 @@ describe("Awards host feature", () => {
       expect(hero).toContain(text);
       expect(html.slice(html.indexOf("</section>", html.indexOf('id="awards-program"')))).not.toContain(text);
     }
-    // Owner (Oct 5): only the Awards Show start in the hero; doors and the rest of the evening in its own section below.
-    expect(hero).toContain("<dt>Awards Show</dt><dd>7:30 PM</dd>");
+    // Owner (Oct 7): doors and the Awards Show start in the hero; the pre-show and the full show run in its own section below.
+    expect(hero).toContain("<dt>Doors Open</dt><dd>6:30 PM</dd>");
+    expect(hero).toContain("<dt>Awards Show</dt><dd>8:00 PM</dd>");
     const evening = html.match(/<section[^>]*id="evening"[^>]*>([\s\S]*?)<\/section>/)?.[1]!;
-    for (const text of ["Community Day", "Doors Open", "7:30 PM-10:00 PM"]) {
+    for (const text of ["Pre-Show", "8:00 PM-10:00 PM"]) {
       expect(evening).toContain(text);
       expect(hero).not.toContain(text);
     }
+    expect(evening).not.toContain("Community Day");
     expect(hostSection(html)).not.toMatch(/RSVP|Pacific|Monday|PM/);
     expect(html).not.toMatch(/More details coming soon|id="program-title"/);
   });

@@ -25,7 +25,7 @@ import { HeroRecap, SummitVideo } from "./summit-video";
 import { HighlightsVideo } from "./highlights-video";
 import { AwardsInfoButton } from "./awards-info-button";
 import { PresentedBy } from "./presented-by";
-import { awardsShowStart2026 } from "../lib/event-partners-2026";
+import { awardsDoorsOpen2026, awardsShowStart2026 } from "../lib/event-partners-2026";
 import summitStyles from "./summit-theme.module.css";
 
 type SourceSection = (typeof source.summit.sections)[number];
@@ -335,8 +335,8 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
         <p className={styles.heroPowered}>Powered by<strong>{awards2026Editorial.foundation}</strong></p>
         {/* Owner (Sept 23): from Nov 6, 2026 the date line reads "2027 — To Be Announced Soon." automatically. */}
         <p className={styles.heroDate}>{isPostEvent() ? postEventLabel : <>{show && !canceled ? <time dateTime={show.startUtc}>{withoutYear(date, 2026)}</time> : withoutYear(date, 2026)}<span className={styles.heroDateVenue}> · {venue}</span></>}</p>
-        {/* Owner (Oct 5): the Awards Show time up top (7:30 PM everywhere); the rest of the evening is further down. */}
-        {show && !canceled && <dl className={styles.heroScheduleTimes} aria-label="Awards Show start"><div><dt>Awards Show</dt><dd>{awardsShowStart2026}</dd></div></dl>}
+        {/* Owner (Oct 7): doors and the show time up top (Aphrah's times); the rest of the evening is further down. */}
+        {show && !canceled && <dl className={styles.heroScheduleTimes} aria-label="Doors and Awards Show start"><div><dt>Doors Open</dt><dd>{awardsDoorsOpen2026}</dd></div><div><dt>Awards Show</dt><dd>{awardsShowStart2026}</dd></div></dl>}
         {!canceled && show && !/to be confirmed/i.test(show.eligibilityScope.label) && <p className={styles.heroInvitation}>{show.eligibilityScope.label}</p>}
         {/* Owner (Oct 4): RSVP and Info up top; Info scrolls to the mission + schedule, and the iHeartRadio
             stream button moved to its own band right before the lineup. */}

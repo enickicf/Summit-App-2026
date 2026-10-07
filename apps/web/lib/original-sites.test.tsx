@@ -265,11 +265,11 @@ describe("source-faithful, year-separated event pages", () => {
     expect(html).not.toContain("autoplay=1");
     expect(html).toContain("Monday, November 2</time>");
     expect(html).not.toContain("Red Carpet");
-    expect(html).toContain("<dt>Doors Open</dt><dd>5:30 PM</dd>");
-    // Owner (Sept 21, late): "The Evening" is exactly Community Day and the Awards Show.
-    expect(html).toContain("<dt>Community Day</dt><dd>5:45 PM-7:15 PM</dd>");
-    expect(html).not.toContain("<dt>Pre-Show</dt>");
-    expect(html).toContain("<dt>Awards Show</dt><dd>7:30 PM-10:00 PM</dd>");
+    expect(html).toContain("<dt>Doors Open</dt><dd>6:30 PM</dd>");
+    // Aphrah (Oct 7): "The Evening" is Doors Open, Pre-Show and the Awards Show; Community Day moved to the daytime page.
+    expect(html).not.toContain("<dt>Community Day</dt>");
+    expect(html).toContain("<dt>Pre-Show</dt><dd>7:30 PM</dd>");
+    expect(html).toContain("<dt>Awards Show</dt><dd>8:00 PM-10:00 PM</dd>");
     expect(html).toContain('id="winners"');
     expect(html).toContain("<h3>Rachel Platten</h3>");
     expect(html).toContain('href="https://www.youtube.com/@iHeartRadio/streams"');

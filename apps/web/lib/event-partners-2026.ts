@@ -29,5 +29,6 @@ export const eventPartners2026 = {
   hostVenue: wynnLasVegas
 } as const;
 
-// Owner (Oct 5): the Awards Show time is the one time shown at the top of every Awards page, everywhere.
-export const awardsShowStart2026 = "7:30 PM";
+// Owner (Oct 5 / Oct 7): the top of every Awards page shows doors and the show time (Aphrah's Oct 7 times).
+export const awardsDoorsOpen2026 = "6:30 PM";
+export const awardsShowStart2026 = "8:00 PM";

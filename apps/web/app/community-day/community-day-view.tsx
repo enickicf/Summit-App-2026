@@ -42,9 +42,9 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
         {over ? <p className={styles.when}>{postEventLabel}</p> : <div className={styles.when}>
           <p className={styles.whenLine}><time className={styles.whenDate} dateTime={day.dateTime}>Monday, November 2</time><span className={styles.whenPlace}>{day.venue}</span></p>
           <dl className={styles.whenTimes}>
-            <div><dt>Nevada Mental Health Day</dt><dd>{day.heroTime}</dd></div>
-            <div><dt>Not Alone Awards Show</dt><dd>{day.heroAwardsShowTime}</dd></div>
+            {day.heroBlocks.map(block => <div key={block.label}><dt>{block.label}</dt><dd>{block.time}</dd></div>)}
           </dl>
+          <p className={styles.whenAwardsLine}>{day.heroAwardsLine}</p>
         </div>}
         <div className={styles.heroButtons} id="community-day-actions">
           {!over && <a className={styles.button} href={rsvpUrl} target="_blank" rel="noopener">Request free tickets</a>}
@@ -68,7 +68,7 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
 
     <section className={styles.details} id="schedule" aria-labelledby="details-title">
       <h2 id="details-title">The Details</h2>
-      <dl>{day.details.map(item => <div key={item.label}><dt>{item.label}</dt><dd className={item.label === "Location" ? styles.locationValue : undefined}>{item.value}{item.note && <span>{item.note}</span>}</dd></div>)}</dl>
+      <dl>{day.details.map(item => <div key={item.label}><dt>{item.label}</dt><dd>{item.value}{item.note && <span>{item.note}</span>}</dd></div>)}</dl>
     </section>
 
     {!over && <section className={styles.tickets} id="tickets" aria-labelledby="tickets-title">

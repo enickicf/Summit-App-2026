@@ -74,10 +74,8 @@ export function awardsPromotionalProgram(body: string, snapshot: EventSnapshot |
     const correction = corrections.find(entry => entry.label === label);
     if (correction && /^(Doors Open: 6:30 PM|Pre-Show: 7:30 PM)(?:; end time to be confirmed\.)?$/.test(line)) {
       corrected.add(label);
-      const lines = [`${label}: ${correction.time}`];
-      const nevadaDay = corrections.find(entry => entry.label === "Nevada Day");
-      if (label === "Doors Open" && nevadaDay && !corrected.has("Nevada Day")) { corrected.add("Nevada Day"); lines.push(`Nevada Day: ${nevadaDay.time}`); }
-      return lines;
+      // Oct 7: Nevada Mental Health Day (daytime) is no longer part of the Awards Show program text.
+      return [`${label}: ${correction.time}`];
     }
     return [line];
   }).map(line => {

@@ -165,7 +165,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
 
       <section className={styles.section} id="community-day" aria-labelledby="community-day-title">
         <div className={styles.sectionHead}><h2 id="community-day-title">Community Day RSVPs</h2><span className={`${styles.badge} ${styles.badgeCommunity}`}>{totals.communityDayGuests} guests · {totals.communityDayTickets} tickets</span></div>
-        <p className={styles.help}>Guests who switched on "Community Day" on the RSVP form (doors 5:30 PM). Those also attending the Awards Show carry both badges.</p>
+        <p className={styles.help}>Guests who chose Nevada Mental Health Day (Community Day) on an RSVP form: Wellness & Check-In 12–3 PM, Summit Sessions 3:30–6:30 PM. Those also attending the Awards Show carry both badges.</p>
         {communityDay.length === 0 ? <p className={styles.empty}>No Community Day RSVPs yet.</p> : <RsvpTable rows={communityDay} />}
       </section>
 
