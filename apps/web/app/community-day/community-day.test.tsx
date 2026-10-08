@@ -89,9 +89,9 @@ describe("Nevada Mental Health Day page", () => {
     const html = await render();
     const scheduleHtml = section(html, "schedule-title");
     const schedule = text(scheduleHtml);
-    // Owner (Oct 8): the full schedule from Airtable's Run of Show, with the Summit Sessions' segments.
-    expect(schedule).toMatch(/Schedule Monday, November 2, 2026 12:00–3:00 PM Wellness & Check-In LaFleur · Attire: Chic Business Casual[^]*3:00–6:30 PM Summit Sessions Margaux Ballroom[^]*3:20–3:30 PM ICF \+ NAMI Opening Ceremony[^]*6:30 PM Awards Show Doors Open Encore Theater 7:30–10:00 PM Not Alone Awards Show Encore Theater · Attire: Semi-Formal with Flair/);
-    expect(schedule).not.toMatch(/Red Carpet|Pre-Show|Founders|Pet Partners|Pickleball|Speaker Reception/);
+    // Owner (Oct 8): the most basic version — the general events and their locations only.
+    expect(schedule).toContain("Schedule Monday, November 2, 2026 12:00–3:00 PM Wellness & Check-In LaFleur 3:00–6:30 PM Summit Sessions Margaux Ballroom 6:30 PM Awards Show Doors Open Encore Theater 7:30–10:00 PM Not Alone Awards Show Encore Theater");
+    expect(schedule).not.toMatch(/Attire|Opening Ceremony|Panel|Break|Red Carpet|Pre-Show|Founders|Pet Partners|Pickleball|Speaker Reception/);
     expect(scheduleHtml).toContain('<h2 id="schedule-title">Schedule</h2>');
     expect(scheduleHtml).toContain('<time dateTime="2026-11-02T12:00:00-08:00">Monday, November 2, 2026</time>');
     expect(html).toMatch(/<section [^>]*id="schedule"[^>]*aria-labelledby="schedule-title"/);
