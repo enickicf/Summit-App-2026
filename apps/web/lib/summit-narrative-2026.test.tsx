@@ -63,3 +63,11 @@ describe("Summit 2026 narrative (Ryan, Oct 7)", () => {
     expect(summit2025).toContain("Building on the success of");
   });
 });
+
+describe("Awards mission wording (owner, Oct 8)", () => {
+  it("says \"The awards show was created…\" on the 2026 page", () => {
+    const html = renderToStaticMarkup(<OriginalAwardsPage year={2026} />);
+    expect(html).toContain("<p>The awards show was created to celebrate the pioneers of human development and mental health");
+    expect(html).not.toContain("The award show was created");
+  });
+});

@@ -418,7 +418,8 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
     <section className={`${styles.band} ${styles.awardsIntroduction} ${styles.awardsMission}`} id="mission" aria-label="About the Not Alone Awards">
       <p>Inspiring Children Foundation × NAMI present the Not Alone Awards Show, powered by the <strong>Steven &amp; Alexandra Cohen Foundation</strong>.</p>
       {/* Owner (Sept 21, late): just the opening statement; the longer text is gone. */}
-      {awards[1]!.blocks.slice(1, 2).map(block => <p key={block.text}>{block.text}</p>)}
+      {/* Owner (Oct 8): "The awards show", not "The award show" (2026 page only; the 2025 archive keeps ICF's text). */}
+      {awards[1]!.blocks.slice(1, 2).map(block => <p key={block.text}>{block.text.replace(/^The award show\b/, "The awards show")}</p>)}
     </section>
     {/* Owner (Oct 8): The Evening section and the "View full schedule" link are gone — the schedule box in the broadcast
         band already carries the date, doors and show times. */}
