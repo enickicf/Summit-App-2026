@@ -361,3 +361,13 @@
   .summit > section:global(#about) .introDetails { flex-direction:column; gap:16px; }
   .summit > section:global(#about) .introSchedule { width:100%; max-width:320px; }
 }
+
+/* Owner (Oct 8, final for now): the dates and venue return to the top of the hero as an eyebrow above the logo; the
+   headline band holds the headline alone (no date row, no schedule button). */
+.summit .heroCopy .heroEyebrow { margin:0 0 18px; color:rgba(255,255,255,.9); font-size:13px; font-weight:700; line-height:1.4; letter-spacing:.22em; text-transform:uppercase; }
+.summit .heroCopy .heroEyebrow .heroDateVenue { font-weight:700; }
+.summit > section:global(#about).introBar { padding-top:52px; padding-bottom:52px; }
+@media(max-width:600px) {
+  .summit .heroCopy .heroEyebrow { font-size:11px; letter-spacing:.18em; margin-bottom:14px; }
+  .summit > section:global(#about).introBar { padding-top:40px; padding-bottom:40px; }
+}

@@ -245,6 +245,10 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     <section className={`${summitStyles.hero} ${summitStyles.heroFormat}`} aria-labelledby="summit-title">
       <SummitVideo background />
       <div className={summitStyles.heroCopy}>
+        {/* Owner (Oct 8): dates and venue up top as a small spaced-capitals line above the logo (same style as the
+            "Powered by" / "Presented by" labels); no schedule button on the page top — the menu's Schedule link covers it.
+            From Nov 6, 2026 it reads "2027 — To Be Announced Soon." (lib/event-phase.ts). 2026 only. */}
+        {!archive && <p className={`${summitStyles.heroDate} ${summitStyles.heroEyebrow}`}>{isPostEvent() ? postEventLabel : <>{withoutYear(heroDates.main, year).replace("-", "–")}, {year}<span className={summitStyles.heroDateVenue}> · {venue ?? "Venue to be announced"}</span></>}</p>}
         <h1 id="summit-title" className={summitStyles.heroLogo}>
           <SiteImage src="/images/summit-logo.png" alt="" sizes="(max-width: 600px) 170px, 250px" loading="eager" fetchPriority="high" />
           <span className={styles.hidden}>Not Alone Summit {year}</span>
@@ -257,8 +261,7 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
         {/* Owner (Sept 23): date and venue on one line, in the Awards hero's format ("November 2–4 | Wynn Las Vegas");
             from Nov 6, 2026 the 2026 page reads "2027 — To Be Announced Soon." by itself (lib/event-phase.ts). */}
         {archive && <p className={summitStyles.heroDate}><span className={summitStyles.heroEdition}>{year}</span>{withoutYear(summit2025Dates, year)}<span className={summitStyles.heroDateVenue}> | Wynn Las Vegas</span></p>}
-        {/* Owner (Oct 8): the hero ends on the Presented-by lockup; the dates, the venue and the schedule button sit beside
-            the headline in the section right below (#about). */}
+        {/* Owner (Oct 8): the hero ends on the Presented-by lockup. */}
       </div>
     </section>
     {/* Owner (Sept 21): the recap player is removed for now; it will move to a new location. */}
@@ -278,13 +281,9 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     /* Ryan (Oct 8): on the 2026 page the introduction is just the headline, "real nice and thin" (the logo and the
        repeated "Powered by" credit are gone — "we don't need to re-say that"), then straight into Who's Coming. */
     : <section className={`${styles.band} ${summitStyles.introThin} ${summitStyles.introBar}`} id="about">
-      {/* Owner (Oct 8): one centred, symmetrical stack — the headline, a short rule, "November 2–4, 2026 · Wynn Las Vegas"
-          on one line, then the schedule button. From Nov 6, 2026 the date line reads "2027 — To Be Announced Soon." */}
+      {/* Owner (Oct 8): the blue band carries the headline alone; the dates and venue sit at the top of the hero and the
+          schedule is reached from the menu. */}
       <h2>A National Convening for <span className={summitStyles.introAccent}>Mental Health</span> and Connection</h2>
-      <div className={summitStyles.introDetails}>
-        <p className={summitStyles.introDate}>{isPostEvent() ? postEventLabel : `${withoutYear(heroDates.main, year).replace("-", "–")}, ${year}`}{!isPostEvent() && <><span className={summitStyles.introDot} aria-hidden="true"> · </span><span className={summitStyles.introVenue}>{venue ?? "Venue to be announced"}</span></>}</p>
-        <a className={summitStyles.introSchedule} href="#schedule">View full schedule <span aria-hidden="true">→</span></a>
-      </div>
     </section>}
     {/* Owner (Sept 21): co-chairs sit just above the producers on every site; 2025 hosts keep their place. */}
     {archive && <Leadership hostsOnly />}

@@ -46,7 +46,7 @@ describe("Summit-only refresh", () => {
       expect(hero(html)).toContain("Powered by<strong>Steven &amp; Alexandra<br/>Cohen Foundation</strong>"); // Oct 8: stacked credit
       expect(hero(html)).not.toMatch(/Highlights<\/a>|heroArt/);
     }
-    expect(current).toContain('href="#schedule">View full schedule'); // Oct 8: beside the headline, under the hero
+    expect(current).not.toContain('View full schedule'); // Oct 8: the menu's Schedule link covers it
     // Owner (Sept 21): the recap player section is removed for now.
     expect(archive).not.toContain('id="summit-highlights"');
   });
