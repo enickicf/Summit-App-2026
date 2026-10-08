@@ -22,27 +22,13 @@
 /* Owner (Oct 4): the title a bit smaller, the "Presented by" ICF and NAMI logos a bit bigger, at every size. */
 .hero h1 { margin:0; color:#ffffff; font-size:clamp(40px,5.2vw,68px); font-weight:700; line-height:1; }
 .hero h1.heroTitleMark { display:flex; flex-direction:column; align-items:flex-start; gap:10px; }
-.heroTitleMark > .notAloneMark { display:inline-flex; align-items:center; gap:10px; color:#ffffff; font-size:clamp(13px,1.35vw,17px); font-weight:700; letter-spacing:.18em; line-height:1; text-transform:uppercase; }
-.notAloneMark svg { width:1.4em; height:1.4em; color:#ffffff; }
 .heroTitleMark strong { color:#ffffff; font:inherit; letter-spacing:-.035em; line-height:.94; text-transform:uppercase; }
-/* "Community Day" label above the Nevada Mental Health Day title, and the Cohen credit under it (Awards hero format). */
-.heroKicker { display:inline-block; color:#d0d4ea; font-size:clamp(14px,1.4vw,18px); font-weight:700; letter-spacing:.22em; line-height:1; text-transform:uppercase; }
+/* The Cohen credit under the Nevada Mental Health Day title (Awards hero format). */
 .heroPowered { margin:18px 0 0; color:#ffffff; font-size:16px; line-height:1.4; letter-spacing:.02em; }
 .heroPowered strong { display:block; font-size:clamp(22px,2.4vw,30px); font-weight:600; line-height:1.2; letter-spacing:0; }
 .hero h1.heroTitleMark { font-size:clamp(36px,4.6vw,60px); }
-/* The date and venue on one line, then the two parts of the evening, each named, times in blue (owner, Oct 6). */
-.when { display:flex; flex-direction:column; gap:14px; margin:24px 0 0; color:#ffffff; }
-/* Owner (Oct 6): the venue sits on its own line under the date at every size. */
-.whenLine { display:flex; flex-direction:column; gap:4px; margin:0; }
-.whenDate { font-size:clamp(26px,2.6vw,36px); font-weight:700; line-height:1.2; }
-.whenPlace { font-size:clamp(15px,1.4vw,18px); font-weight:500; line-height:1.5; color:rgba(255,255,255,.88); }
-.whenTimes { display:grid; grid-template-columns:repeat(2,max-content); gap:10px 36px; margin:0; }
-.whenTimes > div { display:flex; flex-direction:column; gap:2px; min-width:0; }
-.whenTimes dt { color:rgba(255,255,255,.82); font-size:13px; font-weight:700; letter-spacing:.08em; line-height:1.3; text-transform:uppercase; }
-.whenAwardsLine { margin:0; color:rgba(255,255,255,.88); font-size:clamp(14px,1.3vw,17px); font-weight:500; line-height:1.5; }
-.whenAwardsLine a { color:#ffffff; font-weight:700; text-decoration:underline; text-underline-offset:4px; pointer-events:auto; }
-.whenAwardsLine a:hover { color:#d0d4ea; }
-.whenTimes dd { margin:0; color:#d0d4ea; font-size:clamp(24px,2.5vw,34px); font-weight:700; line-height:1.15; font-variant-numeric:tabular-nums; }
+/* After the event the hero carries the "2027" line where the buttons' request used to be. */
+.when { margin:24px 0 0; color:#ffffff; font-size:clamp(26px,2.6vw,36px); font-weight:700; line-height:1.2; }
 .heroButtons { display:flex; flex-wrap:wrap; gap:14px; margin-top:32px; }
 
 /* The purpose comes immediately after the hero, with the Nevada observance called out first. */
@@ -51,32 +37,39 @@
 .occasion { margin:0 0 26px; color:#4a5faa; font-size:clamp(21px,2.4vw,28px); font-weight:700; line-height:1.3; text-wrap:balance; }
 .missionDescription { margin:0; color:#111111; font-size:clamp(23px,2.8vw,32px); font-weight:500; line-height:1.4; text-wrap:balance; }
 
-/* Details: the Awards page's "The Evening" block (components/original-event-page.module.css .eveningSchedule),
-   same layout and sizes, in the Summit lavender instead of the Awards black and gold. */
+/* Schedule: the Awards page's "The Evening" block (components/original-event-page.module.css .eveningSchedule),
+   same layout and sizes, in the Summit lavender instead of the Awards black and gold. Owner (Oct 7): headed
+   "Schedule", the date directly under the heading, one row per part of the day with its room under the time. */
 .details { padding:28px max(24px,calc((100% - 1160px)/2)); background:#d0d4ea; text-align:center; }
-.page .details h2 { margin:0 0 14px; color:#000000; font-size:clamp(40px,3.6vw,48px); line-height:1.08; }
+.page .details h2 { margin:0 0 6px; color:#000000; font-size:clamp(40px,3.6vw,48px); line-height:1.08; }
+.scheduleDate { margin:0 0 10px; color:#000000; font-size:clamp(20px,2vw,24px); font-weight:600; line-height:1.3; }
 .details dl { display:grid; grid-template-columns:1fr; margin:0 auto; max-width:520px; }
 .details dl > div { position:relative; display:flex; min-width:0; padding:14px 12px; flex-direction:column; align-items:center; gap:6px; text-align:center; }
 .details dl > div + div::before { content:""; position:absolute; top:0; right:12px; left:12px; height:1px; background:#4a5faa2e; }
 .details dt { color:#4a5faa; font-size:18px; font-weight:700; line-height:1.3; }
+/* The Awards Show row's name is the link to the Awards page (same blue, underlined). */
+.details dt a { color:inherit; text-decoration:underline; text-underline-offset:4px; }
+.details dt a:hover { color:#000000; }
 .details dd { margin:0; color:#000000; font-size:clamp(26px,2.25vw,32px); font-weight:600; line-height:1.22; font-variant-numeric:tabular-nums; text-wrap:balance; }
+/* "Doors open 6:30 PM · Show 7:30 PM" breaks only between its two parts, never inside a time. */
+.details dd .part { display:inline; margin:0; color:inherit; font:inherit; white-space:nowrap; }
 .details dd span { display:block; margin-top:8px; color:#444444; font-size:18px; font-weight:500; line-height:1.35; }
-.details dd.locationValue { font-size:clamp(17px,5.5vw,23px); letter-spacing:-.035em; white-space:nowrap; }
 
-/* A horizontal row appears only when all five equal columns can keep the same type size and one-line values. */
+/* A horizontal row appears only when all three equal columns can keep the same type size and one-line values. */
 @media (min-width:1800px) {
   .details { padding:36px max(24px,calc((100% - 1760px)/2)); }
-  .page .details h2 { margin-bottom:30px; }
-  .details dl { grid-template-columns:repeat(5,minmax(0,1fr)); max-width:1760px; }
+  .page .details h2 { margin-bottom:8px; }
+  .scheduleDate { margin-bottom:24px; }
+  .details dl { grid-template-columns:repeat(3,minmax(0,1fr)); max-width:1760px; }
   .details dl > div { min-height:88px; padding:10px 18px 14px; gap:8px; }
   .details dl > div + div::before { top:8px; bottom:8px; left:0; width:1px; height:auto; }
-  .details dd, .details dd.locationValue { font-size:21px; letter-spacing:-.03em; white-space:nowrap; }
+  .details dd { font-size:21px; letter-spacing:-.03em; white-space:nowrap; }
 }
 @media (min-width:2200px) {
   .details { padding-right:max(24px,calc((100% - 2160px)/2)); padding-left:max(24px,calc((100% - 2160px)/2)); }
   .details dl { max-width:2160px; }
   .details dl > div { min-height:96px; }
-  .details dd, .details dd.locationValue { font-size:26px; }
+  .details dd { font-size:26px; }
 }
 
 
@@ -97,21 +90,22 @@
   .heroButtons { margin-top:26px; }
   .hero .button { flex:1 1 auto; }
   .mission { padding:64px 16px 56px; }
-  .whenPlace { font-size:15px; }
-  .whenTimes { grid-template-columns:1fr; gap:10px; }
   .details { padding:28px 16px 32px; }
-  .page .details h2 { margin-bottom:14px; font-size:36px; }
+  .page .details h2 { margin-bottom:6px; font-size:36px; }
+  .scheduleDate { font-size:18px; }
   .details dl > div { padding:14px 8px; }
   .details dt { font-size:17px; }
   .details dd { font-size:24px; }
   .details dd span { margin-top:6px; font-size:16px; }
   .tickets { padding:56px 16px 64px; }
 }
-/* Very narrow phones (320-360px): smaller title and date so nothing touches the screen edge. */
+/* Very narrow phones (320-360px): smaller title and schedule times so nothing touches the screen edge
+   ("Doors open 6:30 PM ·" must fit the 272px column on a 320px screen). */
 @media(max-width:360px) {
   .hero h1, .hero h1.heroTitleMark { font-size:31px; }
   .heroPowered strong { font-size:20px; }
-  .whenDate { font-size:24px; } .whenTimes dd { font-size:22px; }
+  .when { font-size:24px; }
+  .details dd { font-size:22px; }
   .heroButtons { gap:10px; }
   .hero .button { padding:14px 18px; }
 }
@@ -119,16 +113,14 @@
   .hero { --band:220px; padding-bottom:24px; }
   .hero h1 { font-size:31px; }
   .hero h1.heroTitleMark { gap:7px; }
-  .when { margin-top:18px; }
-  .whenDate { font-size:22px; } .whenTimes dd { font-size:20px; }
-  .whenPlace { margin-top:8px; font-size:14px; }
+  .when { margin-top:18px; font-size:22px; }
   .heroButtons { margin-top:18px; }
   .hero .button { min-height:46px; padding:11px 12px; font-size:14px; }
 }
 
-/* Owner (Oct 3): the lockup sits above the title. */
-.heroCopy > .presentedBy { margin:0 0 30px; }
-@media(max-width:760px) { .heroCopy > .presentedBy { margin:0 0 20px; } }
+/* Owner (Oct 7): the "Presented by" lockup sits directly under the Cohen Foundation credit. */
+.heroCopy > .presentedBy { margin:26px 0 0; }
+@media(max-width:760px) { .heroCopy > .presentedBy { margin:20px 0 0; } }
 
 /* Owner (Oct 4, 2026): the Awards lineup sits on this page in its own dark look; the menu's Schedule link and
    the Info button land with the section heading clear of the top edge. */

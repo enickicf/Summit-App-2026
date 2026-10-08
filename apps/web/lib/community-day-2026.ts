@@ -1,51 +1,46 @@
 import { awards2026Editorial } from "./awards-editorial";
 
-// Community Day page (/community-day, Summit site). Owner (Sept 28): simple and about Community Day only.
-// The page never compares it with the other events; what it is (its mission, time and free tickets)
-// makes it obvious. Facts come only from owner sources; nothing is inferred:
+// Nevada Mental Health Day page (/community-day, Summit site; "Community Day" is the label the team and the staff
+// portal keep). Owner (Sept 28): simple and about this day only. Facts come only from owner sources; nothing is
+// inferred:
 // - the owner's Community Day invitation (Outreach OS campaign "Community Day — Nevada mental health orgs &
 //   individuals", Sept 28, 2026): the panel + community activation, the Las Vegas organizations it is for,
 //   free tickets for "you, your team, and the people you serve";
-// - the Awards page (lib/awards-editorial.ts): date, venue, doors 5:30, Community Day 5:45-7:15;
-// - the live RSVP form (not-alone-awards-rsvp-2026.netlify.app, read Sept 28): the Organization field,
-//   the Community Day toggle, the party size and the waiting-list notice.
+// - Aphrah (Oct 7, 2026; Airtable run of show) and the owner (Oct 7): Wellness & Check-In 12–3 PM (LaFleur),
+//   Summit Sessions 3–6:30 PM (Margaux Ballroom; the owner moved the start from 3:30 to 3:00 the same day); the
+//   Not Alone Awards Show follows at the Encore Theater, doors 6:30 PM, show 7:30–10:00 PM. No Pre-Show any more.
+// - the live RSVP form (notaloneawards.org/rsvp/nevada-mental-health-day): the Organization field, the three
+//   attendance toggles, the party size and the waiting-list notice.
 // The "What is Community Day?" statement was written for the owner's review (Sept 29) from those same facts.
+export type CommunityDayScheduleRow = { label: string; value: string; note: string; link: "awards" | null };
+
 export const communityDay2026 = {
   name: "Community Day",
   // Ryan (Oct 5, via Aphrah and Paige): the page title is "Nevada Mental Health Day"; "Community Day" is the label.
   title: "Nevada Mental Health Day",
+  // Owner (Oct 7): the header is the title, the Cohen credit and the ICF | NAMI lockup only; the date, time and
+  // rooms live in the Schedule section and the page metadata.
   date: awards2026Editorial.date,
   dateTime: "2026-11-02T12:00:00-08:00",
-  // Aphrah (Oct 7, 2026; Airtable run of show): the day moves into the Wynn's meeting wing: Wellness Activities & Check-In
-  // 12:00-3:00 PM (LaFleur), Summit Sessions 3:30-6:30 PM (Margaux ballroom); the Awards Show follows at the Encore
-  // Theater (doors 6:30, Pre-Show 7:30, show 8:00-10:00). Owner (Oct 7): the rooms are public on this page only.
-  heroBlocks: [
-    { label: "Wellness & Check-In", time: "12–3 PM" },
-    { label: "Summit Sessions", time: "3:30–6:30 PM" }
-  ],
-  // Owner (Oct 7): one self-explanatory line: they are welcome at the show, where, when, how; the show name is a link.
-  // Owner (Oct 7, later): just the pointer, no "choose it on the ticket form".
-  heroAwardsLine: { before: "Stay for the ", link: "Not Alone Awards Show", after: " at the Encore Theater · doors open 6:30 PM" },
   time: "12:00–6:30 PM",
-  doors: "12:00 PM",
-  // Owner (Oct 7, later): the header names the day's room, then the resort (check-in is in LaFleur; see details).
-  venue: "Margaux Ballroom, Wynn Las Vegas",
-  // Owner (Oct 7): this page's tickets go to its own form (Community Day & Awards Show), not the Awards Show form.
+  venue: "Wynn Las Vegas",
+  // Owner (Oct 7): this page's tickets go to its own form (Nevada Mental Health Day & Awards Show), not the Awards Show form.
   rsvpUrl: "https://notaloneawards.org/rsvp/nevada-mental-health-day",
-  // This page's own menu has no Summit, Schedule, Directory or Venue tab. The Awards page is labelled "Concert".
+  // This page's own menu: NV Mental Health Day, Schedule, Tickets, Awards and the Donate sticker (owner, Oct 7).
+  // The public page's Awards link goes to the Awards site; a partner copy's goes back to that copy.
   menu: {
-    concertUrl: "https://notaloneawards.org/awards/2026"
+    awardsUrl: "https://notaloneawards.org/awards/2026"
   },
   // Owner (Sept 29): "What is Community Day?" is answered in one statement that doubles as the mission.
   about: "Nevada Mental Health Day is a free day at the Not Alone Summit dedicated to the Las Vegas organizations making an impact in mental health: wellness rooms and check-in from noon, then panels and conversations that honor the people behind the work.",
-  // The details block, in the Awards page's "The Evening" format (label above a large value).
+  // The Schedule block, in the Awards page's "The Evening" format (label above a large value, venue note under it).
+  // Owner (Oct 7): the date sits under the heading, each row names its room; rooms are public on this page only.
+  // The Awards Show row's label links to that copy's Awards page (the view adds the link).
   details: [
-    { label: "Date", value: "Monday, Nov 2", note: null },
-    { label: "Wellness & Check-In", value: "12–3 PM", note: "LaFleur, Wynn Las Vegas" },
-    { label: "Summit Sessions", value: "3:30–6:30 PM", note: "Margaux Ballroom, Wynn Las Vegas" },
-    { label: "Awards Show Doors", value: "6:30 PM", note: "Encore Theater" },
-    { label: "Awards Show", value: "8:00–10:00 PM", note: "Encore Theater · Pre-Show 7:30 PM" }
-  ],
+    { label: "Wellness & Check-In", value: "12–3 PM", note: "LaFleur, Wynn Las Vegas", link: null },
+    { label: "Summit Sessions", value: "3–6:30 PM", note: "Margaux Ballroom, Wynn Las Vegas", link: null },
+    { label: "Not Alone Awards Show", value: "Doors open 6:30 PM · Show 7:30 PM", note: "Encore Theater", link: "awards" }
+  ] satisfies readonly CommunityDayScheduleRow[],
   tickets: {
     steps: [
       { title: "Open the RSVP form", detail: "Add your name, email and phone, choose how many are in your party (up to ten per request), and add the name, email and phone of each guest." },
