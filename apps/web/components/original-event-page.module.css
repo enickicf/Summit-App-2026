@@ -659,3 +659,27 @@
   .currentAwards .awardsStatementBand p { font-size: 24px; }
   .currentAwards .iheartBand { padding-top: 32px; padding-bottom: 36px; }
 }
+
+/* Owner (Oct 8): the phone stack's symmetry at every screen size. One column width per screen (--stack): the statement,
+   the iHeartRadio logo, the Stream button and the schedule box all share it, centred; larger screens get a wider column
+   and a longer, less stacked statement. The statement keeps its own band; iHeartRadio + schedule keep theirs. */
+.currentAwards { --stack: 720px; }
+@media (max-width: 1199px) { .currentAwards { --stack: 620px; } }
+@media (max-width: 900px) { .currentAwards { --stack: min(560px, calc(100vw - 64px)); } }
+@media (max-width: 600px) { .currentAwards { --stack: calc(100vw - 48px); } }
+.currentAwards .awardsStatementBand p { max-width: var(--stack); font-size: clamp(24px, 2.5vw, 36px); line-height: 1.24; }
+.currentAwards .iheartBand { display: flex; flex-direction: column; align-items: center; gap: 28px; text-align: center; }
+.currentAwards .iheartBand > .broadcastStream, .currentAwards .iheartBand > .broadcastDetails { align-self: center; justify-self: auto; grid-column: auto; grid-row: auto; }
+.currentAwards .broadcastStream { order: 1; width: var(--stack); max-width: 100%; justify-content: flex-start; gap: 24px; }
+.currentAwards .broadcastStream .iheartLogo { width: 100%; height: auto; max-width: none; }
+.currentAwards .broadcastStream .iheartStream { width: 100%; box-sizing: border-box; justify-content: center; min-height: 72px; padding: 0 24px; font-size: clamp(16px, 1.6vw, 22px); }
+.currentAwards .broadcastDetails { order: 2; width: var(--stack); max-width: 100%; box-sizing: border-box; padding: 28px 32px 26px; }
+.currentAwards .broadcastDetails .heroDate { font-size: clamp(16px, 1.4vw, 20px); }
+.currentAwards .broadcastDetails .heroScheduleTimes dd { font-size: clamp(22px, 2vw, 30px); }
+.currentAwards .broadcastDetails .heroScheduleTimes dt { font-size: clamp(12px, 1vw, 15px); }
+.currentAwards .broadcastDetails .awardsActions .action, .currentAwards .broadcastDetails .infoButton { height: clamp(44px, 3.6vw, 52px); font-size: clamp(14px, 1.2vw, 17px); }
+@media (max-width: 600px) {
+  .currentAwards .broadcastStream .iheartStream { min-height: 54px; font-size: 15px; }
+  .currentAwards .broadcastDetails { padding: 22px 22px 20px; }
+  .currentAwards .iheartBand { gap: 24px; }
+}
