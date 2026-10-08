@@ -595,7 +595,7 @@
 .currentAwards .broadcastRule { display: block; width: 64px; height: 2px; margin: 0 0 22px; background: #f1dfbb; }
 .currentAwards .broadcastStatement p { max-width: 900px; margin: 0 auto; color: #fff; font-size: clamp(26px, 2.6vw, 34px); font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; text-align: center; text-wrap: balance; }
 .currentAwards .broadcastStatement .awardsHonorLede { color: #f1dfbb; font-weight: 700; }
-.currentAwards .broadcastDetails { grid-column: 1; grid-row: 2; justify-self: start; box-sizing: border-box; width: 320px; max-width: 100%; padding: 24px 24px 20px; border: 1px solid rgba(241, 223, 187, .38); border-radius: 16px; background: rgba(255, 255, 255, .03); text-align: left; }
+.currentAwards .broadcastDetails { grid-column: 1; grid-row: 2; justify-self: start; box-sizing: border-box; width: 340px; max-width: 100%; padding: 24px 24px 20px; border: 1px solid rgba(241, 223, 187, .38); border-radius: 16px; background: rgba(255, 255, 255, .03); text-align: left; }
 .currentAwards .broadcastDetails .heroDate { margin: 0 0 2px; color: #fff; font-size: 16px; font-weight: 600; line-height: 1.5; }
 .currentAwards .broadcastDetails .heroScheduleTimes { gap: 12px 28px; margin-top: 14px; max-width: none; }
 .currentAwards .broadcastDetails .heroScheduleTimes dt { font-size: 12px; }
@@ -603,8 +603,8 @@
 .currentAwards .broadcastDetails .awardsActions { flex-wrap: nowrap; gap: 10px 12px; margin-top: 20px; }
 .currentAwards .broadcastDetails .awardsActions .action, .currentAwards .broadcastDetails .infoButton { width: auto; flex: 1 1 0; height: 44px; min-height: 0; padding: 0 16px; font-size: 14px; font-weight: 800; letter-spacing: .04em; }
 .currentAwards .broadcastDetails .heroScheduleLink { margin-top: 14px; font-size: 13px; padding: 6px 0; }
-.currentAwards .broadcastStream { grid-column: 2; grid-row: 2; justify-self: end; box-sizing: border-box; width: min(680px, 100%); display: flex; flex-direction: column; align-items: center; gap: 26px; text-align: center; }
-.currentAwards .broadcastStream .iheartLogo { width: 100%; }
+.currentAwards .broadcastStream { grid-column: 2; grid-row: 2; justify-self: stretch; box-sizing: border-box; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 26px; text-align: center; }
+.currentAwards .broadcastStream .iheartLogo { width: min(680px, 100%); }
 .currentAwards .broadcastStream .iheartStream { min-height: 76px; padding: 0 52px; font-size: 22px; }
 /* "The 2026 Lineup" follows the band closely (Awards page only; the 2025 archive's #directory is a div). */
 .currentAwards section:global(#directory) { padding-top: 30px; }
