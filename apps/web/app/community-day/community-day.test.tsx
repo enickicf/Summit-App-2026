@@ -37,15 +37,16 @@ describe("Nevada Mental Health Day page", () => {
     expect(heroHtml).toContain("encore-theater-community-day");
     const hero = text(heroHtml);
     // Owner (Oct 7): the header was too crowded; the date, venue, times and the Awards Show pointer moved to the Schedule.
-    expect(hero).toContain("Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Presented by × Request free tickets Info");
-    expect(hero).not.toMatch(/November|Nov 2|PM|Wynn|Encore|LaFleur|Margaux|Stay for|Awards Show|Community Day/);
-    expect(heroHtml).not.toMatch(/<dl\b|<time\b/);
+    // Owner (Oct 8): the date and place at the top of the header (as on the Summit and Awards), "Full Schedule" replaces "Info".
+    expect(hero).toContain("Monday, November 2, 2026 Wynn Las Vegas Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Presented by × Request free tickets Full Schedule");
+    expect(hero).not.toMatch(/PM|Encore|LaFleur|Margaux|Stay for|Awards Show|Community Day/);
+    expect(heroHtml).not.toMatch(/<dl\b/);
   });
 
-  it("has an Info button that scrolls down to \"What is Community Day?\" on the same page", async () => {
+  it("has a Full Schedule button that scrolls down to the schedule on the same page (owner, Oct 8)", async () => {
     beforeEvent();
     const html = await render();
-    expect(html).toMatch(/<a class="[^"]*" href="#what-is-community-day">Info<\/a>/);
+    expect(html).toMatch(/<a class="[^"]*" href="#schedule">Full Schedule<\/a>/);
     expect(html).toContain('<section class="_mission_');
     expect(html).toMatch(/<section [^>]*id="what-is-community-day"[^>]*aria-labelledby="mission-title"/);
   });
@@ -88,18 +89,21 @@ describe("Nevada Mental Health Day page", () => {
     const html = await render();
     const scheduleHtml = section(html, "schedule-title");
     const schedule = text(scheduleHtml);
-    expect(schedule).toContain("Schedule Monday, November 2, 2026 Wellness & Check-In 12–3 PM LaFleur, Wynn Las Vegas Summit Sessions 3–6:30 PM Margaux Ballroom, Wynn Las Vegas Not Alone Awards Show Doors open 6:30 PM · Show 7:30 PM Encore Theater");
+    // Owner (Oct 8): the full schedule from Airtable's Run of Show, with the Summit Sessions' segments.
+    expect(schedule).toMatch(/Schedule Monday, November 2, 2026 12:00–3:00 PM Wellness & Check-In LaFleur · Attire: Chic Business Casual[^]*3:00–6:30 PM Summit Sessions Margaux Ballroom[^]*3:20–3:30 PM ICF \+ NAMI Opening Ceremony[^]*6:30 PM Awards Show Doors Open Encore Theater 7:30–10:00 PM Not Alone Awards Show Encore Theater · Attire: Semi-Formal with Flair/);
+    expect(schedule).not.toMatch(/Red Carpet|Pre-Show|Founders|Pet Partners|Pickleball|Speaker Reception/);
     expect(scheduleHtml).toContain('<h2 id="schedule-title">Schedule</h2>');
     expect(scheduleHtml).toContain('<time dateTime="2026-11-02T12:00:00-08:00">Monday, November 2, 2026</time>');
     expect(html).toMatch(/<section [^>]*id="schedule"[^>]*aria-labelledby="schedule-title"/);
     // The Awards Show's name is the link to this copy's Awards page, in a new tab.
-    expect(scheduleHtml).toContain('<dt><a href="/awards/2026" target="_blank" rel="noopener">Not Alone Awards Show</a></dt>');
-    expect(section(await render("lakelasvegas-vip"), "schedule-title")).toContain('<dt><a href="/lakelasvegas/vip" target="_blank" rel="noopener">Not Alone Awards Show</a></dt>');
+    expect(scheduleHtml).toContain('<h3><a href="/awards/2026" target="_blank" rel="noopener">Not Alone Awards Show</a></h3>');
+    expect(section(await render("lakelasvegas-vip"), "schedule-title")).toContain('<h3><a href="/lakelasvegas/vip" target="_blank" rel="noopener">Not Alone Awards Show</a></h3>');
     // Owner (Oct 7): rooms are public on this page only (they stay private everywhere else on the site).
     expect(schedule).toContain("LaFleur");
     expect(schedule).toContain("Margaux Ballroom");
     // No separate Date or Location row, no Pre-Show, no 8:00 PM, no ticket-form pointer.
-    expect(schedule).not.toMatch(/Date |Location|Pre-Show|8:00|choose it|3:30|The Details/);
+    expect(schedule).not.toMatch(/Date |Location|Pre-Show|8:00|choose it|The Details/);
+    expect(schedule).toContain("3:00–6:30 PM Summit Sessions"); // the sessions start at 3:00, not 3:30 (owner, Oct 7)
     expect(schedule).not.toMatch(/free|ticket/i);
   });
 
@@ -112,7 +116,8 @@ describe("Nevada Mental Health Day page", () => {
     expect(page).not.toContain("Who it's for");
     expect(page).not.toMatch(/different|not the Awards/i);
     // Owner (Oct 7): the show is 7:30–10:00 PM with doors at 6:30; there is no Pre-Show anywhere any more.
-    expect(page).toContain("Doors open 6:30 PM · Show 7:30 PM");
+    expect(page).toContain("6:30 PM Awards Show Doors Open");
+    expect(page).toContain("7:30–10:00 PM Not Alone Awards Show");
     expect(page).not.toMatch(/Pre-Show|8:00/);
     // Owner (Oct 4): the talent lineup is on this page too; the rest of the Awards program is not.
     // Owner (Oct 6): no Awards Show information block on this page (removed the same day it was added).
@@ -187,7 +192,8 @@ describe("Nevada Mental Health Day page", () => {
     const html = await render();
     expect(html).not.toContain(communityDay2026.rsvpUrl);
     expect(html).not.toContain('id="tickets"');
-    expect(text(section(html, "community-day-title"))).toContain(`Presented by × ${postEventLabel} Info`);
+    expect(text(section(html, "community-day-title"))).toContain(`${postEventLabel} Nevada Mental Health Day`);
+    expect(text(section(html, "community-day-title"))).toContain("Presented by × Full Schedule");
     expect(text(html)).toContain("What is Community Day?");
   });
 

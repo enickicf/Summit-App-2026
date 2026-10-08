@@ -12,6 +12,7 @@ import heroPhoto from "./encore-theater-community-day.png";
 import styles from "./community-day.module.css";
 import { PresentedBy } from "../../components/presented-by";
 import { EventPartners } from "../../components/event-partners";
+import { communityDaySchedule2026 } from "../../lib/community-day-schedule-2026";
 
 
 // Owner (Oct 4): the private partner copies (/nami/community-day, ...) are this same page with the ticket
@@ -33,16 +34,17 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
             "Community Day" label above it. Owner (Oct 7): the header was too crowded: it is now the title, the Cohen
             Foundation credit, the ICF | NAMI "Presented by" lockup directly under that credit, and the two buttons.
             The date, venue, times and the Awards Show pointer moved down to the Schedule section. */}
+        {/* Owner (Oct 8): the date and place at the top of the header, as on the Summit and Awards heroes. */}
+        <p className={styles.heroEyebrow}>{over ? postEventLabel : <><span className={styles.heroEyebrowDate}>Monday, November 2, 2026</span><span className={styles.heroEyebrowVenue}>Wynn Las Vegas</span></>}</p>
         <h1 id="community-day-title" className={styles.heroTitleMark} aria-label={day.title}>
           <strong>Nevada Mental<br />Health Day</strong>
         </h1>
         <p className={styles.heroPowered}>Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong></p>
         <PresentedBy className={styles.presentedBy} />
-        {over && <p className={styles.when}>{postEventLabel}</p>}
         <div className={styles.heroButtons} id="community-day-actions">
           {!over && <a className={styles.button} href={rsvpUrl} target="_blank" rel="noopener">Request free tickets</a>}
-          {/* Scrolls down to the "What is Community Day?" section on this page. */}
-          <a className={`${styles.button} ${styles.outline}`} href="#what-is-community-day">Info</a>
+          {/* Owner (Oct 8): "Full Schedule" (was "Info") scrolls to the day's full schedule on this page. */}
+          <a className={`${styles.button} ${styles.outline}`} href="#schedule">Full Schedule</a>
         </div>
       </div>
     </section>
@@ -59,17 +61,20 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
     {/* Owner (Oct 5): the shared partner block (Cohen "Powered by", ICF x NAMI "Presented by" in one box, Wynn). */}
     <EventPartners tone="light" id="community-day-partners" />
 
-    {/* Owner (Oct 7): "The Details" became the Schedule: the date under the heading, then one row per part of the
-        day with its room; the Awards Show row's name links to the Awards page. The id stays "schedule" for the menu. */}
+    {/* Owner (Oct 8): the full schedule for the day, like the Summit's, from Airtable's Run of Show: each session with its
+        time, room, attire and description; the segments of the Summit Sessions sit under that block; the Awards Show rows
+        link to this copy's Awards page. The id stays "schedule" for the menu and the Full Schedule button. */}
     <section className={styles.details} id="schedule" aria-labelledby="schedule-title">
       <h2 id="schedule-title">Schedule</h2>
       <p className={styles.scheduleDate}><time dateTime={day.dateTime}>{day.date}</time></p>
-      <dl>{day.details.map(item => <div key={item.label}>
-        <dt>{item.link === "awards" ? <a href={awardsPath} target="_blank" rel="noopener">{item.label}</a> : item.label}</dt>
-        {/* A value with several parts ("Doors open 6:30 PM · Show 7:30 PM") may only break at its separator, never
-            inside a time; each part keeps its trailing dot so a wrapped line never starts with one. */}
-        <dd>{item.value.split(" · ").map((part, index, parts) => <span key={part} className={styles.part}>{index < parts.length - 1 ? `${part} · ` : part}</span>)}<span>{item.note}</span></dd>
-      </div>)}</dl>
+      <ol className={styles.fullSchedule}>{communityDaySchedule2026().map(session => <li key={session.id} className={styles[session.kind]}>
+        <p className={styles.sessionTime}>{session.time}</p>
+        <div>
+          <h3>{session.kind === "awards" ? <a href={awardsPath} target="_blank" rel="noopener">{session.title}</a> : session.title}</h3>
+          <p className={styles.sessionMeta}>{[session.room, session.attire && `Attire: ${session.attire}`].filter(Boolean).join(" · ")}</p>
+          {session.synopsis && <p className={styles.sessionSynopsis}>{session.synopsis}</p>}
+        </div>
+      </li>)}</ol>
     </section>
 
     {!over && <section className={styles.tickets} id="tickets" aria-labelledby="tickets-title">
