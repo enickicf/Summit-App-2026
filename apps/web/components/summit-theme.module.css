@@ -264,7 +264,9 @@
 .summit .heroAside .heroButtons { margin:0; }
 .summit .heroAside .heroDate { margin:0; color:#fff; font-size:25px; font-weight:500; line-height:1.5; }
 @media (max-width:760px) {
-  .summit .heroAside { position:static; align-items:flex-start; text-align:left; margin-top:22px; }
+  /* The hero is a flex row; on phones the aside wraps under the copy instead of squeezing beside it. */
+  .summit.summit .heroFormat { flex-wrap:wrap; }
+  .summit .heroAside { position:static; width:100%; align-items:flex-start; text-align:left; margin-top:22px; }
   .summit .heroAside .heroDate { font-size:19px; }
 }
 
