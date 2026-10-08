@@ -27,6 +27,7 @@ import { AwardsInfoButton } from "./awards-info-button";
 import { PresentedBy } from "./presented-by";
 import { awardsDoorsOpen2026, awardsShowStart2026 } from "../lib/event-partners-2026";
 import summitStyles from "./summit-theme.module.css";
+import { summitNarrative2026 } from "../lib/summit-narrative-2026";
 
 type SourceSection = (typeof source.summit.sections)[number];
 function localSections(sections: SourceSection[]): SourceSection[] {
@@ -257,14 +258,25 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     <section className={`${styles.band} ${summitStyles.introSplit}`} id="about">
       <div className={summitStyles.introText}>
         <h2>A National Convening for <span className={summitStyles.introAccent}>Mental Health</span> and Connection</h2>
-        <p>Building on the success of <a href="https://www.inspiringchildren.org/notalone"><strong>NotAloneChallenge.org</strong></a>, the Inspiring Children Foundation {archive ? "launched" : "is launching"} the <strong>Not Alone Summit</strong>, powered by the <strong>Steven &amp; Alexandra Cohen Foundation</strong>, hosted at <strong>{archive ? "Wynn Las Vegas" : venue ?? "Wynn Las Vegas"}.</strong> The Not Alone Summit is a premier national convening designed to bring together leading CEOs, artists, athletes, philanthropists, clinicians, researchers, and youth ambassadors to advance emotional and mental health.</p>
-        <p>{summit[1]!.blocks[2]!.text}</p>
+        {archive ? <>
+          <p>Building on the success of <a href="https://www.inspiringchildren.org/notalone"><strong>NotAloneChallenge.org</strong></a>, the Inspiring Children Foundation launched the <strong>Not Alone Summit</strong>, powered by the <strong>Steven &amp; Alexandra Cohen Foundation</strong>, hosted at <strong>Wynn Las Vegas.</strong> The Not Alone Summit is a premier national convening designed to bring together leading CEOs, artists, athletes, philanthropists, clinicians, researchers, and youth ambassadors to advance emotional and mental health.</p>
+          <p>{summit[1]!.blocks[2]!.text}</p>
+        </> : <>
+          {/* Owner (Oct 7): Ryan's approved narrative, word for word, with the Goals list under it (2026 only). */}
+          {summitNarrative2026.intro.map(paragraph => <p key={paragraph.slice(0, 24)}>{paragraph}</p>)}
+          <h3 className={summitStyles.goalsHeading}>{summitNarrative2026.goalsHeading}</h3>
+          <ol className={summitStyles.goals}>{summitNarrative2026.goals.map(goal => <li key={goal}>{goal}</li>)}</ol>
+        </>}
       </div>
       <div className={summitStyles.introBrand}>
         <SiteImage className={summitStyles.introLogo} src="/images/na-summit-logo-black-2.png" alt="Not Alone Summit" sizes="(max-width: 900px) 200px, 260px" />
         <p className={summitStyles.introPowered}>Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong></p>
       </div>
     </section>
+    {/* Owner (Oct 7): Jewel's approved quote as a featured pull-quote right under the introduction (2026 only). */}
+    {!archive && <section className={`${styles.band} ${summitStyles.pullQuote}`} id="jewel-quote" aria-label="Quote from Jewel">
+      <blockquote><p>“{summitNarrative2026.quote.text}”</p><footer>—{summitNarrative2026.quote.attribution}</footer></blockquote>
+    </section>}
     {/* Owner (Sept 21, late): the no-solicitation notice sits near the top, right after the introduction. */}
     {!archive && <section className={`${styles.band} ${summitStyles.noSolicitation}`} id="no-solicitation" aria-labelledby="summit-no-solicitation-title"><h2 id="summit-no-solicitation-title">{awards2026Program.noSolicitation.title}</h2><p>{awards2026Program.noSolicitation.body}</p></section>}
     {/* Owner (Sept 21): co-chairs sit just above the producers on every site; 2025 hosts keep their place. */}

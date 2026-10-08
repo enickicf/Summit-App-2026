@@ -159,6 +159,17 @@
 .summit.summit .programFooter p { color:#444444; max-width:68ch; }
 .programLinks { display:flex; flex-wrap:wrap; align-items:center; gap:12px 26px; margin-top:18px; }
 .programLinks a { display:inline-flex; align-items:center; gap:8px; border-radius:4px; }
+/* Owner (Oct 7): Ryan's narrative. The Goals list sits under the intro paragraphs in the same column; Jewel's quote
+   is its own band right under the introduction (ICF blue, large white type, name on its own line). */
+.summit.summit > section:global(#about) .introText h3.goalsHeading { margin:30px 0 10px; font-size:14px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#4a5faa; text-align:left; }
+.summit.summit > section:global(#about) .introText ol.goals { margin:0; padding:0 0 0 1.4em; color:#000; font-size:21px; line-height:1.55; text-align:left; }
+.summit.summit > section:global(#about) .introText ol.goals li { margin:4px 0; padding-left:6px; }
+.summit.summit > section:global(#about) .introText ol.goals li::marker { color:#4a5faa; font-weight:600; }
+.summit.summit .pullQuote { background:#4a5faa; color:#fff; text-align:center; }
+.summit.summit .pullQuote blockquote { max-width:880px; margin:0 auto; padding:0; }
+.summit.summit .pullQuote blockquote p { max-width:none; margin:0; color:#fff; font-size:clamp(24px,2.6vw,36px); font-weight:600; line-height:1.3; letter-spacing:-0.01em; text-wrap:balance; }
+.summit.summit .pullQuote blockquote footer { margin-top:22px; color:#d0d4ea; font-size:20px; font-weight:500; letter-spacing:.04em; }
+@media (max-width:900px) { .summit.summit > section:global(#about) .introText ol.goals { font-size:17px; } .summit.summit .pullQuote blockquote p { font-size:22px; } .summit.summit .pullQuote blockquote footer { margin-top:16px; font-size:17px; } }
 .summit.summit .noSolicitation { text-align:center; background:#d0d4ea; }
 .summit.summit .noSolicitation h2 { font-size:20px; margin:0 0 10px; }
 .summit.summit .noSolicitation p { max-width:600px; margin:0 auto; color:#444444; font-size:14px; line-height:1.7; }

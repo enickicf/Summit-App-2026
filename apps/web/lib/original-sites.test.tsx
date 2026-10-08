@@ -311,7 +311,8 @@ describe("source-faithful, year-separated event pages", () => {
     snapshot.event.venueName = "Updated approved venue";
     snapshot.scheduleItems.find(item => item.title === "Awards Show")!.eligibilityScope.label = "Updated approved access";
     const summit = renderToStaticMarkup(<OriginalSummitPage year={2026} snapshot={snapshot} />);
-    expect(summit).toContain("hosted at <strong>Updated approved venue.</strong>");
+    // Owner (Oct 7): the 2026 intro is Ryan's fixed narrative and no longer names the venue; the hero still does.
+    expect(summit).not.toContain("hosted at <strong>");
     expect(summit).toContain("Updated approved venue");
     expect(summit).not.toContain("hosted at Wynn");
     expect(summit).not.toContain('alt="Wynn Resorts"');
