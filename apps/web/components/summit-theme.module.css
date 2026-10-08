@@ -416,3 +416,11 @@
   .summit .heroCopy .heroEyebrow .heroEyebrowDate { font-size:22px; }
   .summit .heroCopy .heroEyebrow .heroDateVenue { margin-top:6px; font-size:13px; letter-spacing:.28em; }
 }
+
+/* Owner (Oct 8): the narrative paragraph was a left-aligned block on white between two pale sections, with a lot of space
+   around it. It is now a centred, balanced paragraph on the Summit pearl, matching the Jewel quote band, so the run reads
+   pearl paragraph → blue Goals → pearl quote; tighter padding; navy text with the opening phrase in bold. */
+.summit.summit .narrativeBand { background:#d0d4ea; text-align:center; padding-top:44px; padding-bottom:44px; }
+.summit.summit .narrativeBand p { max-width:860px; margin:0 auto; color:#1f2a5c; font-size:clamp(18px,1.6vw,21px); line-height:1.6; text-align:center; text-wrap:balance; }
+.summit.summit .narrativeBand .narrativeLede { color:#1f2a5c; font-weight:700; }
+@media(max-width:600px) { .summit.summit .narrativeBand { padding-top:32px; padding-bottom:32px; } .summit.summit .narrativeBand p { font-size:17px; } }
