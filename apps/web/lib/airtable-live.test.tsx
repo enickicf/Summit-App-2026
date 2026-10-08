@@ -196,11 +196,12 @@ describe("Airtable -> website, automatically", () => {
 
   it("moves schedule changes onto the right date, hides operational rows and never invents an end", async () => {
     base.tblRos!.push(session("recSSSSSSSSSSSSS4", "High Tea", "2026-11-05T20:00:00.000Z"));
-    base.tblRos![1]!.fields[f.schedule.start] = "2026-11-03T04:30:00.000Z"; // Awards moved to 8:30 PM
+    base.tblRos![1]!.fields[f.schedule.start] = "2026-11-03T04:30:00.000Z"; // Awards moved to 8:30 PM in Airtable...
     const snapshot = await withAirtable(event2026Snapshot);
     const at = (title: string) => snapshot.scheduleItems.find(item => item.title === title)!;
     expect(snapshot.scheduleItems.map(item => item.title)).toEqual(["Doors Open", "Awards Show", "High Tea"]);
-    expect(at("Awards Show").startUtc).toBe("2026-11-03T04:30:00.000Z");
+    // ...but the owner's pinned 7:30 PM wins until he lifts it (lib/schedule-website-rules.ts ownerPinnedTimes).
+    expect(at("Awards Show").startUtc).toBe("2026-11-03T03:30:00.000Z");
     expect(at("Awards Show").endUtc).toBe("2026-11-03T06:00:00.000Z");
     expect(at("High Tea").endUtc).toBe(at("High Tea").startUtc);
     expect(airtableOverlay(snapshot)!.partners!.map(partner => partner.name)).toEqual(["Glow"]);

@@ -18,6 +18,7 @@ import {
 } from "../app/schedule/schedule-presentation";
 import { isPokerNight, pokerNight } from "../lib/poker-night-links";
 import { isWorkshopSignup } from "../lib/morning-workshops";
+import { sessionAttire } from "../lib/schedule-website-rules";
 import { WorkshopSignup } from "./workshop-signup";
 import styles from "../app/schedule/schedule.module.css";
 import { useEventClock } from "../app/schedule/use-event-clock";
@@ -109,8 +110,12 @@ export function ScheduleBrowser({ days, eventTimeZone, initialNowUtc, noticeSnap
                           {scheduleStatusLabels(item, nowUtc).map(label => <strong key={label}>{label}</strong>)}
                         </div>
                         <h3 id={`${id}-session-${item.id}`}>{item.title}</h3>
-                        {foundersOnly ? <p className={styles.foundersOnly}><Lock size={15} aria-hidden="true" />Founders only event</p> : null}
+                        {foundersOnly ? <p className={styles.foundersOnly}><Lock size={15} aria-hidden="true" />Founders only event</p>
+                          /* Owner (Oct 7): private events are listed and marked "Invite only" rather than hidden. */
+                          : item.eligibilityScope.id === "invite-only" ? <p className={styles.foundersOnly}><Lock size={15} aria-hidden="true" />Invite only</p> : null}
                         {summary ? <p>{summary}</p> : null}
+                        {/* Owner (Oct 7): the Attire column from Airtable's Run of Show, for every event that carries one. */}
+                        {sessionAttire(item) ? <p className={styles.attire}><span>Attire</span>{sessionAttire(item)}</p> : null}
                         {showRooms && <p className={styles.location}><span>Location</span>{/^location to be confirmed\.?$/i.test(item.locationName.trim()) ? "To be confirmed" : item.locationName}</p>}
                         {/* Owner (Sept 28): the poker night has its own site and its own RSVP; this entry is
                             the only place on the Summit site that links to them. */}

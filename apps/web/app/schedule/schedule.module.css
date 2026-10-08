@@ -73,6 +73,9 @@
 .session .foundersOnly { align-items: center; background: #d0d4ea; border-radius: 999px; color: #111111; display: inline-flex; font-size: 13px; font-weight: 700; gap: 7px; margin: 2px 0 12px; padding: 4px 12px; }
 .session .location { color: #444444; font-size: 14px; line-height: 1.5; margin: 0; }
 .location span { color: #777777; font-size: 12px; font-weight: 600; margin-right: 10px; text-transform: uppercase; }
+/* Owner (Oct 7): Airtable's Attire column, shown like the location line. */
+.session .attire { color: #444444; font-size: 14px; line-height: 1.5; margin: 0; }
+.attire span { color: #777777; font-size: 12px; font-weight: 600; margin-right: 10px; text-transform: uppercase; }
 .pending { color: #444444; font-size: 14px; line-height: 1.65; margin: 6px 0 14px; padding: 0 4px; white-space: pre-line; }
 .empty { color: #444444; line-height: 1.6; padding: 28px 36px; text-align: center; }
 

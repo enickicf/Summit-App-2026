@@ -1,0 +1,77 @@
+import type { ScheduleItem } from "@not-alone/validation";
+
+// Owner (Oct 7, 2026): the Summit and Awards schedules pull from Airtable's Run of Show, with every Airtable
+// refresh carrying the Attire column along, and with the owner's standing exceptions applied on top so that a
+// refresh never undoes them. This module holds those rules; lib/airtable-overlay.ts applies them.
+
+// Hard rules from the owner: never on the website, whatever Airtable says.
+//  - Red Carpet ("hard rule, do not pull that from Airtable or anywhere"), Oct 7.
+//  - Speaker Reception ("cut the speaker reception"), Oct 7.
+//  - Pre-Show ("we're not gonna say there's a pre-show, we're just gonna say 7:30"), Oct 7.
+//  - Operational rows (load-in/out, rehearsals) and anything the team has flagged as a possible cut.
+export const neverOnWebsite = /\bred carpet\b|\bspeaker reception\b|\bpre[- ]?show\b|\bload[- ]?(?:in|out)\b|rehearsal|potentially cut/i;
+
+// Which Run of Show rows are events on the public schedule. Airtable lists every segment of the day (each panel,
+// song break and fitness class) under its parent block; the website lists the blocks, as the owner's schedule
+// always has. The "Website Public/Private" column overrides this once the team fills it in: "Public" lists a
+// row whatever its title, "Private" hides it.
+export const scheduleBlockTitles: RegExp[] = [
+  /^poker night$/i,
+  /^wellness activit/i, // "Wellness Activity", "Wellness Activities & Check-In"
+  /^nevada mental health day$/i,
+  /^founders? cocktails$/i,
+  /^founder['’]?s dinner$/i,
+  /^pet partners therapy$/i,
+  /^(?:awards show )?doors open$/i,
+  /^not alone awards\b|^awards show$/i,
+  /^late night pickleball/i,
+  /^summit sessions$/i,
+  /^lunch$/i,
+  /^break$/i,
+  /^dinner\b/i,
+  /^evening talk/i,
+  /^closing (?:dinner|celebration)\b(?!.*:)/i, // "Closing Dinner and Performance", not its "Closing Dinner: Welcome" segment
+  /^tennis\b/i,
+  /^high tea\b/i
+];
+
+export type RosVisibility = { title: string; websitePublic?: string | undefined };
+export function isOnWebsiteSchedule(row: RosVisibility): boolean {
+  const title = row.title.trim();
+  if (neverOnWebsite.test(title)) return false;
+  const flag = (row.websitePublic ?? "").trim().toLowerCase();
+  if (flag === "private") return false;
+  if (flag === "public") return true;
+  return scheduleBlockTitles.some(pattern => pattern.test(title));
+}
+
+// Airtable's working labels that read differently on the website (the owner's schedule calls this "Dinner").
+const displayTitles: Array<[RegExp, string]> = [[/^dinner\s*-\s*talent$/i, "Dinner"]];
+export function websiteSessionTitle(title: string): string {
+  const match = displayTitles.find(([pattern]) => pattern.test(title.trim()));
+  return match ? match[1] : title.trim();
+}
+
+// Owner-dictated times (Oct 7) that stay put through Airtable refreshes until the owner lifts them: the Awards
+// Show is 7:30-10:00 PM with doors at 6:30 (no pre-show), Nevada Mental Health Day starts at 3:00, Founders
+// Cocktails at 4:00, the Tuesday evening performance at 8:00. Airtable already agrees; this is the safety net.
+export const ownerPinnedTimes: Array<{ title: RegExp; date: string; start?: string; end?: string }> = [
+  { title: /^not alone awards\b|^awards show$/i, date: "2026-11-02", start: "19:30", end: "10:00 PM" },
+  { title: /^(?:awards show )?doors open$/i, date: "2026-11-02", start: "18:30" },
+  { title: /^nevada mental health day$/i, date: "2026-11-02", start: "15:00", end: "6:30 PM" },
+  { title: /^founders? cocktails$/i, date: "2026-11-02", start: "16:00" },
+  { title: /^evening talk/i, date: "2026-11-03", start: "20:00" }
+];
+// `date` is the session's local (Las Vegas) day as YYYY-MM-DD; `start` a 24-hour "HH:MM"; `end` Airtable's end text.
+export function pinnedTime(row: { title: string; date: string; start: string; end: string }): { start: string; end: string } {
+  const pin = ownerPinnedTimes.find(entry => entry.date === row.date && entry.title.test(row.title.trim()));
+  return { start: pin?.start ?? row.start, end: pin?.end ?? row.end };
+}
+
+// Owner (Oct 7): private events say so ("invite only") instead of hiding; founders events and the talent dinner.
+export const inviteOnly = /founder|^dinner\s*-\s*talent$/i;
+export const inviteOnlyScope = { id: "invite-only", label: "Invite only" } as const;
+
+// Attire rides on the schedule item; the shared schema has no field for it, so it travels as an extra property.
+export type ScheduleItemWithAttire = ScheduleItem & { attire?: string };
+export const sessionAttire = (item: ScheduleItem): string | null => (item as ScheduleItemWithAttire).attire?.trim() || null;

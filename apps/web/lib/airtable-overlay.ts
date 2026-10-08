@@ -6,6 +6,7 @@ import {
   isPublicAirtablePerson, type AirtableSession
 } from "./airtable";
 import { airtableRos2026, type RosRow } from "./airtable-ros-2026";
+import { inviteOnly, inviteOnlyScope, isOnWebsiteSchedule, pinnedTime, websiteSessionTitle, type ScheduleItemWithAttire } from "./schedule-website-rules";
 import { scheduleDoc2026 } from "./schedule-doc-2026";
 import { airtableTalent2026, type RecordedAirtablePerson } from "./airtable-talent-2026";
 import { airtablePartners2026 } from "./airtable-partners-2026";
@@ -50,52 +51,66 @@ export function sessionEndUtc(startUtc: string, endText: string): string {
   return end.toISOString();
 }
 
-// Operational rows (load-in/out, rehearsals) are not part of the attendee schedule.
-const operational = /\bload[- ]?(in|out)\b|rehearsal|mike'?s bikes/i;
-
+// Owner (Oct 7): which Run of Show rows are on the website is decided by lib/schedule-website-rules.ts (the owner's
+// exclusions such as Red Carpet, the block-level rows, and Airtable's "Website Public/Private" column).
 function scheduleFromAirtable(sessions: AirtableSession[], snapshot: EventSnapshot): ScheduleItem[] {
   const template = snapshot.scheduleItems.find(item => item.eventId === snapshot.event.id);
   const now = new Date().toISOString();
-  const rows = sessions.filter(session => session.startUtc && !operational.test(session.title))
+  const rows = sessions.filter(session => session.startUtc && isOnWebsiteSchedule(session))
     .sort((a, b) => a.startUtc!.localeCompare(b.startUtc!));
   const perDay = new Map<string, number>();
   return rows.map(session => {
-    const startUtc = session.startUtc!;
+    // Owner (Oct 7): the owner's pinned times win over Airtable's (live or recorded) until he lifts them.
+    const local = localDate(session.startUtc!);
+    const localStart = Object.fromEntries(new Intl.DateTimeFormat("en-US", { timeZone, hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date(session.startUtc!)).map(part => [part.type, part.value]));
+    const localDay = `${local.year}-${String(local.month).padStart(2, "0")}-${String(local.day).padStart(2, "0")}`;
+    const pinned = pinnedTime({ title: session.title, date: localDay, start: `${localStart.hour}:${localStart.minute}`, end: session.endText });
+    const [pinHour, pinMinute] = pinned.start.split(":").map(Number) as [number, number];
+    const startUtc = pinned.start === `${localStart.hour}:${localStart.minute}` ? session.startUtc! : zonedToUtc(local.year, local.month, local.day, pinHour, pinMinute).toISOString();
+    const endText = pinned.end;
     const day = JSON.stringify(localDate(startUtc));
     const dayOrder = perDay.get(day) ?? 0;
     perDay.set(day, dayOrder + 1);
     // Airtable's Run of Show has no access field. Keep the access staff already published for the
     // same session; otherwise only the session's own name decides (Founders…, Speaker Reception), and
     // everything else stays "to be confirmed" rather than inventing who may attend.
-    const published = snapshot.scheduleItems.find(item => item.title.trim().toLowerCase() === session.title.trim().toLowerCase());
-    const access = published?.eligibilityScope
-      ?? (/founder/i.test(session.title) ? { id: "ros-founders", label: "Founders" }
-        : /speaker reception/i.test(session.title) ? { id: "ros-speakers", label: "Speakers" }
-        : { id: "unconfirmed", label: "Access details to be confirmed" });
+    const title = websiteSessionTitle(session.title);
+    const published = snapshot.scheduleItems.find(item => item.title.trim().toLowerCase() === title.toLowerCase());
+    // Owner (Oct 7): private events (founders, the talent dinner) say "Invite only" instead of hiding. Otherwise keep
+    // the access staff already published for the same session; nothing else is invented.
+    const access = inviteOnly.test(session.title) ? inviteOnlyScope
+      : published?.eligibilityScope ?? { id: "unconfirmed", label: "Access details to be confirmed" };
     const location = session.location || "Location to be confirmed";
-    const summary = session.synopsis || session.title;
-    return {
+    const summary = session.synopsis || title;
+    const item: ScheduleItemWithAttire = {
       ...(template ?? {}),
-      id: airtableUuid(session.recordId), eventId: snapshot.event.id, title: session.title, shortTitle: session.title,
-      summary, description: summary, startUtc, endUtc: sessionEndUtc(startUtc, session.endText), eventTimeZone: snapshot.event.timeZone || timeZone,
+      id: airtableUuid(session.recordId), eventId: snapshot.event.id, title, shortTitle: title,
+      summary, description: summary, startUtc, endUtc: sessionEndUtc(startUtc, endText), eventTimeZone: snapshot.event.timeZone || timeZone,
       dayOrder, locationId: airtableUuid(`location:${location}`), locationName: location,
       speakerIds: [],
       status: "scheduled", visibilityScope: { id: "public", label: "Public" }, eligibilityScope: access,
       notificationScope: { id: "public", label: "All attendees" }, notificationOffsetsMinutes: [], featured: false, published: true,
       revision: template?.revision ?? 1, updatedAt: now
-    } as ScheduleItem;
+    } as ScheduleItemWithAttire;
+    // Owner (Oct 7): Airtable's Attire column rides along with every event that is on the schedule.
+    if (session.attire?.trim()) item.attire = session.attire.trim();
+    return item;
   });
 }
 
 // The Sept 21 Airtable Run of Show, used until the live connection is configured.
 export const recordedAgainstRevision = 9;
-// Owner (Sept 22): the schedule follows the owner's Google Doc until told otherwise. SCHEDULE_SOURCE=airtable returns to Airtable's Run of Show.
-export const scheduleFollowsDoc = () => process.env.SCHEDULE_SOURCE !== "airtable";
+// Owner (Oct 7): the schedule follows Airtable's Run of Show (live, or the recorded copy), with the owner's pinned
+// exceptions on top. SCHEDULE_SOURCE=doc returns to the Sept 22 Google Doc schedule.
+export const scheduleFollowsDoc = () => process.env.SCHEDULE_SOURCE === "doc";
 export function recordedAirtableSchedule(rows: RosRow[] = airtableRos2026): AirtableSession[] {
   return rows.filter(row => row.start && row.start !== "00:00").map(row => {
     const [year, month, day] = row.date.split("-").map(Number) as [number, number, number];
     const [hour, minute] = row.start.split(":").map(Number) as [number, number];
-    return { recordId: row.recordId, title: row.title, date: row.date, startUtc: zonedToUtc(year, month, day, hour, minute).toISOString(), endText: row.end, location: row.location, synopsis: row.synopsis, forum: "", websiteTime: "" };
+    return {
+      recordId: row.recordId, title: row.title, date: row.date, startUtc: zonedToUtc(year, month, day, hour, minute).toISOString(), endText: row.end,
+      location: row.location, synopsis: row.synopsis, forum: row.forum ?? "", websiteTime: "", attire: row.attire ?? "", websitePublic: row.websitePublic ?? ""
+    };
   });
 }
 

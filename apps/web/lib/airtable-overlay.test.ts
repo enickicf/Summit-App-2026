@@ -64,11 +64,32 @@ describe("withAirtable", () => {
     vi.stubEnv("AIRTABLE_TOKEN", "");
     const next = await withAirtable({ ...event2026Snapshot, revision: 9 });
     const at = (title: string) => next.scheduleItems.filter(item => item.title === title).map(item => item.startUtc);
+    const one = (title: string) => next.scheduleItems.find(item => item.title === title)!;
     expect(at("Poker Night")).toEqual(["2026-11-02T03:00:00.000Z"]); // Nov 1, 7:00 PM PST
-    expect(at("Doors Open")).toEqual(["2026-11-03T02:30:00.000Z"]); // Nov 2, 6:30 PM
-    expect(at("Closing Celebration")).toEqual(["2026-11-05T02:30:00.000Z"]);
+    // Oct 7 read (Bianca's restructure): doors 6:30, the Awards 7:30-10:00 with no Pre-Show row, Nevada Mental Health Day 3:00.
+    expect(at("Awards Show Doors Open")).toEqual(["2026-11-03T02:30:00.000Z"]); // Nov 2, 6:30 PM
+    expect(at("Not Alone Awards with iHeartRadio")).toEqual(["2026-11-03T03:30:00.000Z"]); // 7:30 PM
+    expect(one("Not Alone Awards with iHeartRadio").endUtc).toBe("2026-11-03T06:00:00.000Z"); // 10:00 PM
+    expect(at("Nevada Mental Health Day")).toEqual(["2026-11-02T23:00:00.000Z"]); // 3:00 PM
+    expect(at("Wellness Activities & Check-In")).toEqual(["2026-11-02T20:00:00.000Z"]); // 12:00 PM
+    expect(one("Wellness Activities & Check-In").endUtc).toBe("2026-11-03T01:00:00.000Z"); // 5:00 PM
+    expect(at("Founders Cocktails")).toEqual(["2026-11-03T00:00:00.000Z"]); // 4:00 PM
+    expect(at("Closing Dinner and Performance")).toEqual(["2026-11-05T03:00:00.000Z"]); // Nov 4, 7:00 PM
+    expect(at("Evening Talk + Performance/Writer's Round")).toEqual(["2026-11-04T04:00:00.000Z"]); // Nov 3, 8:00 PM
     expect(at("High Tea")).toEqual(["2026-11-05T20:00:00.000Z"]);
-    expect(next.scheduleItems.some(item => /load (in|out)|mike'?s bikes|eagleman/i.test(item.title))).toBe(false);
+    expect(next.scheduleItems.some(item => /load (in|out)|eagleman|red carpet|pre-show|speaker reception/i.test(item.title))).toBe(false);
+    // Owner (Oct 7): the public schedule lists the day's blocks, not every Run of Show segment, until the team marks
+    // segments "Public" in Airtable; attire rides along; private events say "Invite only"; the talent dinner reads "Dinner".
+    expect(next.scheduleItems.some(item => /ray lewis|fitness 1|song break|hobbies panel/i.test(item.title))).toBe(false);
+    expect((one("Not Alone Awards with iHeartRadio") as { attire?: string }).attire).toBe("Semi-Formal with Flair");
+    expect((one("Tennis") as { attire?: string }).attire).toBe("Athleisure");
+    expect(next.scheduleItems.filter(item => item.title === "Summit Sessions").map(item => (item as { attire?: string }).attire)).toEqual(Array(4).fill("Chic Business Casual"));
+    expect((one("Lunch") as { attire?: string }).attire).toBeUndefined();
+    expect(one("Founders Cocktails").eligibilityScope).toEqual({ id: "invite-only", label: "Invite only" });
+    expect(one("Founder's Dinner").eligibilityScope.label).toBe("Invite only");
+    expect(at("Dinner")).toEqual(["2026-11-04T02:30:00.000Z"]); // "Dinner - talent" in Airtable, Nov 3 6:30 PM
+    expect(one("Dinner").eligibilityScope.label).toBe("Invite only");
+    expect(next.scheduleItems.filter(item => item.title === "Pet Partners Therapy")).toHaveLength(3);
   });
   it("parses Airtable end times without inventing missing ones", () => {
     expect(sessionEndUtc("2026-11-03T04:00:00.000Z", "10 PM")).toBe("2026-11-03T06:00:00.000Z");

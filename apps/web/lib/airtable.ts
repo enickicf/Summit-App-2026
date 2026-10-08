@@ -21,7 +21,10 @@ export type AirtablePerson = {
   recordId: string; name: string; status: string; groups: string[]; occupation: string; organization: string;
   title: string; bio: string; hasHeadshot: boolean; headshotBytes?: number;
 };
-export type AirtableSession = { recordId: string; title: string; date: string; startUtc: string | null; endText: string; location: string; synopsis: string; forum: string; websiteTime: string };
+// Owner (Oct 7): Attire and "Website Public/Private" come along with every Run of Show row (found by column name).
+export type AirtableSession = { recordId: string; title: string; date: string; startUtc: string | null; endText: string; location: string; synopsis: string; forum: string; websiteTime: string; attire?: string; websitePublic?: string };
+const attireColumn = /^\s*attire\s*$/i;
+const websitePublicColumn = /website\s*public/i;
 export type AirtablePartner = { recordId: string; name: string; item: string; group: string; status: string };
 
 type AirtableRecord = { id: string; fields: Record<string, unknown> };
@@ -100,7 +103,10 @@ export async function getAirtableTalent(): Promise<AirtablePerson[] | null> {
 
 export async function getAirtableSchedule(): Promise<AirtableSession[] | null> {
   const f = airtableFields.schedule;
-  const records = await listRecords(f.activity, Object.values(f));
+  const meta = await tableMetaContaining(f.activity);
+  const attireId = meta?.fields.find(field => field.name && attireColumn.test(field.name))?.id;
+  const websitePublicId = meta?.fields.find(field => field.name && websitePublicColumn.test(field.name))?.id;
+  const records = await listRecords(f.activity, [...Object.values(f), ...(attireId ? [attireId] : []), ...(websitePublicId ? [websitePublicId] : [])]);
   return records?.map(record => ({
     recordId: record.id,
     title: text(record.fields[f.activity]),
@@ -110,7 +116,9 @@ export async function getAirtableSchedule(): Promise<AirtableSession[] | null> {
     location: text(record.fields[f.location]),
     synopsis: text(record.fields[f.synopsis]),
     forum: text(record.fields[f.forum]),
-    websiteTime: text(record.fields[f.websiteTime])
+    websiteTime: text(record.fields[f.websiteTime]),
+    attire: attireId ? text(record.fields[attireId]) : "",
+    websitePublic: websitePublicId ? text(record.fields[websitePublicId]) : ""
   })).filter(session => session.title) ?? null;
 }
 
