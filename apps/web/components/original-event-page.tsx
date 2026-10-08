@@ -386,11 +386,12 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
         centred at the very top of the band (no rule above it), the opening phrase in bold gold — then one clearly asymmetric
         row: a compact details card on the left margin and the iHeartRadio block taking about two thirds on the right,
         its right edge on the page margin (never a mirror image). No separate sentence band. */}
+    {/* Owner (Oct 8): the Awards sentence in its own band, right under the hero. */}
+    <section className={`${styles.band} ${styles.awardsStatementBand}`} id="awards-honor" aria-label="About the Not Alone Awards">
+      {(() => { const sentence = summitNarrative2026.awardsSentence; const cut = sentence.indexOf(",") + 1;
+        return <p>{cut > 0 ? <><strong className={styles.awardsHonorLede}>{sentence.slice(0, cut)}</strong>{sentence.slice(cut)}</> : sentence}</p>; })()}
+    </section>
     <section className={`${styles.band} ${styles.iheartBand}`} id="broadcast" aria-labelledby="broadcast-title">
-      <div className={styles.broadcastStatement}>
-        {(() => { const sentence = summitNarrative2026.awardsSentence; const cut = sentence.indexOf(",") + 1;
-          return <p>{cut > 0 ? <><strong className={styles.awardsHonorLede}>{sentence.slice(0, cut)}</strong>{sentence.slice(cut)}</> : sentence}</p>; })()}
-      </div>
       <div className={styles.broadcastDetails}>
         {/* Owner (Sept 23): from Nov 6, 2026 the date line reads "2027 — To Be Announced Soon." automatically. The venue
             is in the hero right above, so the card names the date only. */}
