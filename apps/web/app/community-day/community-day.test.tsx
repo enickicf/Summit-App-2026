@@ -37,7 +37,7 @@ describe("Nevada Mental Health Day page", () => {
     expect(heroHtml).toContain("encore-theater-community-day");
     const hero = text(heroHtml);
     // Owner (Oct 7): the header was too crowded; the date, venue, times and the Awards Show pointer moved to the Schedule.
-    expect(hero).toContain("Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Presented by Request free tickets Info");
+    expect(hero).toContain("Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Presented by × Request free tickets Info");
     expect(hero).not.toMatch(/November|Nov 2|PM|Wynn|Encore|LaFleur|Margaux|Stay for|Awards Show|Community Day/);
     expect(heroHtml).not.toMatch(/<dl\b|<time\b/);
   });
@@ -187,7 +187,7 @@ describe("Nevada Mental Health Day page", () => {
     const html = await render();
     expect(html).not.toContain(communityDay2026.rsvpUrl);
     expect(html).not.toContain('id="tickets"');
-    expect(text(section(html, "community-day-title"))).toContain(`Presented by ${postEventLabel} Info`);
+    expect(text(section(html, "community-day-title"))).toContain(`Presented by × ${postEventLabel} Info`);
     expect(text(html)).toContain("What is Community Day?");
   });
 

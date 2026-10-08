@@ -23,7 +23,7 @@ describe("Nevada Mental Health Day menu", () => {
     const [page, , tickets, awards] = anchors(html).map(match => match[0]);
     expect(page).toContain('aria-current="page"');
     expect(tickets).toMatch(/target="_blank"[^>]*rel="noopener"/);
-    expect(awards).not.toContain("target=");
+    expect(awards).toMatch(/target="_blank"[^>]*rel="noopener"/); // owner (Oct 5): Summit-side links to the Awards open a new tab
     for (const gone of ["Summit<", "/schedule\"", "Directory", "Venue", "/venue", "Concert", ">Community Day<"]) expect(html).not.toContain(gone);
   });
 

@@ -16,7 +16,8 @@ export function CommunityDayNavigation({ partner = null }: { partner?: AwardsPar
       <Link className={styles.link} href={partner ? partnerCommunityDayPath(partner) : "/community-day"} aria-current="page">NV Mental Health Day</Link>
       <a className={styles.link} href="#schedule">Schedule</a>
       <a className={styles.link} href={partner?.rsvpUrl ?? communityDay2026.rsvpUrl} target="_blank" rel="noopener">Tickets</a>
-      {partner ? <Link className={styles.link} href={partner.path}>Awards</Link> : <a className={styles.link} href={communityDay2026.menu.awardsUrl}>Awards</a>}
+      {/* Owner (Oct 5): links from the Summit side to the Awards open in a new tab. */}
+      {partner ? <Link className={styles.link} href={partner.path} target="_blank" rel="noopener">Awards</Link> : <a className={styles.link} href={communityDay2026.menu.awardsUrl} target="_blank" rel="noopener">Awards</a>}
       <a className={`${summit.donateButton} ${styles.donate}`} href="https://www.inspiringchildren.org/donate"><Heart size={16} fill="currentColor" aria-hidden="true" />Donate</a>
     </nav>
   </div>;

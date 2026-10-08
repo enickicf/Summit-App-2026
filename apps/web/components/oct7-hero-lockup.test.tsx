@@ -66,7 +66,7 @@ describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards tim
     const mission = awards.slice(awards.indexOf('id="mission"'), awards.indexOf('id="evening"'));
     // The owner's sentence is the first paragraph; the second (ICF's own statement, awards[1].blocks[1]) stays.
     expect(mission.indexOf("<p>")).toBe(mission.indexOf("<p>Inspiring Children Foundation × NAMI present"));
-    expect(mission.match(/<p>/g)).toHaveLength(2);
+    expect(mission.slice(0, mission.indexOf('id="awards-narrative"')).match(/<p>/g)).toHaveLength(2); // the narrative block (Oct 7 evening) follows
   });
 
   it("shows Doors Open 6:30 PM and Awards Show 7:30 PM up top, the 7:30-10:00 run in The Evening, and no Pre-Show anywhere", () => {

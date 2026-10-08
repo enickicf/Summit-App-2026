@@ -34,12 +34,16 @@ describe("Summit 2026 narrative (Ryan, Oct 7)", () => {
     expect(block).toContain("<footer>—Jewel</footer>");
   });
 
-  it("leaves the 2025 archive and the Awards page without the new text", () => {
-    for (const html of [summit2025, awards2026]) {
-      expect(html).not.toContain('id="jewel-quote"');
-      expect(html).not.toContain("Bringing together the people shaping the future of mental health");
-      expect(html).not.toContain("Celebrate mental-health warriors.");
-    }
+  it("puts the narrative and Goals on the Awards page too (owner, Oct 7 screenshot), never the Jewel quote; 2025 untouched", () => {
+    const narrative = awards2026.slice(awards2026.indexOf('id="awards-narrative"'), awards2026.indexOf('id="evening"'));
+    expect(awards2026.indexOf('id="awards-narrative"')).toBeGreaterThan(awards2026.indexOf('id="mission"'));
+    for (const paragraph of summitNarrative2026.intro) expect(narrative).toContain(`<p>${esc(paragraph)}</p>`);
+    expect(text(narrative)).toContain("Goals " + summitNarrative2026.goals.join(" "));
+    expect(narrative.match(/<li>/g)?.length).toBe(5);
+    expect(awards2026).not.toContain('id="jewel-quote"');
+    expect(awards2026).not.toContain(summitNarrative2026.quote.text.slice(0, 30));
+    expect(summit2025).not.toContain('id="jewel-quote"');
+    expect(summit2025).not.toContain("Bringing together the people shaping the future of mental health");
     expect(summit2025).toContain("Building on the success of");
   });
 });

@@ -514,6 +514,14 @@
 .currentAwards .awardsMission p:first-child { color: #fff; font-size: 22px; line-height: 1.5; font-weight: 500; }
 .currentAwards .awardsMission p:last-child { margin-bottom: 0; color: #fff; font-size: 18px; }
 .currentAwards .awardsMission strong { color: #f1dfbb; font-weight: 600; }
+/* Owner (Oct 7): Ryan's narrative and Goals on the Awards page, under the mission statement. */
+.currentAwards .awardsMission .awardsNarrative { max-width: 720px; margin: 34px auto 0; padding-top: 30px; border-top: 1px solid #d2b47b55; }
+.currentAwards .awardsMission .awardsNarrative p { max-width: none; margin: 0 0 22px; color: #fff; font-size: 18px; line-height: 1.75; }
+.currentAwards .awardsMission .awardsNarrative h3 { margin: 26px 0 12px; color: #f1dfbb; font-size: 13px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+.currentAwards .awardsMission .awardsNarrative ol { display: inline-block; margin: 0; padding: 0 0 0 1.5em; color: #fff; font-size: 18px; line-height: 1.6; text-align: left; }
+.currentAwards .awardsMission .awardsNarrative ol li { margin: 4px 0; padding-left: 6px; }
+.currentAwards .awardsMission .awardsNarrative ol li::marker { color: #f1dfbb; font-weight: 600; }
+@media (max-width: 600px) { .currentAwards .awardsMission .awardsNarrative p, .currentAwards .awardsMission .awardsNarrative ol { font-size: 15px; } }
 @media (max-width: 600px) { .currentAwards .awardsMission p, .currentAwards .awardsMission p:last-child { font-size: 15px; } .currentAwards .awardsMission p:first-child { font-size: 17px; } }
 /* Owner (Sept 21, late): nobody's head is cut off in the Awards hero film. The hero is a wide, short box,
    so the film is anchored to the top edge (a hair above it to keep YouTube's top chrome out) and the

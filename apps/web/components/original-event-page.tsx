@@ -378,6 +378,13 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
       <p>Inspiring Children Foundation × NAMI present the Not Alone Awards Show, powered by the <strong>Steven &amp; Alexandra Cohen Foundation</strong>.</p>
       {/* Owner (Sept 21, late): just the opening statement; the longer text is gone. */}
       {awards[1]!.blocks.slice(1, 2).map(block => <p key={block.text}>{block.text}</p>)}
+      {/* Owner (Oct 7, evening screenshot "Awards page"): Ryan's narrative and Goals also sit on the Awards page, word for word
+          (the Jewel quote stays Summit-only). */}
+      <div className={styles.awardsNarrative} id="awards-narrative">
+        {summitNarrative2026.intro.map(paragraph => <p key={paragraph.slice(0, 24)}>{paragraph}</p>)}
+        <h3>{summitNarrative2026.goalsHeading}</h3>
+        <ol>{summitNarrative2026.goals.map(goal => <li key={goal}>{goal}</li>)}</ol>
+      </div>
     </section>
     {eveningTimes.length > 0 && <section className={`${styles.band} ${styles.eveningSchedule}`} id="evening" aria-labelledby="evening-title">
       <h2 id="evening-title">The Evening</h2>
