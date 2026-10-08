@@ -182,11 +182,13 @@
 .summit.summit .recapPlayer a { color:#d0d4ea; background:none; border:0; }
 
 /* Owner (Sept 21): Summit hero in the Awards hero format (same sizes), over the 2025 recap. */
-.summit.summit .heroFormat { height:auto; min-height:min(760px, calc(100svh - 120px)); padding-top:40px; padding-bottom:48px; align-items:center; }
+/* Owner (Oct 8): the hero is only as tall as its stack — the film ends right under the lockup instead of leaving a
+   spacious band below it; the logo a little smaller. */
+.summit.summit .heroFormat { height:auto; min-height:0; padding-top:40px; padding-bottom:34px; align-items:center; }
 .heroFormat::after { background:linear-gradient(90deg,#000000d9,#0000008c 45%,#00000026 78%),linear-gradient(0deg,#00000099,transparent 38%); }
 .heroFormat .heroCopy { max-width:920px; text-shadow:0 2px 18px #0009; }
 .heroLogo { margin:0 0 14px !important; line-height:0 !important; }
-.heroLogo img { width:250px; max-width:60vw; height:auto; filter:drop-shadow(0 2px 18px #000a); }
+.heroLogo img { width:215px; max-width:60vw; height:auto; filter:drop-shadow(0 2px 18px #000a); }
 /* Owner (Oct 8): the Cohen credit is a compact stack instead of one long line: "Powered by" as a small label (the same
    style as the lockup's "Presented by") over the foundation's name on two balanced lines, "Steven & Alexandra" /
    "Cohen Foundation" (components/powered-by.tsx), so the block keeps one even shape at every width. */
@@ -206,8 +208,8 @@
 .summit.summit .recap { padding-top:48px; padding-bottom:48px; }
 .summit.summit .recapPlayer { max-width:1180px; margin:0 auto; }
 @media(max-width:600px) {
-  .summit.summit .heroFormat { min-height:0; padding:96px 22px 40px; }
-  .heroLogo img { width:170px; }
+  .summit.summit .heroFormat { min-height:0; padding:96px 22px 30px; }
+  .heroLogo img { width:150px; }
   .summit .heroCopy .heroPowered { font-size:11px; margin-bottom:20px; } .heroPowered strong { font-size:26px; margin-top:8px; }
   .summit .heroCopy .heroDate { font-size:18px; } .summit .heroCopy .heroVenue { font-size:16px; } .summit .heroCopy .heroExtra { font-size:14px; }
   .summit.summit .recap { padding:24px 0; }
