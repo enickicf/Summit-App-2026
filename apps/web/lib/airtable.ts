@@ -210,8 +210,10 @@ export const foundersListedRegardless = new Set([
   "jennifer donnelly"
 ]);
 // Owner (Oct 4, 2026): listed on the websites by the owner's direction while Airtable's status is not yet
-// "Confirmed" (Aloe Blacc: A-Talent, Airtable status "Pending"). Remove a name once Airtable confirms it.
-export const ownerListedRegardless = new Set(["aloe blacc"]);
+// "Confirmed". Remove a name once Airtable confirms it. Aloe Blacc (A-Talent, status "Pending") was the only entry
+// until Ryan took him off on Oct 8 ("We gotta take Aloe Blacc out"): with the set empty his Pending status keeps him
+// off both lineups; his recorded Airtable row and portrait data stay in place, unused.
+export const ownerListedRegardless = new Set<string>([]);
 // Owner (Oct 5, 2026): a confirmed status OR any "Hold Space" percentage puts a person on the website (the Bryan
 // brothers are "Hold Space - 51%"); "Pending", "Declined" and "Donation - Not Attending" do not.
 export const isListableStatus = (status: string) => /confirmed/i.test(status) || /hold space/i.test(status);

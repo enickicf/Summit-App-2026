@@ -193,8 +193,22 @@ describe("schedule browser server markup", () => {
     expect(boilerplate).not.toContain("Founders only");
     const custom = `${generated} Staff-approved arrival details.`;
     expect(renderItems([{ ...item, summary: custom }])).toContain(`<p>${custom}</p>`);
-    const founders = renderItems([{ ...item, eligibilityScope: { id: "founders", label: "Founders" }, summary: "" }]);
-    expect(founders).toContain("Founders only event");
+    // Ryan (Oct 8): a founders-only event gets a red asterisk right after its title and a one-line legend under the day.
+    const founders = renderItems([{ ...item, eligibilityScope: { id: "founders", label: "Founders" }, summary: "" }, { ...item, id: "open", title: "Open session", summary: "" }]);
+    expect(founders).toMatch(/<h3 id="[^"]+">Test session <span class="[^"]*foundersMark[^"]*" aria-hidden="true">\*<\/span><span class="srOnly">Founders-only event<\/span><\/h3>/);
     expect(founders).toContain("data-founders-only");
+    expect(founders.match(/Founders-only event/g)).toHaveLength(2); // the hidden text and the legend
+    expect(founders).toMatch(/<p class="[^"]*foundersLegend[^"]*"><span class="[^"]*foundersMark[^"]*" aria-hidden="true">\*<\/span> Founders-only event<\/p>/);
+    expect(founders).not.toContain("Invite only");
+    expect(founders).toContain("<h3 id=\"" + founders.match(/<h3 id="([^"]+-session-open)"/)![1] + "\">Open session</h3>"); // no asterisk on the open session
+    // No founders-only event on the day: no asterisk and no legend.
+    const open = renderItems([{ ...item, summary: "" }]);
+    expect(open).not.toContain("foundersMark");
+    expect(open).not.toContain("Founders-only event");
+    // Owner (Oct 7): another private event keeps its "Invite only" pill (no asterisk).
+    const invite = renderItems([{ ...item, eligibilityScope: { id: "invite-only", label: "Invite only" }, summary: "" }]);
+    expect(invite).toContain("Invite only");
+    expect(invite).not.toContain("foundersMark");
+    expect(invite).not.toContain("data-founders-only");
   });
 });

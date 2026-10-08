@@ -59,7 +59,8 @@ a.card:focus-visible { outline:3px solid #4a5faa; outline-offset:4px; }
 .personPortrait > span { display:flex; width:100%; height:100%; align-items:center; justify-content:center; color:#4a5faa; font-size:28px; font-weight:700; }
 .personName { margin-top:12px; font-weight:700; font-size:16px; line-height:1.3; }
 /* Owner (Sept 23): the blue role line looked like stray link text; it now matches the other people galleries
-   (muted grey, 13px, at most two lines), so long Airtable titles no longer sprawl under a card. */
-.personRole { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; margin-top:4px; padding:0 4px; color:#555555; font-size:13px; font-weight:400; line-height:1.45; overflow-wrap:anywhere; }
+   (muted grey, 13px), so long Airtable titles no longer sprawl under a card. Ryan (Oct 8): titles may run to
+   three lines ("two lines or even three lines if necessary because they're too long"). */
+.personRole { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden; margin-top:4px; padding:0 4px; color:#555555; font-size:13px; font-weight:400; line-height:1.45; overflow-wrap:anywhere; }
 @media (max-width: 900px) { .person { flex-basis:calc((100% - 40px) / 3); } }
 @media (max-width: 600px) { .person { flex-basis:calc((100% - 20px) / 2); } }
