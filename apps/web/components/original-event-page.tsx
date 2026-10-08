@@ -260,10 +260,14 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
         {/* Ryan (Oct 8): the lockup takes the spot the date line had, then the Schedule button sits directly above the
             "dates | venue" line at the bottom of the stack. Owner (Oct 8): everything stays on the left, as before —
             the right-hand placement Ryan wanted to "see how it looks" is out. 2026 only. */}
-        {!archive && <div className={summitStyles.heroButtons}><a className={summitStyles.heroButton} href="#schedule">Schedule</a></div>}
-        {!archive && <p className={`${summitStyles.heroDate} ${summitStyles.heroDateBelow}`}>{isPostEvent() ? postEventLabel : <>{withoutYear(heroDates.main, year)}<span className={summitStyles.heroDateVenue}> | {venue ?? "Venue to be announced"}</span></>}</p>}
+        {/* Owner (Oct 8): the hero ends on the Presented-by lockup; the dates and the Schedule button sit in their own
+            band right under it (components/original-event-page.tsx #summit-dates). */}
       </div>
     </section>
+    {!archive && <section className={summitStyles.datesBand} id="summit-dates" aria-label="Dates and schedule">
+      <p className={summitStyles.heroDate}>{isPostEvent() ? postEventLabel : <>{withoutYear(heroDates.main, year)}<span className={summitStyles.heroDateVenue}> | {venue ?? "Venue to be announced"}</span></>}</p>
+      <a className={summitStyles.heroButton} href="#schedule">Schedule</a>
+    </section>}
     {/* Owner (Sept 21): the recap player is removed for now; it will move to a new location. */}
     {/* Owner (Sept 21): ICF-style two-column introduction (bold heading and rich text; Not Alone logo
         carrying the Cohen Foundation credit), without the Davos quote or Villa Bibbiani. */}

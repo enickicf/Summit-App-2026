@@ -56,13 +56,14 @@ describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards tim
     const details = awards.slice(awards.indexOf('id="broadcast"'), awards.indexOf('id="awards-honor"'));
     expect(details.indexOf("Monday, November 2</time>")).toBeGreaterThan(-1);
     expect(details.indexOf("</time>")).toBeLessThan(details.indexOf("<dl"));
-    // Ryan (Oct 8): Summit: the lockup under the Cohen credit; the Schedule button sits directly ABOVE the "dates | venue"
-    // line in the hero's bottom-right aside.
-    expect(summitHero.indexOf("Presented by")).toBeLessThan(summitHero.indexOf("Schedule</a>"));
-    expect(summitHero.indexOf("Schedule</a>")).toBeLessThan(summitHero.indexOf(" | "));
-    // Owner (Oct 8): one left-hand stack — lockup, then the Schedule button, then the date line, all inside the hero copy.
-    expect(summitHero).toMatch(/alt="NAMI, National Alliance on Mental Illness"[^>]*><\/span><\/div><div class="[^"]*heroButtons[^"]*"><a[^>]*href="#schedule">Schedule<\/a><\/div><p class="[^"]*heroDate/);
+    // Owner (Oct 8): the Summit hero ends on the lockup; the dates line and the Schedule button are their own band
+    // (#summit-dates) directly under the hero, date first, then the button.
+    expect(summitHero).not.toMatch(/Schedule<\/a>| \| /);
+    expect(summitHero).toMatch(/alt="NAMI, National Alliance on Mental Illness"[^>]*><\/span><\/div><\/div>$/); // hero() stops before </section>
     expect(summitHero).not.toContain("heroAside");
+    const dates = summit.match(/<section class="[^"]*datesBand[^"]*" id="summit-dates"[^>]*>([^]*?)<\/section>/)![1]!;
+    expect(dates).toMatch(/^<p class="[^"]*heroDate[^"]*">November 2-4<span class="[^"]*"> \| Wynn Las Vegas<\/span><\/p><a class="[^"]*" href="#schedule">Schedule<\/a>$/);
+    expect(summit.indexOf("</section>")).toBeLessThan(summit.indexOf('id="summit-dates"'));
     // The 2025 archive heroes carry no lockup.
     expect(hero(renderToStaticMarkup(<OriginalSummitPage year={2025} snapshot={event2026Snapshot} />), "summit-title")).not.toContain("Presented by");
     expect(hero(renderToStaticMarkup(<OriginalAwardsPage year={2025} snapshot={event2026Snapshot} program={program} />), "awards-title")).not.toContain("Presented by");

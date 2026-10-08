@@ -263,12 +263,19 @@
 
 /* Ryan (Oct 8) + owner (Oct 8): Summit hero, one left-hand stack — logo, Cohen credit, Presented-by lockup, then the
    Schedule button directly above the "dates | venue" line at the bottom. */
-.summit .heroCopy .heroDateBelow { margin-top:14px; }
+/* Owner (Oct 8): the dates and the Schedule button are their own band right under the hero, so the hero itself ends
+   on the Presented-by lockup. Summit blue like the Goals band; one centered row, stacked on phones. */
+.summit.summit .datesBand { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:18px 40px; padding:26px 24px; background:#4a5faa; border:0; }
+.summit.summit .datesBand .heroDate { margin:0; color:#fff; font-size:26px; font-weight:600; line-height:1.3; text-align:center; }
+.summit.summit .datesBand .heroDate .heroDateVenue { font-weight:500; }
+.summit.summit .datesBand .heroButton { min-height:48px; padding:12px 32px; }
+@media(max-width:600px) { .summit.summit .datesBand { gap:14px; padding:22px 20px 24px; } .summit.summit .datesBand .heroDate { font-size:19px; } }
 
 /* Ryan (Oct 8): the 2026 introduction is the headline alone, thin and centered, straight into Who's Coming. */
-.summit.summit .introThin { background:#fff; text-align:center; padding-top:56px; padding-bottom:36px; }
+/* Owner (Oct 8): the headline sits in its own colour band (Summit pearl) under the blue dates band. */
+.summit.summit .introThin { background:#d0d4ea; text-align:center; padding-top:52px; padding-bottom:52px; }
 .summit.summit .introThin h2 { max-width:920px; margin:0 auto; font-size:clamp(30px,4.2vw,50px); font-weight:300; line-height:1.15; letter-spacing:-0.01em; color:#000; text-wrap:balance; }
-.summit.summit .introThin h2 .introAccent { color:#8fb1e0; font-weight:300; }
+.summit.summit .introThin h2 .introAccent { color:#4a5faa; font-weight:400; }
 
 /* Ryan (Oct 8): the narrative paragraph below Who's Coming, then the Goals in a blue band with large white type. */
 .summit.summit .narrativeBand { background:#fff; text-align:center; padding-top:72px; padding-bottom:40px; }
