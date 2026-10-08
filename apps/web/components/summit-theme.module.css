@@ -373,13 +373,17 @@
 }
 
 /* Owner (Oct 8): the date line is the headline's subtitle; equal, tighter padding in the band and less space before
-   Who's Coming so the band leads straight into the directory. */
+   Who's Coming so the band leads straight into the directory. (p.introDateLine + .summit.summit: the older
+   ".summit.summit > section#about p" rule would otherwise reset its size and margin.) */
 .summit > section:global(#about).introBar { padding-top:48px; padding-bottom:44px; }
-.summit > section:global(#about) .introDateLine { max-width:none; margin:16px 0 0; color:#d0d4ea; font-size:15px; font-weight:600; line-height:1.4; letter-spacing:.2em; text-align:center; text-transform:uppercase; }
-.summit > section:global(#about) .introDateLine .introDot { display:inline-block; margin:0 .6em; color:#d0d4ea; }
+.summit.summit > section:global(#about) p.introDateLine { max-width:none; margin:18px 0 0; color:#d0d4ea; font-size:15px; font-weight:600; line-height:1.5; letter-spacing:.2em; text-align:center; text-transform:uppercase; }
+.summit.summit > section:global(#about) p.introDateLine .introDot { display:inline-block; margin:0 .7em; }
 .summit.summit :global(section#directory) { padding-top:48px; }
 @media(max-width:600px) {
   .summit > section:global(#about).introBar { padding-top:36px; padding-bottom:34px; }
-  .summit > section:global(#about) .introDateLine { font-size:12px; letter-spacing:.16em; margin-top:12px; }
+  .summit.summit > section:global(#about) p.introDateLine { margin-top:14px; font-size:12px; letter-spacing:.16em; }
+  /* On phones: date on one line, venue on the next, never "Wynn / Las Vegas" split mid-name. */
+  .summit.summit > section:global(#about) p.introDateLine .introDot { display:none; }
+  .summit.summit > section:global(#about) p.introDateLine .introDateVenue { display:block; }
   .summit.summit :global(section#directory) { padding-top:36px; }
 }

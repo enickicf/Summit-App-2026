@@ -281,7 +281,7 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
           box or button — so the hero stays logos only and the schedule is reached from the menu. From Nov 6, 2026 the
           line reads "2027 — To Be Announced Soon." (lib/event-phase.ts). */}
       <h2>A National Convening for <span className={summitStyles.introAccent}>Mental Health</span> and Connection</h2>
-      <p className={summitStyles.introDateLine}>{isPostEvent() ? postEventLabel : <>{withoutYear(heroDates.main, year).replace("-", "–")}, {year}<span className={summitStyles.introDot} aria-hidden="true">·</span>{venue ?? "Venue to be announced"}</>}</p>
+      <p className={summitStyles.introDateLine}>{isPostEvent() ? postEventLabel : <>{withoutYear(heroDates.main, year).replace("-", "–")}, {year}<span className={summitStyles.introDot} aria-hidden="true">·</span><span className={summitStyles.introDateVenue}>{venue ?? "Venue to be announced"}</span></>}</p>
     </section>}
     {/* Owner (Sept 21): co-chairs sit just above the producers on every site; 2025 hosts keep their place. */}
     {archive && <Leadership hostsOnly />}

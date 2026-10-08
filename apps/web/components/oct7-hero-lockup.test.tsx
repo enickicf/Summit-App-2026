@@ -62,7 +62,7 @@ describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards tim
     expect(summitHero).not.toMatch(/November 2|Wynn Las Vegas/);
     expect(summitHero).toMatch(/alt="NAMI, National Alliance on Mental Illness"[^>]*><\/span><\/div><\/div>$/);
     const intro = summit.slice(summit.indexOf('id="about"'), summit.indexOf('id="directory"'));
-    expect(intro).toMatch(/<\/h2><p class="[^"]*introDateLine[^"]*">November 2–4, 2026<span class="[^"]*introDot[^"]*" aria-hidden="true">·<\/span>Wynn Las Vegas<\/p><\/section>/);
+    expect(intro).toMatch(/<\/h2><p class="[^"]*introDateLine[^"]*">November 2–4, 2026<span class="[^"]*introDot[^"]*" aria-hidden="true">·<\/span><span class="[^"]*introDateVenue[^"]*">Wynn Las Vegas<\/span><\/p><\/section>/);
     expect(intro).not.toMatch(/href="#schedule"|introDetails/);
     expect(summit).not.toContain('id="summit-dates"');
     expect(summitHero).not.toContain("heroAside");
