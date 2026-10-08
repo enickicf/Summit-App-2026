@@ -68,8 +68,8 @@ describe("Sept 21 meeting website direction", () => {
     }
   });
 
-  it("puts the no-solicitation notice near the top, guests, co-chairs above producers, then the schedule and program block near the bottom (owner, Sept 21 late)", () => {
-    const positions = order(summit, ['id="about"', 'id="no-solicitation"', 'id="directory"', 'id="schedule"', 'id="leadership"', 'id="producers"', 'id="not-alone-program"', 'id="rsvp"']);
+  it("orders the Summit page per Ryan (Oct 8): headline, Who's Coming, narrative, Goals, quote, partners, schedule, hosts, co-chairs, producers, program, no-solicitation at the bottom", () => {
+    const positions = order(summit, ['id="about"', 'id="directory"', 'id="about-summit"', 'id="goals"', 'id="jewel-quote"', 'id="summit-partners"', 'id="schedule"', 'id="hosts"', 'id="leadership"', 'id="producers"', 'id="not-alone-program"', 'id="no-solicitation"', 'id="rsvp"']);
     expect([...positions].sort((a, b) => a - b)).toEqual(positions);
     // Owner (Sept 21): the Featuring list and Cohen logo are removed from the home page.
     expect(summit).not.toContain(">Featuring<");

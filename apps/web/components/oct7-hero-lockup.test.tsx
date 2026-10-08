@@ -22,7 +22,9 @@ const hero = (html: string, title: string) => html.match(new RegExp(`<section[^>
 const escape = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const times = `<span class="${styles.times}" aria-hidden="true">×</span>`;
 // Powered by -> the lockup (label, ICF logo, ×, NAMI logo) -> the next paragraph (the date line).
-const underPoweredBy = new RegExp(`<p class="[^"]*">Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong></p><div class="${escape(styles.presentedBy!)} ${escape(styles.heroSize!)} ">[^]*?>Presented by</span><span class="[^"]*"><img[^>]*alt="Inspiring Children Foundation"[^>]*>${escape(times)}<img[^>]*alt="NAMI, National Alliance on Mental Illness"[^>]*></span></div><p class="[^"]*">`);
+// Ryan (Oct 8): on the Awards pages the lockup sits in the hero's right-hand aside, after the Cohen credit.
+const awardsLockupAside = /Powered by<strong>[^]*?<\/p><\/div><div class="[^"]*heroAside[^"]*"><div class="[^"]*presentedBy[^"]*/;
+const underPoweredBy = new RegExp(`<p class="[^"]*">Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong></p><div class="${escape(styles.presentedBy!)} ${escape(styles.heroSize!)} ">[^]*?>Presented by</span><span class="[^"]*"><img[^>]*alt="Inspiring Children Foundation"[^>]*>${escape(times)}<img[^>]*alt="NAMI, National Alliance on Mental Illness"[^>]*></span></div>`); // Ryan (Oct 8): the Summit date line now sits in the hero's bottom-right aside, after the lockup
 
 describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards times", () => {
   it("joins the Presented-by logos with a × instead of a divider line, in every size and tone", () => {
@@ -40,24 +42,30 @@ describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards tim
   it("stacks event logo, Powered by, then Presented by in both 2026 heroes, with the date line after the lockup", () => {
     const awardsHero = hero(awards, "awards-title");
     const summitHero = hero(summit, "summit-title");
+    expect(summitHero).toMatch(underPoweredBy);
+    // Ryan (Oct 8): on the Awards page the lockup sits in the hero's right-hand aside, still after the Cohen credit.
+    expect(awardsHero).toMatch(awardsLockupAside);
     for (const html of [awardsHero, summitHero]) {
-      expect(html).toMatch(underPoweredBy);
       expect(html.match(/Presented by/g)).toHaveLength(1);
       expect(html.indexOf("<h1 ")).toBeLessThan(html.indexOf("Powered by<strong>"));
       expect(html.indexOf("Powered by<strong>")).toBeLessThan(html.indexOf("Presented by"));
       expect(html).not.toMatch(/Presented by[^]*<h1 /);
     }
     // Awards: lockup, then the date/venue line, then doors and the show time.
-    expect(awardsHero.indexOf("Presented by")).toBeLessThan(awardsHero.indexOf("Monday, November 2</time>"));
-    expect(awardsHero.indexOf("</time>")).toBeLessThan(awardsHero.indexOf("<dl"));
-    // Summit: lockup, then the "dates | venue" line and the Schedule button.
-    expect(summitHero.indexOf("Presented by")).toBeLessThan(summitHero.indexOf(" | "));
-    expect(summitHero.indexOf(" | ")).toBeLessThan(summitHero.indexOf("Schedule</a>"));
+    // Ryan (Oct 8): the date/venue line, then doors and the show time, live in the details band under the hero.
+    const details = awards.slice(awards.indexOf('id="broadcast"'), awards.indexOf('id="awards-honor"'));
+    expect(details.indexOf("Monday, November 2</time>")).toBeGreaterThan(-1);
+    expect(details.indexOf("</time>")).toBeLessThan(details.indexOf("<dl"));
+    // Ryan (Oct 8): Summit: the lockup under the Cohen credit; the Schedule button sits directly ABOVE the "dates | venue"
+    // line in the hero's bottom-right aside.
+    expect(summitHero.indexOf("Presented by")).toBeLessThan(summitHero.indexOf("Schedule</a>"));
+    expect(summitHero.indexOf("Schedule</a>")).toBeLessThan(summitHero.indexOf(" | "));
+    expect(summitHero).toMatch(/heroAside[^"]*"><div class="[^"]*heroButtons[^"]*"><a[^>]*href="#schedule">Schedule<\/a><\/div><p class="[^"]*heroDate/);
     // The 2025 archive heroes carry no lockup.
     expect(hero(renderToStaticMarkup(<OriginalSummitPage year={2025} snapshot={event2026Snapshot} />), "summit-title")).not.toContain("Presented by");
     expect(hero(renderToStaticMarkup(<OriginalAwardsPage year={2025} snapshot={event2026Snapshot} program={program} />), "awards-title")).not.toContain("Presented by");
     // The private partner copies render the same hero.
-    expect(hero(renderToStaticMarkup(<OriginalAwardsPage year={2026} snapshot={event2026Snapshot} program={program} rsvpUrl="https://notaloneawards.org/rsvp/nami-9wvfjfkt40dd" />), "awards-title")).toMatch(underPoweredBy);
+    expect(hero(renderToStaticMarkup(<OriginalAwardsPage year={2026} snapshot={event2026Snapshot} program={program} rsvpUrl="https://notaloneawards.org/rsvp/nami-9wvfjfkt40dd" />), "awards-title")).toMatch(awardsLockupAside);
   });
 
   it("opens the Awards mission with the presenters, in the owner's exact words", () => {
@@ -75,7 +83,7 @@ describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards tim
     expect(awards2026Evening).toEqual([{ label: "Doors Open", time: "6:30 PM" }, { label: "Awards Show", time: "7:30 PM-10:00 PM" }]);
     expect(awards2026Editorial.eveningTimes.map(entry => entry.label)).toEqual(["Doors Open", "Awards Show"]);
     expect(awards2026Editorial.eveningTimes.find(entry => entry.label === "Awards Show")!.time).toBe("7:30-10:00 PM");
-    expect(hero(awards, "awards-title")).toContain("<div><dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>7:30 PM</dd></div>");
+    expect(awards.slice(awards.indexOf('id="broadcast"'), awards.indexOf('id="awards-honor"'))).toContain("<div><dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>7:30 PM</dd></div>");
     const evening = awards.match(/<section[^>]*id="evening"[^>]*>[\s\S]*?<dl>([\s\S]*?)<\/dl>/)![1]!;
     expect(evening).toBe("<div><dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>7:30 PM-10:00 PM</dd></div>");
     expect(awards).not.toMatch(/Pre-Show|Pre Show|8:00 PM|8:00–10:00|8:00-10:00/);

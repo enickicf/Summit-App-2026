@@ -554,3 +554,23 @@
 @media (prefers-reduced-motion: reduce) { .iheartStream { transition: none; } .iheartStream:hover { transform: none; } }
 /* Owner (Oct 5): on phones the Awards lettering starts right under the menu (no 120px empty band). */
 @media (max-width: 600px) { .currentAwards .awardsHero { padding-top: 28px; } }
+
+/* Ryan (Oct 8): Awards hero — the Presented-by lockup on the right side; the evening's details live in the broadcast
+   band below (left), with the iHeartRadio logo and stream button on the right. */
+.currentAwards .awardsHero .heroAside { position: absolute; right: max(32px, calc((100% - 1240px) / 2)); top: 50%; transform: translateY(-50%); z-index: 1; display: flex; flex-direction: column; align-items: flex-end; text-align: right; text-shadow: 0 2px 18px #0009; }
+.currentAwards .iheartBand { flex-direction: row; justify-content: space-between; align-items: center; gap: 40px 56px; text-align: left; }
+.currentAwards .broadcastDetails { flex: 1 1 520px; min-width: 0; }
+.currentAwards .broadcastDetails .heroDate { margin: 0 0 4px; color: #fff; font-size: 22px; line-height: 1.5; }
+.currentAwards .broadcastDetails .heroScheduleTimes { margin-top: 18px; }
+.currentAwards .broadcastDetails .awardsActions { margin-top: 26px; }
+.currentAwards .broadcastDetails .heroScheduleLink { margin-top: 18px; }
+.currentAwards .broadcastStream { flex: 0 1 440px; display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center; }
+.currentAwards .broadcastStream .iheartLogo { width: min(420px, 100%); }
+.currentAwards .awardsHonor { background: #090909; text-align: center; padding-top: 44px; padding-bottom: 52px; }
+.currentAwards .awardsHonor p { max-width: 780px; margin: 0 auto; color: #fff; font-size: clamp(19px, 2.1vw, 25px); line-height: 1.6; text-wrap: pretty; }
+@media (max-width: 900px) {
+  .currentAwards .awardsHero .heroAside { position: static; transform: none; align-items: flex-start; text-align: left; margin-top: 18px; }
+  .currentAwards .iheartBand { flex-direction: column; align-items: stretch; gap: 32px; }
+  .currentAwards .broadcastDetails, .currentAwards .broadcastStream { flex: 0 0 auto; }
+  .currentAwards .broadcastDetails .heroDate { font-size: 18px; }
+}

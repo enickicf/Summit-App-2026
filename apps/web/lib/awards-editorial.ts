@@ -58,7 +58,7 @@ export const awards2026Evening = [
 export const awards2026Program = {
   tagline: "Celebrating Pioneers in Human Development & Mental Health",
   broadcast: "Broadcast on iHeartRadio's Coffee House Channel and YouTube",
-  programStatement: "The Not Alone Awards are part of the Not Alone Program, which includes the Not Alone Challenge, the Not Alone Summit, and the Awards Show. It is produced by the Inspiring Children Foundation, a 501(c)(3) nonprofit that has spent 25 years helping at-risk youth heal, grow, and thrive.",
+  programStatement: "The Not Alone Program, which includes the Challenge, Summit, and Awards Show, is produced by and a program of the Inspiring Children Foundation.", // Ryan (Oct 8), word for word
   challengeUrl: "https://www.inspiringchildren.org/notalone",
   toolkitUrl: "https://www.inspiringchildren.org/notalonetools",
   noSolicitation: {

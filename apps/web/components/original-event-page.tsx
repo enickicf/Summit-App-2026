@@ -27,6 +27,7 @@ import { AwardsInfoButton } from "./awards-info-button";
 import { PresentedBy } from "./presented-by";
 import { awardsDoorsOpen2026, awardsShowStart2026 } from "../lib/event-partners-2026";
 import summitStyles from "./summit-theme.module.css";
+import { EventPartners } from "./event-partners";
 import { summitNarrative2026 } from "../lib/summit-narrative-2026";
 
 type SourceSection = (typeof source.summit.sections)[number];
@@ -249,42 +250,52 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
         {!archive && <PresentedBy size="hero" />}
         {/* Owner (Sept 23): date and venue on one line, in the Awards hero's format ("November 2–4 | Wynn Las Vegas");
             from Nov 6, 2026 the 2026 page reads "2027 — To Be Announced Soon." by itself (lib/event-phase.ts). */}
-        <p className={summitStyles.heroDate}>{archive && <span className={summitStyles.heroEdition}>{year}</span>}{!archive && isPostEvent() ? postEventLabel : <>{withoutYear(archive ? summit2025Dates : heroDates.main, year)}<span className={summitStyles.heroDateVenue}> | {archive ? "Wynn Las Vegas" : venue ?? "Venue to be announced"}</span></>}</p>
-        {!archive && <div className={summitStyles.heroButtons}><a className={summitStyles.heroButton} href="#schedule">Schedule</a></div>}
+        {archive && <p className={summitStyles.heroDate}><span className={summitStyles.heroEdition}>{year}</span>{withoutYear(summit2025Dates, year)}<span className={summitStyles.heroDateVenue}> | Wynn Las Vegas</span></p>}
       </div>
+      {/* Ryan (Oct 8): the date and venue sit at the bottom-right of the hero with the Schedule button directly above
+          them; the lockup takes the spot the date line had (2026 only). */}
+      {!archive && <div className={summitStyles.heroAside}>
+        <div className={summitStyles.heroButtons}><a className={summitStyles.heroButton} href="#schedule">Schedule</a></div>
+        <p className={summitStyles.heroDate}>{isPostEvent() ? postEventLabel : <>{withoutYear(heroDates.main, year)}<span className={summitStyles.heroDateVenue}> | {venue ?? "Venue to be announced"}</span></>}</p>
+      </div>}
     </section>
     {/* Owner (Sept 21): the recap player is removed for now; it will move to a new location. */}
     {/* Owner (Sept 21): ICF-style two-column introduction (bold heading and rich text; Not Alone logo
         carrying the Cohen Foundation credit), without the Davos quote or Villa Bibbiani. */}
-    <section className={`${styles.band} ${summitStyles.introSplit}`} id="about">
+    {archive ? <section className={`${styles.band} ${summitStyles.introSplit}`} id="about">
       <div className={summitStyles.introText}>
         <h2>A National Convening for <span className={summitStyles.introAccent}>Mental Health</span> and Connection</h2>
-        {archive ? <>
-          <p>Building on the success of <a href="https://www.inspiringchildren.org/notalone"><strong>NotAloneChallenge.org</strong></a>, the Inspiring Children Foundation launched the <strong>Not Alone Summit</strong>, powered by the <strong>Steven &amp; Alexandra Cohen Foundation</strong>, hosted at <strong>Wynn Las Vegas.</strong> The Not Alone Summit is a premier national convening designed to bring together leading CEOs, artists, athletes, philanthropists, clinicians, researchers, and youth ambassadors to advance emotional and mental health.</p>
-          <p>{summit[1]!.blocks[2]!.text}</p>
-        </> : <>
-          {/* Owner (Oct 7): Ryan's approved narrative, word for word, with the Goals list under it (2026 only). */}
-          {summitNarrative2026.intro.map(paragraph => <p key={paragraph.slice(0, 24)}>{paragraph}</p>)}
-          <h3 className={summitStyles.goalsHeading}>{summitNarrative2026.goalsHeading}</h3>
-          <ol className={summitStyles.goals}>{summitNarrative2026.goals.map(goal => <li key={goal}>{goal}</li>)}</ol>
-        </>}
+        <p>Building on the success of <a href="https://www.inspiringchildren.org/notalone"><strong>NotAloneChallenge.org</strong></a>, the Inspiring Children Foundation launched the <strong>Not Alone Summit</strong>, powered by the <strong>Steven &amp; Alexandra Cohen Foundation</strong>, hosted at <strong>Wynn Las Vegas.</strong> The Not Alone Summit is a premier national convening designed to bring together leading CEOs, artists, athletes, philanthropists, clinicians, researchers, and youth ambassadors to advance emotional and mental health.</p>
+        <p>{summit[1]!.blocks[2]!.text}</p>
       </div>
       <div className={summitStyles.introBrand}>
         <SiteImage className={summitStyles.introLogo} src="/images/na-summit-logo-black-2.png" alt="Not Alone Summit" sizes="(max-width: 900px) 200px, 260px" />
         <p className={summitStyles.introPowered}>Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong></p>
       </div>
     </section>
-    {/* Owner (Oct 7): Jewel's approved quote as a featured pull-quote right under the introduction (2026 only). */}
-    {!archive && <section className={`${styles.band} ${summitStyles.pullQuote}`} id="jewel-quote" aria-label="Quote from Jewel">
-      <blockquote><p>“{summitNarrative2026.quote.text}”</p><footer>—{summitNarrative2026.quote.attribution}</footer></blockquote>
+    /* Ryan (Oct 8): on the 2026 page the introduction is just the headline, "real nice and thin" (the logo and the
+       repeated "Powered by" credit are gone — "we don't need to re-say that"), then straight into Who's Coming. */
+    : <section className={`${styles.band} ${summitStyles.introThin}`} id="about">
+      <h2>A National Convening for <span className={summitStyles.introAccent}>Mental Health</span> and Connection</h2>
     </section>}
-    {/* Owner (Sept 21, late): the no-solicitation notice sits near the top, right after the introduction. */}
-    {!archive && <section className={`${styles.band} ${summitStyles.noSolicitation}`} id="no-solicitation" aria-labelledby="summit-no-solicitation-title"><h2 id="summit-no-solicitation-title">{awards2026Program.noSolicitation.title}</h2><p>{awards2026Program.noSolicitation.body}</p></section>}
     {/* Owner (Sept 21): co-chairs sit just above the producers on every site; 2025 hosts keep their place. */}
     {archive && <Leadership hostsOnly />}
     <div id={archive ? "directory" : undefined} className={archive ? `directorySection ${summitStyles.archiveDirectory}` : undefined}>{archive ? <><div className="sectionHeading"><p className="eyebrow">2025 Summit</p><h2>Meet Our Guests</h2></div>{summit.slice(7, 13).map(section => <Portraits key={section.id} section={section} />)}</> : <>
       <Directory people2026={guests} available={snapshot?.event.directoryEnabled ?? false} simplified />
     </>}</div>
+    {/* Ryan (Oct 8): the narrative paragraph and the Goals come after Who's Coming (Founders, then Attendees): the
+        paragraph on its own, the Goals in a blue band with large white type, then Jewel's quote, then Our Partners. */}
+    {!archive && <section className={`${styles.band} ${summitStyles.narrativeBand}`} id="about-summit" aria-label="About the Not Alone Summit">
+      {summitNarrative2026.intro.map(paragraph => <p key={paragraph.slice(0, 24)}>{paragraph}</p>)}
+    </section>}
+    {!archive && <section className={`${styles.band} ${summitStyles.goalsBand}`} id="goals" aria-labelledby="summit-goals-title">
+      <h2 id="summit-goals-title">{summitNarrative2026.goalsHeading}</h2>
+      <ol>{summitNarrative2026.goals.map(goal => <li key={goal}>{goal}</li>)}</ol>
+    </section>}
+    {!archive && <section className={`${styles.band} ${summitStyles.pullQuote}`} id="jewel-quote" aria-label="Quote from Jewel">
+      <blockquote><p>“{summitNarrative2026.quote.text}”</p><footer>—{summitNarrative2026.quote.attribution}</footer></blockquote>
+    </section>}
+    {!archive && <EventPartners tone="light" id="summit-partners" />}
     {/* Owner (Sept 21): the 2025 highlight film, big, on the page (play button, no trip to YouTube). */}
     <HighlightsVideo video="summit" />
     {/* Owner (Sept 21, late): the schedule sits right above the co-chairs. */}
@@ -300,12 +311,15 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     {!archive && <>
       <section className={`${styles.band} ${styles.foundation} ${summitStyles.programFooter}`} id="not-alone-program"><SiteImage src={summit[2]!.images[0]!.src} alt="Inspiring Children Foundation" sizes="220px" /><div>
         <h2>This Summit is part of the Not Alone Program</h2>
-        <p>{summit[2]!.blocks[0]!.text}</p>
+        {/* Ryan (Oct 8): the program statement, word for word. */}
+        <p>{summitNarrative2026.programStatement}</p>
         <div className={summitStyles.programLinks}>
           <a className={styles.action} href={awards2026Program.challengeUrl} target="_blank" rel="noreferrer">Join the Not Alone Challenge <ArrowUpRight size={17} aria-hidden="true" /></a>
           <a className={styles.textAction} href={awards2026Program.toolkitUrl} target="_blank" rel="noreferrer">Get the free Not Alone toolkit <ArrowUpRight size={17} aria-hidden="true" /></a>
         </div>
       </div></section>
+      {/* Ryan (Oct 8): "No solicitation, only connection" sits at the bottom of the page. */}
+      <section className={`${styles.band} ${summitStyles.noSolicitation}`} id="no-solicitation" aria-labelledby="summit-no-solicitation-title"><h2 id="summit-no-solicitation-title">{awards2026Program.noSolicitation.title}</h2><p>{awards2026Program.noSolicitation.body}</p></section>
     </>}
     <section className={`${styles.band} ${styles.closing}`} id="rsvp"><SiteImage src={summit[14]!.images[1]!.src} alt="" sizes="250px" /><h2>Thank you for your interest!</h2><p>{archive ? "Explore the 2025 Not Alone Awards and the people behind the gathering." : "Please contact us to inquire about attendance."}</p>{archive ? <a href="/awards/2025" className={styles.action} target="_blank" rel="noopener">2025 Not Alone Awards</a> : <Link href="/contact" className={styles.action}>Contact Us</Link>}</section>
   </main>;
@@ -345,33 +359,38 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
           <span className={styles.hidden}>Not Alone Awards 2026</span>
         </h1>
         <p className={styles.heroPowered}>Powered by<strong>{awards2026Editorial.foundation}</strong></p>
-        {/* Owner (Oct 7 meeting): "Presented by" Inspiring Children Foundation × NAMI (the Community Day lockup) directly
-            under the Cohen Foundation "Powered by" credit (Awards logo -> Powered by -> Presented by), on every copy of
-            this page; the Cohen credit itself is unchanged and the date line still follows. */}
-        <PresentedBy size="hero" />
+      </div>
+      {/* Ryan (Oct 8): the "Presented by" Inspiring Children Foundation × NAMI lockup sits on the right side of the hero;
+          the date, the times and the RSVP / Info buttons moved down into the iHeartRadio band. */}
+      <div className={styles.heroAside}><PresentedBy size="hero" /></div>
+      {!/wynn las vegas/i.test(venue) && <div className={styles.heroFootnote}><p>Wynn Las Vegas · 2025 venue</p></div>}
+    </section>
+    {/* Ryan (Oct 8): the broadcast band carries the evening's details on the left (date and venue, doors and show
+        time, RSVP + Info, the schedule link) and the iHeartRadio logo with the stream button on the right. */}
+    <section className={`${styles.band} ${styles.iheartBand}`} id="broadcast" aria-labelledby="broadcast-title">
+      <div className={styles.broadcastDetails}>
         {/* Owner (Sept 23): from Nov 6, 2026 the date line reads "2027 — To Be Announced Soon." automatically. */}
         <p className={styles.heroDate}>{isPostEvent() ? postEventLabel : <>{show && !canceled ? <time dateTime={show.startUtc}>{withoutYear(date, 2026)}</time> : withoutYear(date, 2026)}<span className={styles.heroDateVenue}> · {venue}</span></>}</p>
-        {/* Owner (Oct 7): doors and the show time up top (Aphrah's times); the rest of the evening is further down. */}
+        {/* Owner (Oct 7): doors and the show time (Aphrah's times); the rest of the evening is further down. */}
         {show && !canceled && <dl className={styles.heroScheduleTimes} aria-label="Doors and Awards Show start"><div><dt>Doors Open</dt><dd>{awardsDoorsOpen2026}</dd></div><div><dt>Awards Show</dt><dd>{awardsShowStart2026}</dd></div></dl>}
         {!canceled && show && !/to be confirmed/i.test(show.eligibilityScope.label) && <p className={styles.heroInvitation}>{show.eligibilityScope.label}</p>}
-        {/* Owner (Oct 4): RSVP and Info up top; Info scrolls to the mission + schedule, and the iHeartRadio
-            stream button moved to its own band right before the lineup. */}
         <div className={styles.awardsActions}>
           {!canceled && <a className={styles.action} href={rsvpUrl} target="_blank" rel="noopener" aria-label="RSVP for the Not Alone Awards (opens in a new tab)">RSVP</a>}
           <AwardsInfoButton className={styles.infoButton}>Info</AwardsInfoButton>
         </div>
         {eveningTimes.length > 0 && <a className={styles.heroScheduleLink} href="#evening">View full schedule<ArrowDown size={15} aria-hidden="true" /></a>}
       </div>
-      {!/wynn las vegas/i.test(venue) && <div className={styles.heroFootnote}><p>Wynn Las Vegas · 2025 venue</p></div>}
+      <div className={styles.broadcastStream}>
+        <p className={styles.iheartKicker} id="broadcast-title">Broadcast live on</p>
+        <img className={styles.iheartLogo} src="/images/iheartradio-logo-white.svg" alt="iHeartRadio" width={392} height={116} />
+        <a className={styles.iheartStream} href={awards2026Editorial.iHeartUrl} target="_blank" rel="noreferrer" aria-label="Stream live on iHeartRadio's YouTube channel (opens in a new tab)">
+          <Play size={20} fill="currentColor" aria-hidden="true" />Stream live on iHeartRadio
+        </a>
+      </div>
     </section>
-    {/* Owner (Oct 4): the broadcast gets its own band right before the lineup: a large iHeartRadio logo and
-        the stream button. The lineup follows immediately; the mission and the schedule come after it. */}
-    <section className={`${styles.band} ${styles.iheartBand}`} id="broadcast" aria-labelledby="broadcast-title">
-      <p className={styles.iheartKicker} id="broadcast-title">Broadcast live on</p>
-      <img className={styles.iheartLogo} src="/images/iheartradio-logo-white.svg" alt="iHeartRadio" width={392} height={116} />
-      <a className={styles.iheartStream} href={awards2026Editorial.iHeartUrl} target="_blank" rel="noreferrer" aria-label="Stream live on iHeartRadio's YouTube channel (opens in a new tab)">
-        <Play size={20} fill="currentColor" aria-hidden="true" />Stream live on iHeartRadio
-      </a>
+    {/* Ryan (Oct 8): the Awards sentence of the narrative, right after the broadcast band, word for word. */}
+    <section className={`${styles.band} ${styles.awardsHonor}`} id="awards-honor" aria-label="About the Not Alone Awards">
+      <p>{summitNarrative2026.awardsSentence}</p>
     </section>
     <AwardsGuestDirectory people={displayPeople} available={available} />
     {/* Owner (Sept 21): last year's mission statement (ICF's Awards page) stays here. Owner (Oct 7 meeting): its
@@ -380,13 +399,6 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
       <p>Inspiring Children Foundation × NAMI present the Not Alone Awards Show, powered by the <strong>Steven &amp; Alexandra Cohen Foundation</strong>.</p>
       {/* Owner (Sept 21, late): just the opening statement; the longer text is gone. */}
       {awards[1]!.blocks.slice(1, 2).map(block => <p key={block.text}>{block.text}</p>)}
-      {/* Owner (Oct 7, evening screenshot "Awards page"): Ryan's narrative and Goals also sit on the Awards page, word for word
-          (the Jewel quote stays Summit-only). */}
-      <div className={styles.awardsNarrative} id="awards-narrative">
-        {summitNarrative2026.intro.map(paragraph => <p key={paragraph.slice(0, 24)}>{paragraph}</p>)}
-        <h3>{summitNarrative2026.goalsHeading}</h3>
-        <ol>{summitNarrative2026.goals.map(goal => <li key={goal}>{goal}</li>)}</ol>
-      </div>
     </section>
     {eveningTimes.length > 0 && <section className={`${styles.band} ${styles.eveningSchedule}`} id="evening" aria-labelledby="evening-title">
       <h2 id="evening-title">The Evening</h2>

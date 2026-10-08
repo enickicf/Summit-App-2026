@@ -60,7 +60,7 @@ describe("Summit-only refresh", () => {
     // Owner (Sept 21): the film section is only the recap, large; no extra buttons or copy.
     expect(html).not.toContain('Watch the 2025 Awards highlights');
     expect(html).not.toContain("Davos of Human Development");
-    expect(html).toContain("na-summit-logo-black-2.png");
+    expect(html).not.toContain("na-summit-logo-black-2.png"); // Ryan (Oct 8): the intro logo and repeated credit are gone from the 2026 page
 
     expect(html).not.toContain("Meet the people");
     expect(html).not.toContain('id="partners"');

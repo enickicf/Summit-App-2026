@@ -33,13 +33,14 @@ describe("Awards host feature", () => {
 
   it("keeps the opening schedule, venue and single RSVP out of the host feature", () => {
     const html = render();
-    const hero = html.match(/<section[^>]*id="awards-program"[^>]*>([\s\S]*?)<\/section>/)?.[1]!;
+    // Ryan (Oct 8): the opening = hero + the details band beneath it (date, times, RSVP), ending at the Awards sentence.
+    const hero = html.slice(html.indexOf('id="awards-program"'), html.indexOf('id="awards-honor"'));
     expect(hero).toContain('id="awards-title"');
     expect(hero).toContain(">RSVP</a>");
     expect(html.match(/href="https:\/\/notaloneawards\.org\/rsvp"/g)).toHaveLength(1);
     for (const text of ["Encore Theater at Wynn Las Vegas", "Monday, November 2</time>"]) {
       expect(hero).toContain(text);
-      expect(html.slice(html.indexOf("</section>", html.indexOf('id="awards-program"')))).not.toContain(text);
+      expect(html.slice(html.indexOf('id="awards-honor"'))).not.toContain(text);
     }
     // Owner (Oct 7 meeting): doors and the Awards Show start in the hero; the full show run (7:30-10:00) in its own section below; no Pre-Show anywhere.
     expect(hero).toContain("<dt>Doors Open</dt><dd>6:30 PM</dd>");

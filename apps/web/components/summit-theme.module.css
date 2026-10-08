@@ -255,3 +255,30 @@
 @media (max-width: 900px) { .summit.summit > section:global(#about) .introBrand { display:none; } }
 /* Owner (Oct 5): on phones the Summit lettering starts right under the menu (no 96px empty band). */
 @media(max-width:600px) { .summit.summit .heroFormat { padding-top:28px; } }
+
+/* Ryan (Oct 8): Summit hero — the date/venue line sits at the bottom-right with the Schedule button directly above
+   it; the Presented-by lockup keeps the spot the date line had (under the Cohen credit). Phones stack it below. */
+.summit.summit .heroFormat { position:relative; }
+.summit .heroAside { position:absolute; right:max(24px,calc((100% - 1180px)/2)); bottom:48px; z-index:2; display:flex; flex-direction:column; align-items:flex-end; gap:14px; text-align:right; text-shadow:0 2px 18px #0009; pointer-events:none; }
+.summit .heroAside a { pointer-events:auto; }
+.summit .heroAside .heroButtons { margin:0; }
+.summit .heroAside .heroDate { margin:0; color:#fff; font-size:25px; font-weight:500; line-height:1.5; }
+@media (max-width:760px) {
+  .summit .heroAside { position:static; align-items:flex-start; text-align:left; margin-top:22px; }
+  .summit .heroAside .heroDate { font-size:19px; }
+}
+
+/* Ryan (Oct 8): the 2026 introduction is the headline alone, thin and centered, straight into Who's Coming. */
+.summit.summit .introThin { background:#fff; text-align:center; padding-top:56px; padding-bottom:36px; }
+.summit.summit .introThin h2 { max-width:920px; margin:0 auto; font-size:clamp(30px,4.2vw,50px); font-weight:300; line-height:1.15; letter-spacing:-0.01em; color:#000; text-wrap:balance; }
+.summit.summit .introThin h2 .introAccent { color:#8fb1e0; font-weight:300; }
+
+/* Ryan (Oct 8): the narrative paragraph below Who's Coming, then the Goals in a blue band with large white type. */
+.summit.summit .narrativeBand { background:#fff; text-align:center; padding-top:72px; padding-bottom:40px; }
+.summit.summit .narrativeBand p { max-width:880px; margin:0 auto; color:#000; font-size:clamp(19px,2.1vw,25px); line-height:1.6; text-wrap:pretty; }
+.summit.summit .goalsBand { background:#4a5faa; color:#fff; text-align:center; }
+.summit.summit .goalsBand h2 { margin:0 0 28px; color:#d0d4ea; font-size:15px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; }
+.summit.summit .goalsBand ol { max-width:1000px; margin:0 auto; padding:0; list-style:none; counter-reset:goal; display:grid; gap:16px; }
+.summit.summit .goalsBand li { counter-increment:goal; margin:0; color:#fff; font-size:clamp(22px,3vw,36px); font-weight:700; line-height:1.25; letter-spacing:-0.01em; text-wrap:balance; }
+.summit.summit .goalsBand li::before { content:counter(goal) ". "; color:#d0d4ea; }
+@media (max-width:600px) { .summit.summit .goalsBand li { font-size:21px; } .summit.summit .goalsBand ol { gap:12px; } }

@@ -11,8 +11,9 @@ const times = (snapshot = event2026Snapshot) => awardsHeroTimes(awardsPromotiona
 const page = (snapshot = event2026Snapshot, published = true) => renderToStaticMarkup(
   <OriginalAwardsPage year={2026} snapshot={snapshot} program={{ ...program, published }} />
 );
-const hero = (snapshot = event2026Snapshot, published = true) => page(snapshot, published)
-  .match(/<section[^>]*aria-labelledby="awards-title"[^>]*>([\s\S]*?)<\/section>/)![1]!;
+// Ryan (Oct 8): the opening = the hero (logo, Cohen credit, lockup on the right) plus the details band under it
+// (date, doors/show times, RSVP + Info, schedule link, iHeartRadio), which ends where the Awards sentence starts.
+const hero = (snapshot = event2026Snapshot, published = true) => { const html = page(snapshot, published); return html.slice(html.indexOf('aria-labelledby="awards-title"'), html.indexOf('id="awards-honor"')); };
 // Owner (Oct 7 meeting): the hero shows Doors Open 6:30 PM and the Awards Show start 7:30 PM; the rest of the evening sits below it; no Pre-Show anywhere.
 const schedule = (snapshot = event2026Snapshot, published = true) => page(snapshot, published)
   .match(/<section[^>]*id="evening"[^>]*>[\s\S]*?<dl>([\s\S]*?)<\/dl>/)?.[1] ?? "";
@@ -70,14 +71,16 @@ describe("Awards opening presentation", () => {
     // The Wynn photo (reduced motion only), the Awards logo and the "Presented by" ICF × NAMI logos (owner, Oct 5;
     // Oct 7 meeting: directly under the Cohen credit, joined by a ×); no still of the film: the hero opens on a
     // plain color and the film cross-fades in once it is really playing.
-    expect(html.match(/<img /g)).toHaveLength(4);
-    expect(html).toMatch(/<\/h1><p class="[^"]*">Powered by<strong>Steven &amp; Alexandra Cohen Foundation<\/strong><\/p><div class="[^"]*">[^]*?Presented by[^]*?alt="Inspiring Children Foundation"[^]*?aria-hidden="true">×<\/span>[^]*?alt="NAMI, National Alliance on Mental Illness"[^]*?<\/div><p class="[^"]*"><time/);
+    expect(html.match(/<img /g)).toHaveLength(5); // Wynn scene, Awards logo, ICF + NAMI, iHeartRadio
+    // Ryan (Oct 8): the lockup sits in the hero's right-hand aside after the Cohen credit; the date line opens the details band.
+    expect(html).toMatch(/<\/h1><p class="[^"]*">Powered by<strong>Steven &amp; Alexandra Cohen Foundation<\/strong><\/p><\/div><div class="[^"]*heroAside[^"]*"><div class="[^"]*">[^]*?Presented by[^]*?alt="Inspiring Children Foundation"[^]*?aria-hidden="true">×<\/span>[^]*?alt="NAMI, National Alliance on Mental Illness"[^]*?<\/div><\/div>[^]*?<p class="[^"]*"><time/);
     expect(html.indexOf("Presented by")).toBeGreaterThan(html.indexOf('<h1 id="awards-title"'));
     expect(html).not.toContain("hero-awards-start.jpg");
     expect(html).toContain("background:#1c1a2e");
     // The hero's second button is Info (scrolls to the mission + schedule); a smaller schedule link sits under it.
     expect(html).toMatch(/>RSVP<\/a><a class="[^"]*" href="#mission">Info<\/a><\/div><a class="[^"]*" href="#evening">View full schedule/);
-    expect(html).not.toMatch(/iHeart|Stream live/);
+    // Ryan (Oct 8): the iHeartRadio logo and stream button sit in the details band, after the RSVP button.
+    expect(html.indexOf(">RSVP</a>")).toBeLessThan(html.indexOf("Stream live"));
     const whole = page();
     const band = whole.slice(whole.indexOf('id="broadcast"'), whole.indexOf('id="directory"'));
     expect(band).toContain('src="/images/iheartradio-logo-white.svg" alt="iHeartRadio"');

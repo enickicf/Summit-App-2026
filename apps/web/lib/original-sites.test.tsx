@@ -70,7 +70,8 @@ describe("source-faithful, year-separated event pages", () => {
       expect(html).not.toContain("Podcaster RSVP");
     }
     const current = renderToStaticMarkup(<OriginalAwardsPage year={2026} />);
-    const program = current.split('id="awards-program"')[1]?.split('</section>')[0];
+    // Ryan (Oct 8): the RSVP button sits in the details band right under the hero.
+    const program = current.slice(current.indexOf('id="awards-program"'), current.indexOf('id="awards-honor"'));
     // Owner (Oct 5): the RSVP form opens in a new tab.
     expect(program).toContain(`href="${url}" target="_blank" rel="noopener" aria-label="RSVP for the Not Alone Awards (opens in a new tab)">RSVP</a>`);
     expect(current.match(new RegExp(`href="${url}"`, "g"))).toHaveLength(1);

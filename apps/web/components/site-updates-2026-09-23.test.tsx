@@ -66,8 +66,12 @@ describe("Sept 23 site updates", () => {
     const partnersAt = s.indexOf('id="summit-partners"');
     const attendeesAt = s.indexOf("-attendees");
     expect(foundersAt).toBeGreaterThan(-1);
-    expect(partnersAt).toBeGreaterThan(foundersAt);
-    expect(attendeesAt).toBeGreaterThan(partnersAt);
+    // Ryan (Oct 8): Attendees follow Founders; the partner block comes after the narrative, the Goals band and Jewel's quote.
+    expect(attendeesAt).toBeGreaterThan(foundersAt);
+    expect(s.indexOf('id="about-summit"')).toBeGreaterThan(attendeesAt);
+    expect(s.indexOf('id="goals"')).toBeGreaterThan(s.indexOf('id="about-summit"'));
+    expect(s.indexOf('id="jewel-quote"')).toBeGreaterThan(s.indexOf('id="goals"'));
+    expect(partnersAt).toBeGreaterThan(s.indexOf('id="jewel-quote"'));
     expect(s).toContain("cohen-foundation-give.png");
     expect(s).toContain("/2026-partners/nami.png");
     expect(s).toContain("/images/icf-logo.webp");
