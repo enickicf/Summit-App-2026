@@ -6,6 +6,7 @@ import { partnerWithUsUrl, summitPartnerTiers, type SummitPartner } from "../../
 import { getPublicSnapshotState } from "../../lib/snapshot";
 import { airtableOverlay } from "../../lib/airtable-shared";
 import { partnerLogo2026 } from "../../lib/partner-logos-2026";
+import { displayPartners, partnerGroupOf, partnerGroupOrder } from "../../lib/partner-display-2026";
 import { awardsDisplayPeople, philanthropistDisplayPeople } from "../../lib/awards-people";
 import { personInitials } from "../../lib/person-portraits";
 import styles from "./partners.module.css";
@@ -37,15 +38,15 @@ export default async function PartnersPage() {
   const isNami = (name: string) => name.trim().toLowerCase() === "nami";
   const isResonance = (name: string) => ["resonance philanthropies", "resonance foundation"].includes(name.trim().toLowerCase());
   const topAirtable = [all.find(partner => isNami(partner.name)), all.find(partner => isResonance(partner.name))].filter((p): p is NonNullable<typeof p> => Boolean(p));
-  const partners = all.filter(partner => !topAirtable.includes(partner));
-  // Airtable's "Partner" (singular) joins the Partners group; "Curriculum Partner" follows it.
-  const groupOf = (partner: { group: string }) => !partner.group || partner.group === "Partner" ? "Partners" : partner.group;
-  const groupOrder = ["Sponsors", "Partners", "Curriculum Partner", "Vendors", "Gifting Suite"];
-  const groups = [...new Set(partners.map(groupOf))]
-    .sort((a, b) => (groupOrder.indexOf(a) + 1 || 99) - (groupOrder.indexOf(b) + 1 || 99))
+  // Oct 7 re-read: one card per brand (By Dzign's two records become one "By Dzign" card; Hugz, recorded in
+  // two groups, keeps its single Partners card) and no internal labels (ICF Items/Cold Creek Plunges).
+  const partners = displayPartners(all.filter(partner => !topAirtable.includes(partner)));
+  // Groups in the page's order (lib/partner-display-2026.ts: Airtable's "Partner" joins Partners, "Curriculum Partner" follows it).
+  const groups = [...new Set(partners.map(partnerGroupOf))]
+    .sort((a, b) => (partnerGroupOrder.indexOf(a) + 1 || 99) - (partnerGroupOrder.indexOf(b) + 1 || 99))
     .map(title => ({
       title: title === "Gifting Suite" ? "Gifting Suite Partners" : title,
-      partners: partners.filter(partner => groupOf(partner) === title)
+      partners: partners.filter(partner => partnerGroupOf(partner) === title)
     }));
   // Sept 22 meeting: confirmed people grouped "Philanthropist" in Airtable, listed on this page.
   // Owner / Ryan (Sept 29): every founder is listed here as well, founders first, then the other philanthropists.

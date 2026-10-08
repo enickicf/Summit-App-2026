@@ -2,8 +2,13 @@ import type { AirtablePartner } from "./airtable";
 
 // Partners from Airtable's "Simplified Partners" page (read-only), recorded so the 2026 Partners page
 // matches Airtable before AIRTABLE_TOKEN is configured; the live connection replaces it automatically.
-// Every row in Airtable's grid order (re-read Oct 3, 2026): Select value as the group, Status as recorded.
-export const airtablePartnersRecordedAt = "2026-10-03";
+// Every row in Airtable's grid order (re-read Oct 3, 2026; new Confirmed rows from the Oct 7, 2026 re-read
+// appended at the end of their group): Select value as the group, Status as recorded.
+// The interface does not expose record ids, so the Oct 7 rows carry synthetic "recNEW-…" ids (used only as
+// React keys; they can never be mistaken for a real Airtable id). The live connection supplies the real ones.
+// Display rules for these rows (one "By Dzign" card, the internal "ICF Items" label hidden, one Hugz card)
+// live in lib/partner-display-2026.ts, so every record stays here exactly as Airtable has it.
+export const airtablePartnersRecordedAt = "2026-10-07";
 export const airtablePartners2026: AirtablePartner[] = [
   { recordId: "reckbMxoUtbg9Wlrk", name: "NAMI", item: "", group: "", status: "Confirmed" },
   { recordId: "recGz6P1iS02UfniY", name: "Slow North", item: "100 - 6 oz gold tin candles in a variety of scents", group: "Gifting Suite", status: "Confirmed" },
@@ -45,6 +50,9 @@ export const airtablePartners2026: AirtablePartner[] = [
   { recordId: "recLgeqs6LwADiZC9", name: "Paul Dalio's Book", item: "A Madman's Revelation. A Memoir of Psychosis and Prophecy", group: "Gifting Suite", status: "Confirmed" },
   { recordId: "recLVGLjonmXrfLBL", name: "SugarBearPro", item: "200 SugarbearPRO® Sleep 5-HTP Amino Vegan Vitamin Gummies – Salon Exclusive Size 200 pairs of SugarbearPRO Cozy Sleep Socks", group: "Gifting Suite", status: "Confirmed" },
   { recordId: "reczQVqfD26y3Tp4B", name: "Bee Harmony Honey", item: "3 oz. mini honey jars", group: "Gifting Suite", status: "Confirmed" },
+  // Oct 7, 2026 re-read: new Confirmed Gifting Suite rows (synthetic ids, see the header comment).
+  { recordId: "recNEW-tubby-todd", name: "Tubby Todd", item: "Hair and Body wash combo", group: "Gifting Suite", status: "Confirmed" },
+  { recordId: "recNEW-tost", name: "TÖST", item: "216 cans of non alcoholic sangria drink", group: "Gifting Suite", status: "Confirmed" },
   { recordId: "recHzsGo1E7VPmEgS", name: "Shiftwave", item: "2 Meditation chairs (1 chair from ICF, 1 chair sending)", group: "Vendors", status: "Confirmed" },
   { recordId: "recSFAj9h31pJPEQM", name: "Somadome", item: "Two meditation pods", group: "Vendors", status: "Confirmed" },
   { recordId: "recFVY299CiG4wCBI", name: "Body Balance System", item: "Red Light Bed", group: "Vendors", status: "Confirmed" },
@@ -55,8 +63,21 @@ export const airtablePartners2026: AirtablePartner[] = [
   { recordId: "recxMGVUFoYwsQgm2", name: "Sena Rituals", item: "Gift Vouchers to print for guests", group: "Vendors", status: "Confirmed" },
   { recordId: "rec5tGdTrpbNw71RG", name: "Woojer", item: "Haptic Vest and Vibracoustic wellness mat", group: "Vendors", status: "Confirmed" },
   { recordId: "rechMMx0JTbJuBv5o", name: "Hyperice", item: "Recovery Devices", group: "Vendors", status: "Confirmed" },
+  // Oct 7, 2026 re-read: new Confirmed Vendors rows. "ICF Items/Cold Creek Plunges" is an internal label for the
+  // foundation's own items (never a card); the two By Dzign rows are one vendor; Hugz is also recorded under
+  // "Partner" below and keeps that single card. All handled by lib/partner-display-2026.ts.
+  { recordId: "recNEW-nomad-sauna", name: "Nomad Sauna", item: "", group: "Vendors", status: "Confirmed" },
+  { recordId: "recNEW-tape-art", name: "Tape Art", item: "", group: "Vendors", status: "Confirmed" },
+  { recordId: "recNEW-icf-items-cold-creek-plunges", name: "ICF Items/Cold Creek Plunges", item: "", group: "Vendors", status: "Confirmed" },
+  { recordId: "recNEW-pickleroll", name: "Pickleroll", item: "1 pickleball court", group: "Vendors", status: "Confirmed" },
+  { recordId: "recNEW-moon-valley-plants", name: "Moon Valley Plants", item: "Plants", group: "Vendors", status: "Confirmed" },
+  { recordId: "recNEW-by-dzign-ceiling-equipment", name: "By Dzign Ceiling Equipment", item: "Ceiling Decor", group: "Vendors", status: "Confirmed" },
+  { recordId: "recNEW-by-dzign-all-decor", name: "By Dzign (All Decor)", item: "Decor", group: "Vendors", status: "Confirmed" },
+  { recordId: "recNEW-hugz-vendors", name: "Hugz", item: "small stuffed animal for green room set up", group: "Vendors", status: "Confirmed" },
   { recordId: "recTcwciArfKYH4HH", name: "Fanatics Foundation", item: "", group: "Sponsors", status: "Confirmed" },
   { recordId: "recY1Vs6yy8Q1g7po", name: "Resonance Foundation", item: "", group: "Sponsors", status: "Confirmed" },
+  // Oct 7, 2026 re-read: new Confirmed Sponsors row (Airtable "Lead": Aphrah).
+  { recordId: "recNEW-villa-bibbiani", name: "Villa Bibbiani", item: "", group: "Sponsors", status: "Confirmed" },
   { recordId: "recQyUsDF12jL70Zu", name: "Wise Friend", item: "", group: "Curriculum Partner", status: "Confirmed" },
   { recordId: "recUZ5bDgnhBp9fVY", name: "Hugz", item: "Purple Turtles", group: "Partner", status: "Confirmed" },
   { recordId: "rec8IXddbFuLA2D78", name: "Big League Wiffleball", item: "", group: "Partner", status: "Confirmed" },
