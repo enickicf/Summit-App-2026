@@ -24,7 +24,7 @@ const times = `<span class="${styles.times}" aria-hidden="true">×</span>`;
 // Powered by -> the lockup (label, ICF logo, ×, NAMI logo) -> the next paragraph (the date line).
 // Ryan (Oct 8): on the Awards pages the lockup sits in the hero's right-hand aside, after the Cohen credit.
 const awardsLockupAside = /Powered by<strong>[^]*?<\/p><\/div><div class="[^"]*heroAside[^"]*"><div class="[^"]*presentedBy[^"]*/;
-const underPoweredBy = new RegExp(`<p class="[^"]*">Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong></p><div class="${escape(styles.presentedBy!)} ${escape(styles.heroSize!)} ">[^]*?>Presented by</span><span class="[^"]*"><img[^>]*alt="Inspiring Children Foundation"[^>]*>${escape(times)}<img[^>]*alt="NAMI, National Alliance on Mental Illness"[^>]*></span></div>`); // Ryan (Oct 8): the Summit date line now sits in the hero's bottom-right aside, after the lockup
+const underPoweredBy = new RegExp(`<p class="[^"]*">Powered by<strong>Steven &amp; Alexandra<br/>Cohen Foundation</strong></p><div class="${escape(styles.presentedBy!)} ${escape(styles.heroSize!)} ">[^]*?>Presented by</span><span class="[^"]*"><img[^>]*alt="Inspiring Children Foundation"[^>]*>${escape(times)}<img[^>]*alt="NAMI, National Alliance on Mental Illness"[^>]*></span></div>`); // Ryan (Oct 8): the Summit date line now sits in the hero's bottom-right aside, after the lockup
 
 describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards times", () => {
   it("joins the Presented-by logos with a × instead of a divider line, in every size and tone", () => {

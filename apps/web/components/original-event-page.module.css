@@ -411,8 +411,14 @@
 .currentAwards .awardsHero { height: auto; min-height: min(760px, calc(100svh - 120px)); max-height: none; padding-top: 40px; padding-bottom: 48px; }
 .currentAwards .awardsHero .awardsLogo { margin: 0 0 14px; line-height: 0; }
 .currentAwards .awardsHero .awardsLogo img { width: 250px; max-width: 60vw; height: auto; margin: 0; object-fit: contain; filter: drop-shadow(0 2px 18px #000a); }
-.currentAwards .awardsHero .heroPowered { margin: 0 0 26px; color: #fff; font-size: 19px; letter-spacing: 0.02em; }
-.currentAwards .awardsHero .heroPowered strong { display: block; font-size: 34px; font-weight: 600; line-height: 1.2; letter-spacing: 0; }
+/* Owner (Oct 8): the Cohen credit is a compact stack — "Powered by" as a small label over "Steven & Alexandra" /
+   "Cohen Foundation" (components/powered-by.tsx) — instead of one long line; same treatment as the Summit hero. */
+.currentAwards .awardsHero .heroPowered { margin: 0 0 26px; color: rgba(255,255,255,.78); font-size: 12px; font-weight: 700; line-height: 1; letter-spacing: .22em; text-transform: uppercase; }
+.currentAwards .awardsHero .heroPowered strong { display: block; margin-top: 10px; color: #fff; font-size: clamp(26px, 2.3vw, 32px); font-weight: 700; line-height: 1.12; letter-spacing: -0.01em; text-transform: none; }
+@media (max-width: 600px) {
+  .currentAwards .awardsHero .heroPowered { font-size: 11px; margin-bottom: 20px; }
+  .currentAwards .awardsHero .heroPowered strong { font-size: 24px; margin-top: 8px; }
+}
 .currentAwards .awardsHero .heroVenue { margin: 6px 0 0; font-size: 17px; color: #fff; }
 .currentAwards .heroEdition { display: inline-block; margin-right: 12px; padding-right: 12px; border-right: 1px solid #fff6; color: #f2dbaa; font-weight: 600; }
 .currentAwards .awardsHero .heroBroadcast { margin: 14px 0 0; font-size: 13px; color: #e8e3ea; }

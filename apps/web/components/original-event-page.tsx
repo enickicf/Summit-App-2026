@@ -25,6 +25,7 @@ import { HeroRecap, SummitVideo } from "./summit-video";
 import { HighlightsVideo } from "./highlights-video";
 import { AwardsInfoButton } from "./awards-info-button";
 import { PresentedBy } from "./presented-by";
+import { PoweredBy } from "./powered-by";
 import { awardsDoorsOpen2026, awardsShowStart2026 } from "../lib/event-partners-2026";
 import summitStyles from "./summit-theme.module.css";
 import { EventPartners } from "./event-partners";
@@ -248,7 +249,8 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
           <SiteImage src="/images/summit-logo.png" alt="" sizes="(max-width: 600px) 170px, 250px" loading="eager" fetchPriority="high" />
           <span className={styles.hidden}>Not Alone Summit {year}</span>
         </h1>
-        <p className={summitStyles.heroPowered}>Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong></p>
+        {/* Owner (Oct 8): the credit is a compact stack, "Powered by" over "Steven & Alexandra" / "Cohen Foundation". */}
+        <PoweredBy className={summitStyles.heroPowered} />
         {/* Owner (Oct 7 meeting): "Presented by" Inspiring Children Foundation × NAMI directly under the Cohen credit
             (Summit logo -> Powered by -> Presented by); 2026 only. */}
         {!archive && <PresentedBy size="hero" />}
@@ -361,7 +363,7 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
           <SiteImage src="/images/na-awards-logo-white.png" alt="" sizes="(max-width: 600px) 180px, 250px" loading="eager" fetchPriority="high" />
           <span className={styles.hidden}>Not Alone Awards 2026</span>
         </h1>
-        <p className={styles.heroPowered}>Powered by<strong>{awards2026Editorial.foundation}</strong></p>
+        <PoweredBy className={styles.heroPowered} />
       </div>
       {/* Ryan (Oct 8): the "Presented by" Inspiring Children Foundation × NAMI lockup sits on the right side of the hero;
           the date, the times and the RSVP / Info buttons moved down into the iHeartRadio band. */}

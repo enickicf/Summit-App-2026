@@ -187,8 +187,11 @@
 .heroFormat .heroCopy { max-width:920px; text-shadow:0 2px 18px #0009; }
 .heroLogo { margin:0 0 14px !important; line-height:0 !important; }
 .heroLogo img { width:250px; max-width:60vw; height:auto; filter:drop-shadow(0 2px 18px #000a); }
-.summit .heroCopy .heroPowered { margin:0 0 26px; color:#fff; font-size:22px; line-height:1.4; letter-spacing:.02em; }
-.heroPowered strong { display:block; font-size:42px; font-weight:600; line-height:1.15; letter-spacing:0; }
+/* Owner (Oct 8): the Cohen credit is a compact stack instead of one long line: "Powered by" as a small label (the same
+   style as the lockup's "Presented by") over the foundation's name on two balanced lines, "Steven & Alexandra" /
+   "Cohen Foundation" (components/powered-by.tsx), so the block keeps one even shape at every width. */
+.summit .heroCopy .heroPowered { margin:0 0 26px; color:rgba(255,255,255,.78); font-size:12px; font-weight:700; line-height:1; letter-spacing:.22em; text-transform:uppercase; }
+.heroPowered strong { display:block; margin-top:10px; color:#fff; font-size:clamp(28px,2.5vw,36px); font-weight:700; line-height:1.12; letter-spacing:-0.01em; text-transform:none; }
 .summit .heroCopy .heroDate { margin:0; color:#fff; font-size:25px; font-weight:500; line-height:1.5; }
 /* Owner (Sept 23): venue on the same line as the date, Awards-style. */
 .summit .heroCopy .heroDateVenue { font-weight:500; }
@@ -205,7 +208,7 @@
 @media(max-width:600px) {
   .summit.summit .heroFormat { min-height:0; padding:96px 22px 40px; }
   .heroLogo img { width:170px; }
-  .summit .heroCopy .heroPowered { font-size:16px; } .heroPowered strong { font-size:28px; }
+  .summit .heroCopy .heroPowered { font-size:11px; margin-bottom:20px; } .heroPowered strong { font-size:26px; margin-top:8px; }
   .summit .heroCopy .heroDate { font-size:18px; } .summit .heroCopy .heroVenue { font-size:16px; } .summit .heroCopy .heroExtra { font-size:14px; }
   .summit.summit .recap { padding:24px 0; }
 }

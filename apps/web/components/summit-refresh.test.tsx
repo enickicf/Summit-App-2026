@@ -43,7 +43,7 @@ describe("Summit-only refresh", () => {
       expect(hero(html)).toContain("background:#4a5faa");
       expect(hero(html)).not.toContain(summit2025Recap.posterUrl);
       expect(hero(html)).toContain("summit-logo.png"); // full-resolution hero logo (audit, Sept 21)
-      expect(hero(html)).toContain("Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong>");
+      expect(hero(html)).toContain("Powered by<strong>Steven &amp; Alexandra<br/>Cohen Foundation</strong>"); // Oct 8: stacked credit
       expect(hero(html)).not.toMatch(/Highlights<\/a>|heroArt/);
     }
     expect(hero(current)).toContain('href="#schedule">Schedule</a>');

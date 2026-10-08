@@ -67,13 +67,13 @@ describe("Awards opening presentation", () => {
     expect(html).not.toContain("/images/cohen-foundation.webp");
     // Sept 21 meeting: the foundation credit sits directly under the ICF Awards logo, larger than before.
     expect(html).toContain("/images/na-awards-logo-white.png");
-    expect(html).toMatch(/na-awards-logo-white[^]*<\/h1><p class="[^"]*">Powered by<strong>Steven &amp; Alexandra Cohen Foundation<\/strong><\/p>/);
+    expect(html).toMatch(/na-awards-logo-white[^]*<\/h1><p class="[^"]*">Powered by<strong>Steven &amp; Alexandra<br\/>Cohen Foundation<\/strong><\/p>/); // Oct 8: stacked credit
     // The Wynn photo (reduced motion only), the Awards logo and the "Presented by" ICF × NAMI logos (owner, Oct 5;
     // Oct 7 meeting: directly under the Cohen credit, joined by a ×); no still of the film: the hero opens on a
     // plain color and the film cross-fades in once it is really playing.
     expect(html.match(/<img /g)).toHaveLength(5); // Wynn scene, Awards logo, ICF + NAMI, iHeartRadio
     // Ryan (Oct 8): the lockup sits in the hero's right-hand aside after the Cohen credit; the date line opens the details band.
-    expect(html).toMatch(/<\/h1><p class="[^"]*">Powered by<strong>Steven &amp; Alexandra Cohen Foundation<\/strong><\/p><\/div><div class="[^"]*heroAside[^"]*"><div class="[^"]*">[^]*?Presented by[^]*?alt="Inspiring Children Foundation"[^]*?aria-hidden="true">×<\/span>[^]*?alt="NAMI, National Alliance on Mental Illness"[^]*?<\/div><\/div>[^]*?<p class="[^"]*"><time/);
+    expect(html).toMatch(/<\/h1><p class="[^"]*">Powered by<strong>Steven &amp; Alexandra<br\/>Cohen Foundation<\/strong><\/p><\/div><div class="[^"]*heroAside[^"]*"><div class="[^"]*">[^]*?Presented by[^]*?alt="Inspiring Children Foundation"[^]*?aria-hidden="true">×<\/span>[^]*?alt="NAMI, National Alliance on Mental Illness"[^]*?<\/div><\/div>[^]*?<p class="[^"]*"><time/);
     expect(html.indexOf("Presented by")).toBeGreaterThan(html.indexOf('<h1 id="awards-title"'));
     expect(html).not.toContain("hero-awards-start.jpg");
     expect(html).toContain("background:#1c1a2e");
