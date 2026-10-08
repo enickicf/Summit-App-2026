@@ -22,9 +22,11 @@ describe("Summit 2026 narrative (Ryan, Oct 7)", () => {
     expect(summit2026).not.toContain("Building on the success of");
     const about = summit2026.slice(summit2026.indexOf('id="about-summit"'), summit2026.indexOf('id="goals"'));
     expect(summit2026.indexOf('id="about-summit"')).toBeGreaterThan(summit2026.indexOf("-attendees"));
-    for (const paragraph of summitNarrative2026.intro) expect(about).toContain(`<p>${esc(paragraph)}</p>`);
+    // Owner (Oct 8): the opening phrase is bold blue; the words themselves stay exactly Ryan's.
+    for (const paragraph of summitNarrative2026.intro) expect(about.replace(/<\/?strong[^>]*>/g, "")).toContain(`<p>${esc(paragraph)}</p>`);
+    expect(about).toMatch(/<p><strong class="[^"]*narrativeLede[^"]*">Bringing together the people shaping the future of mental health<\/strong>—clinical experts/);
     const goals = summit2026.slice(summit2026.indexOf('id="goals"'), summit2026.indexOf('id="jewel-quote"'));
-    expect(text(goals)).toContain("Goals " + summitNarrative2026.goals.join(" "));
+    expect(text(goals)).toContain("Goals " + summitNarrative2026.goals.map((goal, i) => `0${i + 1} ${goal}`).join(" ")); // Oct 8: numbered columns
     expect(goals.match(/<li>/g)?.length).toBe(5);
     // The Awards sentence left the Summit page.
     expect(summit2026).not.toContain(esc(summitNarrative2026.awardsSentence));

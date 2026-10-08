@@ -294,11 +294,15 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     {/* Ryan (Oct 8): the narrative paragraph and the Goals come after Who's Coming (Founders, then Attendees): the
         paragraph on its own, the Goals in a blue band with large white type, then Jewel's quote, then Our Partners. */}
     {!archive && <section className={`${styles.band} ${summitStyles.narrativeBand}`} id="about-summit" aria-label="About the Not Alone Summit">
-      {summitNarrative2026.intro.map(paragraph => <p key={paragraph.slice(0, 24)}>{paragraph}</p>)}
+      {/* Owner (Oct 8): the paragraph reads as an opening statement — left-aligned on a narrow measure, its opening phrase
+          (up to the first dash) in bold Summit blue; the words are Ryan's, unchanged. */}
+      {summitNarrative2026.intro.map(paragraph => { const cut = paragraph.indexOf("—"); return <p key={paragraph.slice(0, 24)}>{cut > 0 ? <><strong className={summitStyles.narrativeLede}>{paragraph.slice(0, cut)}</strong>{paragraph.slice(cut)}</> : paragraph}</p>; })}
     </section>}
     {!archive && <section className={`${styles.band} ${summitStyles.goalsBand}`} id="goals" aria-labelledby="summit-goals-title">
       <h2 id="summit-goals-title">{summitNarrative2026.goalsHeading}</h2>
-      <ol>{summitNarrative2026.goals.map(goal => <li key={goal}>{goal}</li>)}</ol>
+      {/* Owner (Oct 8): the five goals run across the band as equal columns (number, thin rule, goal); a left-aligned list
+          with a number column on phones. */}
+      <ol>{summitNarrative2026.goals.map((goal, index) => <li key={goal}><span className={summitStyles.goalNumber} aria-hidden="true">{String(index + 1).padStart(2, "0")}</span><span className={summitStyles.goalText}>{goal}</span></li>)}</ol>
     </section>}
     {!archive && <section className={`${styles.band} ${summitStyles.pullQuote}`} id="jewel-quote" aria-label="Quote from Jewel">
       <blockquote><p>“{summitNarrative2026.quote.text}”</p><footer>—{summitNarrative2026.quote.attribution}</footer></blockquote>
