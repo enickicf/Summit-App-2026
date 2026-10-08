@@ -45,7 +45,9 @@ describe("Summit 2026 narrative (Ryan, Oct 7)", () => {
   it("Ryan (Oct 8): only the Awards sentence goes on the Awards page, right after the broadcast band; never the Goals or the quote; 2025 untouched", () => {
     const honor = awards2026.slice(awards2026.indexOf('id="awards-honor"'), awards2026.indexOf('id="mission"'));
     expect(awards2026.indexOf('id="awards-honor"')).toBeGreaterThan(awards2026.indexOf('id="broadcast"'));
-    expect(honor).toContain(`<p>${esc(summitNarrative2026.awardsSentence)}</p>`);
+    // Owner (Oct 8): presented like a slide, the opening phrase in bold; the words unchanged.
+    expect(honor.replace(/<[^>]+>/g, "")).toContain(esc(summitNarrative2026.awardsSentence));
+    expect(honor).toMatch(/<p><strong class="[^"]*">Through the Not Alone Awards,<\/strong> we honor the pioneers/);
     expect(awards2026).not.toContain('id="awards-narrative"');
     expect(awards2026).not.toContain("Celebrate mental-health warriors.");
     for (const paragraph of summitNarrative2026.intro) expect(awards2026).not.toContain(esc(paragraph));

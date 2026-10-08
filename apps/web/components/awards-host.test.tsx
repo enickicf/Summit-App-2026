@@ -38,7 +38,8 @@ describe("Awards host feature", () => {
     expect(hero).toContain('id="awards-title"');
     expect(hero).toContain(">RSVP</a>");
     expect(html.match(/href="https:\/\/notaloneawards\.org\/rsvp"/g)).toHaveLength(1);
-    for (const text of ["Encore Theater at Wynn Las Vegas", "Monday, November 2</time>"]) {
+    // Owner (Oct 8): the venue sits in the hero's date block (Summit format), "Encore Theater · Wynn Las Vegas".
+    for (const text of ["Encore Theater · Wynn Las Vegas", "Monday, November 2</time>"]) {
       expect(hero).toContain(text);
       expect(html.slice(html.indexOf('id="awards-honor"'))).not.toContain(text);
     }

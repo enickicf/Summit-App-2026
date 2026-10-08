@@ -22,8 +22,7 @@ const hero = (html: string, title: string) => html.match(new RegExp(`<section[^>
 const escape = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const times = `<span class="${styles.times}" aria-hidden="true">×</span>`;
 // Powered by -> the lockup (label, ICF logo, ×, NAMI logo) -> the next paragraph (the date line).
-// Ryan (Oct 8): on the Awards pages the lockup sits in the hero's right-hand aside, after the Cohen credit.
-const awardsLockupAside = /Powered by<strong>[^]*?<\/p><\/div><div class="[^"]*heroAside[^"]*"><div class="[^"]*presentedBy[^"]*/;
+// Owner (Oct 8): the Awards hero takes the Summit format — the lockup directly under the Cohen credit in the same stack.
 const underPoweredBy = new RegExp(`<p class="[^"]*">Powered by<strong>Steven &amp; Alexandra<br/>Cohen Foundation</strong></p><div class="${escape(styles.presentedBy!)} ${escape(styles.heroSize!)} ">[^]*?>Presented by</span><span class="[^"]*"><img[^>]*alt="Inspiring Children Foundation"[^>]*>${escape(times)}<img[^>]*alt="NAMI, National Alliance on Mental Illness"[^>]*></span></div>`); // Ryan (Oct 8): the Summit date line now sits in the hero's bottom-right aside, after the lockup
 
 describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards times", () => {
@@ -43,8 +42,9 @@ describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards tim
     const awardsHero = hero(awards, "awards-title");
     const summitHero = hero(summit, "summit-title");
     expect(summitHero).toMatch(underPoweredBy);
-    // Ryan (Oct 8): on the Awards page the lockup sits in the hero's right-hand aside, still after the Cohen credit.
-    expect(awardsHero).toMatch(awardsLockupAside);
+    // Owner (Oct 8): the Awards hero copies the Summit format exactly: the lockup directly under the Cohen credit.
+    expect(awardsHero).toMatch(underPoweredBy);
+    expect(awardsHero).not.toContain("heroAside");
     for (const html of [awardsHero, summitHero]) {
       expect(html.match(/Presented by/g)).toHaveLength(1);
       expect(html.indexOf("<h1 ")).toBeLessThan(html.indexOf("Powered by<strong>"));
@@ -65,11 +65,14 @@ describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards tim
     expect(intro).not.toMatch(/href="#schedule"|introDetails/);
     expect(summit).not.toContain('id="summit-dates"');
     expect(summitHero).not.toContain("heroAside");
+    // Owner (Oct 8): the Awards hero, the same stack — date block above the logo, the hero ends on the lockup.
+    expect(awardsHero).toMatch(/<div class="[^"]*heroStack[^"]*"><p class="[^"]*heroEyebrow[^"]*"><time class="[^"]*heroEyebrowDate[^"]*"[^>]*>Monday, November 2, 2026<\/time><span class="[^"]*">Encore Theater · Wynn Las Vegas<\/span><\/p><h1 /);
+    expect(awardsHero).toMatch(/alt="NAMI, National Alliance on Mental Illness"[^>]*><\/span><\/div><\/div>$/);
     // The 2025 archive heroes carry no lockup.
     expect(hero(renderToStaticMarkup(<OriginalSummitPage year={2025} snapshot={event2026Snapshot} />), "summit-title")).not.toContain("Presented by");
     expect(hero(renderToStaticMarkup(<OriginalAwardsPage year={2025} snapshot={event2026Snapshot} program={program} />), "awards-title")).not.toContain("Presented by");
     // The private partner copies render the same hero.
-    expect(hero(renderToStaticMarkup(<OriginalAwardsPage year={2026} snapshot={event2026Snapshot} program={program} rsvpUrl="https://notaloneawards.org/rsvp/nami-9wvfjfkt40dd" />), "awards-title")).toMatch(awardsLockupAside);
+    expect(hero(renderToStaticMarkup(<OriginalAwardsPage year={2026} snapshot={event2026Snapshot} program={program} rsvpUrl="https://notaloneawards.org/rsvp/nami-9wvfjfkt40dd" />), "awards-title")).toMatch(underPoweredBy);
   });
 
   it("opens the Awards mission with the presenters, in the owner's exact words", () => {

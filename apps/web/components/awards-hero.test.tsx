@@ -11,7 +11,7 @@ const times = (snapshot = event2026Snapshot) => awardsHeroTimes(awardsPromotiona
 const page = (snapshot = event2026Snapshot, published = true) => renderToStaticMarkup(
   <OriginalAwardsPage year={2026} snapshot={snapshot} program={{ ...program, published }} />
 );
-// Ryan (Oct 8): the opening = the hero (logo, Cohen credit, lockup on the right) plus the details band under it
+// Owner (Oct 8): the opening = the hero (the Summit format: date block, logo, Cohen credit, lockup) plus the details band under it
 // (date, doors/show times, RSVP + Info, schedule link, iHeartRadio), which ends where the Awards sentence starts.
 const hero = (snapshot = event2026Snapshot, published = true) => { const html = page(snapshot, published); return html.slice(html.indexOf('aria-labelledby="awards-title"'), html.indexOf('id="awards-honor"')); };
 // Owner (Oct 7 meeting): the hero shows Doors Open 6:30 PM and the Awards Show start 7:30 PM; the rest of the evening sits below it; no Pre-Show anywhere.
@@ -40,10 +40,11 @@ describe("Awards opening presentation", () => {
       { label: "Awards Show", time: "8:00 PM-10:00 PM" }
     ]);
     const html = hero();
-    // Owner (Sept 21, late): no "2026" label in the hero; the date omits the year.
+    // Owner (Sept 21, late): no "2026" label in the hero. Owner (Oct 8): the hero's date block (Summit format) carries the
+    // full date with the year; the details card under it names the date only.
     expect(html).not.toContain(">2026</span>");
     expect(html).toContain("Monday, November 2</time>");
-    expect(html).not.toContain("Monday, November 2, 2026");
+    expect(html.match(/Monday, November 2, 2026<\/time>/g)).toHaveLength(1);
     // Owner (Oct 7 meeting): the hero's timing line is Doors Open 6:30 and the Awards Show start 7:30; the full run sits in "The Evening".
     expect(html).toContain('<dl class="' + styles.heroScheduleTimes + '" aria-label="Doors and Awards Show start"><div><dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>7:30 PM</dd></div></dl>');
     expect(html).not.toMatch(/Nevada Day|Community Day|Pre-Show|7:30 PM-10:00 PM|8:00 PM/);
@@ -72,8 +73,11 @@ describe("Awards opening presentation", () => {
     // Oct 7 meeting: directly under the Cohen credit, joined by a ×); no still of the film: the hero opens on a
     // plain color and the film cross-fades in once it is really playing.
     expect(html.match(/<img /g)).toHaveLength(5); // Wynn scene, Awards logo, ICF + NAMI, iHeartRadio
-    // Ryan (Oct 8): the lockup sits in the hero's right-hand aside after the Cohen credit; the date line opens the details band.
-    expect(html).toMatch(/<\/h1><p class="[^"]*">Powered by<strong>Steven &amp; Alexandra<br\/>Cohen Foundation<\/strong><\/p><\/div><div class="[^"]*heroAside[^"]*"><div class="[^"]*">[^]*?Presented by[^]*?alt="Inspiring Children Foundation"[^]*?aria-hidden="true">×<\/span>[^]*?alt="NAMI, National Alliance on Mental Illness"[^]*?<\/div><\/div>[^]*?<p class="[^"]*"><time/);
+    // Owner (Oct 8): the Summit hero's format — one left stack: date block, logo, Cohen credit, then the lockup, which
+    // ends the hero; no right-hand aside. The date line then opens the details band.
+    expect(html).toMatch(/^[^]*?<div class="[^"]*heroStack[^"]*"><p class="[^"]*heroEyebrow[^"]*"><time class="[^"]*heroEyebrowDate[^"]*"[^>]*>Monday, November 2, 2026<\/time><span class="[^"]*heroDateVenue[^"]*">Encore Theater · Wynn Las Vegas<\/span><\/p><h1 id="awards-title"/);
+    expect(html).toMatch(/<\/h1><p class="[^"]*">Powered by<strong>Steven &amp; Alexandra<br\/>Cohen Foundation<\/strong><\/p><div class="[^"]*">[^]*?Presented by[^]*?alt="Inspiring Children Foundation"[^]*?aria-hidden="true">×<\/span>[^]*?alt="NAMI, National Alliance on Mental Illness"[^]*?<\/div><\/div><\/section>[^]*?<p class="[^"]*"><time/);
+    expect(html).not.toContain("heroAside");
     expect(html.indexOf("Presented by")).toBeGreaterThan(html.indexOf('<h1 id="awards-title"'));
     expect(html).not.toContain("hero-awards-start.jpg");
     expect(html).toContain("background:#1c1a2e");

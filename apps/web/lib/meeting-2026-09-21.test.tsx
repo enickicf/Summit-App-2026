@@ -31,7 +31,8 @@ describe("Sept 21 meeting website direction", () => {
     expect([...positions].sort((a, b) => a - b)).toEqual(positions);
     // Owner (Sept 21): broadcast line removed; RSVP button reads just "RSVP"; venue sits with the date.
     expect(awards).not.toContain(escape(awards2026Program.broadcast));
-    expect(awards.indexOf("Monday, November 2, 2026")).toBeLessThan(awards.indexOf("Encore Theater at Wynn Las Vegas"));
+    // Owner (Oct 8): the hero's date block, date over venue (Summit format).
+    expect(awards.indexOf("Monday, November 2, 2026")).toBeLessThan(awards.indexOf("Encore Theater · Wynn Las Vegas"));
     // Owner (Sept 21, late): 2025 awards with descriptions instead of the 2026 category list.
     expect(awards).not.toContain('id="award-categories"');
     expect(awards).toContain("<h3>No Quit Award</h3>");

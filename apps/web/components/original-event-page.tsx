@@ -358,29 +358,37 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
   const eveningTimes = canceled ? [] : awards2026Evening;
   const host = reviewedPeople.find(person => person.name === awards2026Editorial.host);
   return <main id="main-content" tabIndex={-1} className={`${styles.page} ${styles.awards} ${styles.currentAwards}`}>
-    <section className={styles.awardsHero} id="awards-program" aria-labelledby="awards-title">
+    <section className={`${styles.awardsHero} ${styles.awardsHeroStack}`} id="awards-program" aria-labelledby="awards-title">
       <SiteImage className={styles.heroScene} src="/images/wynn-las-vegas.webp" alt="Wynn Las Vegas overlooking its gardens and waterfall" sizes="100vw" loading="eager" fetchPriority="high" />
       {/* Owner (Sept 21): the hero goes straight into the 2025 Awards highlights; the Wynn photo is kept
           only for visitors who ask their device to reduce motion. */}
       <HeroRecap video="awards" poster={null} className={styles.heroVideo} />
-      <div className={styles.heroContent}>
+      {/* Owner (Oct 8): the Summit hero's format, exactly — one left-hand stack: a two-line date block (bold white date,
+          venue in spaced capitals), the Awards logo, the Cohen credit, then the Inspiring Children Foundation × NAMI
+          lockup. Nothing else; the hero is only as tall as its stack. From Nov 6, 2026 the date block reads
+          "2027 — To Be Announced Soon." (lib/event-phase.ts). */}
+      <div className={`${styles.heroContent} ${styles.heroStack}`}>
+        <p className={`${styles.heroDate} ${styles.heroEyebrow}`}>{isPostEvent() ? postEventLabel : <>{show && !canceled
+          ? <time className={styles.heroEyebrowDate} dateTime={show.startUtc}>{withoutYear(date, 2026)}, 2026</time>
+          : <span className={styles.heroEyebrowDate}>{canceled ? date : `${withoutYear(date, 2026)}${/to be confirmed/i.test(date) ? "" : ", 2026"}`}</span>}
+          <span className={styles.heroDateVenue}>{venue.replace(/ at /i, " · ")}</span></>}</p>
         <h1 id="awards-title" className={styles.awardsLogo}>
           <SiteImage src="/images/na-awards-logo-white.png" alt="" sizes="(max-width: 600px) 180px, 250px" loading="eager" fetchPriority="high" />
           <span className={styles.hidden}>Not Alone Awards 2026</span>
         </h1>
         <PoweredBy className={styles.heroPowered} />
+        <PresentedBy size="hero" />
       </div>
-      {/* Ryan (Oct 8): the "Presented by" Inspiring Children Foundation × NAMI lockup sits on the right side of the hero;
-          the date, the times and the RSVP / Info buttons moved down into the iHeartRadio band. */}
-      <div className={styles.heroAside}><PresentedBy size="hero" /></div>
       {!/wynn las vegas/i.test(venue) && <div className={styles.heroFootnote}><p>Wynn Las Vegas · 2025 venue</p></div>}
     </section>
-    {/* Ryan (Oct 8): the broadcast band carries the evening's details on the left (date and venue, doors and show
-        time, RSVP + Info, the schedule link) and the iHeartRadio logo with the stream button on the right. */}
+    {/* Ryan (Oct 8): the broadcast band carries the evening's details (date, doors and show time, RSVP + Info, the
+        schedule link). Owner (Oct 8): the details card on the left and the iHeartRadio block, larger, to the right of
+        centre so it takes most of the band; together they fill the page measure (a 5:7 grid, not a mirror image). */}
     <section className={`${styles.band} ${styles.iheartBand}`} id="broadcast" aria-labelledby="broadcast-title">
       <div className={styles.broadcastDetails}>
-        {/* Owner (Sept 23): from Nov 6, 2026 the date line reads "2027 — To Be Announced Soon." automatically. */}
-        <p className={styles.heroDate}>{isPostEvent() ? postEventLabel : <>{show && !canceled ? <time dateTime={show.startUtc}>{withoutYear(date, 2026)}</time> : withoutYear(date, 2026)}<span className={styles.heroDateVenue}> · {venue}</span></>}</p>
+        {/* Owner (Sept 23): from Nov 6, 2026 the date line reads "2027 — To Be Announced Soon." automatically. The venue
+            is in the hero right above, so the card names the date only. */}
+        <p className={styles.heroDate}>{isPostEvent() ? postEventLabel : show && !canceled ? <time dateTime={show.startUtc}>{withoutYear(date, 2026)}</time> : withoutYear(date, 2026)}</p>
         {/* Owner (Oct 7): doors and the show time (Aphrah's times); the rest of the evening is further down. */}
         {show && !canceled && <dl className={styles.heroScheduleTimes} aria-label="Doors and Awards Show start"><div><dt>Doors Open</dt><dd>{awardsDoorsOpen2026}</dd></div><div><dt>Awards Show</dt><dd>{awardsShowStart2026}</dd></div></dl>}
         {!canceled && show && !/to be confirmed/i.test(show.eligibilityScope.label) && <p className={styles.heroInvitation}>{show.eligibilityScope.label}</p>}
@@ -398,9 +406,11 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
         </a>
       </div>
     </section>
-    {/* Ryan (Oct 8): the Awards sentence of the narrative, right after the broadcast band, word for word. */}
+    {/* Ryan (Oct 8): the Awards sentence of the narrative, right after the broadcast band, word for word. Owner (Oct 8):
+        presented like a slide — a champagne band, large centred type, the opening phrase in bold. */}
     <section className={`${styles.band} ${styles.awardsHonor}`} id="awards-honor" aria-label="About the Not Alone Awards">
-      <p>{summitNarrative2026.awardsSentence}</p>
+      {(() => { const sentence = summitNarrative2026.awardsSentence; const cut = sentence.indexOf(",") + 1;
+        return <p>{cut > 0 ? <><strong className={styles.awardsHonorLede}>{sentence.slice(0, cut)}</strong>{sentence.slice(cut)}</> : sentence}</p>; })()}
     </section>
     <AwardsGuestDirectory people={displayPeople} available={available} />
     {/* Owner (Sept 21): last year's mission statement (ICF's Awards page) stays here. Owner (Oct 7 meeting): its

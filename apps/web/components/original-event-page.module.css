@@ -555,30 +555,61 @@
 /* Owner (Oct 5): on phones the Awards lettering starts right under the menu (no 120px empty band). */
 @media (max-width: 600px) { .currentAwards .awardsHero { padding-top: 28px; } }
 
-/* Ryan (Oct 8): Awards hero — the Presented-by lockup on the right side; the evening's details live in the broadcast
-   band below (left), with the iHeartRadio logo and stream button on the right. */
-.currentAwards .awardsHero .heroAside { position: absolute; right: max(32px, calc((100% - 1240px) / 2)); top: 50%; transform: translateY(-50%); z-index: 1; display: flex; flex-direction: column; align-items: flex-end; text-align: right; text-shadow: 0 2px 18px #0009; }
-/* Owner (Oct 8): iHeartRadio stays front and centre of the band (kicker, big logo, stream button in the middle, as
-   before); the evening's details are a much smaller outlined card on the left. Grid 1fr auto 1fr keeps the iHeart
-   block dead centre whatever the card's width. */
-.currentAwards .iheartBand { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 32px 40px; text-align: center; }
-.currentAwards .broadcastDetails { grid-column: 1; justify-self: start; width: 300px; max-width: 100%; padding: 20px 22px 18px; border: 1px solid rgba(241, 223, 187, .38); border-radius: 14px; background: rgba(255, 255, 255, .03); text-align: left; }
-.currentAwards .broadcastDetails .heroDate { margin: 0 0 2px; color: #fff; font-size: 14px; line-height: 1.5; }
-.currentAwards .broadcastDetails .heroScheduleTimes { gap: 12px 22px; margin-top: 12px; max-width: none; }
-.currentAwards .broadcastDetails .heroScheduleTimes dt { font-size: 11px; }
-.currentAwards .broadcastDetails .heroScheduleTimes dd { font-size: 19px; }
-.currentAwards .broadcastDetails .awardsActions { gap: 8px 10px; margin-top: 16px; }
-.currentAwards .broadcastDetails .awardsActions .action { min-height: 38px; padding: 8px 18px; font-size: 13px; font-weight: 800; letter-spacing: .04em; }
-.currentAwards .broadcastDetails .heroScheduleLink, .currentAwards .broadcastDetails .textAction { margin-top: 12px; font-size: 12px; padding: 6px 0; }
-.currentAwards .broadcastStream { grid-column: 2; display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center; }
-.currentAwards .broadcastStream .iheartLogo { width: min(420px, 100%); }
-.currentAwards .awardsHonor { background: #090909; text-align: center; padding-top: 44px; padding-bottom: 52px; }
-.currentAwards .awardsHonor p { max-width: 780px; margin: 0 auto; color: #fff; font-size: clamp(19px, 2.1vw, 25px); line-height: 1.6; text-wrap: pretty; }
+/* Owner (Oct 8): the 2026 Awards hero takes the Summit hero's format exactly (summit-theme.module.css .heroFormat,
+   .heroEyebrow, .heroLogo, .heroPowered): one left-hand stack — two-line date block, logo, Cohen credit, Presented-by
+   lockup — on the page measure, and the hero only as tall as its stack. Colours stay the Awards' (black, white,
+   champagne). Scoped to .awardsHeroStack so the 2025 archive hero is unchanged. */
+.currentAwards .awardsHero.awardsHeroStack { height: auto; min-height: 0; max-height: none; padding: 40px max(24px, calc((100% - 1180px) / 2)) 34px; align-items: center; }
+.currentAwards .awardsHero.awardsHeroStack::after { background: linear-gradient(90deg, #000000d9, #0000008c 45%, #00000026 78%), linear-gradient(0deg, #00000099, transparent 38%); }
+.currentAwards .awardsHeroStack .heroStack { width: auto; max-width: 920px; text-shadow: 0 2px 18px #0009; }
+/* Two-line date block above the logo: the date in bold white capitals, the venue in champagne spaced capitals. The
+   Awards date line is longer than the Summit's ("MONDAY, NOVEMBER 2, 2026"), so it is set a step smaller to keep the
+   Summit's proportion — about as wide as the "Steven & Alexandra" credit line. */
+.currentAwards .awardsHeroStack .heroEyebrow { margin: 0 0 14px; color: #fff; font-size: inherit; line-height: 1.2; letter-spacing: 0; text-transform: none; }
+.currentAwards .awardsHeroStack .heroEyebrow .heroEyebrowDate { display: block; color: #fff; font-size: clamp(19px, 1.6vw, 23px); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.currentAwards .awardsHeroStack .heroEyebrow .heroDateVenue { display: block; margin-top: 8px; color: #f1dfbb; font-size: 13px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; }
+.currentAwards .awardsHeroStack .awardsLogo { margin: 0 0 14px; line-height: 0; }
+.currentAwards .awardsHeroStack .awardsLogo img { width: 195px; max-width: 60vw; }
+.currentAwards .awardsHeroStack .heroPowered { margin: 0 0 26px; }
+.currentAwards .awardsHeroStack .heroPowered strong { font-size: clamp(28px, 2.5vw, 36px); }
+@media (min-width: 601px) and (max-height: 800px) { .currentAwards .awardsHeroStack .awardsLogo img { width: 195px; } }
+@media (max-width: 600px) {
+  .currentAwards .awardsHero.awardsHeroStack { padding: 28px 22px 30px; }
+  .currentAwards .awardsHeroStack .heroEyebrow { margin-bottom: 12px; }
+  .currentAwards .awardsHeroStack .heroEyebrow .heroEyebrowDate { font-size: 17px; }
+  .currentAwards .awardsHeroStack .heroEyebrow .heroDateVenue { margin-top: 6px; font-size: 11px; letter-spacing: .18em; }
+  .currentAwards .awardsHeroStack .awardsLogo img { width: 140px; }
+  .currentAwards .awardsHeroStack .heroPowered { margin-bottom: 20px; }
+  .currentAwards .awardsHeroStack .heroPowered strong { font-size: 26px; }
+}
+
+/* Owner (Oct 8): broadcast band — the evening's details card on the left, the iHeartRadio block (larger) to the right of
+   centre taking most of the band; the two fill the page measure (.band: 1180px) in a 5:7 grid, so it is neither a
+   mirror-image 50/50 nor a block floating mid-page with a gap on the right. Phones: iHeart first, the card under it. */
+.currentAwards .iheartBand { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; gap: 32px 56px; text-align: center; }
+.currentAwards .broadcastDetails { grid-column: 1; justify-self: start; box-sizing: border-box; width: 370px; max-width: 100%; padding: 26px 28px 22px; border: 1px solid rgba(241, 223, 187, .38); border-radius: 16px; background: rgba(255, 255, 255, .03); text-align: left; }
+.currentAwards .broadcastDetails .heroDate { margin: 0 0 2px; color: #fff; font-size: 16px; font-weight: 600; line-height: 1.5; }
+.currentAwards .broadcastDetails .heroScheduleTimes { gap: 12px 30px; margin-top: 14px; max-width: none; }
+.currentAwards .broadcastDetails .heroScheduleTimes dt { font-size: 12px; }
+.currentAwards .broadcastDetails .heroScheduleTimes dd { font-size: 22px; }
+.currentAwards .broadcastDetails .awardsActions { flex-wrap: nowrap; gap: 10px 12px; margin-top: 20px; }
+.currentAwards .broadcastDetails .awardsActions .action, .currentAwards .broadcastDetails .infoButton { width: auto; flex: 1 1 0; height: 44px; min-height: 0; padding: 0 18px; font-size: 14px; font-weight: 800; letter-spacing: .04em; }
+.currentAwards .broadcastDetails .heroScheduleLink { margin-top: 14px; font-size: 13px; padding: 6px 0; }
+.currentAwards .broadcastStream { grid-column: 2; display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
+.currentAwards .broadcastStream .iheartLogo { width: min(540px, 100%); }
+@media (max-width: 1100px) and (min-width: 901px) { .currentAwards .iheartBand { gap: 32px 40px; } .currentAwards .broadcastStream .iheartLogo { width: min(460px, 100%); } }
 @media (max-width: 900px) {
-  /* Phones/tablets: the lockup is a full-width row under the copy, never a squeezed second column. */
-  .currentAwards .awardsHero { flex-wrap: wrap; }
-  .currentAwards .awardsHero .heroAside { position: static; transform: none; flex: 1 1 100%; align-items: flex-start; text-align: left; margin-top: 18px; }
   .currentAwards .iheartBand { grid-template-columns: minmax(0, 1fr); gap: 28px; justify-items: center; }
   .currentAwards .broadcastStream { grid-column: 1; grid-row: 1; }
-  .currentAwards .broadcastDetails { grid-column: 1; grid-row: 2; justify-self: center; width: 320px; }
+  .currentAwards .broadcastStream .iheartLogo { width: min(420px, 78vw); }
+  .currentAwards .broadcastDetails { grid-column: 1; grid-row: 2; justify-self: center; width: 340px; }
 }
+@media (max-width: 380px) { .currentAwards .broadcastDetails { padding: 22px 20px 18px; } }
+
+/* Owner (Oct 8): the Awards mission sentence reads like a presentation slide, not a line of document text — a full-width
+   champagne band against the black page, large centred near-black type, the opening phrase bold and the rest semi-bold,
+   balanced lines (the site loads Poppins 400/500/700, so the rest is set in 500 against the 700 lede) (after the Summit's #about-summit narrative band, made more prominent). Words unchanged. */
+.currentAwards .awardsHonor { background: #f1dfbb; text-align: center; padding-top: 48px; padding-bottom: 48px; }
+.currentAwards .awardsHonor p { max-width: 900px; margin: 0 auto; color: #17141a; font-size: clamp(24px, 2.6vw, 34px); font-weight: 500; line-height: 1.35; letter-spacing: -0.01em; text-wrap: balance; }
+.currentAwards .awardsHonor .awardsHonorLede { font-weight: 700; }
+@media (max-width: 600px) { .currentAwards .awardsHonor { padding-top: 36px; padding-bottom: 36px; } .currentAwards .awardsHonor p { font-size: 22px; } }
