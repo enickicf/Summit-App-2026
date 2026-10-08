@@ -58,11 +58,10 @@ describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards tim
     expect(details.indexOf("</time>")).toBeLessThan(details.indexOf("<dl"));
     // Owner (Oct 8): date + venue eyebrow above the logo; the hero ends on the lockup; no schedule button up top and
     // the headline band holds the headline alone.
-    expect(summitHero).toMatch(/<div class="[^"]*heroCopy[^"]*"><h1 /); // Oct 8: hero is logos only
-    expect(summitHero).not.toMatch(/November 2|Wynn Las Vegas/);
+    expect(summitHero).toMatch(/<div class="[^"]*heroCopy[^"]*"><p class="[^"]*heroEyebrow[^"]*">November 2–4, 2026<span class="[^"]*"> · Wynn Las Vegas<\/span><\/p><h1 /); // Oct 8: dates up top
     expect(summitHero).toMatch(/alt="NAMI, National Alliance on Mental Illness"[^>]*><\/span><\/div><\/div>$/);
     const intro = summit.slice(summit.indexOf('id="about"'), summit.indexOf('id="directory"'));
-    expect(intro).toMatch(/<\/h2><p class="[^"]*introDateLine[^"]*">November 2–4, 2026<span class="[^"]*introDot[^"]*" aria-hidden="true">·<\/span><span class="[^"]*introDateVenue[^"]*">Wynn Las Vegas<\/span><\/p><\/section>/);
+    expect(intro).not.toMatch(/introDateLine|November 2/); // the band holds the headline alone
     expect(intro).not.toMatch(/href="#schedule"|introDetails/);
     expect(summit).not.toContain('id="summit-dates"');
     expect(summitHero).not.toContain("heroAside");
