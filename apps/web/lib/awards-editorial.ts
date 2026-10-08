@@ -5,11 +5,13 @@ export const awards2026Editorial = {
   venue: "Encore Theater at Wynn Las Vegas",
   foundation: "Steven & Alexandra Cohen Foundation",
   date: "Monday, November 2, 2026",
-  // NAS web meeting, September 21, 2026 (Ryan/Offra). Supersedes the Sept 17 7:00 PM pre-show
-  // correction. A published staff session with the same title always wins over these lines.
+  // Owner (Oct 7 meeting): publicly the evening is Doors Open 6:30 PM and the Awards Show 7:30–10:00 PM; no
+  // Pre-Show is announced anywhere (supersedes the Sept 21 / Oct 7 Pre-Show lines). These legacy corrections apply
+  // only to the old published program notes (lib/awards-program.ts); a published staff session with the same title
+  // always wins over these lines, so the Awards Show entry documents the owner's time until a new revision is published.
   eveningTimes: [
     { label: "Doors Open", time: "6:30 PM" },
-    { label: "Pre-Show", time: "7:30-8:00 PM" }
+    { label: "Awards Show", time: "7:30-10:00 PM" }
   ],
   // Owner (Sept 21, later): the Awards hero says only "Doors open 6:00 PM"; the rest of the evening
   // is listed further down the page.
@@ -45,12 +47,11 @@ export const awards2025Winners = [
 ] as const;
 
 // Owner (Sept 21, late): the Awards page's "The Evening" block, exactly as the owner wrote it.
-// Aphrah (Oct 7, 2026; Airtable run of show): Doors 6:30, Pre-Show 7:30, Awards Show 8:00-10:00 at the Encore Theater.
+// Owner (Oct 7 meeting): Doors Open 6:30 PM, Awards Show 7:30 PM-10:00 PM at the Encore Theater; no Pre-Show row.
 // Community Day (now Nevada Mental Health Day, daytime, in the Margaux ballroom) is no longer on the Awards page.
 export const awards2026Evening = [
   { label: "Doors Open", time: "6:30 PM" },
-  { label: "Pre-Show", time: "7:30 PM" },
-  { label: "Awards Show", time: "8:00 PM-10:00 PM" }
+  { label: "Awards Show", time: "7:30 PM-10:00 PM" }
 ] as const;
 
 // Sept 21 meeting direction, using ICF's own published wording (inspiringchildren.org/awards).

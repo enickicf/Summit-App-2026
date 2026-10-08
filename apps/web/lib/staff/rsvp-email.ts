@@ -10,12 +10,14 @@ type Plan = "both" | "awards" | "communityDay";
 const planFor = (guest: { attending?: RsvpAttending | undefined; communityDay: boolean }): Plan => guest.attending === "community-day" ? "communityDay" : wantsCommunityDay(guest) ? "both" : "awards";
 export type RenderedEmail = { subject: string; text: string; html: string };
 
-// Aphrah (Oct 7, 2026; Airtable run of show): Nevada Mental Health Day (Community Day) runs in the daytime: Wellness &
-// Check-In 12–3 PM, Summit Sessions 3:30–6:30 PM; the Awards Show follows at the Encore Theater: doors 6:30, Pre-Show
-// 7:30, show 8:00–10:00 PM.
-const evening = "Wellness & Check-In 12–3 PM · Summit Sessions 3:30–6:30 PM · Awards Show doors 6:30 PM · Awards Show 8:00–10:00 PM";
-const showOnlyEvening = "Doors open 6:30 PM · Pre-Show 7:30 PM · Awards Show 8:00–10:00 PM";
-const communityDayOnlyEvening = "Wellness & Check-In 12–3 PM · Summit Sessions 3:30–6:30 PM";
+// Owner (Oct 7 meeting): Nevada Mental Health Day (Community Day) runs in the daytime: Wellness & Check-In 12–3 PM,
+// Summit Sessions 3:30–6:30 PM; the Awards Show follows at the Encore Theater: Doors 6:30 PM, Awards Show 7:30–10:00 PM.
+// No Pre-Show is announced in any variant.
+const awardsEvening = "Doors 6:30 PM · Awards Show 7:30–10:00 PM";
+const dayTimes = "Wellness & Check-In 12–3 PM · Summit Sessions 3:30–6:30 PM";
+const evening = `${dayTimes} · ${awardsEvening}`;
+const showOnlyEvening = awardsEvening;
+const communityDayOnlyEvening = dayTimes;
 // Owner (Oct 4, 2026): a guest who asked for Community Day is confirmed for Community Day and the Not Alone
 // Awards Show; everyone else for the Not Alone Awards Show only.
 const eventsFor = (plan: Plan) => plan === "both" ? "Community Day and the Not Alone Awards Show" : plan === "communityDay" ? "Community Day" : "the Not Alone Awards Show";

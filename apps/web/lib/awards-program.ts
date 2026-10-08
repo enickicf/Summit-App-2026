@@ -71,6 +71,9 @@ export function awardsPromotionalProgram(body: string, snapshot: EventSnapshot |
     // Correct only the reviewed legacy notes on the owner-specified date. A later published
     // session or moved show always wins over this editorial correction.
     const label = line.slice(0, Math.max(0, line.indexOf(":")));
+    // Owner (Oct 7 meeting): no Pre-Show is announced publicly, so the legacy pending note ("Pre-Show: 7:30 PM; end
+    // time to be confirmed.") leaves the promotional text entirely. A Pre-Show session staff actually publish still wins.
+    if (label === "Pre-Show" && !publishedTitles.has("Pre-Show")) return [];
     const correction = corrections.find(entry => entry.label === label);
     if (correction && /^(Doors Open: 6:30 PM|Pre-Show: 7:30 PM)(?:; end time to be confirmed\.)?$/.test(line)) {
       corrected.add(label);

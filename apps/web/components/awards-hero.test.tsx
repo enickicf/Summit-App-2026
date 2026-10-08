@@ -13,7 +13,7 @@ const page = (snapshot = event2026Snapshot, published = true) => renderToStaticM
 );
 const hero = (snapshot = event2026Snapshot, published = true) => page(snapshot, published)
   .match(/<section[^>]*aria-labelledby="awards-title"[^>]*>([\s\S]*?)<\/section>/)![1]!;
-// Owner (Oct 7, Aphrah's times): the hero shows Doors Open 6:30 PM and the Awards Show start 8:00 PM; the rest of the evening sits below it.
+// Owner (Oct 7 meeting): the hero shows Doors Open 6:30 PM and the Awards Show start 7:30 PM; the rest of the evening sits below it; no Pre-Show anywhere.
 const schedule = (snapshot = event2026Snapshot, published = true) => page(snapshot, published)
   .match(/<section[^>]*id="evening"[^>]*>[\s\S]*?<dl>([\s\S]*?)<\/dl>/)?.[1] ?? "";
 
@@ -31,10 +31,11 @@ describe("Awards opening presentation", () => {
   });
 
   it("shows doors and the Awards Show start in the hero and the rest of the evening below, without the red carpet", () => {
+    // Owner (Oct 7 meeting): the legacy Pre-Show note is gone from the promotional program; the Awards Show line still
+    // follows the published session (revision 9 says 8:00-10:00 until staff publish the 7:30 start).
     expect(times()).toEqual([
       { label: "Red Carpet", time: "6:15 PM-7:30 PM" },
       { label: "Doors Open", time: "6:30 PM" },
-      { label: "Pre-Show", time: "7:30-8:00 PM" },
       { label: "Awards Show", time: "8:00 PM-10:00 PM" }
     ]);
     const html = hero();
@@ -42,16 +43,16 @@ describe("Awards opening presentation", () => {
     expect(html).not.toContain(">2026</span>");
     expect(html).toContain("Monday, November 2</time>");
     expect(html).not.toContain("Monday, November 2, 2026");
-    // Owner (Oct 7): the hero's timing line is Doors Open 6:30 and the Awards Show start 8:00; the full evening sits in "The Evening".
-    expect(html).toContain('<dl class="' + styles.heroScheduleTimes + '" aria-label="Doors and Awards Show start"><div><dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>8:00 PM</dd></div></dl>');
-    expect(html).not.toMatch(/Nevada Day|Community Day|Pre-Show|8:00 PM-10:00 PM/);
-    // Aphrah (Oct 7): "The Evening" shows exactly three lines; Community Day is no longer part of it.
+    // Owner (Oct 7 meeting): the hero's timing line is Doors Open 6:30 and the Awards Show start 7:30; the full run sits in "The Evening".
+    expect(html).toContain('<dl class="' + styles.heroScheduleTimes + '" aria-label="Doors and Awards Show start"><div><dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>7:30 PM</dd></div></dl>');
+    expect(html).not.toMatch(/Nevada Day|Community Day|Pre-Show|7:30 PM-10:00 PM|8:00 PM/);
+    // Owner (Oct 7 meeting): "The Evening" shows exactly two lines (Doors Open, Awards Show); no Pre-Show, no Community Day.
     const evening = schedule();
     expect(evening).toContain("<dt>Doors Open</dt><dd>6:30 PM</dd>");
-    expect(evening).toContain("<dt>Pre-Show</dt><dd>7:30 PM</dd>");
-    expect(evening).toContain("<dt>Awards Show</dt><dd>8:00 PM-10:00 PM</dd>");
-    expect(evening).not.toContain("Community Day");
-    expect(evening.match(/<dt>/g)).toHaveLength(3);
+    expect(evening).toContain("<dt>Awards Show</dt><dd>7:30 PM-10:00 PM</dd>");
+    expect(evening).not.toMatch(/Pre-Show|8:00 PM|Community Day/);
+    expect(evening.match(/<dt>/g)).toHaveLength(2);
+    expect(page()).not.toMatch(/Pre-Show|8:00 PM/);
     expect(page()).not.toContain("Red Carpet");
     expect(page()).toContain('<h2 id="evening-title">The Evening</h2>');
     expect(page().indexOf('id="awards-program"')).toBeLessThan(page().indexOf('id="evening"'));
@@ -66,11 +67,12 @@ describe("Awards opening presentation", () => {
     // Sept 21 meeting: the foundation credit sits directly under the ICF Awards logo, larger than before.
     expect(html).toContain("/images/na-awards-logo-white.png");
     expect(html).toMatch(/na-awards-logo-white[^]*<\/h1><p class="[^"]*">Powered by<strong>Steven &amp; Alexandra Cohen Foundation<\/strong><\/p>/);
-    // The Wynn photo (reduced motion only), the "Presented by" ICF and NAMI logos (owner, Oct 5) and the
-    // Awards logo; no still of the film: the hero opens on a plain color and the film cross-fades in once
-    // it is really playing.
+    // The Wynn photo (reduced motion only), the Awards logo and the "Presented by" ICF × NAMI logos (owner, Oct 5;
+    // Oct 7 meeting: directly under the Cohen credit, joined by a ×); no still of the film: the hero opens on a
+    // plain color and the film cross-fades in once it is really playing.
     expect(html.match(/<img /g)).toHaveLength(4);
-    expect(html).toMatch(/Presented by[^]*alt="Inspiring Children Foundation"[^]*alt="NAMI, National Alliance on Mental Illness"[^]*<h1 id="awards-title"/);
+    expect(html).toMatch(/<\/h1><p class="[^"]*">Powered by<strong>Steven &amp; Alexandra Cohen Foundation<\/strong><\/p><div class="[^"]*">[^]*?Presented by[^]*?alt="Inspiring Children Foundation"[^]*?aria-hidden="true">×<\/span>[^]*?alt="NAMI, National Alliance on Mental Illness"[^]*?<\/div><p class="[^"]*"><time/);
+    expect(html.indexOf("Presented by")).toBeGreaterThan(html.indexOf('<h1 id="awards-title"'));
     expect(html).not.toContain("hero-awards-start.jpg");
     expect(html).toContain("background:#1c1a2e");
     // The hero's second button is Info (scrolls to the mission + schedule); a smaller schedule link sits under it.
@@ -106,9 +108,9 @@ describe("Awards opening presentation", () => {
     expect(page(snapshot)).not.toContain('id="evening"');
     expect(awardsHeroTimes(null, null)).toEqual([]);
     const withoutProgram = schedule(event2026Snapshot, false);
-    expect(withoutProgram).toContain("8:00 PM-10:00 PM");
-    expect(withoutProgram).not.toMatch(/<dt>(Community Day|Red Carpet)<\/dt>/); // Aphrah (Oct 7): The Evening opens with Doors Open 6:30
-    expect(hero(event2026Snapshot, false)).toContain("<dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>8:00 PM</dd>");
+    expect(withoutProgram).toContain("7:30 PM-10:00 PM");
+    expect(withoutProgram).not.toMatch(/<dt>(Community Day|Red Carpet|Pre-Show)<\/dt>/); // Owner (Oct 7 meeting): The Evening is Doors Open 6:30 and the Awards Show 7:30-10:00
+    expect(hero(event2026Snapshot, false)).toContain("<dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>7:30 PM</dd>");
   });
 
   it("omits an empty timetable when the published snapshot is unavailable", () => {

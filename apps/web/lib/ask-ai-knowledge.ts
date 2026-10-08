@@ -1,7 +1,8 @@
 import type { EventSnapshot } from "@not-alone/validation";
 import { publicLocation } from "./room-privacy";
 import source from "./original-sites.json";
-import { awards2026Editorial } from "./awards-editorial";
+import { awards2026Editorial, awards2026Evening } from "./awards-editorial";
+import { awardsDoorsOpen2026 } from "./event-partners-2026";
 import { directoryPeople } from "./people";
 import { personNameKey } from "./person-portraits";
 import { isFoundersOnly } from "../app/schedule/schedule-presentation";
@@ -41,8 +42,17 @@ export function awardsFactAnswer(question: string): string | null {
   const { host, venue, date } = awards2026Editorial;
   if (/\bhost(s|ed|ing)?\b|\bemcee|\bmc\b/.test(normalized)) return `The 2026 Not Alone Awards are hosted by ${host}, at the ${venue} on ${date}.`;
   if (/\bwhere\b|\bvenue\b|\blocation\b|\bheld\b/.test(normalized)) return `The 2026 Not Alone Awards take place at the ${venue} on ${date}.`;
+  // Owner (Oct 7 meeting): the public evening is Doors Open 6:30 PM and the Awards Show 7:30–10:00 PM; no Pre-Show is
+  // announced. Answered here, before the published program, because the staff app's revision 9 still carries the
+  // old times until a new revision is published.
+  if (/\b(when|what time|time|times|doors?|starts?|starting|begins?|ends?|how long|how late|o'?clock)\b/.test(normalized)) return `The 2026 Not Alone Awards Show is on ${date} at the ${venue}. Doors open ${awardsDoorsOpen2026}; the Awards Show runs ${awardsShowTime2026}.`;
   return null;
 }
+
+const awardsShowTime2026 = awards2026Evening.find(entry => entry.label === "Awards Show")!.time;
+// Owner (Oct 7 meeting): no Pre-Show is announced publicly, so the legacy "Pre-Show: 7:30 PM; end time to be
+// confirmed." pending note never reaches the model (it is still canonical published text elsewhere).
+const withoutPreShow = (body: string) => body.split(/\r?\n/).filter(line => !/^Pre-Show:/i.test(line.trim())).join("\n").replace(/\n{3,}/g, "\n\n").trim();
 
 /** Free answers quoted from ICF's own copy, so common foundation questions never reach the model. */
 export function icfFactAnswer(question: string): string | null {
@@ -91,6 +101,11 @@ export function buildAskAiKnowledge(snapshot: EventSnapshot) {
       venue: awards2026Editorial.venue,
       host: awards2026Editorial.host,
       poweredBy: awards2026Editorial.foundation,
+      presentedBy: "Inspiring Children Foundation × NAMI",
+      // Owner (Oct 7 meeting): the public evening; no Pre-Show is announced.
+      doorsOpen: awardsDoorsOpen2026,
+      awardsShow: awardsShowTime2026,
+      evening: awards2026Evening.map(entry => `${entry.label} ${entry.time}`).join(" · "),
       rsvp: awards2026Editorial.rsvpUrl
     },
     inspiringChildrenFoundation: { overview: icfOverview, taxStatus: icfTaxStatus, program: programCopy, donate: "https://www.inspiringchildren.org/donate", mailingAddress: contactAddress },
@@ -102,7 +117,7 @@ export function buildAskAiKnowledge(snapshot: EventSnapshot) {
       location: publicLocation(item.locationName),
       foundersOnly: isFoundersOnly(item)
     })),
-    pendingNotes: snapshot.contentPages.filter(page => page.published && page.slug.startsWith("schedule-pending")).map(page => page.body),
+    pendingNotes: snapshot.contentPages.filter(page => page.published && page.slug.startsWith("schedule-pending")).map(page => withoutPreShow(page.body)),
     guests: directoryPeople(snapshot).map(person => ({ name: person.name, role: person.role })),
     faqs: snapshot.faqs.filter(faq => faq.published).map(faq => ({ question: faq.question, answer: faq.answer }))
   };
