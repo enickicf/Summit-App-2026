@@ -720,3 +720,4 @@
   .currentAwards .broadcastStream .iheartStream { min-height: clamp(64px, 5vw, 88px); font-size: clamp(18px, 1.5vw, 26px); }
   .currentAwards .broadcastStream .iheartKicker { font-size: clamp(14px, 1.05vw, 18px); }
 }
+@media (min-width: 1100px) { .currentAwards .broadcastDetails { width: clamp(380px, 29vw, 440px); } .currentAwards .broadcastStream { flex: 1 1 auto; max-width: 680px; } }
