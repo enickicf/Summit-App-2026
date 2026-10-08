@@ -245,9 +245,9 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     <section className={`${summitStyles.hero} ${summitStyles.heroFormat}`} aria-labelledby="summit-title">
       <SummitVideo background />
       <div className={summitStyles.heroCopy}>
-        {/* Owner (Oct 8): dates and venue up top, a small spaced-capitals line above the logo (same style as the
-            "Powered by" / "Presented by" labels). From Nov 6, 2026 it reads "2027 — To Be Announced Soon." 2026 only. */}
-        {!archive && <p className={`${summitStyles.heroDate} ${summitStyles.heroEyebrow}`}>{isPostEvent() ? postEventLabel : <>{withoutYear(heroDates.main, year).replace("-", "–")}, {year}<span className={summitStyles.heroDateVenue}> · {venue ?? "Venue to be announced"}</span></>}</p>}
+        {/* Owner (Oct 8): a two-line date block above the logo, about the width of the stack below it: the dates in bold
+            white, the venue in pearl spaced capitals. From Nov 6, 2026 it reads "2027 — To Be Announced Soon." 2026 only. */}
+        {!archive && <p className={`${summitStyles.heroDate} ${summitStyles.heroEyebrow}`}>{isPostEvent() ? postEventLabel : <><span className={summitStyles.heroEyebrowDate}>{withoutYear(heroDates.main, year).replace("-", "–")}, {year}</span><span className={summitStyles.heroDateVenue}>{venue ?? "Venue to be announced"}</span></>}</p>}
         <h1 id="summit-title" className={summitStyles.heroLogo}>
           <SiteImage src="/images/summit-logo.png" alt="" sizes="(max-width: 600px) 170px, 250px" loading="eager" fetchPriority="high" />
           <span className={styles.hidden}>Not Alone Summit {year}</span>
