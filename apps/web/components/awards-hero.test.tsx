@@ -13,7 +13,7 @@ const page = (snapshot = event2026Snapshot, published = true) => renderToStaticM
 );
 // Owner (Oct 8): the opening = the hero (the Summit format: date block, logo, Cohen credit, lockup) plus the details band under it
 // (date, doors/show times, RSVP + Info, schedule link, iHeartRadio), which ends where the Awards sentence starts.
-const hero = (snapshot = event2026Snapshot, published = true) => { const html = page(snapshot, published); return html.slice(html.indexOf('aria-labelledby="awards-title"'), html.indexOf('id="awards-honor"')); };
+const hero = (snapshot = event2026Snapshot, published = true) => { const html = page(snapshot, published); return html.slice(html.indexOf('aria-labelledby="awards-title"'), html.indexOf('id="directory"')); };
 // Owner (Oct 7 meeting): the hero shows Doors Open 6:30 PM and the Awards Show start 7:30 PM; the rest of the evening sits below it; no Pre-Show anywhere.
 const schedule = (snapshot = event2026Snapshot, published = true) => page(snapshot, published)
   .match(/<section[^>]*id="evening"[^>]*>[\s\S]*?<dl>([\s\S]*?)<\/dl>/)?.[1] ?? "";

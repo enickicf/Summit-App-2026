@@ -53,7 +53,7 @@ describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards tim
     }
     // Awards: lockup, then the date/venue line, then doors and the show time.
     // Ryan (Oct 8): the date/venue line, then doors and the show time, live in the details band under the hero.
-    const details = awards.slice(awards.indexOf('id="broadcast"'), awards.indexOf('id="awards-honor"'));
+    const details = awards.slice(awards.indexOf('id="broadcast"'), awards.indexOf('id="directory"'));
     expect(details.indexOf("Monday, November 2</time>")).toBeGreaterThan(-1);
     expect(details.indexOf("</time>")).toBeLessThan(details.indexOf("<dl"));
     // Owner (Oct 8): date + venue eyebrow above the logo; the hero ends on the lockup; no schedule button up top and
@@ -90,7 +90,7 @@ describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards tim
     expect(awards2026Evening).toEqual([{ label: "Doors Open", time: "6:30 PM" }, { label: "Awards Show", time: "7:30 PM-10:00 PM" }]);
     expect(awards2026Editorial.eveningTimes.map(entry => entry.label)).toEqual(["Doors Open", "Awards Show"]);
     expect(awards2026Editorial.eveningTimes.find(entry => entry.label === "Awards Show")!.time).toBe("7:30-10:00 PM");
-    expect(awards.slice(awards.indexOf('id="broadcast"'), awards.indexOf('id="awards-honor"'))).toContain("<div><dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>7:30 PM</dd></div>");
+    expect(awards.slice(awards.indexOf('id="broadcast"'), awards.indexOf('id="directory"'))).toContain("<div><dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>7:30 PM</dd></div>");
     const evening = awards.match(/<section[^>]*id="evening"[^>]*>[\s\S]*?<dl>([\s\S]*?)<\/dl>/)![1]!;
     expect(evening).toBe("<div><dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>7:30 PM-10:00 PM</dd></div>");
     expect(awards).not.toMatch(/Pre-Show|Pre Show|8:00 PM|8:00–10:00|8:00-10:00/);

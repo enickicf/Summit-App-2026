@@ -43,8 +43,13 @@ describe("Summit 2026 narrative (Ryan, Oct 7)", () => {
   });
 
   it("Ryan (Oct 8): only the Awards sentence goes on the Awards page, right after the broadcast band; never the Goals or the quote; 2025 untouched", () => {
-    const honor = awards2026.slice(awards2026.indexOf('id="awards-honor"'), awards2026.indexOf('id="mission"'));
-    expect(awards2026.indexOf('id="awards-honor"')).toBeGreaterThan(awards2026.indexOf('id="broadcast"'));
+    // Owner (Oct 8, approved): the sentence is the broadcast band's headline (no separate band), before the details card
+    // and the iHeartRadio block.
+    const band = awards2026.slice(awards2026.indexOf('id="broadcast"'), awards2026.indexOf('id="directory"'));
+    const honor = band.slice(0, band.indexOf("Doors Open"));
+    expect(awards2026).not.toContain('id="awards-honor"');
+    expect(honor.indexOf("Through the Not Alone Awards,")).toBeGreaterThan(-1);
+    expect(band.indexOf("Through the Not Alone Awards,")).toBeLessThan(band.indexOf("Broadcast live on"));
     // Owner (Oct 8): presented like a slide, the opening phrase in bold; the words unchanged.
     expect(honor.replace(/<[^>]+>/g, "")).toContain(esc(summitNarrative2026.awardsSentence));
     // Owner (Oct 8): exact wording (no "everyday" before "warriors").

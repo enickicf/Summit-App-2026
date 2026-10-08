@@ -71,7 +71,7 @@ describe("source-faithful, year-separated event pages", () => {
     }
     const current = renderToStaticMarkup(<OriginalAwardsPage year={2026} />);
     // Ryan (Oct 8): the RSVP button sits in the details band right under the hero.
-    const program = current.slice(current.indexOf('id="awards-program"'), current.indexOf('id="awards-honor"'));
+    const program = current.slice(current.indexOf('id="awards-program"'), current.indexOf('id="directory"'));
     // Owner (Oct 5): the RSVP form opens in a new tab.
     expect(program).toContain(`href="${url}" target="_blank" rel="noopener" aria-label="RSVP for the Not Alone Awards (opens in a new tab)">RSVP</a>`);
     expect(current.match(new RegExp(`href="${url}"`, "g"))).toHaveLength(1);
