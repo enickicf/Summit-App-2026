@@ -688,3 +688,19 @@
 @media (max-width: 1199px) { .currentAwards .awardsStatementBand p { font-size: 26px; } }
 @media (max-width: 900px) { .currentAwards .awardsStatementBand p { font-size: 24px; } }
 @media (max-width: 600px) { .currentAwards .awardsStatementBand p { font-size: 22px; } }
+
+/* Owner (Oct 8): on computer screens the band is side by side again — the schedule box left, iHeartRadio right — as one
+   centred group with a modest gap (no wide empty gap between them), equal heights, and the box's content centred
+   vertically so it never shows an empty bottom. Tablets and phones keep the symmetrical stack above. */
+@media (min-width: 1100px) {
+  .currentAwards .iheartBand { flex-direction: row; justify-content: center; align-items: stretch; gap: 56px; }
+  .currentAwards .broadcastDetails { order: 1; width: 420px; display: flex; flex-direction: column; justify-content: center; padding: 32px 36px; }
+  .currentAwards .broadcastStream { order: 2; width: 600px; justify-content: center; gap: 20px; }
+  .currentAwards .broadcastDetails .heroDate { font-size: 20px; }
+  .currentAwards .broadcastDetails .heroScheduleTimes { margin-top: 18px; }
+  .currentAwards .broadcastDetails .heroScheduleTimes dd { font-size: 32px; }
+  .currentAwards .broadcastDetails .heroScheduleTimes dt { font-size: 15px; }
+  .currentAwards .broadcastDetails .awardsActions { margin-top: 26px; }
+  .currentAwards .broadcastDetails .awardsActions .action, .currentAwards .broadcastDetails .infoButton { height: 54px; font-size: 17px; }
+  .currentAwards .awardsStatementBand p { max-width: 1000px; }
+}
