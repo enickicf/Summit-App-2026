@@ -707,3 +707,16 @@
 @media (min-width: 1100px) {
   .currentAwards .iheartBand > .broadcastDetails, .currentAwards .iheartBand > .broadcastStream { align-self: stretch; }
 }
+/* Owner (Oct 8): the same proportions on every computer screen — the pair scales with the window (box ~29vw,
+   iHeartRadio ~41.5vw, gap ~3.9vw), capped for very wide screens, so it never looks small or spread apart. */
+@media (min-width: 1100px) {
+  .currentAwards .iheartBand { gap: clamp(44px, 3.9vw, 72px); }
+  .currentAwards .broadcastDetails { width: clamp(380px, 29vw, 540px); padding: clamp(28px, 2.3vw, 40px) clamp(30px, 2.5vw, 44px); }
+  .currentAwards .broadcastStream { width: clamp(520px, 41.5vw, 780px); }
+  .currentAwards .broadcastDetails .heroDate { font-size: clamp(18px, 1.4vw, 24px); }
+  .currentAwards .broadcastDetails .heroScheduleTimes dd { font-size: clamp(28px, 2.2vw, 40px); }
+  .currentAwards .broadcastDetails .heroScheduleTimes dt { font-size: clamp(14px, 1.05vw, 18px); }
+  .currentAwards .broadcastDetails .awardsActions .action, .currentAwards .broadcastDetails .infoButton { height: clamp(48px, 3.75vw, 64px); font-size: clamp(15px, 1.2vw, 20px); }
+  .currentAwards .broadcastStream .iheartStream { min-height: clamp(64px, 5vw, 88px); font-size: clamp(18px, 1.5vw, 26px); }
+  .currentAwards .broadcastStream .iheartKicker { font-size: clamp(14px, 1.05vw, 18px); }
+}
