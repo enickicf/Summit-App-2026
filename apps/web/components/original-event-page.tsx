@@ -381,16 +381,20 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
       </div>
       {!/wynn las vegas/i.test(venue) && <div className={styles.heroFootnote}><p>Wynn Las Vegas · 2025 venue</p></div>}
     </section>
-    {/* Ryan (Oct 8): the broadcast band carries the evening's details and the iHeartRadio stream. Owner (Oct 8, approved
-        final): one dark band, two columns of equal height on the page measure, a thin vertical hairline between them —
-        left (about a third): "The Evening" (date, venue, doors and show times, RSVP + Info, the schedule link), no box;
-        right (about two thirds): "Broadcast live on", the iHeartRadio logo, the stream button and, under them, the Awards
-        sentence (only "Not Alone Awards" in gold). No separate sentence band. Phones: the right column first. */}
+    {/* Ryan (Oct 8): the broadcast band carries the evening's details (date, doors and show time, RSVP + Info, the
+        schedule link) and the iHeartRadio stream. Owner (Oct 8, approved): the Awards sentence is the band's headline —
+        centred at the very top of the band (no rule above it), the opening phrase in bold gold — then one clearly asymmetric
+        row: a compact details card on the left margin and the iHeartRadio block taking about two thirds on the right,
+        its right edge on the page margin (never a mirror image). No separate sentence band. */}
     <section className={`${styles.band} ${styles.iheartBand}`} id="broadcast" aria-labelledby="broadcast-title">
+      <div className={styles.broadcastStatement}>
+        {(() => { const sentence = summitNarrative2026.awardsSentence; const cut = sentence.indexOf(",") + 1;
+          return <p>{cut > 0 ? <><strong className={styles.awardsHonorLede}>{sentence.slice(0, cut)}</strong>{sentence.slice(cut)}</> : sentence}</p>; })()}
+      </div>
       <div className={styles.broadcastDetails}>
-        <p className={`${styles.iheartKicker} ${styles.eveningKicker}`}>The Evening</p>
-        {/* Owner (Sept 23): from Nov 6, 2026 the date line reads "2027 — To Be Announced Soon." automatically. */}
-        <p className={styles.heroDate}>{isPostEvent() ? postEventLabel : show && !canceled ? <time dateTime={show.startUtc}>{withoutYear(date, 2026)}</time> : withoutYear(date, 2026)}{!isPostEvent() && <span className={styles.broadcastVenue}>{venue.replace(/ at /i, " · ")}</span>}</p>
+        {/* Owner (Sept 23): from Nov 6, 2026 the date line reads "2027 — To Be Announced Soon." automatically. The venue
+            is in the hero right above, so the card names the date only. */}
+        <p className={styles.heroDate}>{isPostEvent() ? postEventLabel : show && !canceled ? <time dateTime={show.startUtc}>{withoutYear(date, 2026)}</time> : withoutYear(date, 2026)}</p>
         {/* Owner (Oct 7): doors and the show time (Aphrah's times); the rest of the evening is further down. */}
         {show && !canceled && <dl className={styles.heroScheduleTimes} aria-label="Doors and Awards Show start"><div><dt>Doors Open</dt><dd>{awardsDoorsOpen2026}</dd></div><div><dt>Awards Show</dt><dd>{awardsShowStart2026}</dd></div></dl>}
         {!canceled && show && !/to be confirmed/i.test(show.eligibilityScope.label) && <p className={styles.heroInvitation}>{show.eligibilityScope.label}</p>}
@@ -404,11 +408,8 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
         <p className={styles.iheartKicker} id="broadcast-title">Broadcast live on</p>
         <img className={styles.iheartLogo} src="/images/iheartradio-logo-white.svg" alt="iHeartRadio" width={392} height={116} />
         <a className={styles.iheartStream} href={awards2026Editorial.iHeartUrl} target="_blank" rel="noreferrer" aria-label="Stream live on iHeartRadio's YouTube channel (opens in a new tab)">
-          <Play size={18} fill="currentColor" aria-hidden="true" />Stream live on iHeartRadio
+          <Play size={20} fill="currentColor" aria-hidden="true" />Stream live on iHeartRadio
         </a>
-        {/* Ryan (Oct 8): the Awards sentence, word for word; owner (Oct 8): only "Not Alone Awards" in gold. */}
-        {(() => { const sentence = summitNarrative2026.awardsSentence; const name = "Not Alone Awards"; const at = sentence.indexOf(name);
-          return <p className={styles.broadcastStatement}>{at >= 0 ? <>{sentence.slice(0, at)}<strong className={styles.awardsHonorLede}>{name}</strong>{sentence.slice(at + name.length)}</> : sentence}</p>; })()}
       </div>
     </section>
     <AwardsGuestDirectory people={displayPeople} available={available} />
