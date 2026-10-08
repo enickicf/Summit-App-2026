@@ -408,3 +408,11 @@
   .summit .heroCopy .heroEyebrow .heroEyebrowDate { font-size:17px; }
   .summit .heroCopy .heroEyebrow .heroDateVenue { font-size:11px; letter-spacing:.2em; margin-top:4px; }
 }
+/* Measured (Oct 8): the dates line set to the same width as the "Steven & Alexandra" line at every size (it scales with
+   the credit: 27px beside a 32px credit at 1280px, 22px beside 26px on phones); the venue a balanced shorter line. */
+.summit .heroCopy .heroEyebrow .heroEyebrowDate { font-size:clamp(24px,2.11vw,30px); }
+.summit .heroCopy .heroEyebrow .heroDateVenue { margin-top:8px; font-size:16px; letter-spacing:.32em; }
+@media(max-width:600px) {
+  .summit .heroCopy .heroEyebrow .heroEyebrowDate { font-size:22px; }
+  .summit .heroCopy .heroEyebrow .heroDateVenue { margin-top:6px; font-size:13px; letter-spacing:.28em; }
+}
