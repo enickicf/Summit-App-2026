@@ -84,6 +84,7 @@ export function awardsPromotionalProgram(body: string, snapshot: EventSnapshot |
   }).map(line => {
     if (/^(Room,|All times are Pacific\.|Locations and access details|.*complete show lineup will be announced)/i.test(line)) return "";
     if (/^(Doors Open|Pre-Show|Red Carpet|Awards Show): Details to be confirmed/.test(line)) return "";
+    if (/^Red Carpet:/i.test(line)) return ""; // owner (Oct 7): the Red Carpet is never on the website
     return line.replace(/; end time to be confirmed\./gi, "");
   }).filter((line, index, lines) => line.trim() || lines[index - 1]?.trim()).join("\n").trim();
 }
@@ -93,7 +94,8 @@ export function awardsHeroTimes(program: string | null, snapshot: EventSnapshot 
   if (!show || show.status === "canceled") return [];
   const lines = program?.split(/\r?\n/) ?? [];
   const live = airtableOverlay(snapshot)?.schedule;
-  return ["Red Carpet", "Doors Open", "Nevada Day", "Community Day", "Pre-Show", "Awards Show"].flatMap(label => {
+  // Owner (Oct 7): the Red Carpet is never on the website.
+  return ["Doors Open", "Nevada Day", "Community Day", "Pre-Show", "Awards Show"].flatMap(label => {
     // With Airtable's Run of Show, the evening's own sessions supply the times directly.
     const session = live ? snapshot!.scheduleItems.find(item => item.title === label && item.eventId === snapshot!.event.id && awardsDate(item) === awardsDate(show)) : undefined;
     const line = label === "Awards Show" ? programTime(show, show) : session ? programTime(session, show) : lines.find(value => value.startsWith(`${label}: `));

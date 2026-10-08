@@ -33,8 +33,8 @@ describe("Awards opening presentation", () => {
   it("shows doors and the Awards Show start in the hero and the rest of the evening below, without the red carpet", () => {
     // Owner (Oct 7 meeting): the legacy Pre-Show note is gone from the promotional program; the Awards Show line still
     // follows the published session (revision 9 says 8:00-10:00 until staff publish the 7:30 start).
+    // Owner (Oct 7): the Red Carpet is never on the website.
     expect(times()).toEqual([
-      { label: "Red Carpet", time: "6:15 PM-7:30 PM" },
       { label: "Doors Open", time: "6:30 PM" },
       { label: "Awards Show", time: "8:00 PM-10:00 PM" }
     ]);
@@ -126,7 +126,7 @@ describe("Awards opening presentation", () => {
     show.endUtc = "2026-11-04T07:00:00Z";
     expect(times(snapshot)).toContainEqual({ label: "Awards Show", time: "9:00 PM-11:00 PM" });
     expect(times(snapshot).some(item => item.label === "Pre-Show" || item.label === "Doors Open")).toBe(false);
-    expect(times(snapshot).find(item => item.label === "Red Carpet")?.time).toContain("Monday, November 2, 2026");
+    expect(times(snapshot).some(item => item.label === "Red Carpet")).toBe(false); // owner (Oct 7): never on the website
     expect(hero(snapshot)).toContain("Tuesday, November 3</time>");
   });
 

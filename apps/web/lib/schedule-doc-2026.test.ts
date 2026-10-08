@@ -11,7 +11,7 @@ describe("owner's Google Doc schedule (Sept 22), behind SCHEDULE_SOURCE=doc", ()
     vi.stubEnv("AIRTABLE_TOKEN", "");
     vi.stubEnv("SCHEDULE_SOURCE", "");
     const next = await withAirtable({ ...event2026Snapshot, revision: 9 });
-    expect(next.scheduleItems.map(item => item.title)).toContain("Not Alone Awards with iHeartRadio"); // Airtable's title, not the doc's "Awards Show"
+    expect(next.scheduleItems.map(item => item.title)).toContain("Awards Show"); // Airtable's "Not Alone Awards with iHeartRadio" row, shown as "Awards Show"
     expect(next.scheduleItems.map(item => item.title)).not.toContain("Pre-Show");
   });
 

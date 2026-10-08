@@ -52,7 +52,8 @@ export function awardsFactAnswer(question: string): string | null {
 const awardsShowTime2026 = awards2026Evening.find(entry => entry.label === "Awards Show")!.time;
 // Owner (Oct 7 meeting): no Pre-Show is announced publicly, so the legacy "Pre-Show: 7:30 PM; end time to be
 // confirmed." pending note never reaches the model (it is still canonical published text elsewhere).
-const withoutPreShow = (body: string) => body.split(/\r?\n/).filter(line => !/^Pre-Show:/i.test(line.trim())).join("\n").replace(/\n{3,}/g, "\n\n").trim();
+// Owner (Oct 7): the Red Carpet is never on the website either, so Ask AI does not quote it.
+const withoutPreShow = (body: string) => body.split(/\r?\n/).filter(line => !/^(Pre-Show|Red Carpet):/i.test(line.trim())).join("\n").replace(/\n{3,}/g, "\n\n").trim();
 
 /** Free answers quoted from ICF's own copy, so common foundation questions never reach the model. */
 export function icfFactAnswer(question: string): string | null {

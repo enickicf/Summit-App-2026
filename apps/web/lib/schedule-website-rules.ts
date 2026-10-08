@@ -28,7 +28,7 @@ export const scheduleBlockTitles: RegExp[] = [
   /^summit sessions$/i,
   /^lunch$/i,
   /^break$/i,
-  /^dinner\b/i,
+  /^dinner(?:\s*-\s*talent)?$/i, // "Dinner" / "Dinner - talent"; not the closing dinner's "Dinner & Connection" segment
   /^evening talk/i,
   /^closing (?:dinner|celebration)\b(?!.*:)/i, // "Closing Dinner and Performance", not its "Closing Dinner: Welcome" segment
   /^tennis\b/i,
@@ -45,8 +45,13 @@ export function isOnWebsiteSchedule(row: RosVisibility): boolean {
   return scheduleBlockTitles.some(pattern => pattern.test(title));
 }
 
-// Airtable's working labels that read differently on the website (the owner's schedule calls this "Dinner").
-const displayTitles: Array<[RegExp, string]> = [[/^dinner\s*-\s*talent$/i, "Dinner"]];
+// Airtable's working labels that read differently on the website: the owner's schedule calls the talent dinner
+// "Dinner", and the show is "Awards Show" (owner, Oct 7: "just put show, 7:30"); the Awards page's hero, program
+// and Ask AI all key on the title "Awards Show". The iHeartRadio credit has its own band on the Awards page.
+const displayTitles: Array<[RegExp, string]> = [
+  [/^dinner\s*-\s*talent$/i, "Dinner"],
+  [/^not alone awards\b/i, "Awards Show"]
+];
 export function websiteSessionTitle(title: string): string {
   const match = displayTitles.find(([pattern]) => pattern.test(title.trim()));
   return match ? match[1] : title.trim();

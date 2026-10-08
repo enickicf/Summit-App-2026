@@ -325,7 +325,9 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
   const canceled = show?.status === "canceled";
   const date = canceled ? "Awards Show canceled" : show ? awardsDate(show) : "Date to be confirmed";
   const publishedRoom = show?.locationName && !/to be confirmed|pending|tbc|tbd/i.test(show.locationName) ? show.locationName : null;
-  const venue = publishedRoom ?? (snapshot?.event.venueName && !/wynn las vegas/i.test(snapshot.event.venueName) ? snapshot.event.venueName : awards2026Editorial.venue);
+  // Airtable's room for the show is "Encore Theater"; the public venue line keeps the resort ("Encore Theater at Wynn Las Vegas").
+  const venue = publishedRoom && !/^encore theater$/i.test(publishedRoom.trim()) ? publishedRoom
+    : (snapshot?.event.venueName && !/wynn las vegas/i.test(snapshot.event.venueName) ? snapshot.event.venueName : awards2026Editorial.venue);
   const approvedProgram = program?.published ? program : null;
   const programBody = approvedProgram ? awardsPromotionalProgram(approvedProgram.body, snapshot) : null;
   // Owner (Sept 21, late): "The Evening" shows exactly these two lines.

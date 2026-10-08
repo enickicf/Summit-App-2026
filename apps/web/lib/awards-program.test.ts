@@ -10,7 +10,8 @@ describe("Awards copy and canonical schedule", () => {
     const result = awardsPromotionalProgram(body, event2026Snapshot)!;
     // Owner (Oct 7 meeting): Doors 6:30; no Pre-Show publicly; the Awards Show line still follows the published session
     // (revision 9 says 8:00-10:00 until staff publish the 7:30 start); no Nevada Day / Community Day line.
-    expect(result).toContain("Red Carpet: 6:15 PM-7:30 PM\nDoors Open: 6:30 PM\nAwards Show: 8:00 PM-10:00 PM");
+    expect(result).toContain("Doors Open: 6:30 PM\nAwards Show: 8:00 PM-10:00 PM");
+    expect(result).not.toContain("Red Carpet"); // owner (Oct 7): never on the website
     expect(result).not.toContain("Pre-Show");
     expect(result).not.toMatch(/Nevada Day|Community Day|5:30 PM/);
     expect(result).not.toContain("end time to be confirmed");

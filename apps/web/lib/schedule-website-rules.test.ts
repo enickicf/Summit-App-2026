@@ -15,7 +15,7 @@ describe("schedule website rules", () => {
     for (const title of ["Poker Night", "Wellness Activities & Check-In", "Wellness Activity", "Nevada Mental Health Day", "Founders Cocktails", "Founder's Dinner", "Pet Partners Therapy", "Awards Show Doors Open", "Not Alone Awards with iHeartRadio", "Late Night Pickleball + Sauna", "Summit Sessions", "Lunch", "Break", "Dinner - talent", "Evening Talk + Performance/Writer's Round", "Closing Dinner and Performance", "Tennis", "High Tea", "Tennis (ICF Site Visit)"]) {
       expect(isOnWebsiteSchedule({ title }), title).toBe(true);
     }
-    for (const title of ["Ray Lewis: Loss, Purpose & Advocacy", "Fitness 1", "Pilates 2", "Song Break", "Hobbies Panel", "Closing Dinner: Welcome & Appreciation", "Wellness Rooms Open (Approved Hours)", "Auction & Fundraising Appeal"]) {
+    for (const title of ["Ray Lewis: Loss, Purpose & Advocacy", "Fitness 1", "Pilates 2", "Song Break", "Hobbies Panel", "Closing Dinner: Welcome & Appreciation", "Dinner & Connection", "Wellness Rooms Open (Approved Hours)", "Auction & Fundraising Appeal"]) {
       expect(isOnWebsiteSchedule({ title }), title).toBe(false);
       expect(isOnWebsiteSchedule({ title, websitePublic: "Public" }), `${title} marked Public`).toBe(true);
     }
