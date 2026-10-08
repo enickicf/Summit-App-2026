@@ -63,7 +63,21 @@ const partnerLogoFiles: Record<string, string> = {
   "big league wiffleball": "/2026-partners/big-league-wiffleball.png",
   "atlys": "/2026-partners/atlys.png",
   "paul dalio s book": "/2026-partners/paul-dalio-s-book.png",
-  "sugarbearpro": "/2026-partners/sugarbearpro.png"
+  "sugarbearpro": "/2026-partners/sugarbearpro.png",
+  // Oct 7 Airtable re-read: new confirmed partners (sources, licence basis and processing notes in
+  // work/partner-logos-20261007/manifest.json; official files from each brand's own site, white-only
+  // wordmarks recoloured dark for this light page as on Oct 3).
+  "tubby todd": "/2026-partners/tubby-todd.png",
+  "tost": "/2026-partners/tost.png", // Airtable "TÖST": the key drops the diaeresis
+  "nomad sauna": "/2026-partners/nomad-sauna.png",
+  "tape art": "/2026-partners/tape-art.png",
+  "pickleroll": "/2026-partners/pickleroll.png",
+  // Airtable's "Moon Valley Plants" is Moon Valley Nurseries (the Las Vegas nursery); the logo reads Moon Valley Nurseries.
+  "moon valley plants": "/2026-partners/moon-valley-nurseries.png",
+  "moon valley nurseries": "/2026-partners/moon-valley-nurseries.png",
+  // One card for the two By Dzign records; lib/partner-display-2026.ts names it "By Dzign".
+  "by dzign": "/2026-partners/by-dzign.png",
+  "villa bibbiani": "/2026-partners/villa-bibbiani.png"
 };
 
 export function partnerLogoKey(name: string): string {

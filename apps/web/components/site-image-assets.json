@@ -2613,5 +2613,45 @@
     "width": 948,
     "height": 900,
     "bytes": 233750
+  },
+  "/2026-partners/tubby-todd.png": {
+    "width": 800,
+    "height": 271,
+    "bytes": 56249
+  },
+  "/2026-partners/tost.png": {
+    "width": 587,
+    "height": 186,
+    "bytes": 10417
+  },
+  "/2026-partners/nomad-sauna.png": {
+    "width": 590,
+    "height": 190,
+    "bytes": 11195
+  },
+  "/2026-partners/tape-art.png": {
+    "width": 800,
+    "height": 225,
+    "bytes": 30143
+  },
+  "/2026-partners/pickleroll.png": {
+    "width": 800,
+    "height": 125,
+    "bytes": 27675
+  },
+  "/2026-partners/moon-valley-nurseries.png": {
+    "width": 800,
+    "height": 496,
+    "bytes": 163955
+  },
+  "/2026-partners/by-dzign.png": {
+    "width": 800,
+    "height": 255,
+    "bytes": 56148
+  },
+  "/2026-partners/villa-bibbiani.png": {
+    "width": 214,
+    "height": 190,
+    "bytes": 43230
   }
 }

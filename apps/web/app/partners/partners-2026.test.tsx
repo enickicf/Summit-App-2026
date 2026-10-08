@@ -11,7 +11,22 @@ const partners = [
   { recordId: "rec00000000000004", name: "Tool Co", item: "", group: "Vendors", status: "Confirmed" },
   // The two Airtable Sponsors, in Airtable's own order (Oct 3 re-read).
   { recordId: "rec00000000000005", name: "Fanatics Foundation", item: "", group: "Sponsors", status: "Confirmed" },
-  { recordId: "rec00000000000006", name: "Resonance Foundation", item: "", group: "Sponsors", status: "Confirmed" }
+  { recordId: "rec00000000000006", name: "Resonance Foundation", item: "", group: "Sponsors", status: "Confirmed" },
+  // The Oct 7 re-read rows in Airtable's grid order: two Gifting Suite partners, Vendors including an internal label,
+  // two By Dzign records and a second Hugz record, a Sponsor, and then Hugz's original "Partner" row (Airtable lists
+  // the Vendors block before the Partner rows).
+  { recordId: "recNEW-tubby-todd", name: "Tubby Todd", item: "Hair and Body wash combo", group: "Gifting Suite", status: "Confirmed" },
+  { recordId: "recNEW-tost", name: "TÖST", item: "216 cans of non alcoholic sangria drink", group: "Gifting Suite", status: "Confirmed" },
+  { recordId: "recNEW-nomad-sauna", name: "Nomad Sauna", item: "", group: "Vendors", status: "Confirmed" },
+  { recordId: "recNEW-tape-art", name: "Tape Art", item: "", group: "Vendors", status: "Confirmed" },
+  { recordId: "recNEW-icf-items-cold-creek-plunges", name: "ICF Items/Cold Creek Plunges", item: "", group: "Vendors", status: "Confirmed" },
+  { recordId: "recNEW-pickleroll", name: "Pickleroll", item: "1 pickleball court", group: "Vendors", status: "Confirmed" },
+  { recordId: "recNEW-moon-valley-plants", name: "Moon Valley Plants", item: "Plants", group: "Vendors", status: "Confirmed" },
+  { recordId: "recNEW-by-dzign-ceiling-equipment", name: "By Dzign Ceiling Equipment", item: "Ceiling Decor", group: "Vendors", status: "Confirmed" },
+  { recordId: "recNEW-by-dzign-all-decor", name: "By Dzign (All Decor)", item: "Decor", group: "Vendors", status: "Confirmed" },
+  { recordId: "recNEW-hugz-vendors", name: "Hugz", item: "small stuffed animal for green room set up", group: "Vendors", status: "Confirmed" },
+  { recordId: "recNEW-villa-bibbiani", name: "Villa Bibbiani", item: "", group: "Sponsors", status: "Confirmed" },
+  { recordId: "rec00000000000007", name: "Hugz", item: "Purple Turtles", group: "Partner", status: "Confirmed" }
 ];
 const snapshot = { ...event2026Snapshot };
 setAirtableOverlay(snapshot, { people: null, partners, schedule: false });
@@ -63,5 +78,33 @@ describe("2026 partners page", () => {
     expect(html.slice(0, brands)).not.toContain("Fanatics");
     // The Airtable record name is never shown twice: the card reads as the logo does.
     expect(html).not.toContain('alt="Resonance Foundation"');
+  });
+
+  it("Oct 7 Airtable re-read: new partners sit in their groups in Airtable order, By Dzign and Hugz are one card each, the internal ICF Items label is not shown", async () => {
+    const { default: PartnersPage } = await import("./page");
+    const html = renderToStaticMarkup(await PartnersPage());
+    const brands = html.slice(html.indexOf('id="brands"'));
+    const at = (text: string) => { const index = brands.indexOf(text); expect(index, text).toBeGreaterThan(-1); return index; };
+    // Sponsors: Fanatics (Resonance holds the top-row Sponsor spot) then Villa Bibbiani; then Partners (Hugz, where it was),
+    // then Vendors and the Gifting Suite, each in Airtable order; a partner without a logo (Tool Co, Glow Skincare) stays a name card.
+    const order = [
+      ">Sponsors<", 'alt="Fanatics Foundation"', 'alt="Villa Bibbiani"',
+      ">Partners<", 'alt="Hugz"',
+      ">Vendors<", "Tool Co", 'alt="Nomad Sauna"', 'alt="Tape Art"', 'alt="Pickleroll"', 'alt="Moon Valley Plants"', 'alt="By Dzign"',
+      ">Gifting Suite Partners<", "Glow Skincare", 'alt="Tubby Todd"', 'alt="TÖST"'
+    ];
+    const positions = order.map(at);
+    expect(positions).toEqual([...positions].sort((a, b) => a - b));
+    // One card each: the two By Dzign records read "By Dzign"; the second Hugz record adds no card; no internal label.
+    expect(html.match(/alt="By Dzign"/g)).toHaveLength(1);
+    expect(html).not.toContain("By Dzign Ceiling Equipment");
+    expect(html).not.toContain("By Dzign (All Decor)");
+    expect(html.match(/alt="Hugz"/g)).toHaveLength(1);
+    expect(html).not.toContain("ICF Items");
+    expect(html).not.toContain("Cold Creek");
+    // Every new logo is served from public/2026-partners through the image optimizer.
+    for (const file of ["tubby-todd", "tost", "nomad-sauna", "tape-art", "pickleroll", "moon-valley-nurseries", "by-dzign", "villa-bibbiani"]) {
+      expect(html, file).toContain(`%2F2026-partners%2F${file}.png`);
+    }
   });
 });
