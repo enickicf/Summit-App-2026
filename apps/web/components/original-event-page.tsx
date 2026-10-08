@@ -245,6 +245,10 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     <section className={`${summitStyles.hero} ${summitStyles.heroFormat}`} aria-labelledby="summit-title">
       <SummitVideo background />
       <div className={summitStyles.heroCopy}>
+        {/* Owner (Oct 8): the dates and venue are a small spaced-capitals line ABOVE the logo, matching the "Powered by" /
+            "Presented by" labels, so the hero reads as three matching tiers; from Nov 6, 2026 it reads
+            "2027 — To Be Announced Soon." (lib/event-phase.ts). 2026 only. */}
+        {!archive && <p className={`${summitStyles.heroDate} ${summitStyles.heroEyebrow}`}>{isPostEvent() ? postEventLabel : <>{withoutYear(heroDates.main, year).replace("-", "–")}, {year}<span className={summitStyles.heroDateVenue}> · {venue ?? "Venue to be announced"}</span></>}</p>}
         <h1 id="summit-title" className={summitStyles.heroLogo}>
           <SiteImage src="/images/summit-logo.png" alt="" sizes="(max-width: 600px) 170px, 250px" loading="eager" fetchPriority="high" />
           <span className={styles.hidden}>Not Alone Summit {year}</span>
@@ -257,17 +261,11 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
         {/* Owner (Sept 23): date and venue on one line, in the Awards hero's format ("November 2–4 | Wynn Las Vegas");
             from Nov 6, 2026 the 2026 page reads "2027 — To Be Announced Soon." by itself (lib/event-phase.ts). */}
         {archive && <p className={summitStyles.heroDate}><span className={summitStyles.heroEdition}>{year}</span>{withoutYear(summit2025Dates, year)}<span className={summitStyles.heroDateVenue}> | Wynn Las Vegas</span></p>}
-        {/* Ryan (Oct 8): the lockup takes the spot the date line had, then the Schedule button sits directly above the
-            "dates | venue" line at the bottom of the stack. Owner (Oct 8): everything stays on the left, as before —
-            the right-hand placement Ryan wanted to "see how it looks" is out. 2026 only. */}
-        {/* Owner (Oct 8): the hero ends on the Presented-by lockup; the dates and the Schedule button sit in their own
-            band right under it (components/original-event-page.tsx #summit-dates). */}
+        {/* Owner (Oct 8): an outlined "View schedule" button ends the stack under the lockup (no fill, so it never
+            outshines the logo); the separate dates band is gone. 2026 only. */}
+        {!archive && <div className={summitStyles.heroButtons}><a className={`${summitStyles.heroButton} ${summitStyles.heroButtonGhost}`} href="#schedule">View schedule <span aria-hidden="true">→</span></a></div>}
       </div>
     </section>
-    {!archive && <section className={summitStyles.datesBand} id="summit-dates" aria-label="Dates and schedule">
-      <p className={summitStyles.heroDate}>{isPostEvent() ? postEventLabel : <>{withoutYear(heroDates.main, year)}<span className={summitStyles.heroDateVenue}> | {venue ?? "Venue to be announced"}</span></>}</p>
-      <a className={summitStyles.heroButton} href="#schedule">Schedule</a>
-    </section>}
     {/* Owner (Sept 21): the recap player is removed for now; it will move to a new location. */}
     {/* Owner (Sept 21): ICF-style two-column introduction (bold heading and rich text; Not Alone logo
         carrying the Cohen Foundation credit), without the Davos quote or Villa Bibbiani. */}

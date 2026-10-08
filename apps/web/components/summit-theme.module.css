@@ -188,7 +188,7 @@
 .heroFormat::after { background:linear-gradient(90deg,#000000d9,#0000008c 45%,#00000026 78%),linear-gradient(0deg,#00000099,transparent 38%); }
 .heroFormat .heroCopy { max-width:920px; text-shadow:0 2px 18px #0009; }
 .heroLogo { margin:0 0 14px !important; line-height:0 !important; }
-.heroLogo img { width:215px; max-width:60vw; height:auto; filter:drop-shadow(0 2px 18px #000a); }
+.heroLogo img { width:195px; max-width:60vw; height:auto; filter:drop-shadow(0 2px 18px #000a); }
 /* Owner (Oct 8): the Cohen credit is a compact stack instead of one long line: "Powered by" as a small label (the same
    style as the lockup's "Presented by") over the foundation's name on two balanced lines, "Steven & Alexandra" /
    "Cohen Foundation" (components/powered-by.tsx), so the block keeps one even shape at every width. */
@@ -209,7 +209,7 @@
 .summit.summit .recapPlayer { max-width:1180px; margin:0 auto; }
 @media(max-width:600px) {
   .summit.summit .heroFormat { min-height:0; padding:96px 22px 30px; }
-  .heroLogo img { width:150px; }
+  .heroLogo img { width:140px; }
   .summit .heroCopy .heroPowered { font-size:11px; margin-bottom:20px; } .heroPowered strong { font-size:26px; margin-top:8px; }
   .summit .heroCopy .heroDate { font-size:18px; } .summit .heroCopy .heroVenue { font-size:16px; } .summit .heroCopy .heroExtra { font-size:14px; }
   .summit.summit .recap { padding:24px 0; }
@@ -265,13 +265,19 @@
 
 /* Ryan (Oct 8) + owner (Oct 8): Summit hero, one left-hand stack — logo, Cohen credit, Presented-by lockup, then the
    Schedule button directly above the "dates | venue" line at the bottom. */
-/* Owner (Oct 8): the dates and the Schedule button are their own band right under the hero, so the hero itself ends
-   on the Presented-by lockup. Summit blue like the Goals band; one centered row, stacked on phones. */
-.summit.summit .datesBand { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:18px 40px; padding:26px 24px; background:#4a5faa; border:0; }
-.summit.summit .datesBand .heroDate { margin:0; color:#fff; font-size:26px; font-weight:600; line-height:1.3; text-align:center; }
-.summit.summit .datesBand .heroDate .heroDateVenue { font-weight:500; }
-.summit.summit .datesBand .heroButton { min-height:48px; padding:12px 32px; }
-@media(max-width:600px) { .summit.summit .datesBand { gap:14px; padding:22px 20px 24px; } .summit.summit .datesBand .heroDate { font-size:19px; } }
+/* Owner (Oct 8): date + venue as a spaced-capitals eyebrow above the logo (same style as the Powered by / Presented
+   by labels, a touch brighter), and an outlined "View schedule" button closing the stack. */
+.summit .heroCopy .heroEyebrow { margin:0 0 18px; color:rgba(255,255,255,.88); font-size:13px; font-weight:700; line-height:1.4; letter-spacing:.22em; text-transform:uppercase; }
+.summit .heroCopy .heroEyebrow .heroDateVenue { font-weight:700; }
+.summit .heroCopy .heroButtons { margin-top:26px; }
+.summit .heroCopy .heroButtonGhost { min-height:42px; padding:9px 22px; border:1.5px solid rgba(255,255,255,.85); border-radius:999px; background:transparent; color:#fff; font-size:14px; font-weight:700; letter-spacing:.02em; text-shadow:none; transition:background 160ms ease, color 160ms ease; }
+.summit .heroCopy .heroButtonGhost:hover { background:#fff; color:#111; }
+.summit .heroCopy .heroButtonGhost span { margin-left:6px; }
+@media(max-width:600px) {
+  .summit .heroCopy .heroEyebrow { font-size:11px; letter-spacing:.18em; margin-bottom:14px; }
+  .summit .heroCopy .heroButtons { margin-top:20px; }
+  .summit .heroCopy .heroButtonGhost { min-height:40px; padding:8px 18px; font-size:13px; }
+}
 
 /* Ryan (Oct 8): the 2026 introduction is the headline alone, thin and centered, straight into Who's Coming. */
 /* Owner (Oct 8): the headline sits in its own colour band (Summit pearl) under the blue dates band. */
