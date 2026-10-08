@@ -382,8 +382,8 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
       {!/wynn las vegas/i.test(venue) && <div className={styles.heroFootnote}><p>Wynn Las Vegas · 2025 venue</p></div>}
     </section>
     {/* Ryan (Oct 8): the broadcast band carries the evening's details (date, doors and show time, RSVP + Info, the
-        schedule link). Owner (Oct 8): the details card on the left and the iHeartRadio block, larger, to the right of
-        centre so it takes most of the band; together they fill the page measure (a 5:7 grid, not a mirror image). */}
+        schedule link). Owner (Oct 8): clearly asymmetric — a compact details card on the left margin and the iHeartRadio
+        block taking most of the band on the right, its right edge on the page margin (a 1:2 grid, never a mirror image). */}
     <section className={`${styles.band} ${styles.iheartBand}`} id="broadcast" aria-labelledby="broadcast-title">
       <div className={styles.broadcastDetails}>
         {/* Owner (Sept 23): from Nov 6, 2026 the date line reads "2027 — To Be Announced Soon." automatically. The venue

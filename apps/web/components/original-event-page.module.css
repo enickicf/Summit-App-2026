@@ -585,25 +585,27 @@
   .currentAwards .awardsHeroStack .heroPowered strong { font-size: 26px; }
 }
 
-/* Owner (Oct 8): broadcast band — the evening's details card on the left, the iHeartRadio block (larger) to the right of
-   centre taking most of the band; the two fill the page measure (.band: 1180px) in a 5:7 grid, so it is neither a
-   mirror-image 50/50 nor a block floating mid-page with a gap on the right. Phones: iHeart first, the card under it. */
-.currentAwards .iheartBand { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; gap: 32px 56px; text-align: center; }
-.currentAwards .broadcastDetails { grid-column: 1; justify-self: start; box-sizing: border-box; width: 370px; max-width: 100%; padding: 26px 28px 22px; border: 1px solid rgba(241, 223, 187, .38); border-radius: 16px; background: rgba(255, 255, 255, .03); text-align: left; }
+/* Owner (Oct 8): broadcast band — clearly asymmetric (the owner rejected a balanced, near-symmetric version): a compact
+   details card on the left page margin, and the iHeartRadio block taking most of the band on the right (a 1:2 grid on the
+   page measure, .band = 1180px), its logo filling the block and its right edge on the right page margin. Phones: iHeart
+   first, the card under it. */
+.currentAwards .iheartBand { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); align-items: center; gap: 32px 48px; text-align: center; }
+.currentAwards .broadcastDetails { grid-column: 1; justify-self: start; box-sizing: border-box; width: 320px; max-width: 100%; padding: 24px 24px 20px; border: 1px solid rgba(241, 223, 187, .38); border-radius: 16px; background: rgba(255, 255, 255, .03); text-align: left; }
 .currentAwards .broadcastDetails .heroDate { margin: 0 0 2px; color: #fff; font-size: 16px; font-weight: 600; line-height: 1.5; }
-.currentAwards .broadcastDetails .heroScheduleTimes { gap: 12px 30px; margin-top: 14px; max-width: none; }
+.currentAwards .broadcastDetails .heroScheduleTimes { gap: 12px 28px; margin-top: 14px; max-width: none; }
 .currentAwards .broadcastDetails .heroScheduleTimes dt { font-size: 12px; }
 .currentAwards .broadcastDetails .heroScheduleTimes dd { font-size: 22px; }
 .currentAwards .broadcastDetails .awardsActions { flex-wrap: nowrap; gap: 10px 12px; margin-top: 20px; }
-.currentAwards .broadcastDetails .awardsActions .action, .currentAwards .broadcastDetails .infoButton { width: auto; flex: 1 1 0; height: 44px; min-height: 0; padding: 0 18px; font-size: 14px; font-weight: 800; letter-spacing: .04em; }
+.currentAwards .broadcastDetails .awardsActions .action, .currentAwards .broadcastDetails .infoButton { width: auto; flex: 1 1 0; height: 44px; min-height: 0; padding: 0 16px; font-size: 14px; font-weight: 800; letter-spacing: .04em; }
 .currentAwards .broadcastDetails .heroScheduleLink { margin-top: 14px; font-size: 13px; padding: 6px 0; }
-.currentAwards .broadcastStream { grid-column: 2; display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
-.currentAwards .broadcastStream .iheartLogo { width: min(540px, 100%); }
-@media (max-width: 1100px) and (min-width: 901px) { .currentAwards .iheartBand { gap: 32px 40px; } .currentAwards .broadcastStream .iheartLogo { width: min(460px, 100%); } }
+.currentAwards .broadcastStream { grid-column: 2; justify-self: end; box-sizing: border-box; width: min(680px, 100%); display: flex; flex-direction: column; align-items: center; gap: 26px; text-align: center; }
+.currentAwards .broadcastStream .iheartLogo { width: 100%; }
+.currentAwards .broadcastStream .iheartStream { min-height: 76px; padding: 0 52px; font-size: 22px; }
 @media (max-width: 900px) {
   .currentAwards .iheartBand { grid-template-columns: minmax(0, 1fr); gap: 28px; justify-items: center; }
-  .currentAwards .broadcastStream { grid-column: 1; grid-row: 1; }
+  .currentAwards .broadcastStream { grid-column: 1; grid-row: 1; justify-self: center; width: auto; gap: 22px; }
   .currentAwards .broadcastStream .iheartLogo { width: min(420px, 78vw); }
+  .currentAwards .broadcastStream .iheartStream { min-height: 54px; padding: 0 24px; font-size: 15px; }
   .currentAwards .broadcastDetails { grid-column: 1; grid-row: 2; justify-self: center; width: 340px; }
 }
 @media (max-width: 380px) { .currentAwards .broadcastDetails { padding: 22px 20px 18px; } }
