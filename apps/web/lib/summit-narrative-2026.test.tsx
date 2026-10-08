@@ -43,18 +43,16 @@ describe("Summit 2026 narrative (Ryan, Oct 7)", () => {
   });
 
   it("Ryan (Oct 8): only the Awards sentence goes on the Awards page, right after the broadcast band; never the Goals or the quote; 2025 untouched", () => {
-    // Owner (Oct 8, approved): the sentence is the broadcast band's headline (no separate band), before the details card
-    // and the iHeartRadio block.
+    // Owner (Oct 8, approved final): no separate sentence band; the sentence sits in the broadcast band's right column,
+    // under the iHeartRadio logo and the stream button, with only "Not Alone Awards" in gold.
     const band = awards2026.slice(awards2026.indexOf('id="broadcast"'), awards2026.indexOf('id="directory"'));
-    const honor = band.slice(0, band.indexOf("Doors Open"));
     expect(awards2026).not.toContain('id="awards-honor"');
-    expect(honor.indexOf("Through the Not Alone Awards,")).toBeGreaterThan(-1);
-    expect(band.indexOf("Through the Not Alone Awards,")).toBeLessThan(band.indexOf("Broadcast live on"));
-    // Owner (Oct 8): presented like a slide, the opening phrase in bold; the words unchanged.
+    const honor = band.slice(band.indexOf("Stream live on iHeartRadio</a>"));
     expect(honor.replace(/<[^>]+>/g, "")).toContain(esc(summitNarrative2026.awardsSentence));
+    expect(honor).toMatch(/<p class="[^"]*">Through the <strong class="[^"]*">Not Alone Awards<\/strong>, we honor the pioneers/);
+    expect(band.indexOf("The Evening")).toBeLessThan(band.indexOf("Broadcast live on"));
     // Owner (Oct 8): exact wording (no "everyday" before "warriors").
     expect(summitNarrative2026.awardsSentence).toBe("Through the Not Alone Awards, we honor the pioneers, advocates, and warriors who fight for mental health every day.");
-    expect(honor).toMatch(/<p><strong class="[^"]*">Through the Not Alone Awards,<\/strong> we honor the pioneers/);
     expect(awards2026).not.toContain('id="awards-narrative"');
     expect(awards2026).not.toContain("Celebrate mental-health warriors.");
     for (const paragraph of summitNarrative2026.intro) expect(awards2026).not.toContain(esc(paragraph));
