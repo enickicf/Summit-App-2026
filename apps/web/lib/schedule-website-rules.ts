@@ -89,9 +89,19 @@ export function pinnedTime(row: { title: string; date: string; start: string; en
   return { start: pin?.start ?? row.start, end: pin?.end ?? row.end };
 }
 
-// Owner (Oct 7): private events say so ("invite only") instead of hiding; founders events and the talent dinner.
+// Owner (Oct 7): private events say so instead of hiding. Ryan (Oct 8): "make sure a founders-only event is marked with
+// a red asterisk", so the founders rows (Founders Cocktails, Founder's Dinner) carry the canonical "founders" scope that
+// app/schedule/schedule-presentation.ts isFoundersOnly() recognises and components/schedule-browser.tsx marks with the
+// asterisk; any other private row (the talent dinner, if Airtable ever names it that again) reads "Invite only".
+export const foundersOnly = /founder/i;
+export const foundersOnlyScope = { id: "founders", label: "Founders only" } as const;
 export const inviteOnly = /founder|^dinner\s*-\s*talent$/i;
 export const inviteOnlyScope = { id: "invite-only", label: "Invite only" } as const;
+export function privateEventScope(title: string): typeof foundersOnlyScope | typeof inviteOnlyScope | null {
+  const text = title.trim();
+  if (foundersOnly.test(text)) return foundersOnlyScope;
+  return inviteOnly.test(text) ? inviteOnlyScope : null;
+}
 
 // Attire rides on the schedule item; the shared schema has no field for it, so it travels as an extra property.
 export type ScheduleItemWithAttire = ScheduleItem & { attire?: string };

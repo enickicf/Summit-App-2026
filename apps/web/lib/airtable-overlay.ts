@@ -6,13 +6,14 @@ import {
   isPublicAirtablePerson, type AirtableSession
 } from "./airtable";
 import { airtableRos2026, type RosRow } from "./airtable-ros-2026";
-import { inviteOnly, inviteOnlyScope, isOnWebsiteSchedule, pinnedTime, websiteSessionSynopsis, websiteSessionTitle, type ScheduleItemWithAttire } from "./schedule-website-rules";
+import { isOnWebsiteSchedule, pinnedTime, privateEventScope, websiteSessionSynopsis, websiteSessionTitle, type ScheduleItemWithAttire } from "./schedule-website-rules";
 import { scheduleDoc2026 } from "./schedule-doc-2026";
 import { airtableTalent2026, type RecordedAirtablePerson } from "./airtable-talent-2026";
 import { airtablePartners2026 } from "./airtable-partners-2026";
 import { airtableHeadshotCrops } from "./airtable-headshot-crops";
 import { interimBio2026 } from "./interim-bios-2026";
 import { awardsBiographies } from "./awards-people";
+import { titleOverride2026 } from "./title-overrides-2026";
 
 // Airtable becomes the website's source for 2026 people (who is listed, grouping, title, bio,
 // headshot), the schedule and 2026 partners whenever the read-only connection is configured.
@@ -76,10 +77,11 @@ function scheduleFromAirtable(sessions: AirtableSession[], snapshot: EventSnapsh
     // everything else stays "to be confirmed" rather than inventing who may attend.
     const title = websiteSessionTitle(session.title);
     const published = snapshot.scheduleItems.find(item => item.title.trim().toLowerCase() === title.toLowerCase());
-    // Owner (Oct 7): private events (founders, the talent dinner) say "Invite only" instead of hiding. Otherwise keep
-    // the access staff already published for the same session; nothing else is invented.
-    const access = inviteOnly.test(session.title) ? inviteOnlyScope
-      : published?.eligibilityScope ?? { id: "unconfirmed", label: "Access details to be confirmed" };
+    // Owner (Oct 7) / Ryan (Oct 8): founders events carry the "founders" scope (red asterisk on the schedule); any other
+    // private event says "Invite only" instead of hiding. Otherwise keep the access staff already published for the
+    // same session; nothing else is invented.
+    const access = privateEventScope(session.title)
+      ?? published?.eligibilityScope ?? { id: "unconfirmed", label: "Access details to be confirmed" };
     const location = session.location || "Location to be confirmed";
     const summary = websiteSessionSynopsis(session.synopsis) || title;
     const item: ScheduleItemWithAttire = {
@@ -155,13 +157,15 @@ export async function withAirtable(snapshot: EventSnapshot): Promise<EventSnapsh
       const key = personNameKey(person.name);
       const existing = snapshot.speakers.find(speaker => personNameKey(speaker.name) === key);
       const speakerId = existing?.id ?? airtableUuid(person.recordId);
-      people!.set(key, { ...person, speakerId, categories: airtableCategories(person.groups), featured: person.groups.includes(featuredGroup), rank: talent.indexOf(person),
+      // Owner (Oct 8): an owner-dictated title (lib/title-overrides-2026.ts) wins over Airtable's Title column everywhere.
+      const title = titleOverride2026(person.name) ?? person.title;
+      people!.set(key, { ...person, title, speakerId, categories: airtableCategories(person.groups), featured: person.groups.includes(featuredGroup), rank: talent.indexOf(person),
         ...(talentTier(person.groups) ? { tier: talentTier(person.groups)! } : {}), ...(ranks.has(person) ? { topRank: ranks.get(person)! } : {}) });
       return {
         id: speakerId, eventId: snapshot.event.id, name: person.name,
         // Owner (Sept 21, late): the website shows Airtable's Title column only, never Occupation.
         // Sept 22 meeting: the title comes from Airtable (or one already published on the website); nothing is invented.
-        role: person.title || existing?.role || "",
+        role: titleOverride2026(person.name) ?? (person.title || existing?.role || ""),
         // Airtable's bio wins; then a published one, ICF's own bio, and finally the interim bio.
         bio: person.bio || existing?.bio || awardsBiographies[person.name]?.bio || interimBio2026(person.name) || "",
         headshotUrl: "headshotFile" in person && person.headshotFile ? person.headshotFile

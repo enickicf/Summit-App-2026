@@ -28,8 +28,15 @@ const notFounders2026 = new Set(["Ray Lewis", "Paul Dalio", "Sanem (Sam) Alkan"]
 const notInAwardsLineup2026 = new Set(["Daniel Gillison", "Wendy Oliver-Pyatt", "Rahil Briggs"].map(personNameKey));
 // Owner (Sept 24): the two Tape Art artists are listed in the Summit lineup (Speakers), not under
 // Attendees, although Airtable groups them "X - attendee". Summit page only; the Awards lineup is unchanged.
-const summitLineup2026 = new Set(["Michael Townsend", "Leah Smith"].map(personNameKey));
+// Ryan (Oct 8): Raquelle Stevens ("she should be up with these speakers") and Jessica Edwards ("put Jessica Edwards
+// up with the other speakers") join them; both are "X - attendee" in Airtable today.
+export const summitLineup2026 = new Set(["Michael Townsend", "Leah Smith", "Raquelle Stevens", "Jessica Edwards"].map(personNameKey));
 const inSummitLineup = (person: SummitPerson) => summitLineup2026.has(personNameKey(person.name));
+// Ryan (Oct 8): "add him to the awards show too". Ben Maxwell is in the Awards lineup whatever his tier chip says,
+// once the completeness gate passes (title, photo, bio). Airtable's D-talent chip already puts him there today; this
+// keeps him there if the chip ever changes. Awards page only; the Summit follows Airtable alone.
+export const awardsLineupAdditions2026 = new Set(["Ben Maxwell"].map(personNameKey));
+const inAwardsLineup = (person: SummitPerson) => awardsLineupAdditions2026.has(personNameKey(person.name));
 const founderCategories: PersonCategory[] = ["Founders", "Founders & Entrepreneurs", "Business Leaders", "Business Leaders & Philanthropists"];
 
 export type SectionEntry = { person: SummitPerson; role: string };
@@ -95,7 +102,7 @@ export function peopleSections(people: SummitPerson[], variant: SectionVariant =
   const unique = people.filter(person => { const key = personNameKey(person.name); if (seen.has(key)) return false; seen.add(key); return true; });
   const cards = unique.filter(person => (!creditOnly(person) || isKeynote(person)) && isCompleteCard(person));
   const top = cards.filter(isKeynote).sort((a, b) => a.rank! - b.rank!);
-  const tiered = cards.filter(person => !isKeynote(person) && (person.tier || (variant === "summit" && inSummitLineup(person))) && (!isFounder(person) || isHeadline(person))).sort(byTier);
+  const tiered = cards.filter(person => !isKeynote(person) && (person.tier || (variant === "summit" && inSummitLineup(person)) || (variant === "awards" && inAwardsLineup(person))) && (!isFounder(person) || isHeadline(person))).sort(byTier);
   const founders = founderOrder2026(cards.filter(isFounder).sort(byAirtable));
   const attendees = cards.filter(person => person.categories.includes("Attendees") && !isKeynote(person) && !person.tier && !isFounder(person) && !inSummitLineup(person)).sort(byAirtable);
   const entry = (person: SummitPerson) => ({ person, role: publicRole(person) });

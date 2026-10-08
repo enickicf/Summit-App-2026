@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { airtableRos2026 } from "./airtable-ros-2026";
-import { isOnWebsiteSchedule, pinnedTime, websiteSessionSynopsis, websiteSessionTitle } from "./schedule-website-rules";
+import { isOnWebsiteSchedule, pinnedTime, privateEventScope, websiteSessionSynopsis, websiteSessionTitle } from "./schedule-website-rules";
 
 // Owner (Oct 7, 2026): the schedule pulls from Airtable's Run of Show; these are the website's standing rules on top.
 describe("schedule website rules", () => {
@@ -37,6 +37,14 @@ describe("schedule website rules", () => {
     expect(websiteSessionTitle("Summit Sessions")).toBe("Summit Sessions");
     expect(websiteSessionSynopsis("Dinner for Summit talent.")).toBe(""); // Oct 8: not a talent-only dinner
     expect(websiteSessionSynopsis("Lunch for Summit guests.")).toBe("Lunch for Summit guests.");
+  });
+
+  it("marks founders rows with the canonical founders scope (red asterisk) and other private rows as invite only (Ryan, Oct 8)", () => {
+    for (const title of ["Founders Cocktails", "Founder's Dinner", "Founder’s Dinner", " founders cocktails "]) {
+      expect(privateEventScope(title), title).toEqual({ id: "founders", label: "Founders only" });
+    }
+    expect(privateEventScope("Dinner - talent")).toEqual({ id: "invite-only", label: "Invite only" });
+    for (const title of ["Dinner", "Lunch", "Summit Sessions", "Awards Show", "Closing Dinner and Performance"]) expect(privateEventScope(title), title).toBeNull();
   });
 
   it("recorded Run of Show (Oct 7 read): every block on the schedule that Airtable gives an attire keeps it", () => {

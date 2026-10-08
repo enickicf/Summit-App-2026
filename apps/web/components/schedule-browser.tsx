@@ -109,10 +109,10 @@ export function ScheduleBrowser({ days, eventTimeZone, initialNowUtc, noticeSnap
                           {item.featured ? <strong>Featured</strong> : null}
                           {scheduleStatusLabels(item, nowUtc).map(label => <strong key={label}>{label}</strong>)}
                         </div>
-                        <h3 id={`${id}-session-${item.id}`}>{item.title}</h3>
-                        {foundersOnly ? <p className={styles.foundersOnly}><Lock size={15} aria-hidden="true" />Founders only event</p>
-                          /* Owner (Oct 7): private events are listed and marked "Invite only" rather than hidden. */
-                          : item.eligibilityScope.id === "invite-only" ? <p className={styles.foundersOnly}><Lock size={15} aria-hidden="true" />Invite only</p> : null}
+                        {/* Ryan (Oct 8): a founders-only event is marked with a red asterisk after its title (legend under the day). */}
+                        <h3 id={`${id}-session-${item.id}`}>{item.title}{foundersOnly ? <> <span className={styles.foundersMark} aria-hidden="true">*</span><span className="srOnly">Founders-only event</span></> : null}</h3>
+                        {/* Owner (Oct 7): other private events are listed and marked "Invite only" rather than hidden. */}
+                        {!foundersOnly && item.eligibilityScope.id === "invite-only" ? <p className={styles.inviteOnly}><Lock size={15} aria-hidden="true" />Invite only</p> : null}
                         {summary ? <p>{summary}</p> : null}
                         {/* Owner (Oct 7): the Attire column from Airtable's Run of Show, for every event that carries one. */}
                         {sessionAttire(item) ? <p className={styles.attire}><span>Attire</span>{sessionAttire(item)}</p> : null}
@@ -135,6 +135,7 @@ export function ScheduleBrowser({ days, eventTimeZone, initialNowUtc, noticeSnap
                 <h2>{block.start}</h2><div className={styles.sessions}><article className={styles.session}><h3>{block.title}</h3>{block.detail && <p>{block.detail}</p>}</article></div>
               </section> : <p className={styles.pending} key={index}>{block.detail}</p>)}
             </div>)}
+            {day.items.some(isFoundersOnly) ? <p className={styles.foundersLegend}><span className={styles.foundersMark} aria-hidden="true">*</span> Founders-only event</p> : null}
             {day.items.length === 0 && day.notes.length === 0 ? <p className={styles.empty}>No published sessions for this day.</p> : null}
           </> : null}
         </div>

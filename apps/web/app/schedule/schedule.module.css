@@ -70,7 +70,12 @@
 .session[data-status="canceled"] .topline strong { border-color: #e2b8be; color: #942235; }
 .session h3 { color: #000000; font-family: inherit; font-size: 19px; font-weight: 600; line-height: 1.35; margin: 4px 0 8px; }
 .session p { color: #444444; font-size: 15px; line-height: 1.65; margin: 0 0 8px; }
-.session .foundersOnly { align-items: center; background: #d0d4ea; border-radius: 999px; color: #111111; display: inline-flex; font-size: 13px; font-weight: 700; gap: 7px; margin: 2px 0 12px; padding: 4px 12px; }
+/* Owner (Oct 7): a private, non-founders event wears a small "Invite only" pill. */
+.session .inviteOnly { align-items: center; background: #d0d4ea; border-radius: 999px; color: #111111; display: inline-flex; font-size: 13px; font-weight: 700; gap: 7px; margin: 2px 0 12px; padding: 4px 12px; }
+/* Ryan (Oct 8): a founders-only event is marked with a red asterisk right after its title, explained once under the day's list. */
+.foundersMark { color: #c0392b; font-weight: 700; }
+.session h3 .foundersMark { font-size: 1.1em; line-height: 1; margin-left: 2px; }
+.foundersLegend { color: #c0392b; font-size: 13px; font-weight: 700; line-height: 1.5; margin: -12px 0 24px; padding: 0 4px; }
 .session .location { color: #444444; font-size: 14px; line-height: 1.5; margin: 0; }
 .location span { color: #777777; font-size: 12px; font-weight: 600; margin-right: 10px; text-transform: uppercase; }
 /* Owner (Oct 7): Airtable's Attire column, shown like the location line. */
