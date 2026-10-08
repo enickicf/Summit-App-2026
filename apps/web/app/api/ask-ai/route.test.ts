@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { event2026Snapshot } from "@not-alone/test-fixtures/event-2026";
 import { getSiteSnapshot } from "../../../lib/snapshot";
+import { buildAskAiKnowledge } from "../../../lib/ask-ai-knowledge";
 import { POST } from "./route";
 
 vi.mock("../../../lib/snapshot", () => ({ getSiteSnapshot: vi.fn() }));
@@ -293,5 +294,22 @@ describe("Ask AI awards facts", () => {
   it("answers the approved Awards host and venue for free", async () => {
     expect((await (await ask("Who is hosting the Not Alone Awards?")).json()).answer).toBe("The 2026 Not Alone Awards are hosted by Loni Love, at the Encore Theater at Wynn Las Vegas on Monday, November 2, 2026.");
     expect((await (await ask("Where are the awards held?")).json()).answer).toContain("Encore Theater at Wynn Las Vegas");
+  });
+
+  // Owner (Oct 7 meeting): publicly the evening is Doors Open 6:30 PM and the Awards Show 7:30–10:00 PM; no Pre-Show.
+  // Answered before the published program because the staff app's revision 9 still carries the old times.
+  it("answers Awards Show time questions with the owner's Oct 7 evening and feeds the model no Pre-Show", async () => {
+    for (const question of ["What time do the Awards start?", "When is the Not Alone Awards Show?", "What time do doors open for the awards?"]) {
+      const { answer } = await (await ask(question)).json();
+      expect(answer).toBe("The 2026 Not Alone Awards Show is on Monday, November 2, 2026 at the Encore Theater at Wynn Las Vegas. Doors open 6:30 PM; the Awards Show runs 7:30 PM-10:00 PM.");
+    }
+    const knowledge = JSON.stringify(buildAskAiKnowledge(structuredClone(event2026Snapshot)));
+    expect(knowledge).toContain('"doorsOpen":"6:30 PM"');
+    expect(knowledge).toContain('"awardsShow":"7:30 PM-10:00 PM"');
+    expect(knowledge).toContain('"evening":"Doors Open 6:30 PM · Awards Show 7:30 PM-10:00 PM"');
+    expect(knowledge).not.toContain("Pre-Show");
+    // The other pending notes still reach the model untouched.
+    expect(knowledge).toContain("Doors Open: 6:30 PM; end time to be confirmed.");
+    expect(knowledge).toContain("Tennis: 10:00 AM; end time to be confirmed.");
   });
 });

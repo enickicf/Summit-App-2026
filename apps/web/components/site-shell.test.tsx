@@ -93,19 +93,21 @@ describe("shared site navigation", () => {
     const footer = renderToStaticMarkup(<SiteFooter />);
     expect(html).not.toContain("NotAloneAwards_Logo_White.png");
     // Owner (Oct 5): the Awards site no longer links to the Summit (no "Summit" item); the Summit links here instead.
-    expect([...html.matchAll(/<a[^>]*>([^<]+)<\/a>/g)].map(match => match[1])).toEqual(["Awards", "2026", "2025", "Community Day", "Tickets", "Nominate"]);
+    // Owner (Oct 7 meeting): the Community Day link reads "NV Mental Health Day".
+    expect([...html.matchAll(/<a[^>]*>([^<]+)<\/a>/g)].map(match => match[1])).toEqual(["Awards", "2026", "2025", "NV Mental Health Day", "Tickets", "Nominate"]);
     expect(html.match(/<a[^>]*aria-current="page"[^>]*>/)?.[0]).toContain(`href="/awards/${year}"`);
     for (const href of ["/schedule", "/map", "/ask-ai", "/summit/live", "/", "/2025"]) expect(html + footer).not.toContain(`href="${href}"`);
     expect(html).not.toContain("NotAloneChallenge");
     expect(footer).toContain("Steven &amp; Alexandra Cohen Foundation");
   });
 
-  it.each([2025, 2026])("uses one Awards %s row (Awards, Community Day, Tickets, Nominate) below the brand with no separate menu or Summit link", year => {
+  it.each([2025, 2026])("uses one Awards %s row (Awards, NV Mental Health Day, Tickets, Nominate) below the brand with no separate menu or Summit link", year => {
     const html = headerAt(`/awards/${year}`);
     const nav = html.match(/<nav[^>]*aria-label="Awards navigation"[^>]*>([\s\S]*?)<\/nav>/)?.[1] ?? "";
     // Owner (Sept 23): Awards (2026 / 2025), Tickets (RSVP form), Nominate (ICF nominations); Donate is a sticker at the far right.
     // Owner (Oct 3): Community Day joins the row. Owner (Oct 5): no Summit link; Tickets and Nominate open in a new tab.
-    expect([...nav.matchAll(/<a[^>]*>([^<]+)<\/a>/g)].map(match => match[1])).toEqual(["Awards", "2026", "2025", "Community Day", "Tickets", "Nominate"]);
+    // Owner (Oct 7 meeting): that link now reads "NV Mental Health Day" (same /community-day destination).
+    expect([...nav.matchAll(/<a[^>]*>([^<]+)<\/a>/g)].map(match => match[1])).toEqual(["Awards", "2026", "2025", "NV Mental Health Day", "Tickets", "Nominate"]);
     expect([...nav.matchAll(/href="([^"]+)"/g)].map(match => match[1])).toEqual([
       "/awards/2026", "/awards/2026", "/awards/2025", "/community-day", "https://notaloneawards.org/rsvp", "https://notaloneawards.org/rsvp/nominate", "https://www.inspiringchildren.org/donate"
     ]);

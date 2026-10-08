@@ -266,10 +266,10 @@ describe("source-faithful, year-separated event pages", () => {
     expect(html).toContain("Monday, November 2</time>");
     expect(html).not.toContain("Red Carpet");
     expect(html).toContain("<dt>Doors Open</dt><dd>6:30 PM</dd>");
-    // Aphrah (Oct 7): "The Evening" is Doors Open, Pre-Show and the Awards Show; Community Day moved to the daytime page.
+    // Owner (Oct 7 meeting): "The Evening" is Doors Open 6:30 and the Awards Show 7:30-10:00; no Pre-Show; Community Day moved to the daytime page.
     expect(html).not.toContain("<dt>Community Day</dt>");
-    expect(html).toContain("<dt>Pre-Show</dt><dd>7:30 PM</dd>");
-    expect(html).toContain("<dt>Awards Show</dt><dd>8:00 PM-10:00 PM</dd>");
+    expect(html).not.toMatch(/Pre-Show|8:00 PM/);
+    expect(html).toContain("<dt>Awards Show</dt><dd>7:30 PM-10:00 PM</dd>");
     expect(html).toContain('id="winners"');
     expect(html).toContain("<h3>Rachel Platten</h3>");
     expect(html).toContain('href="https://www.youtube.com/@iHeartRadio/streams"');
@@ -293,7 +293,7 @@ describe("source-faithful, year-separated event pages", () => {
     const snapshot = { ...event2026Snapshot, scheduleItems: event2026Snapshot.scheduleItems.map(item => item.title === "Awards Show" ? { ...item, status: "canceled" as const } : item) };
     const html = renderToStaticMarkup(<OriginalAwardsPage year={2026} snapshot={snapshot} program={publishedAwardsProgram(snapshot)} />);
     expect(html).toContain("Awards Show canceled");
-    expect(html).not.toContain("8:00 PM-10:00 PM");
+    expect(html).not.toContain("7:30 PM-10:00 PM");
     expect(html).not.toContain(">RSVP</a>");
     expect(html).not.toContain("Date to be confirmed");
     // Owner (Oct 5): the Awards site no longer links to the Summit (no "Explore the Not Alone Summit" link).

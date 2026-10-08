@@ -239,13 +239,14 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     <section className={`${summitStyles.hero} ${summitStyles.heroFormat}`} aria-labelledby="summit-title">
       <SummitVideo background />
       <div className={summitStyles.heroCopy}>
-        {/* Owner (Oct 5): "Presented by" Inspiring Children x NAMI above the Summit logo, as on Community Day. */}
-        {!archive && <PresentedBy size="hero" />}
         <h1 id="summit-title" className={summitStyles.heroLogo}>
           <SiteImage src="/images/summit-logo.png" alt="" sizes="(max-width: 600px) 170px, 250px" loading="eager" fetchPriority="high" />
           <span className={styles.hidden}>Not Alone Summit {year}</span>
         </h1>
         <p className={summitStyles.heroPowered}>Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong></p>
+        {/* Owner (Oct 7 meeting): "Presented by" Inspiring Children Foundation × NAMI directly under the Cohen credit
+            (Summit logo -> Powered by -> Presented by); 2026 only. */}
+        {!archive && <PresentedBy size="hero" />}
         {/* Owner (Sept 23): date and venue on one line, in the Awards hero's format ("November 2–4 | Wynn Las Vegas");
             from Nov 6, 2026 the 2026 page reads "2027 — To Be Announced Soon." by itself (lib/event-phase.ts). */}
         <p className={summitStyles.heroDate}>{archive && <span className={summitStyles.heroEdition}>{year}</span>}{!archive && isPostEvent() ? postEventLabel : <>{withoutYear(archive ? summit2025Dates : heroDates.main, year)}<span className={summitStyles.heroDateVenue}> | {archive ? "Wynn Las Vegas" : venue ?? "Venue to be announced"}</span></>}</p>
@@ -337,14 +338,15 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
           only for visitors who ask their device to reduce motion. */}
       <HeroRecap video="awards" poster={null} className={styles.heroVideo} />
       <div className={styles.heroContent}>
-        {/* Owner (Oct 5): "Presented by" Inspiring Children x NAMI above the Awards logo (the Community Day lockup);
-            the Cohen Foundation "Powered by" credit below the logo is unchanged. */}
-        <PresentedBy size="hero" />
         <h1 id="awards-title" className={styles.awardsLogo}>
           <SiteImage src="/images/na-awards-logo-white.png" alt="" sizes="(max-width: 600px) 180px, 250px" loading="eager" fetchPriority="high" />
           <span className={styles.hidden}>Not Alone Awards 2026</span>
         </h1>
         <p className={styles.heroPowered}>Powered by<strong>{awards2026Editorial.foundation}</strong></p>
+        {/* Owner (Oct 7 meeting): "Presented by" Inspiring Children Foundation × NAMI (the Community Day lockup) directly
+            under the Cohen Foundation "Powered by" credit (Awards logo -> Powered by -> Presented by), on every copy of
+            this page; the Cohen credit itself is unchanged and the date line still follows. */}
+        <PresentedBy size="hero" />
         {/* Owner (Sept 23): from Nov 6, 2026 the date line reads "2027 — To Be Announced Soon." automatically. */}
         <p className={styles.heroDate}>{isPostEvent() ? postEventLabel : <>{show && !canceled ? <time dateTime={show.startUtc}>{withoutYear(date, 2026)}</time> : withoutYear(date, 2026)}<span className={styles.heroDateVenue}> · {venue}</span></>}</p>
         {/* Owner (Oct 7): doors and the show time up top (Aphrah's times); the rest of the evening is further down. */}
@@ -370,10 +372,10 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
       </a>
     </section>
     <AwardsGuestDirectory people={displayPeople} available={available} />
-    {/* Owner (Sept 21): last year's mission statement (ICF's Awards page, word for word) stays at the top
-        until it is replaced later. */}
+    {/* Owner (Sept 21): last year's mission statement (ICF's Awards page) stays here. Owner (Oct 7 meeting): its
+        opening sentence now credits the presenters, in the owner's exact words. */}
     <section className={`${styles.band} ${styles.awardsIntroduction} ${styles.awardsMission}`} id="mission" aria-label="About the Not Alone Awards">
-      <p>Presenting the Not Alone Awards Show, powered by the <strong>Steven &amp; Alexandra Cohen Foundation</strong>, broadcast live on <strong>iHeartRadio</strong>, and hosted by <strong>Wynn Resorts</strong>.</p>
+      <p>Inspiring Children Foundation × NAMI present the Not Alone Awards Show, powered by the <strong>Steven &amp; Alexandra Cohen Foundation</strong>.</p>
       {/* Owner (Sept 21, late): just the opening statement; the longer text is gone. */}
       {awards[1]!.blocks.slice(1, 2).map(block => <p key={block.text}>{block.text}</p>)}
     </section>

@@ -38,8 +38,9 @@ export function SiteHeader() {
           opens in a new tab so guests never need the back arrow. */}
       <div className={styles.navMenu}><Link href={partner?.path ?? "/awards/2026"} aria-current={pathname === "/awards/2026" || partner ? "page" : undefined} data-active={year === 2026 || undefined} aria-haspopup="true">Awards</Link>
         <div className={styles.navMenuList}><Link href={partner?.path ?? "/awards/2026"}>2026</Link><Link href="/awards/2025" aria-current={pathname === "/awards/2025" ? "page" : undefined} data-active={year === 2025 || undefined}>2025</Link></div></div>
-      {/* Owner (Oct 3): the Community Day page is in the Awards menu. */}
-      <Link href={partner ? partnerCommunityDayPath(partner) : "/community-day"}>Community Day</Link>
+      {/* Owner (Oct 3): the Community Day page is in the Awards menu. Owner (Oct 7 meeting): labelled "NV Mental Health Day"
+          (the day is Nevada Mental Health Day); the link itself is unchanged. */}
+      <Link href={partner ? partnerCommunityDayPath(partner) : "/community-day"}>NV Mental Health Day</Link>
       <a href={partner?.rsvpUrl ?? awards2026Editorial.rsvpUrl} target="_blank" rel="noopener">Tickets</a>
       <a href={awards2026Editorial.nominateUrl} target="_blank" rel="noopener">Nominate</a>
       <a className={styles.donateButton} href="https://www.inspiringchildren.org/donate"><Heart size={16} fill="currentColor" aria-hidden="true" />Donate</a>

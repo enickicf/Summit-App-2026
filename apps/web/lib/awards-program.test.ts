@@ -6,13 +6,16 @@ import { awardsPromotionalProgram, publicAwardsShow, reconcileAwardsProgram } fr
 const body = publishedAwardsProgram(event2026Snapshot)!.body;
 
 describe("Awards copy and canonical schedule", () => {
-  it("applies the Oct 7 owner times only to the legacy doors and pre-show notes and hides pending promotional boilerplate", () => {
+  it("applies the Oct 7 owner times to the legacy doors note, drops the legacy Pre-Show note and hides pending promotional boilerplate", () => {
     const result = awardsPromotionalProgram(body, event2026Snapshot)!;
-    // Aphrah (Oct 7): Doors 6:30, Pre-Show 7:30-8:00, Awards Show 8:00-10:00; no Nevada Day / Community Day line.
-    expect(result).toContain("Doors Open: 6:30 PM\nPre-Show: 7:30-8:00 PM\nAwards Show: 8:00 PM-10:00 PM");
+    // Owner (Oct 7 meeting): Doors 6:30; no Pre-Show publicly; the Awards Show line still follows the published session
+    // (revision 9 says 8:00-10:00 until staff publish the 7:30 start); no Nevada Day / Community Day line.
+    expect(result).toContain("Red Carpet: 6:15 PM-7:30 PM\nDoors Open: 6:30 PM\nAwards Show: 8:00 PM-10:00 PM");
+    expect(result).not.toContain("Pre-Show");
     expect(result).not.toMatch(/Nevada Day|Community Day|5:30 PM/);
     expect(result).not.toContain("end time to be confirmed");
     expect(result).not.toContain("complete show lineup");
+    // The legacy note stays in the canonical publication; only the public projection drops it.
     expect(event2026Snapshot.contentPages.find(page => page.slug === "schedule-pending-2026-11-02")!.body).toContain("Pre-Show: 7:30 PM");
   });
 

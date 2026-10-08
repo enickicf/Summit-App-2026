@@ -29,6 +29,7 @@ export const eventPartners2026 = {
   hostVenue: wynnLasVegas
 } as const;
 
-// Owner (Oct 5 / Oct 7): the top of every Awards page shows doors and the show time (Aphrah's Oct 7 times).
+// Owner (Oct 5 / Oct 7): the top of every Awards page shows doors and the show time. Owner (Oct 7 meeting): publicly
+// the evening is Doors Open 6:30 PM and the Awards Show 7:30 PM (the show runs 7:30–10:00 PM); no Pre-Show is announced.
 export const awardsDoorsOpen2026 = "6:30 PM";
-export const awardsShowStart2026 = "8:00 PM";
+export const awardsShowStart2026 = "7:30 PM";
