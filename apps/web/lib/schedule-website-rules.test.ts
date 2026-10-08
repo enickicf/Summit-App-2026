@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { airtableRos2026 } from "./airtable-ros-2026";
-import { isOnWebsiteSchedule, pinnedTime, websiteSessionTitle } from "./schedule-website-rules";
+import { isOnWebsiteSchedule, pinnedTime, websiteSessionSynopsis, websiteSessionTitle } from "./schedule-website-rules";
 
 // Owner (Oct 7, 2026): the schedule pulls from Airtable's Run of Show; these are the website's standing rules on top.
 describe("schedule website rules", () => {
@@ -20,6 +20,11 @@ describe("schedule website rules", () => {
       expect(isOnWebsiteSchedule({ title, websitePublic: "Public" }), `${title} marked Public`).toBe(true);
     }
     expect(isOnWebsiteSchedule({ title: "Lunch", websitePublic: "Private" })).toBe(false);
+    // The Airtable checkbox: ticked rows are on, unticked rows are off, whatever the title.
+    expect(isOnWebsiteSchedule({ title: "Pet Partners Therapy", websitePublic: "" })).toBe(false);
+    expect(isOnWebsiteSchedule({ title: "Pet Partners Therapy", websitePublic: "checked" })).toBe(true);
+    expect(isOnWebsiteSchedule({ title: "Song Break", websitePublic: "true" })).toBe(true); // live API value
+    expect(isOnWebsiteSchedule({ title: "Red Carpet", websitePublic: "checked" })).toBe(false); // owner rule wins
   });
 
   it("keeps the owner's Oct 7 times over Airtable's until lifted, and reads the talent dinner as Dinner", () => {
@@ -30,6 +35,8 @@ describe("schedule website rules", () => {
     expect(pinnedTime({ title: "Lunch", date: "2026-11-03", start: "13:00", end: "2:30 PM" })).toEqual({ start: "13:00", end: "2:30 PM" });
     expect(websiteSessionTitle("Dinner - talent")).toBe("Dinner");
     expect(websiteSessionTitle("Summit Sessions")).toBe("Summit Sessions");
+    expect(websiteSessionSynopsis("Dinner for Summit talent.")).toBe(""); // Oct 8: not a talent-only dinner
+    expect(websiteSessionSynopsis("Lunch for Summit guests.")).toBe("Lunch for Summit guests.");
   });
 
   it("recorded Run of Show (Oct 7 read): every block on the schedule that Airtable gives an attire keeps it", () => {
@@ -45,6 +52,7 @@ describe("schedule website rules", () => {
       "2026-11-05 High Tea": "Athleisure"
     });
     expect(airtableRos2026.find(row => row.title === "Red Carpet")?.attire).toBe("Semi-Formal with Flair"); // recorded, never listed
-    expect(airtableRos2026.every(row => !row.websitePublic)).toBe(true); // the column was empty on Oct 7
+    expect(airtableRos2026.filter(row => row.websitePublic === "checked")).toHaveLength(24); // the team's checkbox, Oct 8 read
+    expect(airtableRos2026.filter(row => row.title === "Pet Partners Therapy").every(row => row.websitePublic === "")).toBe(true);
   });
 });

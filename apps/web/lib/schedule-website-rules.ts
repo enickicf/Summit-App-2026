@@ -35,14 +35,30 @@ export const scheduleBlockTitles: RegExp[] = [
   /^high tea\b/i
 ];
 
+// Airtable's "Website Public/Private" column is a CHECKBOX (found Oct 8, after the team pointed out an unchecked Pet
+// Partners row on the site): ticked = on the public website, unticked = not. When a row carries that information
+// (recorded read: "checked" / ""; live API: "true" / "") it decides; the block list above is only the fallback for
+// sources without it (the Google Doc schedule).
 export type RosVisibility = { title: string; websitePublic?: string | undefined };
+const checkedValues = new Set(["checked", "true", "public", "yes", "1", "x"]);
 export function isOnWebsiteSchedule(row: RosVisibility): boolean {
   const title = row.title.trim();
   if (neverOnWebsite.test(title)) return false;
-  const flag = (row.websitePublic ?? "").trim().toLowerCase();
-  if (flag === "private") return false;
-  if (flag === "public") return true;
+  if (row.websitePublic !== undefined) {
+    const flag = row.websitePublic.trim().toLowerCase();
+    if (flag === "private") return false;
+    return checkedValues.has(flag);
+  }
   return scheduleBlockTitles.some(pattern => pattern.test(title));
+}
+
+// Airtable synopses that must not be shown as written (Payton/Jan, Oct 8: the Nov 3 dinner is for every Summit guest,
+// not "talent"; Bianca took the note out of the title but the synopsis still says it). Until Airtable is corrected the
+// website shows the title alone.
+const suppressedSynopses = [/^dinner for summit talent\.?$/i];
+export function websiteSessionSynopsis(synopsis: string): string {
+  const text = synopsis.trim();
+  return suppressedSynopses.some(pattern => pattern.test(text)) ? "" : text;
 }
 
 // Airtable's working labels that read differently on the website: the owner's schedule calls the talent dinner

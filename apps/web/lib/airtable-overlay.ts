@@ -6,7 +6,7 @@ import {
   isPublicAirtablePerson, type AirtableSession
 } from "./airtable";
 import { airtableRos2026, type RosRow } from "./airtable-ros-2026";
-import { inviteOnly, inviteOnlyScope, isOnWebsiteSchedule, pinnedTime, websiteSessionTitle, type ScheduleItemWithAttire } from "./schedule-website-rules";
+import { inviteOnly, inviteOnlyScope, isOnWebsiteSchedule, pinnedTime, websiteSessionSynopsis, websiteSessionTitle, type ScheduleItemWithAttire } from "./schedule-website-rules";
 import { scheduleDoc2026 } from "./schedule-doc-2026";
 import { airtableTalent2026, type RecordedAirtablePerson } from "./airtable-talent-2026";
 import { airtablePartners2026 } from "./airtable-partners-2026";
@@ -81,7 +81,7 @@ function scheduleFromAirtable(sessions: AirtableSession[], snapshot: EventSnapsh
     const access = inviteOnly.test(session.title) ? inviteOnlyScope
       : published?.eligibilityScope ?? { id: "unconfirmed", label: "Access details to be confirmed" };
     const location = session.location || "Location to be confirmed";
-    const summary = session.synopsis || title;
+    const summary = websiteSessionSynopsis(session.synopsis) || title;
     const item: ScheduleItemWithAttire = {
       ...(template ?? {}),
       id: airtableUuid(session.recordId), eventId: snapshot.event.id, title, shortTitle: title,
@@ -109,7 +109,9 @@ export function recordedAirtableSchedule(rows: RosRow[] = airtableRos2026): Airt
     const [hour, minute] = row.start.split(":").map(Number) as [number, number];
     return {
       recordId: row.recordId, title: row.title, date: row.date, startUtc: zonedToUtc(year, month, day, hour, minute).toISOString(), endText: row.end,
-      location: row.location, synopsis: row.synopsis, forum: row.forum ?? "", websiteTime: "", attire: row.attire ?? "", websitePublic: row.websitePublic ?? ""
+      location: row.location, synopsis: row.synopsis, forum: row.forum ?? "", websiteTime: "", attire: row.attire ?? "",
+      // undefined (the Google Doc rows) keeps the block-list fallback; the recorded Airtable rows carry the checkbox state.
+      ...(row.websitePublic !== undefined ? { websitePublic: row.websitePublic } : {})
     };
   });
 }

@@ -88,8 +88,12 @@ describe("withAirtable", () => {
     expect(one("Founders Cocktails").eligibilityScope).toEqual({ id: "invite-only", label: "Invite only" });
     expect(one("Founder's Dinner").eligibilityScope.label).toBe("Invite only");
     expect(at("Dinner")).toEqual(["2026-11-04T02:30:00.000Z"]); // "Dinner - talent" in Airtable, Nov 3 6:30 PM
-    expect(one("Dinner").eligibilityScope.label).toBe("Invite only");
-    expect(next.scheduleItems.filter(item => item.title === "Pet Partners Therapy")).toHaveLength(3);
+    // Oct 8 (Payton/Jan): the Nov 3 dinner is for every Summit guest; Airtable's leftover "talent" synopsis is not shown.
+    expect(one("Dinner").eligibilityScope.label).not.toBe("Invite only");
+    expect(one("Dinner").summary).not.toMatch(/talent/i);
+    // Oct 8: Airtable's "Website Public/Private" checkbox decides; Pet Partners is unticked, so it is off the schedule.
+    expect(next.scheduleItems.filter(item => item.title === "Pet Partners Therapy")).toHaveLength(0);
+    expect(next.scheduleItems.filter(item => item.title === "Late Night Pickleball + Sauna").map(item => item.startUtc)).toEqual(["2026-11-04T06:00:00.000Z", "2026-11-05T06:00:00.000Z"]); // Nov 3 and 4 ticked (10 PM PST), Nov 2 not
   });
   it("parses Airtable end times without inventing missing ones", () => {
     expect(sessionEndUtc("2026-11-03T04:00:00.000Z", "10 PM")).toBe("2026-11-03T06:00:00.000Z");

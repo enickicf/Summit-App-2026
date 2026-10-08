@@ -118,7 +118,8 @@ export async function getAirtableSchedule(): Promise<AirtableSession[] | null> {
     forum: text(record.fields[f.forum]),
     websiteTime: text(record.fields[f.websiteTime]),
     attire: attireId ? text(record.fields[attireId]) : "",
-    websitePublic: websitePublicId ? text(record.fields[websitePublicId]) : ""
+    // The checkbox arrives as true/absent; without the column the website falls back to its block list.
+    ...(websitePublicId ? { websitePublic: text(record.fields[websitePublicId]) } : {})
   })).filter(session => session.title) ?? null;
 }
 
