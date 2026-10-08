@@ -54,7 +54,7 @@ describe("Sept 23 site updates", () => {
   it("Summit hero puts the date and venue on one line, Awards-style", () => {
     const html = summit();
     // Owner (Oct 8): date and venue sit beside the headline under the hero: "November 2–4, 2026" over "Wynn Las Vegas".
-    expect(html).toMatch(/<p class="[^"]*introDate[^"]*">November 2–4, 2026<\/p><p class="[^"]*introVenue[^"]*">Wynn Las Vegas<\/p>/);
+    expect(html).toMatch(/<p class="[^"]*introDate[^"]*">November 2–4, 2026<span[^>]*> · <\/span><span class="[^"]*introVenue[^"]*">Wynn Las Vegas<\/span><\/p>/);
     expect(html).not.toContain("heroVenue");
   });
 

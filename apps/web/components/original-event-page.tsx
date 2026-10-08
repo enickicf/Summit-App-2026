@@ -278,12 +278,11 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     /* Ryan (Oct 8): on the 2026 page the introduction is just the headline, "real nice and thin" (the logo and the
        repeated "Powered by" credit are gone — "we don't need to re-say that"), then straight into Who's Coming. */
     : <section className={`${styles.band} ${summitStyles.introThin} ${summitStyles.introBar}`} id="about">
-      {/* Owner (Oct 8): headline on the left; the event's date, venue and the schedule button on the right, split by a
-          thin rule (stacked and centred on phones). From Nov 6, 2026 the date reads "2027 — To Be Announced Soon." */}
+      {/* Owner (Oct 8): one centred, symmetrical stack — the headline, a short rule, "November 2–4, 2026 · Wynn Las Vegas"
+          on one line, then the schedule button. From Nov 6, 2026 the date line reads "2027 — To Be Announced Soon." */}
       <h2>A National Convening for <span className={summitStyles.introAccent}>Mental Health</span> and Connection</h2>
       <div className={summitStyles.introDetails}>
-        <p className={summitStyles.introDate}>{isPostEvent() ? postEventLabel : `${withoutYear(heroDates.main, year).replace("-", "–")}, ${year}`}</p>
-        {!isPostEvent() && <p className={summitStyles.introVenue}>{venue ?? "Venue to be announced"}</p>}
+        <p className={summitStyles.introDate}>{isPostEvent() ? postEventLabel : `${withoutYear(heroDates.main, year).replace("-", "–")}, ${year}`}{!isPostEvent() && <><span className={summitStyles.introDot} aria-hidden="true"> · </span><span className={summitStyles.introVenue}>{venue ?? "Venue to be announced"}</span></>}</p>
         <a className={summitStyles.introSchedule} href="#schedule">View full schedule <span aria-hidden="true">→</span></a>
       </div>
     </section>}
