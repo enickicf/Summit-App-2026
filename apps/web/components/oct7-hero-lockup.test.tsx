@@ -56,10 +56,11 @@ describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards tim
     const details = awards.slice(awards.indexOf('id="broadcast"'), awards.indexOf('id="awards-honor"'));
     expect(details.indexOf("Monday, November 2</time>")).toBeGreaterThan(-1);
     expect(details.indexOf("</time>")).toBeLessThan(details.indexOf("<dl"));
-    // Owner (Oct 8): date + venue eyebrow above the logo; the stack ends on an outlined "View schedule" button
-    // directly under the lockup; no separate dates band.
-    expect(summitHero).toMatch(/^[^]*?<div class="[^"]*heroCopy[^"]*"><p class="[^"]*heroEyebrow[^"]*">November 2–4, 2026<span class="[^"]*"> · Wynn Las Vegas<\/span><\/p><h1 /);
-    expect(summitHero).toMatch(/alt="NAMI, National Alliance on Mental Illness"[^>]*><\/span><\/div><div class="[^"]*heroButtons[^"]*"><a class="[^"]*heroButtonGhost[^"]*" href="#schedule">View schedule <span aria-hidden="true">→<\/span><\/a><\/div><\/div>$/);
+    // Owner (Oct 8): the hero ends on the lockup; date, venue and the schedule button sit beside the headline in #about.
+    expect(summitHero).not.toMatch(/Schedule|Wynn Las Vegas|November 2/);
+    expect(summitHero).toMatch(/alt="NAMI, National Alliance on Mental Illness"[^>]*><\/span><\/div><\/div>$/);
+    const intro = summit.slice(summit.indexOf('id="about"'), summit.indexOf('id="directory"'));
+    expect(intro).toMatch(/<h2>A National Convening for[^]*?<\/h2><div class="[^"]*introDetails[^"]*"><p class="[^"]*introDate[^"]*">November 2–4, 2026<\/p><p class="[^"]*introVenue[^"]*">Wynn Las Vegas<\/p><a class="[^"]*introSchedule[^"]*" href="#schedule">View full schedule <span aria-hidden="true">→<\/span><\/a><\/div>/);
     expect(summit).not.toContain('id="summit-dates"');
     expect(summitHero).not.toContain("heroAside");
     // The 2025 archive heroes carry no lockup.

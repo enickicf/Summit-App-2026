@@ -53,9 +53,8 @@ describe("Sept 23 site updates", () => {
 
   it("Summit hero puts the date and venue on one line, Awards-style", () => {
     const html = summit();
-    const line = html.match(/<p class="[^"]*heroDate[^"]*">([\s\S]*?)<\/p>/)?.[1] ?? "";
-    // Owner (Oct 8): the line is an eyebrow above the logo, "November 2–4, 2026 · Wynn Las Vegas".
-    expect(line).toMatch(/November[^<|]*, 2026<span class="[^"]*heroDateVenue[^"]*"> · Wynn Las Vegas<\/span>/);
+    // Owner (Oct 8): date and venue sit beside the headline under the hero: "November 2–4, 2026" over "Wynn Las Vegas".
+    expect(html).toMatch(/<p class="[^"]*introDate[^"]*">November 2–4, 2026<\/p><p class="[^"]*introVenue[^"]*">Wynn Las Vegas<\/p>/);
     expect(html).not.toContain("heroVenue");
   });
 
@@ -143,6 +142,7 @@ describe("Sept 23 site updates", () => {
     const s = summit(); const a = awards();
     expect(s).toContain("2027 — To Be Announced Soon.");
     expect(a).toContain("2027 — To Be Announced Soon.");
-    expect(s.match(/<p class="[^"]*heroDate[^"]*">([\s\S]*?)<\/p>/)?.[1]).not.toContain("Wynn Las Vegas");
+    expect(s.match(/<p class="[^"]*introDate[^"]*">([\s\S]*?)<\/p>/)?.[1]).toBe("2027 — To Be Announced Soon.");
+    expect(s).not.toContain("introVenue");
   });
 });

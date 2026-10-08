@@ -245,10 +245,6 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     <section className={`${summitStyles.hero} ${summitStyles.heroFormat}`} aria-labelledby="summit-title">
       <SummitVideo background />
       <div className={summitStyles.heroCopy}>
-        {/* Owner (Oct 8): the dates and venue are a small spaced-capitals line ABOVE the logo, matching the "Powered by" /
-            "Presented by" labels, so the hero reads as three matching tiers; from Nov 6, 2026 it reads
-            "2027 — To Be Announced Soon." (lib/event-phase.ts). 2026 only. */}
-        {!archive && <p className={`${summitStyles.heroDate} ${summitStyles.heroEyebrow}`}>{isPostEvent() ? postEventLabel : <>{withoutYear(heroDates.main, year).replace("-", "–")}, {year}<span className={summitStyles.heroDateVenue}> · {venue ?? "Venue to be announced"}</span></>}</p>}
         <h1 id="summit-title" className={summitStyles.heroLogo}>
           <SiteImage src="/images/summit-logo.png" alt="" sizes="(max-width: 600px) 170px, 250px" loading="eager" fetchPriority="high" />
           <span className={styles.hidden}>Not Alone Summit {year}</span>
@@ -261,9 +257,8 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
         {/* Owner (Sept 23): date and venue on one line, in the Awards hero's format ("November 2–4 | Wynn Las Vegas");
             from Nov 6, 2026 the 2026 page reads "2027 — To Be Announced Soon." by itself (lib/event-phase.ts). */}
         {archive && <p className={summitStyles.heroDate}><span className={summitStyles.heroEdition}>{year}</span>{withoutYear(summit2025Dates, year)}<span className={summitStyles.heroDateVenue}> | Wynn Las Vegas</span></p>}
-        {/* Owner (Oct 8): an outlined "View schedule" button ends the stack under the lockup (no fill, so it never
-            outshines the logo); the separate dates band is gone. 2026 only. */}
-        {!archive && <div className={summitStyles.heroButtons}><a className={`${summitStyles.heroButton} ${summitStyles.heroButtonGhost}`} href="#schedule">View schedule <span aria-hidden="true">→</span></a></div>}
+        {/* Owner (Oct 8): the hero ends on the Presented-by lockup; the dates, the venue and the schedule button sit beside
+            the headline in the section right below (#about). */}
       </div>
     </section>
     {/* Owner (Sept 21): the recap player is removed for now; it will move to a new location. */}
@@ -282,8 +277,15 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     </section>
     /* Ryan (Oct 8): on the 2026 page the introduction is just the headline, "real nice and thin" (the logo and the
        repeated "Powered by" credit are gone — "we don't need to re-say that"), then straight into Who's Coming. */
-    : <section className={`${styles.band} ${summitStyles.introThin}`} id="about">
+    : <section className={`${styles.band} ${summitStyles.introThin} ${summitStyles.introBar}`} id="about">
+      {/* Owner (Oct 8): headline on the left; the event's date, venue and the schedule button on the right, split by a
+          thin rule (stacked and centred on phones). From Nov 6, 2026 the date reads "2027 — To Be Announced Soon." */}
       <h2>A National Convening for <span className={summitStyles.introAccent}>Mental Health</span> and Connection</h2>
+      <div className={summitStyles.introDetails}>
+        <p className={summitStyles.introDate}>{isPostEvent() ? postEventLabel : `${withoutYear(heroDates.main, year).replace("-", "–")}, ${year}`}</p>
+        {!isPostEvent() && <p className={summitStyles.introVenue}>{venue ?? "Venue to be announced"}</p>}
+        <a className={summitStyles.introSchedule} href="#schedule">View full schedule <span aria-hidden="true">→</span></a>
+      </div>
     </section>}
     {/* Owner (Sept 21): co-chairs sit just above the producers on every site; 2025 hosts keep their place. */}
     {archive && <Leadership hostsOnly />}

@@ -265,19 +265,6 @@
 
 /* Ryan (Oct 8) + owner (Oct 8): Summit hero, one left-hand stack — logo, Cohen credit, Presented-by lockup, then the
    Schedule button directly above the "dates | venue" line at the bottom. */
-/* Owner (Oct 8): date + venue as a spaced-capitals eyebrow above the logo (same style as the Powered by / Presented
-   by labels, a touch brighter), and an outlined "View schedule" button closing the stack. */
-.summit .heroCopy .heroEyebrow { margin:0 0 18px; color:rgba(255,255,255,.88); font-size:13px; font-weight:700; line-height:1.4; letter-spacing:.22em; text-transform:uppercase; }
-.summit .heroCopy .heroEyebrow .heroDateVenue { font-weight:700; }
-.summit .heroCopy .heroButtons { margin-top:26px; }
-.summit .heroCopy .heroButtonGhost { min-height:42px; padding:9px 22px; border:1.5px solid rgba(255,255,255,.85); border-radius:999px; background:transparent; color:#fff; font-size:14px; font-weight:700; letter-spacing:.02em; text-shadow:none; transition:background 160ms ease, color 160ms ease; }
-.summit .heroCopy .heroButtonGhost:hover { background:#fff; color:#111; }
-.summit .heroCopy .heroButtonGhost span { margin-left:6px; }
-@media(max-width:600px) {
-  .summit .heroCopy .heroEyebrow { font-size:11px; letter-spacing:.18em; margin-bottom:14px; }
-  .summit .heroCopy .heroButtons { margin-top:20px; }
-  .summit .heroCopy .heroButtonGhost { min-height:40px; padding:8px 18px; font-size:13px; }
-}
 
 /* Ryan (Oct 8): the 2026 introduction is the headline alone, thin and centered, straight into Who's Coming. */
 /* Owner (Oct 8): the headline sits in its own colour band (Summit pearl) under the blue dates band. */
@@ -294,3 +281,21 @@
 .summit.summit .goalsBand li { counter-increment:goal; margin:0; color:#fff; font-size:clamp(22px,3vw,36px); font-weight:700; line-height:1.25; letter-spacing:-0.01em; text-wrap:balance; }
 .summit.summit .goalsBand li::before { content:counter(goal) ". "; color:#d0d4ea; }
 @media (max-width:600px) { .summit.summit .goalsBand li { font-size:21px; } .summit.summit .goalsBand ol { gap:12px; } }
+
+/* Owner (Oct 8): the headline band is two columns — headline left (about 60%), the event's details right (about 40%)
+   split by a thin vertical rule: the date bold and large, the venue under it, then a filled Summit-blue button.
+   Both columns sit on the page measure and are centred against each other; stacked and centred on phones. */
+.summit.summit .introBar { display:grid; grid-template-columns:minmax(0,3fr) minmax(0,2fr); align-items:center; gap:0; text-align:left; padding-top:56px; padding-bottom:56px; }
+.summit.summit .introBar h2 { margin:0; max-width:none; padding-right:48px; font-size:clamp(32px,3.6vw,52px); text-align:left; }
+.summit.summit .introDetails { padding:6px 0 6px 48px; border-left:1px solid rgba(74,95,170,.35); }
+.summit.summit .introDetails .introDate { margin:0; color:#111; font-size:clamp(24px,2.3vw,32px); font-weight:700; line-height:1.2; letter-spacing:-0.01em; }
+.summit.summit .introDetails .introVenue { margin:6px 0 0; color:#333; font-size:18px; font-weight:500; line-height:1.4; }
+.summit.summit .introSchedule { display:inline-flex; align-items:center; gap:8px; min-height:44px; margin-top:20px; padding:10px 22px; border-radius:999px; background:#4a5faa; color:#fff; font-size:15px; font-weight:700; text-decoration:none; transition:background 160ms ease; }
+.summit.summit .introSchedule:hover { background:#3a4c8f; }
+.summit.summit .introSchedule:focus-visible { outline:3px solid #4a5faa; outline-offset:3px; }
+@media(max-width:760px) {
+  .summit.summit .introBar { grid-template-columns:1fr; text-align:center; padding-top:40px; padding-bottom:40px; }
+  .summit.summit .introBar h2 { padding-right:0; text-align:center; }
+  .summit.summit .introDetails { margin-top:24px; padding:24px 0 0; border-left:0; border-top:1px solid rgba(74,95,170,.35); }
+  .summit.summit .introSchedule { display:flex; justify-content:center; width:100%; max-width:340px; margin:18px auto 0; }
+}
