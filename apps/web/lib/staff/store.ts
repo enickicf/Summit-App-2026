@@ -25,18 +25,18 @@ const personName = (max: number) => z.string().trim().min(2).max(max); // as the
 const email = z.string().trim().toLowerCase().max(254).regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Please enter a valid email address.");
 
 // Exactly the RSVP form's fields (Netlify site not-alone-awards-rsvp-2026).
-export const rsvpPartners = ["", "nami"] as const;
+export const rsvpPartners = ["", "nami", "usta"] as const;
 export type RsvpPartner = (typeof rsvpPartners)[number];
-export const rsvpPartnerLabels: Record<Exclude<RsvpPartner, "">, string> = { nami: "NAMI" };
+export const rsvpPartnerLabels: Record<Exclude<RsvpPartner, "">, string> = { nami: "NAMI", usta: "USTA" };
 // Owner (Oct 3, 2026): private plain RSVP forms per group; the form's link tags the request (Lake Las Vegas).
 // Owner (Oct 7): the Nevada Mental Health Day page's own form ("Community Day & Awards Show") is tagged community-day.
 export const rsvpTiers = ["", "lake-las-vegas", "community-day"] as const;
 export type RsvpTier = (typeof rsvpTiers)[number];
 // Owner (Oct 3, 2026): "How did you hear about us?" on the main RSVP form (required there; older or cached
 // forms that do not send it still work and store "").
-export const rsvpHeardFrom = ["", "inspiring-children", "nami", "lake-las-vegas", "other"] as const;
+export const rsvpHeardFrom = ["", "inspiring-children", "nami", "lake-las-vegas", "usta", "other"] as const;
 export type RsvpHeardFrom = (typeof rsvpHeardFrom)[number];
-export const rsvpHeardFromLabels: Record<Exclude<RsvpHeardFrom, "">, string> = { "inspiring-children": "Inspiring Children", nami: "NAMI", "lake-las-vegas": "Lake Las Vegas", other: "Other" };
+export const rsvpHeardFromLabels: Record<Exclude<RsvpHeardFrom, "">, string> = { "inspiring-children": "Inspiring Children", nami: "NAMI", "lake-las-vegas": "Lake Las Vegas", usta: "USTA", other: "Other" };
 // Owner (Oct 5, 2026): a request can cover up to ten people, and the form collects the name, email and phone of
 // every additional person in the party (the person filling in the form is the first). "guests" holds those
 // additional people. Forms from before Oct 5 sent no list, so the field is optional and older records have none.
@@ -304,12 +304,15 @@ export function rsvpTotals(records: RsvpSubmission[]) {
   const communityDayOnly = communityDay.filter(record => !wantsAwardsShow(record));
   const vip = latest.filter(record => record.vip);
   const nami = latest.filter(record => record.partner === "nami");
+  const usta = latest.filter(record => record.partner === "usta");
   const lakeLasVegas = latest.filter(record => record.tier === "lake-las-vegas");
   return {
     lakeLasVegasGuests: lakeLasVegas.length,
     lakeLasVegasTickets: lakeLasVegas.filter(requestsTickets).reduce((total, record) => total + record.guestCount, 0),
     namiGuests: nami.length,
     namiTickets: nami.filter(requestsTickets).reduce((total, record) => total + record.guestCount, 0),
+    ustaGuests: usta.length,
+    ustaTickets: usta.filter(requestsTickets).reduce((total, record) => total + record.guestCount, 0),
     vipGuests: vip.length,
     vipTickets: vip.filter(requestsTickets).reduce((total, record) => total + record.guestCount, 0),
     formsSubmitted: records.length,
@@ -330,18 +333,20 @@ export function rsvpTotals(records: RsvpSubmission[]) {
 export const activeRsvps = (records: RsvpSubmission[]) => records.filter(record => !record.removedAt);
 export const vipRsvps = (records: RsvpSubmission[]) => records.filter(record => Boolean(record.vip));
 export const namiRsvps = (records: RsvpSubmission[]) => records.filter(record => record.partner === "nami");
+export const ustaRsvps = (records: RsvpSubmission[]) => records.filter(record => record.partner === "usta");
 export const lakeLasVegasRsvps = (records: RsvpSubmission[]) => records.filter(record => record.tier === "lake-las-vegas");
 // Owner (Oct 2): every request shows which form it came through. NAMI wins over VIP if both were ever set.
 // Owner (Oct 3): NAMI VIP and Lake Las Vegas VIP are private VIP forms tagged with their group as well.
-export type RsvpForm = "Standard" | "VIP" | "NAMI" | "NAMI VIP" | "Lake Las Vegas" | "Lake Las Vegas VIP" | "Community Day";
+export type RsvpForm = "Standard" | "VIP" | "NAMI" | "NAMI VIP" | "USTA" | "Lake Las Vegas" | "Lake Las Vegas VIP" | "Community Day";
 export function rsvpForm(record: Pick<RsvpSubmission, "vip" | "partner" | "tier">): RsvpForm {
   if (record.partner === "nami") return record.vip ? "NAMI VIP" : "NAMI";
+  if (record.partner === "usta") return "USTA";
   if (record.tier === "lake-las-vegas") return record.vip ? "Lake Las Vegas VIP" : "Lake Las Vegas";
   if (record.tier === "community-day") return "Community Day";
   return record.vip ? "VIP" : "Standard";
 }
 // Owner (Oct 3): one spreadsheet per form, for seating.
-export const rsvpExportForms = { vip: "VIP", "nami-vip": "NAMI VIP", "lake-las-vegas-vip": "Lake Las Vegas VIP", "lake-las-vegas": "Lake Las Vegas", nami: "NAMI", standard: "Standard" } as const;
+export const rsvpExportForms = { vip: "VIP", "nami-vip": "NAMI VIP", "lake-las-vegas-vip": "Lake Las Vegas VIP", "lake-las-vegas": "Lake Las Vegas", nami: "NAMI", usta: "USTA", standard: "Standard" } as const;
 export type RsvpExportForm = keyof typeof rsvpExportForms;
 export const rsvpsOfForm = (records: RsvpSubmission[], form: RsvpExportForm) => records.filter(record => rsvpForm(record) === rsvpExportForms[form]);
 export const withRsvpForm = (records: RsvpSubmission[]) => records.map(record => ({ ...record, form: rsvpForm(record), attendingLabel: record.attending ? rsvpAttendingLabels[record.attending] : (record.communityDay ? rsvpAttendingLabels.both : ""), heardFromLabel: record.heardFrom ? rsvpHeardFromLabels[record.heardFrom] : "", guestDetails: (record.guests ?? []).map(partyGuestLine).join("; ") }));

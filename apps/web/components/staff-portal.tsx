@@ -2,7 +2,7 @@ import { SiteImage } from "./site-image";
 import { PortalViewSwitch } from "./portal-views";
 import { PortalAutoRefresh } from "./portal-auto-refresh";
 import { RsvpEmailTools } from "./rsvp-email-tools";
-import { activeOf, activeRsvps, comingTo, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels } from "../lib/staff/store";
+import { activeOf, activeRsvps, comingTo, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, ustaRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels } from "../lib/staff/store";
 import styles from "../app/staff/staff.module.css";
 
 export type LineupGroup = { title: string; people: { name: string; role: string; rank: number | null; tier: string | null; photo: boolean }[] };
@@ -12,10 +12,11 @@ const when = (iso: string) => new Date(iso).toLocaleString("en-US", { timeZone: 
 // Owner (Sept 23): red = Awards Show, blue = Community Day; both when a guest is coming to both.
 function ComingTo({ record }: { record: RsvpSubmission }) {
   const parts = comingTo(record);
-  if (!parts.length && !record.vip && record.partner !== "nami" && record.tier !== "lake-las-vegas") return <span className={styles.muted}>—</span>;
+  if (!parts.length && !record.vip && !record.partner && record.tier !== "lake-las-vegas") return <span className={styles.muted}>—</span>;
   return <span className={styles.badges}>
     {record.vip && <span className={`${styles.badge} ${styles.badgeVip}`}>VIP</span>}
     {record.partner === "nami" && <span className={`${styles.badge} ${styles.badgeNami}`}>NAMI</span>}
+    {record.partner === "usta" && <span className={`${styles.badge} ${styles.badgeUsta}`}>USTA</span>}
     {record.tier === "lake-las-vegas" && <span className={`${styles.badge} ${styles.badgeLake}`}>Lake Las Vegas</span>}
     {parts.includes("awards") && <span className={`${styles.badge} ${styles.badgeAwards}`}>Awards</span>}
     {parts.includes("communityDay") && <span className={`${styles.badge} ${styles.badgeCommunity}`}>Community Day</span>}
@@ -97,6 +98,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
   const communityDay = active.filter(row => comingTo(row).includes("communityDay"));
   const vip = vipRsvps(active);
   const nami = namiRsvps(active);
+  const usta = ustaRsvps(active);
   const lakeLasVegas = lakeLasVegasRsvps(active);
   const pokerActive = activeOf(poker);
   const pokerRemoved = removedOf(poker);
@@ -125,7 +127,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
     </header>
 
     <div data-view="awards" id="awards">
-      <nav className={styles.sectionNav} aria-label="Awards sections"><a href="#vip">VIP</a><a href="#lake-las-vegas">Lake Las Vegas</a><a href="#nami">NAMI</a><a href="#tickets">Tickets</a><a href="#community-day">Community Day</a><a href="#nominations">Nominations</a><a href="#removed">Removed</a><a href="#lineup">Lineup</a></nav>
+      <nav className={styles.sectionNav} aria-label="Awards sections"><a href="#vip">VIP</a><a href="#lake-las-vegas">Lake Las Vegas</a><a href="#nami">NAMI</a><a href="#usta">USTA</a><a href="#tickets">Tickets</a><a href="#community-day">Community Day</a><a href="#nominations">Nominations</a><a href="#removed">Removed</a><a href="#lineup">Lineup</a></nav>
       <section className={styles.stats} aria-label="Ticket totals">
         <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{totals.ticketsRequested}</span><span className={styles.statLabel}>Awards Show tickets</span><span className={styles.statNote}>Party sizes of every Awards Show request, one per guest email (Community Day-only requests are counted below)</span></div>
         <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{totals.formsSubmitted}</span><span className={styles.statLabel}>Forms submitted</span><span className={styles.statNote}>Every RSVP submission received</span></div>
@@ -133,6 +135,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
         <div className={`${styles.stat} ${styles.statVip}`}><span className={styles.statValue}>{totals.vipTickets}</span><span className={styles.statLabel}>VIP tickets</span><span className={styles.statNote}>{totals.vipGuests} VIP {totals.vipGuests === 1 ? "guest" : "guests"} through the VIP link</span></div>
         <div className={`${styles.stat} ${styles.statLake}`}><span className={styles.statValue}>{totals.lakeLasVegasTickets}</span><span className={styles.statLabel}>Lake Las Vegas tickets</span><span className={styles.statNote}>{totals.lakeLasVegasGuests} {totals.lakeLasVegasGuests === 1 ? "guest" : "guests"} through the Lake Las Vegas form</span></div>
         <div className={`${styles.stat} ${styles.statNami}`}><span className={styles.statValue}>{totals.namiTickets}</span><span className={styles.statLabel}>NAMI tickets</span><span className={styles.statNote}>{totals.namiGuests} NAMI {totals.namiGuests === 1 ? "guest" : "guests"} through the NAMI form</span></div>
+        <div className={`${styles.stat} ${styles.statUsta}`}><span className={styles.statValue}>{totals.ustaTickets}</span><span className={styles.statLabel}>USTA tickets</span><span className={styles.statNote}>{totals.ustaGuests} USTA {totals.ustaGuests === 1 ? "guest" : "guests"} through the USTA form</span></div>
         <div className={`${styles.stat} ${styles.statCommunity}`}><span className={styles.statValue}>{totals.communityDayTickets}</span><span className={styles.statLabel}>Community Day tickets</span><span className={styles.statNote}>{totals.communityDayGuests} {totals.communityDayGuests === 1 ? "guest" : "guests"} said yes to Community Day{totals.communityDayOnlyGuests > 0 ? ` · ${totals.communityDayOnlyGuests} Community Day only (${totals.communityDayOnlyTickets} ${totals.communityDayOnlyTickets === 1 ? "ticket" : "tickets"})` : ""}</span></div>
         <div className={styles.stat}><span className={styles.statValue}>{nominations.length}</span><span className={styles.statLabel}>Nominations</span></div>
       </section>
@@ -158,6 +161,12 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
         <div className={styles.sectionHead}><h2 id="nami-title">NAMI RSVPs</h2><span className={`${styles.badge} ${styles.badgeNami}`}>{totals.namiGuests} guests · {totals.namiTickets} tickets</span><a className={styles.button} href="/api/staff/export?kind=rsvp&amp;form=nami">Download list</a></div>
         <p className={styles.help}>Requests from NAMI's private RSVP link. They also appear in the full list below with a <span className={`${styles.badge} ${styles.badgeNami}`}>NAMI</span> badge.</p>
         {nami.length === 0 ? <p className={styles.empty}>No NAMI RSVPs yet.</p> : <RsvpTable rows={nami} />}
+      </section>
+
+      <section className={styles.section} id="usta" aria-labelledby="usta-title">
+        <div className={styles.sectionHead}><h2 id="usta-title">USTA RSVPs</h2><span className={`${styles.badge} ${styles.badgeUsta}`}>{totals.ustaGuests} guests · {totals.ustaTickets} tickets</span><a className={styles.button} href="/api/staff/export?kind=rsvp&amp;form=usta">Download list</a></div>
+        <p className={styles.help}>Requests from USTA's private Community Day + Awards RSVP link. They also appear in the full list below with a <span className={`${styles.badge} ${styles.badgeUsta}`}>USTA</span> badge.</p>
+        {usta.length === 0 ? <p className={styles.empty}>No USTA RSVPs yet.</p> : <RsvpTable rows={usta} />}
       </section>
 
       <section className={styles.section} id="tickets" aria-labelledby="tickets-title">
