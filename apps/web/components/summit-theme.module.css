@@ -351,3 +351,13 @@
 .summit.summit .pullQuote { background:#d0d4ea; color:#1f2a5c; }
 .summit.summit .pullQuote blockquote p { color:#1f2a5c; }
 .summit.summit .pullQuote blockquote footer { color:#4a5faa; font-weight:600; }
+
+/* Owner (Oct 8): "View full schedule" sits on the same line, to the right of "November 2–4, 2026 · Wynn Las Vegas";
+   the pair is centred as one group under the rule and vertically aligned. Stacked again on phones. */
+.summit > section:global(#about) .introDetails { flex-direction:row; flex-wrap:wrap; justify-content:center; align-items:center; gap:14px 28px; }
+.summit > section:global(#about) .introDetails .introDate { font-size:clamp(18px,1.5vw,21px); }
+.summit > section:global(#about) .introSchedule { margin-top:0; min-height:42px; padding:9px 22px; font-size:15px; }
+@media(max-width:600px) {
+  .summit > section:global(#about) .introDetails { flex-direction:column; gap:16px; }
+  .summit > section:global(#about) .introSchedule { width:100%; max-width:320px; }
+}
