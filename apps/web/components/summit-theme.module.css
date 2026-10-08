@@ -106,8 +106,10 @@
 .archiveDirectory > section > div h3 { margin:0 0 6px; font-size:17px; color:#4a5faa; }
 .archiveDirectory > section > div p { margin:0; font-size:13px; line-height:1.45; color:#555555; }
 /* Every Summit guest card is identical: square photo plus a fixed text area (2-line name, 2-line role). */
-.summit.summit :global(.personCard > div:nth-child(2)), .archiveDirectory > section > div > * > div { box-sizing:border-box; flex:none; height:124px; min-height:0; overflow:hidden; }
+/* Ryan (Oct 8): titles may run three lines instead of being cut at two. */
+.summit.summit :global(.personCard > div:nth-child(2)), .archiveDirectory > section > div > * > div { box-sizing:border-box; flex:none; height:144px; min-height:0; overflow:hidden; }
 .summit.summit :global(.personCard h4), .summit.summit :global(.personCard p), .archiveDirectory > section > div h3, .archiveDirectory > section > div p { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
+.summit.summit :global(.personCard p), .archiveDirectory > section > div p { -webkit-line-clamp:3; }
 .summit.summit :global(.personCard h4), .archiveDirectory > section > div h3 { line-height:1.3; }
 .summit.summit :global(.personCard p) { line-height:1.45; }
 .summit.summit > section:global(#rsvp) { background:linear-gradient(115deg,#d0d4ea,#d0d4ea); border-top:1px solid var(--rule); }
@@ -131,7 +133,7 @@
   .archiveDirectory > section > h2 { font-size:22px; }
   .archiveDirectory > section > div > * > div { padding:14px 12px; }
   .archiveDirectory > section > div h3 { font-size:15px; }
-  .summit.summit :global(.personCard > div:nth-child(2)), .archiveDirectory > section > div > * > div { height:132px; }
+  .summit.summit :global(.personCard > div:nth-child(2)), .archiveDirectory > section > div > * > div { height:152px; }
   .summit.summit :global(.personCard h4), .archiveDirectory > section > div h3 { -webkit-line-clamp:3; }
   .summit.summit :global(.peopleGrid > .personCard) { flex-basis:calc((100% - 16px) / 2); }
 }

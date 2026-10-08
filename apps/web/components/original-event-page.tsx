@@ -29,6 +29,7 @@ import { awardsDoorsOpen2026, awardsShowStart2026 } from "../lib/event-partners-
 import summitStyles from "./summit-theme.module.css";
 import { EventPartners } from "./event-partners";
 import { summitNarrative2026 } from "../lib/summit-narrative-2026";
+import { applyProducerCreditRules } from "../lib/producer-credits-2026";
 
 type SourceSection = (typeof source.summit.sections)[number];
 function localSections(sections: SourceSection[]): SourceSection[] {
@@ -114,7 +115,8 @@ function AwardCategories() {
   return <div className={styles.categories}>{categories.filter((_, index) => index % 2 === 0).map((block, index) => <article key={block.text}><h3>{block.text}</h3><p>{categories[index * 2 + 1]?.text}</p></article>)}</div>;
 }
 
-type LeadershipProps = { producers?: boolean; chairsOnly?: boolean; hostsOnly?: boolean; confirmedNames?: Set<string>; awardsProfiles?: ReturnType<typeof awardsPeople> };
+// summitLinks (Ryan, Oct 8: every face opens a bio): the Summit co-chair cards link to the Summit-context profile.
+type LeadershipProps = { producers?: boolean; chairsOnly?: boolean; hostsOnly?: boolean; confirmedNames?: Set<string>; awardsProfiles?: ReturnType<typeof awardsPeople>; summitLinks?: boolean };
 
 function currentCoChairNames(snapshot: EventSnapshot | null, confirmedNames: Set<string>) {
   const names = new Set(confirmedNames);
@@ -168,7 +170,7 @@ function Leadership(props: LeadershipProps) {
       {group.people.map(person => {
         const profile = props.awardsProfiles?.find(profile => normalizePersonName(profile.name) === normalizePersonName(person.name));
         const card = <>{photos && <SiteImage src={person.image} alt={person.name} sizes="(max-width: 600px) 230px, 250px" />}<h3>{person.name}</h3><p>{person.role}</p></>;
-        return <article key={person.name}>{profile ? <Link href={`/directory/${encodeURIComponent(profile.slug)}?from=awards`} prefetch={false} aria-label={`Meet ${person.name}`}>{card}</Link> : card}</article>;
+        return <article key={person.name}>{profile ? <Link href={`/directory/${encodeURIComponent(profile.slug)}${props.summitLinks ? "" : "?from=awards"}`} prefetch={false} aria-label={`Meet ${person.name}`}>{card}</Link> : card}</article>;
       })}
     </div></div>;
     })}
@@ -207,7 +209,9 @@ function ProducerCredits2026({ confirmedNames, profiles, awardsContext = false, 
     const at = groups.findIndex(group => group.title === "Producers");
     groups.splice(at === -1 ? groups.length : at, 0, { title: "Producer", photos: false, people: producer });
   }
-  const shown = groups.filter(group => group.people.length);
+  // Ryan (Oct 8): Raquelle Stevens credited as a Producer (Airtable source), Ryan off the credits, every group
+  // alphabetical by surname (lib/producer-credits-2026.ts).
+  const shown = applyProducerCreditRules(groups, live).filter(group => group.people.length);
   if (!shown.length) return null;
   const imageFor = (image: string) => getSiteImageMetadata(image)
     ? (alt: string) => <SiteImage src={image} alt={alt} sizes="(max-width: 600px) 230px, 250px" />
@@ -306,7 +310,7 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     </section>}
     {/* Owner (Sept 22): hosts sit just above the co-chairs. */}
     {!archive && <Hosts2026 profiles={reviewedPeople} />}
-    <Leadership {...(archive ? { chairsOnly: true } : { chairsOnly: true, confirmedNames: coChairNames })} />
+    <Leadership {...(archive ? { chairsOnly: true } : { chairsOnly: true, confirmedNames: coChairNames, awardsProfiles: reviewedPeople, summitLinks: true })} />
     {archive ? <Leadership producers /> : <ProducerCredits2026 confirmedNames={confirmedNames} profiles={reviewedPeople} snapshot={snapshot} />}
     {!archive && <>
       <section className={`${styles.band} ${styles.foundation} ${summitStyles.programFooter}`} id="not-alone-program"><SiteImage src={summit[2]!.images[0]!.src} alt="Inspiring Children Foundation" sizes="220px" /><div>
