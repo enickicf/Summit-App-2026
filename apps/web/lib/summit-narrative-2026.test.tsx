@@ -47,6 +47,8 @@ describe("Summit 2026 narrative (Ryan, Oct 7)", () => {
     expect(awards2026.indexOf('id="awards-honor"')).toBeGreaterThan(awards2026.indexOf('id="broadcast"'));
     // Owner (Oct 8): presented like a slide, the opening phrase in bold; the words unchanged.
     expect(honor.replace(/<[^>]+>/g, "")).toContain(esc(summitNarrative2026.awardsSentence));
+    // Owner (Oct 8): exact wording (no "everyday" before "warriors").
+    expect(summitNarrative2026.awardsSentence).toBe("Through the Not Alone Awards, we honor the pioneers, advocates, and warriors who fight for mental health every day.");
     expect(honor).toMatch(/<p><strong class="[^"]*">Through the Not Alone Awards,<\/strong> we honor the pioneers/);
     expect(awards2026).not.toContain('id="awards-narrative"');
     expect(awards2026).not.toContain("Celebrate mental-health warriors.");

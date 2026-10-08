@@ -10,7 +10,7 @@ export const summitNarrative2026 = {
   intro: [
     "Bringing together the people shaping the future of mental health—clinical experts, lived-experience leaders, nonprofit organizations, artists, philanthropists, funders, innovators, policymakers, and young people—to share what works, spark collaboration, and build a more connected national mental-health system."
   ],
-  awardsSentence: "Through the Not Alone Awards, we honor the pioneers, advocates, and everyday warriors who fight for mental health every day.",
+  awardsSentence: "Through the Not Alone Awards, we honor the pioneers, advocates, and warriors who fight for mental health every day.",
   goalsHeading: "Goals",
   goals: [
     "Connect the people doing the work.",
