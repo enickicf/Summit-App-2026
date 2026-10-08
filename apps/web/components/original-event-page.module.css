@@ -722,13 +722,6 @@
 }
 @media (min-width: 1100px) { .currentAwards .broadcastDetails { width: clamp(380px, 29vw, 440px); } .currentAwards .broadcastStream { flex: 1 1 auto; max-width: 680px; } }
 
-/* Owner (Oct 8): the mission statement on its own band — the same lifted dark tone as the Awards sentence band near the
-   top (#121212), full width, equal padding above and below; the host band after it returns to the page black so the two
-   never run together. */
-.currentAwards section:global(#mission) { background: #121212; padding-top: 56px; padding-bottom: 56px; border-top: 0; border-bottom: 0; margin-top: 0; }
-.currentAwards section:global(#awards-host) { background: #090909; border-top: 0; }
-@media (max-width: 600px) { .currentAwards section:global(#mission) { padding-top: 40px; padding-bottom: 40px; } }
-
 /* Owner (Oct 8): the lower mission statement (#mission: "Inspiring Children Foundation × NAMI present…" + "The award show
    was created…") on its own band — the same lifted dark tone as the Awards sentence band near the top (#121212), full
    width, equal padding above and below. The top sentence band is unchanged. The host band after it returns to the page
