@@ -60,7 +60,9 @@ describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards tim
     // line in the hero's bottom-right aside.
     expect(summitHero.indexOf("Presented by")).toBeLessThan(summitHero.indexOf("Schedule</a>"));
     expect(summitHero.indexOf("Schedule</a>")).toBeLessThan(summitHero.indexOf(" | "));
-    expect(summitHero).toMatch(/heroAside[^"]*"><div class="[^"]*heroButtons[^"]*"><a[^>]*href="#schedule">Schedule<\/a><\/div><p class="[^"]*heroDate/);
+    // Owner (Oct 8): one left-hand stack — lockup, then the Schedule button, then the date line, all inside the hero copy.
+    expect(summitHero).toMatch(/alt="NAMI, National Alliance on Mental Illness"[^>]*><\/span><\/div><div class="[^"]*heroButtons[^"]*"><a[^>]*href="#schedule">Schedule<\/a><\/div><p class="[^"]*heroDate/);
+    expect(summitHero).not.toContain("heroAside");
     // The 2025 archive heroes carry no lockup.
     expect(hero(renderToStaticMarkup(<OriginalSummitPage year={2025} snapshot={event2026Snapshot} />), "summit-title")).not.toContain("Presented by");
     expect(hero(renderToStaticMarkup(<OriginalAwardsPage year={2025} snapshot={event2026Snapshot} program={program} />), "awards-title")).not.toContain("Presented by");

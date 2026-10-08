@@ -255,13 +255,12 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
         {/* Owner (Sept 23): date and venue on one line, in the Awards hero's format ("November 2–4 | Wynn Las Vegas");
             from Nov 6, 2026 the 2026 page reads "2027 — To Be Announced Soon." by itself (lib/event-phase.ts). */}
         {archive && <p className={summitStyles.heroDate}><span className={summitStyles.heroEdition}>{year}</span>{withoutYear(summit2025Dates, year)}<span className={summitStyles.heroDateVenue}> | Wynn Las Vegas</span></p>}
+        {/* Ryan (Oct 8): the lockup takes the spot the date line had, then the Schedule button sits directly above the
+            "dates | venue" line at the bottom of the stack. Owner (Oct 8): everything stays on the left, as before —
+            the right-hand placement Ryan wanted to "see how it looks" is out. 2026 only. */}
+        {!archive && <div className={summitStyles.heroButtons}><a className={summitStyles.heroButton} href="#schedule">Schedule</a></div>}
+        {!archive && <p className={`${summitStyles.heroDate} ${summitStyles.heroDateBelow}`}>{isPostEvent() ? postEventLabel : <>{withoutYear(heroDates.main, year)}<span className={summitStyles.heroDateVenue}> | {venue ?? "Venue to be announced"}</span></>}</p>}
       </div>
-      {/* Ryan (Oct 8): the date and venue sit at the bottom-right of the hero with the Schedule button directly above
-          them; the lockup takes the spot the date line had (2026 only). */}
-      {!archive && <div className={summitStyles.heroAside}>
-        <div className={summitStyles.heroButtons}><a className={summitStyles.heroButton} href="#schedule">Schedule</a></div>
-        <p className={summitStyles.heroDate}>{isPostEvent() ? postEventLabel : <>{withoutYear(heroDates.main, year)}<span className={summitStyles.heroDateVenue}> | {venue ?? "Venue to be announced"}</span></>}</p>
-      </div>}
     </section>
     {/* Owner (Sept 21): the recap player is removed for now; it will move to a new location. */}
     {/* Owner (Sept 21): ICF-style two-column introduction (bold heading and rich text; Not Alone logo
