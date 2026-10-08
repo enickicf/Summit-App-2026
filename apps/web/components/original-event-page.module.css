@@ -704,3 +704,6 @@
   .currentAwards .broadcastDetails .awardsActions .action, .currentAwards .broadcastDetails .infoButton { height: 54px; font-size: 17px; }
   .currentAwards .awardsStatementBand p { max-width: 1000px; }
 }
+@media (min-width: 1100px) {
+  .currentAwards .iheartBand > .broadcastDetails, .currentAwards .iheartBand > .broadcastStream { align-self: stretch; }
+}
