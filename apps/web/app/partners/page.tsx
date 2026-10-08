@@ -29,12 +29,14 @@ export default async function PartnersPage() {
   const { snapshot } = await getPublicSnapshotState();
   const featured = summitPartnerTiers.filter(tier => tier.featured);
   const all = (airtableOverlay(snapshot)?.partners ?? []).filter(partner => confirmed.test(partner.status));
-  // Sept 22 meeting: Founding Partners first (the Cohen Foundation and NAMI; never Wynn), then Wynn and
-  // Fanatics, then the brands in their Airtable groups with Vendors before the Gifting Suite.
-  // Oct 3: Airtable renamed Fanatics to "Fanatics Foundation"; either name takes the Sponsor spot.
+  // Sept 22 meeting: Founding Partners first (the Cohen Foundation and NAMI; never Wynn), then Wynn and the
+  // Sponsor spot, then the brands in their Airtable groups with Vendors before the Gifting Suite.
+  // Owner (Oct 7): Resonance Philanthropies takes the Sponsor spot beside Wynn (Airtable's record is named
+  // "Resonance Foundation"; its logo reads Resonance Philanthropies) and Fanatics moves down into the Sponsors
+  // group, where Resonance sat until today.
   const isNami = (name: string) => name.trim().toLowerCase() === "nami";
-  const isFanatics = (name: string) => ["fanatics", "fanatics foundation"].includes(name.trim().toLowerCase());
-  const topAirtable = [all.find(partner => isNami(partner.name)), all.find(partner => isFanatics(partner.name))].filter((p): p is NonNullable<typeof p> => Boolean(p));
+  const isResonance = (name: string) => ["resonance philanthropies", "resonance foundation"].includes(name.trim().toLowerCase());
+  const topAirtable = [all.find(partner => isNami(partner.name)), all.find(partner => isResonance(partner.name))].filter((p): p is NonNullable<typeof p> => Boolean(p));
   const partners = all.filter(partner => !topAirtable.includes(partner));
   // Airtable's "Partner" (singular) joins the Partners group; "Curriculum Partner" follows it.
   const groupOf = (partner: { group: string }) => !partner.group || partner.group === "Partner" ? "Partners" : partner.group;
@@ -52,8 +54,11 @@ export default async function PartnersPage() {
   const founders = everyone.filter(isFounder);
   const philanthropists = [...founders, ...everyone.filter(person => person.categories.includes("Philanthropists") && !founders.includes(person))].filter((person, index, list) => list.findIndex(other => other.slug === person.slug) === index);
   const nami = topAirtable.find(partner => isNami(partner.name));
-  const fanatics = topAirtable.find(partner => isFanatics(partner.name));
-  const logoCard = (partner: { recordId: string; name: string }, logo = partnerLogo2026(partner.name)!) => <div className={`${styles.card} ${styles.logoCard} ${styles.topCard}`}><SiteImage src={logo} alt={partner.name} sizes="(max-width: 600px) 90vw, 420px" /></div>;
+  const resonance = topAirtable.find(partner => isResonance(partner.name));
+  // A top-row partner without a logo file keeps the same name card the brand groups use.
+  const logoCard = (partner: { recordId: string; name: string }, logo = partnerLogo2026(partner.name)) => logo
+    ? <div className={`${styles.card} ${styles.logoCard} ${styles.topCard}`}><SiteImage src={logo} alt={partner.name} sizes="(max-width: 600px) 90vw, 420px" /></div>
+    : <div className={`${styles.card} ${styles.nameCard} ${styles.topCard}`}><span>{partner.name}</span></div>;
   return <main id="main-content" tabIndex={-1} className={styles.page}>
     <header className={styles.hero}>
       <p>Not Alone Summit 2026</p>
@@ -80,7 +85,8 @@ export default async function PartnersPage() {
       <div className={styles.featured}>
         {[
           { title: featured[1]!.title, card: <PartnerCard partner={featured[1]!.partners[0]!} featured /> },
-          ...(fanatics ? [{ title: "Sponsor", card: logoCard(fanatics) }] : [])
+          // The logo is found by the Airtable name; the card is labelled the way the logo reads.
+          ...(resonance ? [{ title: "Sponsor", card: logoCard({ recordId: resonance.recordId, name: "Resonance Philanthropies" }, partnerLogo2026(resonance.name)) }] : [])
         ].map(tier => <section key={tier.title} className={styles.tier} aria-labelledby={`tier-${tier.title}`}>
           <h2 id={`tier-${tier.title}`}>{tier.title}</h2>
           {tier.card}

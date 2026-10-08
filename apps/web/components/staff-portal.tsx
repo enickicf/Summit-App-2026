@@ -71,14 +71,17 @@ export function groupWorkshops(rows: WorkshopSubmission[]) {
 }
 
 // Thursday site visit: one row per person (name, case-insensitive) with Tennis / High Tea badges.
+// Oct 7: and the signed waiver (the full name typed with the first sign-up that carried one); sign-ups from before
+// Oct 7 have no waiver and show "—".
 export function groupSiteVisit(rows: WorkshopSubmission[]) {
-  const people = new Map<string, { key: string; name: string; tennis: boolean; highTea: boolean; first: string }>();
+  const people = new Map<string, { key: string; name: string; tennis: boolean; highTea: boolean; first: string; signature?: string }>();
   for (const row of [...rows].sort((a, b) => a.submittedAt.localeCompare(b.submittedAt))) {
     const key = row.name.trim().toLowerCase().replace(/\s+/g, " ");
     const entry = people.get(key) ?? { key, name: row.name.trim(), tennis: false, highTea: false, first: row.submittedAt };
     const title = row.sessionTitle.trim().toLowerCase();
     if (/^tennis\b/.test(title)) entry.tennis = true;
     if (/^high tea\b/.test(title)) entry.highTea = true;
+    if (row.waiverAccepted === true && row.signature?.trim() && !entry.signature) entry.signature = row.signature.trim();
     people.set(key, entry);
   }
   return [...people.values()];
@@ -224,10 +227,10 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
 
       <section className={styles.section} id="site-visit-list" aria-labelledby="site-visit-title">
         <div className={styles.sectionHead}><h2 id="site-visit-title">Tennis &amp; High Tea</h2><a className={styles.button} href="/api/staff/export?kind=site-visit">Download CSV</a></div>
-        <p className={styles.help}>Thursday November 5 ICF site visit sign-ups from the schedule page. <span className={`${styles.badge} ${styles.badgeTennis}`}>Tennis</span> = signed up for Tennis; <span className={`${styles.badge} ${styles.badgeTea}`}>High Tea</span> = signed up for High Tea; both badges when both. Attendees only; remove anyone not on the guest list.</p>
+        <p className={styles.help}>Thursday November 5 ICF site visit sign-ups from the schedule page. <span className={`${styles.badge} ${styles.badgeTennis}`}>Tennis</span> = signed up for Tennis; <span className={`${styles.badge} ${styles.badgeTea}`}>High Tea</span> = signed up for High Tea; both badges when both. Waiver = the full name typed to sign the activity waiver (sign-ups from Oct 7 on; earlier sign-ups show —). Attendees only; remove anyone not on the guest list.</p>
         {siteVisitPeople.length === 0 ? <p className={styles.empty}>No Tennis or High Tea sign-ups yet.</p> : <div className={styles.tableWrap}><table className={styles.table}>
-          <thead><tr><th>Name</th><th>Signed up for</th><th>First sign-up</th></tr></thead>
-          <tbody>{siteVisitPeople.map(person => <tr key={person.key}><td className={styles.strong}>{person.name}</td><td><span className={styles.badges}>{person.tennis && <span className={`${styles.badge} ${styles.badgeTennis}`}>Tennis</span>}{person.highTea && <span className={`${styles.badge} ${styles.badgeTea}`}>High Tea</span>}</span></td><td className={styles.nowrap}>{when(person.first)}</td></tr>)}</tbody>
+          <thead><tr><th>Name</th><th>Signed up for</th><th>Waiver</th><th>First sign-up</th></tr></thead>
+          <tbody>{siteVisitPeople.map(person => <tr key={person.key}><td className={styles.strong}>{person.name}</td><td><span className={styles.badges}>{person.tennis && <span className={`${styles.badge} ${styles.badgeTennis}`}>Tennis</span>}{person.highTea && <span className={`${styles.badge} ${styles.badgeTea}`}>High Tea</span>}</span></td><td className={styles.nowrap}>{person.signature ? `Signed: ${person.signature}` : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{when(person.first)}</td></tr>)}</tbody>
         </table></div>}
       </section>
     </div>

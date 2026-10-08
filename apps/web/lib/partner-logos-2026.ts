@@ -57,6 +57,8 @@ const partnerLogoFiles: Record<string, string> = {
   "fanatics foundation": "/2026-partners/fanatics.png",
   // Oct 3 Airtable re-read: new confirmed partners (sources in work/partner-logos-20261003/manifest.json).
   "resonance foundation": "/2026-partners/resonance-foundation.png",
+  // Oct 7: the owner calls it (and its logo reads) Resonance Philanthropies; either Airtable name finds the logo.
+  "resonance philanthropies": "/2026-partners/resonance-foundation.png",
   "wise friend": "/2026-partners/wise-friend-wordmark.png", // owner, Oct 5: the mark with the name "Wise Friend" under it (their symbol alone reads as nothing)
   "big league wiffleball": "/2026-partners/big-league-wiffleball.png",
   "atlys": "/2026-partners/atlys.png",

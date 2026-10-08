@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { isStaffSession, staffCookieName } from "../../../../lib/staff/auth";
-import { activeRsvps, getSubmissionStore, listAllRsvps, rsvpExportForms, rsvpsOfForm, type RsvpExportForm, withRsvpForm, nominationCsvColumns, pokerCsvColumns, rsvpCsvColumns, toCsv, workshopCsvColumns } from "../../../../lib/staff/store";
+import { activeRsvps, getSubmissionStore, listAllRsvps, rsvpExportForms, rsvpsOfForm, type RsvpExportForm, withRsvpForm, nominationCsvColumns, pokerCsvColumns, rsvpCsvColumns, siteVisitCsvColumns, toCsv, workshopCsvColumns } from "../../../../lib/staff/store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -23,7 +23,8 @@ export async function GET(request: Request) {
     return new Response(csv, { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-awards-nominations-${stamp}.csv"`, "Cache-Control": "no-store" } });
   }
   if (kind === "site-visit") {
-    const csv = toCsv((await store.list("workshop")).filter(row => row.category === "siteVisit"), workshopCsvColumns);
+    // Oct 7: with the signed waiver columns (waiverAccepted, signature, waiverVersion).
+    const csv = toCsv((await store.list("workshop")).filter(row => row.category === "siteVisit"), siteVisitCsvColumns);
     return new Response(csv, { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-summit-tennis-high-tea-signups-${stamp}.csv"`, "Cache-Control": "no-store" } });
   }
   if (kind === "workshops") {

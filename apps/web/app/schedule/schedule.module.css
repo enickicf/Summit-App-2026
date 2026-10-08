@@ -112,8 +112,13 @@
 .signupForm { display: grid; gap: 10px; max-width: 560px; padding: 16px 18px; background: #f4f5fa; border: 1px solid #d0d4ea; border-radius: 12px; }
 .signupForm label { font-size: 13px; font-weight: 700; }
 .signupRow { display: flex; flex-wrap: wrap; gap: 10px; }
-.signupRow input { flex: 1 1 220px; min-width: 0; font: inherit; padding: 10px 12px; border: 1px solid #d0d4ea; border-radius: 10px; background: #ffffff; }
+.signupField { display: grid; gap: 6px; }
+.signupRow input, .signupField input { flex: 1 1 220px; min-width: 0; font: inherit; padding: 10px 12px; border: 1px solid #d0d4ea; border-radius: 10px; background: #ffffff; }
 .signupNote { margin: 0; font-size: 14px; line-height: 1.5; color: #333333; }
+/* Owner (Oct 7): the Tennis / High Tea waiver: the text, the agree box and the typed signature above the button. */
+.signupWaiver { margin: 0; padding: 12px 14px; font-size: 13px; line-height: 1.55; color: #333333; background: #ffffff; border: 1px solid #d0d4ea; border-radius: 10px; }
+.signupForm .signupCheck { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; font-weight: 600; line-height: 1.4; cursor: pointer; }
+.signupCheck input { flex: 0 0 auto; width: 18px; height: 18px; margin: 2px 0 0; accent-color: #4a5faa; }
 .signupError { margin: 0; color: #8a1c1c; font-size: 14px; }
 .signupDone { margin: 14px 0 0; padding: 12px 16px; background: #eef6ee; border: 1px solid #b9dcc0; border-radius: 10px; font-size: 14px; line-height: 1.5; max-width: 560px; }
 .signupHoneypot { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }

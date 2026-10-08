@@ -3,6 +3,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { z } from "zod";
 import type { Store } from "@netlify/blobs";
+import { signatureMatchesName } from "../morning-workshops";
 
 // Owner (Sept 23): one clean staff portal for the Awards ticket requests (RSVP form) and the new
 // nomination form. Submissions are stored in the website's Netlify Blobs store in production (no
@@ -121,15 +122,32 @@ export type PokerPayload = z.infer<typeof pokerPayloadSchema>;
 
 // Owner (Sept 28): morning workshop sign-ups from the Summit schedule page. Name only; the sign-up is
 // exclusive to Summit attendees (invitation-only), and anyone not on the guest list is removed by staff.
+// Owner (Oct 7): a Tennis / High Tea sign-up also carries a signed waiver: the box ticked (waiverAccepted), the
+// full name typed as the signature, and the version of the waiver text that was shown. The three fields are
+// optional here because the wellness workshops are name-only; the API requires all three for a site-visit
+// sign-up (siteVisitWaiverProblem below).
 export const workshopPayloadSchema = z.object({
   sessionId: text(120).min(1),
   sessionTitle: text(160).min(1),
   sessionDay: text(80).optional().default(""),
   sessionTime: text(40).optional().default(""),
   name: personName(120),
+  waiverAccepted: z.preprocess(value => value === undefined || value === null ? undefined : value === true || value === "on" || value === "yes" || value === "true", z.boolean()).optional(),
+  signature: text(120).optional(),
+  waiverVersion: text(40).optional(),
   website: text(200).optional().default("") // honeypot
 }).strip();
 export type WorkshopPayload = z.infer<typeof workshopPayloadSchema>;
+
+/** Why a Tennis / High Tea sign-up cannot be accepted yet, as a message for the guest; null when the waiver is in order. */
+export function siteVisitWaiverProblem(payload: Pick<WorkshopPayload, "name" | "waiverAccepted" | "signature" | "waiverVersion">): { field: "waiverAccepted" | "signature" | "waiverVersion"; error: string } | null {
+  if (payload.waiverAccepted !== true) return { field: "waiverAccepted", error: "Please read the waiver and tick the box to agree to it." };
+  const signature = (payload.signature ?? "").trim();
+  if (signature.length < 2 || signature.length > 120) return { field: "signature", error: "Please type your full name to sign the waiver." };
+  if (!signatureMatchesName(signature, payload.name)) return { field: "signature", error: "Your signature needs to match the full name you entered. Please type it exactly as above." };
+  if (!(payload.waiverVersion ?? "").trim()) return { field: "waiverVersion", error: "Please refresh the page and sign up again." };
+  return null;
+}
 
 export type Submission<T> = T & { id: string; submittedAt: string; source: "form" | "import"; legacyId?: string };
 // Owner (Sept 28): a request can be removed from the working lists (test entries) without being deleted; it
@@ -138,7 +156,9 @@ export type Submission<T> = T & { id: string; submittedAt: string; source: "form
 export type RsvpSubmission = Submission<Omit<RsvpPayload, "website" | "invitedBy" | "vip" | "partner" | "heardFrom" | "tier">> & { invitedBy?: string; vip?: boolean; partner?: RsvpPartner; heardFrom?: RsvpHeardFrom; tier?: RsvpTier; removedAt?: string; removedReason?: string };
 export type NominationSubmission = Submission<Omit<NominationPayload, "website">>;
 export type PokerSubmission = Submission<Omit<PokerPayload, "website">> & { removedAt?: string; removedReason?: string };
-export type WorkshopSubmission = Submission<Omit<WorkshopPayload, "website"> & { category: "workshop" | "siteVisit" }>;
+// Oct 7: waiverAccepted / signature / waiverVersion / waiverAcceptedAt are set on Tennis / High Tea sign-ups from Oct 7
+// onward; sign-ups stored before then (and wellness sign-ups) have none of them.
+export type WorkshopSubmission = Submission<Omit<WorkshopPayload, "website"> & { category: "workshop" | "siteVisit"; waiverAcceptedAt?: string }>;
 // Sept 28: one record per confirmation email sent for an RSVP (id = the RSVP id, submittedAt = when it was sent).
 export type RsvpEmailRecord = Submission<{ email: string; subject: string; rsvpId: string }>;
 
@@ -395,6 +415,8 @@ export const pokerInterestLabels: Record<PokerInterest, string> = {
 };
 
 export const workshopCsvColumns = ["submittedAt", "name", "category", "sessionTitle", "sessionDay", "sessionTime", "sessionId", "source", "id"];
+// Oct 7: the Tennis / High Tea spreadsheet also carries the signed waiver (empty for sign-ups from before Oct 7).
+export const siteVisitCsvColumns = [...workshopCsvColumns, "waiverAccepted", "signature", "waiverVersion"];
 export const pokerCsvColumns = ["submittedAt", "name", "email", "phone", "organization", "interest", "sponsorship", "seats", "experience", "notes", "source", "id", "removedAt", "removedReason"];
 
 /** A sponsor is anyone who asked for a level; their pledged value is the matrix's own figure. */
