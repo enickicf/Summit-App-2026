@@ -683,3 +683,8 @@
   .currentAwards .broadcastDetails { padding: 22px 22px 20px; }
   .currentAwards .iheartBand { gap: 24px; }
 }
+/* Statement sized per screen so its balanced lines run the full column width (3 lines on computers and tablets). */
+.currentAwards .awardsStatementBand p { font-size: 32px; }
+@media (max-width: 1199px) { .currentAwards .awardsStatementBand p { font-size: 26px; } }
+@media (max-width: 900px) { .currentAwards .awardsStatementBand p { font-size: 24px; } }
+@media (max-width: 600px) { .currentAwards .awardsStatementBand p { font-size: 22px; } }
