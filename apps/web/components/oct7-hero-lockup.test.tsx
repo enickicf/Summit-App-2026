@@ -78,7 +78,7 @@ describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards tim
   it("opens the Awards mission with the presenters, in the owner's exact words", () => {
     expect(awards).toContain("<p>Inspiring Children Foundation × NAMI present the Not Alone Awards Show, powered by the <strong>Steven &amp; Alexandra Cohen Foundation</strong>.</p>");
     expect(awards).not.toMatch(/Presenting the Not Alone Awards Show|hosted by <strong>Wynn Resorts|broadcast live on <strong>iHeartRadio/);
-    const mission = awards.slice(awards.indexOf('id="mission"'), awards.indexOf('id="evening"'));
+    const mission = awards.slice(awards.indexOf('id="mission"'), awards.indexOf('id="awards-host"'));
     // The owner's sentence is the first paragraph; the second (ICF's own statement, awards[1].blocks[1]) stays.
     expect(mission.indexOf("<p>")).toBe(mission.indexOf("<p>Inspiring Children Foundation × NAMI present"));
     expect(mission.slice(0, mission.indexOf('id="awards-narrative"')).match(/<p>/g)).toHaveLength(2); // the narrative block (Oct 7 evening) follows
@@ -91,8 +91,7 @@ describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards tim
     expect(awards2026Editorial.eveningTimes.map(entry => entry.label)).toEqual(["Doors Open", "Awards Show"]);
     expect(awards2026Editorial.eveningTimes.find(entry => entry.label === "Awards Show")!.time).toBe("7:30-10:00 PM");
     expect(awards.slice(awards.indexOf('id="broadcast"'), awards.indexOf('id="directory"'))).toContain("<div><dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>7:30 PM</dd></div>");
-    const evening = awards.match(/<section[^>]*id="evening"[^>]*>[\s\S]*?<dl>([\s\S]*?)<\/dl>/)![1]!;
-    expect(evening).toBe("<div><dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>7:30 PM-10:00 PM</dd></div>");
+    expect(awards).not.toContain('id="evening"'); // Owner (Oct 8): The Evening section removed; the schedule box carries the times
     expect(awards).not.toMatch(/Pre-Show|Pre Show|8:00 PM|8:00–10:00|8:00-10:00/);
   });
 

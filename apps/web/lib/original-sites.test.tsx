@@ -272,7 +272,7 @@ describe("source-faithful, year-separated event pages", () => {
     // Owner (Oct 7 meeting): "The Evening" is Doors Open 6:30 and the Awards Show 7:30-10:00; no Pre-Show; Community Day moved to the daytime page.
     expect(html).not.toContain("<dt>Community Day</dt>");
     expect(html).not.toMatch(/Pre-Show|8:00 PM/);
-    expect(html).toContain("<dt>Awards Show</dt><dd>7:30 PM-10:00 PM</dd>");
+    expect(html).not.toContain('id="evening"'); // Owner (Oct 8): The Evening section removed
     expect(html).toContain('id="winners"');
     expect(html).toContain("<h3>Rachel Platten</h3>");
     expect(html).toContain('href="https://www.youtube.com/@iHeartRadio/streams"');

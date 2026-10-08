@@ -402,7 +402,6 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
           {!canceled && <a className={styles.action} href={rsvpUrl} target="_blank" rel="noopener" aria-label="RSVP for the Not Alone Awards (opens in a new tab)">RSVP</a>}
           <AwardsInfoButton className={styles.infoButton}>Info</AwardsInfoButton>
         </div>
-        {eveningTimes.length > 0 && <a className={styles.heroScheduleLink} href="#evening">View full schedule<ArrowDown size={15} aria-hidden="true" /></a>}
       </div>
       <div className={styles.broadcastStream}>
         <p className={styles.iheartKicker} id="broadcast-title">Broadcast live on</p>
@@ -420,10 +419,8 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
       {/* Owner (Sept 21, late): just the opening statement; the longer text is gone. */}
       {awards[1]!.blocks.slice(1, 2).map(block => <p key={block.text}>{block.text}</p>)}
     </section>
-    {eveningTimes.length > 0 && <section className={`${styles.band} ${styles.eveningSchedule}`} id="evening" aria-labelledby="evening-title">
-      <h2 id="evening-title">The Evening</h2>
-      <dl>{eveningTimes.map(item => <div key={item.label}><dt>{item.label}</dt><dd>{item.time}</dd></div>)}</dl>
-    </section>}
+    {/* Owner (Oct 8): The Evening section and the "View full schedule" link are gone — the schedule box in the broadcast
+        band already carries the date, doors and show times. */}
     {/* Owner (Sept 21, late): the host sits below the Speakers. */}
     {host && !canceled && <section className={`${styles.band} ${styles.hostFeature}`} id="awards-host" aria-labelledby="awards-host-title">
       <h2 id="awards-host-title">Your 2026 Host</h2>

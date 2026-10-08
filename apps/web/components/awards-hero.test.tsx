@@ -49,15 +49,12 @@ describe("Awards opening presentation", () => {
     expect(html).toContain('<dl class="' + styles.heroScheduleTimes + '" aria-label="Doors and Awards Show start"><div><dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>7:30 PM</dd></div></dl>');
     expect(html).not.toMatch(/Nevada Day|Community Day|Pre-Show|7:30 PM-10:00 PM|8:00 PM/);
     // Owner (Oct 7 meeting): "The Evening" shows exactly two lines (Doors Open, Awards Show); no Pre-Show, no Community Day.
-    const evening = schedule();
-    expect(evening).toContain("<dt>Doors Open</dt><dd>6:30 PM</dd>");
-    expect(evening).toContain("<dt>Awards Show</dt><dd>7:30 PM-10:00 PM</dd>");
-    expect(evening).not.toMatch(/Pre-Show|8:00 PM|Community Day/);
-    expect(evening.match(/<dt>/g)).toHaveLength(2);
+    // Owner (Oct 8): The Evening section is gone — the schedule box in the broadcast band carries the times.
+    expect(schedule()).toBe("");
     expect(page()).not.toMatch(/Pre-Show|8:00 PM/);
     expect(page()).not.toContain("Red Carpet");
-    expect(page()).toContain('<h2 id="evening-title">The Evening</h2>');
-    expect(page().indexOf('id="awards-program"')).toBeLessThan(page().indexOf('id="evening"'));
+    expect(page()).not.toContain('id="evening"');
+    expect(page()).not.toContain("View full schedule");
     expect(html.indexOf("</time>")).toBeLessThan(html.indexOf("<dl"));
     expect(html.indexOf("</dl>")).toBeLessThan(html.indexOf(">RSVP</a>"));
     expect(page().match(/Monday, November 2</g)).toHaveLength(1);
@@ -82,7 +79,7 @@ describe("Awards opening presentation", () => {
     expect(html).not.toContain("hero-awards-start.jpg");
     expect(html).toContain("background:#1c1a2e");
     // The hero's second button is Info (scrolls to the mission + schedule); a smaller schedule link sits under it.
-    expect(html).toMatch(/>RSVP<\/a><a class="[^"]*" href="#mission">Info<\/a><\/div><a class="[^"]*" href="#evening">View full schedule/);
+    expect(html).toMatch(/>RSVP<\/a><a class="[^"]*" href="#mission">Info<\/a><\/div>/); // Oct 8: no "View full schedule" link
     // Ryan (Oct 8): the iHeartRadio logo and stream button sit in the details band, after the RSVP button.
     expect(html.indexOf(">RSVP</a>")).toBeLessThan(html.indexOf("Stream live"));
     const whole = page();
@@ -92,7 +89,7 @@ describe("Awards opening presentation", () => {
     expect(band).toContain("Stream live on iHeartRadio</a>");
     expect(band).toContain('aria-label="Stream live on iHeartRadio&#x27;s YouTube channel (opens in a new tab)"');
     // Lineup right after the hero and the broadcast band; the mission and the schedule follow it, together.
-    const order = ['id="awards-program"', 'id="broadcast"', 'id="directory"', 'id="mission"', 'id="evening"', 'id="awards-host"'].map(part => whole.indexOf(part));
+    const order = ['id="awards-program"', 'id="broadcast"', 'id="directory"', 'id="mission"', 'id="awards-host"'].map(part => whole.indexOf(part));
     expect(order.every(index => index >= 0)).toBe(true);
     expect([...order].sort((x, y) => x - y)).toEqual(order);
     expect(whole).not.toMatch(/live now|watch live|live stream/i);
@@ -114,9 +111,7 @@ describe("Awards opening presentation", () => {
     expect(schedule(snapshot)).toBe("");
     expect(page(snapshot)).not.toContain('id="evening"');
     expect(awardsHeroTimes(null, null)).toEqual([]);
-    const withoutProgram = schedule(event2026Snapshot, false);
-    expect(withoutProgram).toContain("7:30 PM-10:00 PM");
-    expect(withoutProgram).not.toMatch(/<dt>(Community Day|Red Carpet|Pre-Show)<\/dt>/); // Owner (Oct 7 meeting): The Evening is Doors Open 6:30 and the Awards Show 7:30-10:00
+    expect(schedule(event2026Snapshot, false)).toBe(""); // Owner (Oct 8): no Evening section
     expect(hero(event2026Snapshot, false)).toContain("<dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>7:30 PM</dd>");
   });
 

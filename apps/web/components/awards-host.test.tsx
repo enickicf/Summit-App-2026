@@ -46,11 +46,9 @@ describe("Awards host feature", () => {
     // Owner (Oct 7 meeting): doors and the Awards Show start in the hero; the full show run (7:30-10:00) in its own section below; no Pre-Show anywhere.
     expect(hero).toContain("<dt>Doors Open</dt><dd>6:30 PM</dd>");
     expect(hero).toContain("<dt>Awards Show</dt><dd>7:30 PM</dd>");
-    const evening = html.match(/<section[^>]*id="evening"[^>]*>([\s\S]*?)<\/section>/)?.[1]!;
-    expect(evening).toContain("7:30 PM-10:00 PM");
+    expect(html).not.toContain('id="evening"'); // Owner (Oct 8): The Evening section removed
     expect(hero).not.toContain("7:30 PM-10:00 PM");
     expect(html).not.toMatch(/Pre-Show|8:00 PM/);
-    expect(evening).not.toContain("Community Day");
     expect(hostSection(html)).not.toMatch(/RSVP|Pacific|Monday|PM/);
     expect(html).not.toMatch(/More details coming soon|id="program-title"/);
   });

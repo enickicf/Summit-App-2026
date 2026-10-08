@@ -641,3 +641,22 @@
 .currentAwards .awardsMission p:first-child strong { color: #f1dfbb; font-weight: 700; }
 .currentAwards .awardsMission p:last-child { max-width: 760px; margin: 0 auto; color: rgba(255, 255, 255, .8); font-size: 19px; font-weight: 400; line-height: 1.6; text-wrap: balance; }
 @media (max-width: 600px) { .currentAwards .awardsMission p:last-child { font-size: 17px; } }
+
+/* Owner (Oct 8): "the way this looks [on a phone] is great … deploy that to all screen types": the broadcast band is one
+   centred stack at every width — the statement, then "Broadcast live on", the iHeartRadio logo and the Stream button,
+   then the schedule box — scaled up for larger screens. */
+.currentAwards .iheartBand { display: flex; flex-direction: column; align-items: center; gap: 36px; padding-top: 40px; padding-bottom: 48px; text-align: center; }
+.currentAwards .broadcastStatement { order: 1; width: 100%; }
+.currentAwards .broadcastStatement p { max-width: 860px; font-size: clamp(26px, 3vw, 40px); font-weight: 700; line-height: 1.22; }
+.currentAwards .broadcastStream { order: 2; width: auto; justify-self: auto; justify-content: flex-start; align-self: center; gap: 24px; }
+.currentAwards .broadcastStream .iheartLogo { width: min(520px, 78vw); height: auto; }
+.currentAwards .broadcastStream .iheartStream { min-height: 64px; padding: 0 40px; font-size: 19px; }
+.currentAwards .broadcastDetails { order: 3; align-self: center; width: 460px; max-width: 100%; }
+.currentAwards .iheartBand > .broadcastDetails, .currentAwards .iheartBand > .broadcastStream { align-self: center; }
+@media (max-width: 900px) {
+  .currentAwards .iheartBand { gap: 32px; }
+  .currentAwards .broadcastStream .iheartLogo { width: min(420px, 78vw); }
+  .currentAwards .broadcastStream .iheartStream { min-height: 54px; padding: 0 24px; font-size: 15px; }
+  .currentAwards .broadcastDetails { width: 340px; }
+}
+@media (max-width: 600px) { .currentAwards .iheartBand { padding-top: 20px; padding-bottom: 36px; } }
