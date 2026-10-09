@@ -247,7 +247,7 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
       <div className={summitStyles.heroCopy}>
         {/* Owner (Oct 8): a two-line date block above the logo, about the width of the stack below it: the dates in bold
             white, the venue in pearl spaced capitals. From Nov 6, 2026 it reads "2027 — To Be Announced Soon." 2026 only. */}
-        {!archive && <p className={`${summitStyles.heroDate} ${summitStyles.heroEyebrow}`}>{isPostEvent() ? postEventLabel : <><span className={summitStyles.heroEyebrowDate}>{withoutYear(heroDates.main, year).replace("-", "–")}, {year}</span><span className={summitStyles.heroDateVenue}>{venue ?? "Venue to be announced"}</span></>}</p>}
+        {!archive && <p className={`${summitStyles.heroDate} ${summitStyles.heroEyebrow} ${summitStyles.heroEyebrowTop}`}>{isPostEvent() ? postEventLabel : <><span className={summitStyles.heroEyebrowDate}>{withoutYear(heroDates.main, year).replace("-", "–")}, {year}</span><span className={summitStyles.heroDateVenue}>{venue ?? "Venue to be announced"}</span></>}</p>}
         <h1 id="summit-title" className={summitStyles.heroLogo}>
           <SiteImage src="/images/summit-logo.png" alt="" sizes="(max-width: 600px) 170px, 250px" loading="eager" fetchPriority="high" />
           <span className={styles.hidden}>Not Alone Summit {year}</span>
@@ -262,6 +262,12 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
         {archive && <p className={summitStyles.heroDate}><span className={summitStyles.heroEdition}>{year}</span>{withoutYear(summit2025Dates, year)}<span className={summitStyles.heroDateVenue}> | Wynn Las Vegas</span></p>}
         {/* Owner (Oct 8): the hero ends on the Presented-by lockup. */}
       </div>
+      {/* Ryan (Oct 9 call): on computers the dates and venue sit in the hero's bottom-right corner with the Schedule
+          button on top of them; on phones they stay at the top of the stack (the eyebrow above the logo). 2026 only. */}
+      {!archive && <div className={summitStyles.heroCorner}>
+        <a className={summitStyles.heroCornerButton} href="#schedule">Schedule</a>
+        <p className={`${summitStyles.heroDate} ${summitStyles.heroEyebrow} ${summitStyles.heroCornerDate}`}>{isPostEvent() ? postEventLabel : <><span className={summitStyles.heroEyebrowDate}>{withoutYear(heroDates.main, year).replace("-", "–")}, {year}</span><span className={summitStyles.heroDateVenue}>{venue ?? "Venue to be announced"}</span></>}</p>
+      </div>}
     </section>
     {/* Owner (Sept 21): the recap player is removed for now; it will move to a new location. */}
     {/* Owner (Sept 21): ICF-style two-column introduction (bold heading and rich text; Not Alone logo
