@@ -435,3 +435,7 @@
 .summit .hero .heroCornerButton:focus-visible { outline:3px solid #fff; outline-offset:3px; }
 @media (min-width:901px) { .summit .heroCopy .heroEyebrowTop { display:none; } }
 @media (max-width:900px) { .summit .hero .heroCorner { display:none; } }
+/* Ryan (Oct 9): the corner's date block uses the hero eyebrow's look (the eyebrow rules are scoped to .heroCopy). */
+.summit .hero .heroCorner .heroCornerDate { color:#fff; font-size:inherit; letter-spacing:0; text-transform:none; line-height:1.2; }
+.summit .hero .heroCorner .heroEyebrowDate { display:block; color:#fff; font-size:clamp(24px,2.11vw,30px); font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+.summit .hero .heroCorner .heroDateVenue { display:block; margin-top:8px; color:#d0d4ea; font-size:16px; font-weight:700; letter-spacing:.32em; margin-right:-.32em; text-transform:uppercase; }
