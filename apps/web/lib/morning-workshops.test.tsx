@@ -138,8 +138,8 @@ describe("workshop + Tennis / High Tea sign-ups (owner, Sept 28; Tennis / High T
     expect(html).toContain('href="#site-visit"');
     // CSV for Tennis & High Tea: the waiver columns, empty for the older sign-up.
     const csv = toCsv(rows.filter(r => r.category === "siteVisit"), siteVisitCsvColumns);
-    expect(csv.split("\r\n")[0]).toBe([...workshopCsvColumns, "waiverAccepted", "signature", "waiverVersion"].join(","));
-    expect(csv).toContain(",t2,true,Lisa Lundt,2026-10-07\r\n");
-    expect(csv).toContain(",s1,form,t1,,,\r\n"); // the Oct 3 sign-up: no waiver columns filled
+    expect(csv.split("\r\n")[0]).toBe([...workshopCsvColumns, "waiverAccepted", "signature", "waiverVersion", "email", "phone", "transport"].join(","));
+    expect(csv).toContain(",t2,true,Lisa Lundt,2026-10-07,,,\r\n");
+    expect(csv).toContain(",s1,form,t1,,,,,,\r\n"); // the Oct 3 sign-up: no waiver columns filled
   });
 });

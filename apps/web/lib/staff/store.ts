@@ -120,6 +120,28 @@ export const pokerPayloadSchema = z.object({
 }).strip();
 export type PokerPayload = z.infer<typeof pokerPayloadSchema>;
 
+// Oct 9: how a Tennis & High Tea guest gets to the site visit: the shuttle from Wynn valet, or driving themselves.
+export const siteVisitTransportValues = ["wynn", "self"] as const;
+export type SiteVisitTransport = (typeof siteVisitTransportValues)[number];
+export const siteVisitTransportLabels: Record<SiteVisitTransport, string> = { wynn: "Transportation from Wynn", self: "Driving themselves" };
+
+// Oct 9: the Tennis & High Tea form (public/tennis-high-tea, the ICF designer's page, owner: "use this one"). One
+// request can pick tennis, high tea or both; the API stores one site-visit sign-up per activity so the portal's
+// Tennis & High Tea view and its spreadsheet keep working unchanged.
+export const siteVisitFormSchema = z.object({
+  name: personName(120),
+  email,
+  phone: text(40).refine(value => /^[0-9+().\-\s]+$/.test(value) && value.replace(/\D/g, "").length >= 7, "Please enter a phone number."),
+  tennis: z.boolean(),
+  tea: z.boolean(),
+  transport: z.enum(siteVisitTransportValues),
+  waiverAccepted: z.preprocess(value => value === true || value === "on" || value === "true", z.boolean()).optional(),
+  signature: text(120).optional(),
+  waiverVersion: text(40).optional(),
+  website: text(200).optional().default("") // honeypot
+}).strip();
+export type SiteVisitFormPayload = z.infer<typeof siteVisitFormSchema>;
+
 // Owner (Sept 28): morning workshop sign-ups from the Summit schedule page. Name only; the sign-up is
 // exclusive to Summit attendees (invitation-only), and anyone not on the guest list is removed by staff.
 // Owner (Oct 7): a Tennis / High Tea sign-up also carries a signed waiver: the box ticked (waiverAccepted), the
@@ -135,6 +157,11 @@ export const workshopPayloadSchema = z.object({
   waiverAccepted: z.preprocess(value => value === undefined || value === null ? undefined : value === true || value === "on" || value === "yes" || value === "true", z.boolean()).optional(),
   signature: text(120).optional(),
   waiverVersion: text(40).optional(),
+  // Oct 9: the Tennis & High Tea form (/tennis-high-tea, the ICF designer's page) also asks for email, phone and how
+  // the guest gets there; sign-ups from the schedule pop-up have none of the three.
+  email: email.optional(),
+  phone: text(40).optional(),
+  transport: z.enum(siteVisitTransportValues).optional(),
   website: text(200).optional().default("") // honeypot
 }).strip();
 export type WorkshopPayload = z.infer<typeof workshopPayloadSchema>;
@@ -421,7 +448,7 @@ export const pokerInterestLabels: Record<PokerInterest, string> = {
 
 export const workshopCsvColumns = ["submittedAt", "name", "category", "sessionTitle", "sessionDay", "sessionTime", "sessionId", "source", "id"];
 // Oct 7: the Tennis / High Tea spreadsheet also carries the signed waiver (empty for sign-ups from before Oct 7).
-export const siteVisitCsvColumns = [...workshopCsvColumns, "waiverAccepted", "signature", "waiverVersion"];
+export const siteVisitCsvColumns = [...workshopCsvColumns, "waiverAccepted", "signature", "waiverVersion", "email", "phone", "transport"];
 export const pokerCsvColumns = ["submittedAt", "name", "email", "phone", "organization", "interest", "sponsorship", "seats", "experience", "notes", "source", "id", "removedAt", "removedReason"];
 
 /** A sponsor is anyone who asked for a level; their pledged value is the matrix's own figure. */

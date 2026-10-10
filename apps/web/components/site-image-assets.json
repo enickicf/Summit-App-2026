@@ -2653,5 +2653,20 @@
     "width": 214,
     "height": 190,
     "bytes": 43230
+  },
+  "/tennis-high-tea/brand/icf-logo-white.png": {
+    "width": 1500,
+    "height": 1136,
+    "bytes": 128529
+  },
+  "/tennis-high-tea/brand/summit-logo.png": {
+    "width": 1507,
+    "height": 1681,
+    "bytes": 196741
+  },
+  "/tennis-high-tea/favicon.svg": {
+    "width": 32,
+    "height": 32,
+    "bytes": 348
   }
 }

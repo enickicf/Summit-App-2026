@@ -2,7 +2,7 @@ import { SiteImage } from "./site-image";
 import { PortalViewSwitch } from "./portal-views";
 import { PortalAutoRefresh } from "./portal-auto-refresh";
 import { RsvpEmailTools } from "./rsvp-email-tools";
-import { activeOf, activeRsvps, comingTo, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, ustaRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels } from "../lib/staff/store";
+import { activeOf, activeRsvps, comingTo, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, ustaRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels, siteVisitTransportLabels, type SiteVisitTransport } from "../lib/staff/store";
 import styles from "../app/staff/staff.module.css";
 
 export type LineupGroup = { title: string; people: { name: string; role: string; rank: number | null; tier: string | null; photo: boolean }[] };
@@ -75,7 +75,7 @@ export function groupWorkshops(rows: WorkshopSubmission[]) {
 // Oct 7: and the signed waiver (the full name typed with the first sign-up that carried one); sign-ups from before
 // Oct 7 have no waiver and show "—".
 export function groupSiteVisit(rows: WorkshopSubmission[]) {
-  const people = new Map<string, { key: string; name: string; tennis: boolean; highTea: boolean; first: string; signature?: string }>();
+  const people = new Map<string, { key: string; name: string; tennis: boolean; highTea: boolean; first: string; signature?: string; email?: string; phone?: string; transport?: SiteVisitTransport }>();
   for (const row of [...rows].sort((a, b) => a.submittedAt.localeCompare(b.submittedAt))) {
     const key = row.name.trim().toLowerCase().replace(/\s+/g, " ");
     const entry = people.get(key) ?? { key, name: row.name.trim(), tennis: false, highTea: false, first: row.submittedAt };
@@ -83,6 +83,10 @@ export function groupSiteVisit(rows: WorkshopSubmission[]) {
     if (/^tennis\b/.test(title)) entry.tennis = true;
     if (/^high tea\b/.test(title)) entry.highTea = true;
     if (row.waiverAccepted === true && row.signature?.trim() && !entry.signature) entry.signature = row.signature.trim();
+    // Oct 9: the Tennis & High Tea form adds contact details and transport; the latest sign-up that has them wins.
+    if (row.email) entry.email = row.email;
+    if (row.phone) entry.phone = row.phone;
+    if (row.transport) entry.transport = row.transport;
     people.set(key, entry);
   }
   return [...people.values()];
@@ -236,10 +240,10 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
 
       <section className={styles.section} id="site-visit-list" aria-labelledby="site-visit-title">
         <div className={styles.sectionHead}><h2 id="site-visit-title">Tennis &amp; High Tea</h2><a className={styles.button} href="/api/staff/export?kind=site-visit">Download CSV</a></div>
-        <p className={styles.help}>Thursday November 5 ICF site visit sign-ups from the schedule page. <span className={`${styles.badge} ${styles.badgeTennis}`}>Tennis</span> = signed up for Tennis; <span className={`${styles.badge} ${styles.badgeTea}`}>High Tea</span> = signed up for High Tea; both badges when both. Waiver = the full name typed to sign the activity waiver (sign-ups from Oct 7 on; earlier sign-ups show —). Attendees only; remove anyone not on the guest list.</p>
+        <p className={styles.help}>Thursday November 5 ICF site visit sign-ups from the Tennis &amp; High Tea form (notalonesummit.org/tennis-high-tea) and the schedule page. <span className={`${styles.badge} ${styles.badgeTennis}`}>Tennis</span> = signed up for Tennis; <span className={`${styles.badge} ${styles.badgeTea}`}>High Tea</span> = signed up for High Tea; both badges when both. Waiver = the full name typed to sign the activity waiver (sign-ups from Oct 7 on; earlier sign-ups show —). Attendees only; remove anyone not on the guest list.</p>
         {siteVisitPeople.length === 0 ? <p className={styles.empty}>No Tennis or High Tea sign-ups yet.</p> : <div className={styles.tableWrap}><table className={styles.table}>
-          <thead><tr><th>Name</th><th>Signed up for</th><th>Waiver</th><th>First sign-up</th></tr></thead>
-          <tbody>{siteVisitPeople.map(person => <tr key={person.key}><td className={styles.strong}>{person.name}</td><td><span className={styles.badges}>{person.tennis && <span className={`${styles.badge} ${styles.badgeTennis}`}>Tennis</span>}{person.highTea && <span className={`${styles.badge} ${styles.badgeTea}`}>High Tea</span>}</span></td><td className={styles.nowrap}>{person.signature ? `Signed: ${person.signature}` : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{when(person.first)}</td></tr>)}</tbody>
+          <thead><tr><th>Name</th><th>Signed up for</th><th>Email</th><th>Phone</th><th>Getting there</th><th>Waiver</th><th>First sign-up</th></tr></thead>
+          <tbody>{siteVisitPeople.map(person => <tr key={person.key}><td className={styles.strong}>{person.name}</td><td><span className={styles.badges}>{person.tennis && <span className={`${styles.badge} ${styles.badgeTennis}`}>Tennis</span>}{person.highTea && <span className={`${styles.badge} ${styles.badgeTea}`}>High Tea</span>}</span></td><td>{person.email ? <a href={`mailto:${person.email}`}>{person.email}</a> : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{person.phone || <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{person.transport ? siteVisitTransportLabels[person.transport] : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{person.signature ? `Signed: ${person.signature}` : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{when(person.first)}</td></tr>)}</tbody>
         </table></div>}
       </section>
     </div>

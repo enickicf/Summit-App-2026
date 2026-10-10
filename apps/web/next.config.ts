@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   transpilePackages: ["@not-alone/config", "@not-alone/test-fixtures"],
+  // Oct 9: the Tennis & High Tea form (the ICF designer's static page in public/tennis-high-tea) at a clean address.
+  async rewrites() {
+    return [{ source: "/tennis-high-tea", destination: "/tennis-high-tea/index.html" }];
+  },
   async headers() {
     return [
       {
