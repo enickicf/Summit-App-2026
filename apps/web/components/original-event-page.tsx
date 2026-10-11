@@ -356,14 +356,15 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
 // buttons to that group's own form; everything else is identical.
 type AwardsPageProps = { year: 2025 | 2026; program?: EventSnapshot["contentPages"][number] | null; snapshot?: EventSnapshot | null; rsvpUrl?: string | undefined };
 
-// Owner (Oct 11): the Awards hero date and venue can stack into short lines on phones (beside the Presented-by logos)
-// without changing a word: the text is split at its first separator into two parts that are inline on wide screens
-// and stacked on phones (the separator stays in the first part for ", " and is hidden for " · ").
+// Owner (Oct 11): the Awards hero date and venue are split at their first separator so phones can show the Summit's
+// two-line format (the separator stays in the first part for ", " and is its own span for " · ").
 function StackedParts({ text, split, className }: { text: string; split: string; className?: string | undefined }) {
   const at = text.indexOf(split);
   if (at === -1) return <>{text}</>;
   const keep = split.trim() === "," ? "," : "";
-  return <><span className={className}>{text.slice(0, at)}{keep}</span>{keep ? " " : <span className={styles.cornerSep}>{split}</span>}<span className={className}>{text.slice(at + split.length)}</span></>;
+  // Owner (Oct 11): on phones the first part ("Monday," / "Encore Theater") is left out so the corner reads exactly like
+  // the Summit's — "NOVEMBER 2, 2026" over "WYNN LAS VEGAS" at the same sizes.
+  return <><span className={`${className ?? ""} ${styles.cornerFirst}`}>{text.slice(0, at)}{keep}</span>{keep ? " " : <span className={styles.cornerSep}>{split}</span>}<span className={className}>{text.slice(at + split.length)}</span></>;
 }
 
 function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }: Omit<AwardsPageProps, "year">) {

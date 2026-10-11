@@ -753,14 +753,18 @@
 .currentAwards .awardsStatementBand p, .currentAwards .awardsStatementBand .awardsHonorLede,
 .currentAwards .awardsMission p:first-child, .currentAwards .awardsMission p:first-child strong { font-weight: 800; }
 
-/* Owner (Oct 11, phones): the Awards date and venue sit beside the Presented-by logos, level with their bottom, never
-   below the stack and never touching the logos: each splits into short stacked lines ("Monday," / "November 2, 2026",
-   "Encore Theater" / "Wynn Las Vegas"), tiny and shrinking with the screen width. */
+/* Owner (Oct 11, phones): the Awards corner matches the Summit's exactly — two lines, "NOVEMBER 2, 2026" over
+   "WYNN LAS VEGAS", at the Summit's sizes, beside the Presented-by logos and level with their bottom. "Monday," and
+   "Encore Theater ·" are left out on phones only (the full text shows on tablets and computers; the Encore Theater is in
+   the schedule box below). */
 @media (max-width: 600px) {
-  .currentAwards .awardsHeroStack .awardsCorner .cornerPart { display: block; }
-  .currentAwards .awardsHeroStack .awardsCorner .cornerSep { display: none; }
-  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroEyebrowDate { font-size: clamp(8px, 2.6vw, 11px); letter-spacing: .04em; line-height: 1.25; }
-  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { margin-top: .5em; font-size: clamp(6.5px, 1.9vw, 8px); letter-spacing: .14em; margin-right: -.14em; line-height: 1.35; }
+  .currentAwards .awardsHeroStack .awardsCorner .cornerFirst, .currentAwards .awardsHeroStack .awardsCorner .cornerSep { display: none; }
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroEyebrowDate { font-size: clamp(9.5px, 2.9vw, 12px); letter-spacing: .08em; line-height: 1.2; }
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { margin-top: .35em; font-size: clamp(7px, 2vw, 8.5px); letter-spacing: .22em; margin-right: -.22em; line-height: 1.2; }
+}
+@media (max-width: 380px) {
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroEyebrowDate { font-size: clamp(8px, 2.6vw, 10px); letter-spacing: .04em; }
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { font-size: clamp(6.5px, 1.9vw, 7.5px); letter-spacing: .16em; margin-right: -.16em; }
 }
 /* Owner (Oct 11): the same on every Awards copy — no margin under the lockup on phones and tablets, so the date's bottom
    is level with the bottom of the logos. */

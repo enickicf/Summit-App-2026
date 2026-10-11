@@ -185,7 +185,12 @@
 @media (max-width:600px) {
   .hero .heroPowered { font-size:11px; }
   .hero .heroPowered strong { font-size:26px; margin-top:8px; }
-  .heroCorner .cornerPart { display:block; }
-  .heroCorner .heroEyebrowDate { font-size:clamp(8px,2.6vw,11px); letter-spacing:.04em; line-height:1.25; }
-  .heroCorner .heroEyebrowVenue { margin-top:.5em; font-size:clamp(6.5px,1.9vw,8px); letter-spacing:.14em; margin-right:-.14em; }
+  /* the Summit's two-line format on phones: "NOVEMBER 2, 2026" over "WYNN LAS VEGAS" at the same sizes */
+  .heroCorner .cornerFirst { display:none; }
+  .heroCorner .heroEyebrowDate { font-size:clamp(9.5px,2.9vw,12px); letter-spacing:.08em; line-height:1.2; }
+  .heroCorner .heroEyebrowVenue { margin-top:.35em; font-size:clamp(7px,2vw,8.5px); letter-spacing:.22em; margin-right:-.22em; }
+}
+@media (max-width:380px) {
+  .heroCorner .heroEyebrowDate { font-size:clamp(8px,2.6vw,10px); letter-spacing:.04em; }
+  .heroCorner .heroEyebrowVenue { font-size:clamp(6.5px,1.9vw,7.5px); letter-spacing:.16em; margin-right:-.16em; }
 }

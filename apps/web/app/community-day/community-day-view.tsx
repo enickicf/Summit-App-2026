@@ -48,7 +48,7 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
           {/* Owner (Oct 11): as on the Summit and Awards (Ryan, Oct 9), the date and place sit in the header's bottom-right
               corner; small on phones, shrinking with the screen width. */}
           <div className={styles.heroCorner}>
-              <p className={`${styles.heroEyebrow} ${styles.heroCornerDate}`}>{over ? postEventLabel : <><span className={styles.heroEyebrowDate}><span className={styles.cornerPart}>Monday,</span> <span className={styles.cornerPart}>November 2, 2026</span></span><span className={styles.heroEyebrowVenue}>Wynn Las Vegas</span></>}</p>
+              <p className={`${styles.heroEyebrow} ${styles.heroCornerDate}`}>{over ? postEventLabel : <><span className={styles.heroEyebrowDate}><span className={`${styles.cornerPart} ${styles.cornerFirst}`}>Monday,</span> <span className={styles.cornerPart}>November 2, 2026</span></span><span className={styles.heroEyebrowVenue}>Wynn Las Vegas</span></>}</p>
           </div>
         </div>
         <div className={styles.heroButtons} id="community-day-actions">
