@@ -783,3 +783,16 @@
   .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroEyebrowDate { font-size: clamp(24px, 2.11vw, 30px); letter-spacing: .06em; }
   .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { margin-top: 8px; font-size: 16px; letter-spacing: .32em; margin-right: -.32em; }
 }
+
+/* Owner (Oct 11): headings and the hero text use the same warm logo-style weight as the rest (Poppins ExtraBold) on the
+   2026 pages — "Who's Coming", "Keynotes" and every gallery and section heading, the hero date and venue, "Powered by"
+   with the foundation's name, and "Presented by". 2026 Summit (.refined) and 2026 Awards (.awards2026, every copy)
+   only; the 2025 archives keep ICF's styling. Sizes and colours unchanged. */
+.refined.refined h2, .refined.refined :global(.groupHeading) h3, .refined.refined :global(.sectionHeading) h2,
+.refined.refined > section:first-of-type p, .refined.refined > section:first-of-type span, .refined.refined > section:first-of-type strong, .refined.refined > section:first-of-type time,
+.awards2026.awards2026 h2, .awards2026.awards2026 h2 *,
+.awards2026.awards2026 > section:first-of-type p, .awards2026.awards2026 > section:first-of-type span, .awards2026.awards2026 > section:first-of-type strong, .awards2026.awards2026 > section:first-of-type time { font-weight: 800; }
+/* (Oct 11) Stronger selectors where older rules set lighter weights: the hero date/venue corners, the Summit gallery
+   group headings ("Keynotes", "2026 Lineup", "Founders", "Attendees") and the Goals label. */
+.refined.refined.refined :global(.directoryGroup) :global(.groupHeading) h3, .refined.refined :global(#goals) h2 { font-weight: 800; }
+.awards2026.awards2026 .awardsCorner .heroEyebrow .heroEyebrowDate, .awards2026.awards2026 .awardsCorner .heroEyebrow .heroEyebrowDate *, .awards2026.awards2026 .awardsCorner .heroEyebrow .heroDateVenue, .awards2026.awards2026 .awardsCorner .heroEyebrow .heroDateVenue * { font-weight: 800; }

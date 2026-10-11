@@ -207,3 +207,6 @@
   .heroCorner .heroEyebrowDate { font-size:clamp(24px,2.11vw,30px); letter-spacing:.06em; }
   .heroCorner .heroEyebrowVenue { margin-top:8px; font-size:16px; letter-spacing:.32em; margin-right:-.32em; }
 }
+/* Owner (Oct 11): headings and the header text in the same warm logo-style weight (Poppins ExtraBold) as the Summit and
+   Awards — every section heading, the date and place, "Powered by" with the foundation's name, and "Presented by". */
+.page.page h2, .page.page h2 *, .hero .heroCopy p, .hero .heroCopy span, .hero .heroCopy strong, .hero .heroCorner span { font-weight:800; }

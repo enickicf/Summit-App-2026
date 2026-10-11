@@ -490,3 +490,5 @@
 .summit.summit .hero.heroWithCorner .heroCopy { grid-area:1 / 1; }
 .summit.summit .hero.heroWithCorner .heroCorner { grid-area:1 / 1; position:relative; right:auto; bottom:auto; justify-self:end; align-self:end; margin:0; }
 .summit.summit .hero.heroWithCorner .heroCopy > :last-child { margin-bottom:0; }
+/* (Oct 11) The hero date and venue in the warm ExtraBold weight, like the rest of the hero (2026 hero only). */
+.summit.summit .hero.heroWithCorner .heroCorner .heroEyebrowDate, .summit.summit .hero.heroWithCorner .heroCorner .heroDateVenue { font-weight:800; }

@@ -385,7 +385,7 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
   // Owner (Sept 21, late): "The Evening" shows exactly these two lines.
   const eveningTimes = canceled ? [] : awards2026Evening;
   const host = reviewedPeople.find(person => person.name === awards2026Editorial.host);
-  return <main id="main-content" tabIndex={-1} className={`${styles.page} ${styles.awards} ${styles.currentAwards}`}>
+  return <main id="main-content" tabIndex={-1} className={`${styles.page} ${styles.awards} ${styles.currentAwards} ${styles.awards2026}`}>
     <section className={`${styles.awardsHero} ${styles.awardsHeroStack}`} id="awards-program" aria-labelledby="awards-title">
       <SiteImage className={styles.heroScene} src="/images/wynn-las-vegas.webp" alt="Wynn Las Vegas overlooking its gardens and waterfall" sizes="100vw" loading="eager" fetchPriority="high" />
       {/* Owner (Sept 21): the hero goes straight into the 2025 Awards highlights; the Wynn photo is kept
