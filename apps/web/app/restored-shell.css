@@ -1,5 +1,6 @@
 @font-face { font-family: "Original Poppins"; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/poppins-regular.woff2') format('woff2'); }
 @font-face { font-family: "Original Poppins"; font-style: normal; font-weight: 700; font-display: swap; src: url('/fonts/poppins-bold.woff2') format('woff2'); }
+@font-face { font-family: "Original Poppins"; font-style: normal; font-weight: 800; font-display: swap; src: url('/fonts/poppins-extrabold.woff2') format('woff2'); }
 @font-face { font-family: "Original Poppins"; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/poppins-medium.woff2') format('woff2'); }
 @font-face { font-family: "Great Vibes"; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/great-vibes-regular.woff2') format('woff2'); }
 

@@ -151,7 +151,8 @@ export const hiddenFromSite2026 = new Set(["hal fisher"].map(personNameKey));
 // Owner (Sept 22): Jay & Erica McGraw were credited as founders before a photo existed (name cards).
 // Owner (Oct 7): the owner supplied a headshot of each (work/new-headshots-20261007/owner-upload-*.jpg), so both are
 // photo cards now (entries above) and nobody is listed without a photo. The set stays for the next such case.
-export const listedWithoutPhoto2026 = new Set<string>([]);
+// Owner (Oct 11): Christiana Musk is a Founder without a photo (her request, Ryan Oct 9).
+export const listedWithoutPhoto2026 = new Set<string>(["christiana musk"]);
 export function hiddenUntilPhoto2026(name: string, image: string | undefined): boolean {
   const key = personNameKey(name);
   return hiddenFromSite2026.has(key) || (!image && !listedWithoutPhoto2026.has(key));

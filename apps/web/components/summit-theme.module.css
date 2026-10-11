@@ -439,3 +439,9 @@
 .summit .hero .heroCorner .heroCornerDate { color:#fff; font-size:inherit; letter-spacing:0; text-transform:none; line-height:1.2; }
 .summit .hero .heroCorner .heroEyebrowDate { display:block; color:#fff; font-size:clamp(24px,2.11vw,30px); font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
 .summit .hero .heroCorner .heroDateVenue { display:block; margin-top:8px; color:#d0d4ea; font-size:16px; font-weight:700; letter-spacing:.32em; margin-right:-.32em; text-transform:uppercase; }
+
+/* Ryan (Oct 9): the headline "A National Convening…" and the mission paragraph in a warmer face like the logo's
+   "alone summit" lettering. Owner (Oct 11): take only the font from the logo (no colours or other logo styling) and
+   only where Ryan asked: Poppins ExtraBold (800, self-hosted; the logo's heavy geometric sans), sizes and colours unchanged. */
+.summit.summit .introThin h2, .summit.summit .introThin h2 .introAccent { font-weight:800; letter-spacing:-0.015em; }
+.summit.summit .narrativeBand p, .summit.summit .narrativeBand p .narrativeLede { font-weight:800; }
