@@ -194,3 +194,16 @@
   .heroCorner .heroEyebrowDate { font-size:clamp(8px,2.6vw,10px); letter-spacing:.04em; }
   .heroCorner .heroEyebrowVenue { font-size:clamp(6.5px,1.9vw,7.5px); letter-spacing:.16em; margin-right:-.16em; }
 }
+/* Owner (Oct 11): on computers the date's bottom is level with the bottom of the buttons (Full Schedule): the corner is
+   placed against the bottom-right of the header's content column, which spans the full width; on tablets and phones it
+   stays beside the logos (rules above). */
+@media (min-width:901px) {
+  .heroCopy { position:relative; max-width:none; flex:1 1 auto; width:100%; }
+  .lockupRow { position:static; }
+  .heroCorner { right:0; bottom:0; }
+}
+/* Owner (Oct 11): on computers the Nevada corner uses the Summit's exact sizes (date clamp 24-30px, venue 16px .32em). */
+@media (min-width:901px) {
+  .heroCorner .heroEyebrowDate { font-size:clamp(24px,2.11vw,30px); letter-spacing:.06em; }
+  .heroCorner .heroEyebrowVenue { margin-top:8px; font-size:16px; letter-spacing:.32em; margin-right:-.32em; }
+}

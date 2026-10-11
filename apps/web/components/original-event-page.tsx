@@ -253,7 +253,7 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     {!archive && <CurrentEventUpdates snapshot={snapshot} initialNowUtc={new Date().toISOString()} />}
     {/* Owner (Sept 21): same hero format as the Awards site (logo, larger foundation credit, date and
         venue, one action), over the 2025 Summit recap with its Villa Bibbiani segments skipped. */}
-    <section className={`${summitStyles.hero} ${summitStyles.heroFormat}`} aria-labelledby="summit-title">
+    <section className={`${summitStyles.hero} ${summitStyles.heroFormat}${archive ? "" : ` ${summitStyles.heroWithCorner}`}`} aria-labelledby="summit-title">
       <SummitVideo background />
       <div className={summitStyles.heroCopy}>
         {/* Owner (Oct 8): a two-line date block above the logo, about the width of the stack below it: the dates in bold

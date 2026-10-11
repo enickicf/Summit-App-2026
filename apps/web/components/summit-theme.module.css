@@ -483,3 +483,10 @@
    (18-24px) sat under them; on phones and tablets the lockup ends the stack with no margin, so the date's bottom is
    level with the bottom of the logos. */
 @media (max-width:900px) { .summit.summit .hero .heroCopy > :last-child { margin-bottom:0; } }
+/* Owner (Oct 11): at EVERY screen size the corner's bottom is tied to the bottom of the left stack (the Presented-by
+   logos), not to a fixed distance from the hero's edge: the stack and the corner share one grid cell, the corner sits
+   at its bottom-right, and the lockup that ends the stack carries no bottom margin. 2026 hero only (.heroWithCorner). */
+.summit.summit .hero.heroWithCorner { display:grid; grid-template-columns:minmax(0,1fr); align-content:center; }
+.summit.summit .hero.heroWithCorner .heroCopy { grid-area:1 / 1; }
+.summit.summit .hero.heroWithCorner .heroCorner { grid-area:1 / 1; position:relative; right:auto; bottom:auto; justify-self:end; align-self:end; margin:0; }
+.summit.summit .hero.heroWithCorner .heroCopy > :last-child { margin-bottom:0; }

@@ -769,3 +769,17 @@
 /* Owner (Oct 11): the same on every Awards copy — no margin under the lockup on phones and tablets, so the date's bottom
    is level with the bottom of the logos. */
 @media (max-width: 900px) { .currentAwards .awardsHeroStack .heroStack > :last-child { margin-bottom: 0; } }
+
+/* Owner (Oct 11): at EVERY screen size the Awards corner's bottom is tied to the bottom of the Presented-by logos (same
+   grid cell as the stack, bottom-right); the lockup's 24px bottom margin moves into the hero's padding so the hero keeps
+   its height on computers. */
+.currentAwards .awardsHero.awardsHeroStack { display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; padding-bottom: 58px; }
+.currentAwards .awardsHeroStack .heroStack { grid-area: 1 / 1; }
+.currentAwards .awardsHeroStack .awardsCorner { grid-area: 1 / 1; position: relative; right: auto; bottom: auto; justify-self: end; align-self: end; margin: 0; }
+.currentAwards .awardsHeroStack .heroStack > :last-child { margin-bottom: 0; }
+@media (max-width: 600px) { .currentAwards .awardsHero.awardsHeroStack { padding-bottom: 30px; } }
+/* Owner (Oct 11): on computers the Awards corner uses the Summit's exact sizes (date clamp 24-30px, venue 16px .32em). */
+@media (min-width: 901px) {
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroEyebrowDate { font-size: clamp(24px, 2.11vw, 30px); letter-spacing: .06em; }
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { margin-top: 8px; font-size: 16px; letter-spacing: .32em; margin-right: -.32em; }
+}
