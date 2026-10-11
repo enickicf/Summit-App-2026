@@ -463,3 +463,10 @@
   .summit .hero .heroCorner .heroEyebrowDate { font-size:clamp(13px,4.4vw,20px); white-space:nowrap; }
   .summit .hero .heroCorner .heroDateVenue { margin-top:.45em; font-size:clamp(8.5px,2.75vw,12px); letter-spacing:.24em; margin-right:-.24em; white-space:nowrap; }
 }
+/* Owner (Oct 11, from his iPhone screenshot): on phones the date and venue are tiny and tucked in the bottom-right
+   corner (still one line each, shrinking with the width). Tablets and computers keep the larger sizes above. */
+@media (max-width:600px) {
+  .summit .hero .heroCorner { margin-top:16px; }
+  .summit .hero .heroCorner .heroEyebrowDate { font-size:clamp(9.5px,2.9vw,12px); letter-spacing:.08em; }
+  .summit .hero .heroCorner .heroDateVenue { margin-top:.35em; font-size:clamp(7px,2vw,8.5px); letter-spacing:.22em; margin-right:-.22em; }
+}
