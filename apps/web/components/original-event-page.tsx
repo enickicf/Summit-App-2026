@@ -385,16 +385,20 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
           lockup. Nothing else; the hero is only as tall as its stack. From Nov 6, 2026 the date block reads
           "2027 — To Be Announced Soon." (lib/event-phase.ts). */}
       <div className={`${styles.heroContent} ${styles.heroStack}`}>
-        <p className={`${styles.heroDate} ${styles.heroEyebrow}`}>{isPostEvent() ? postEventLabel : <>{show && !canceled
-          ? <time className={styles.heroEyebrowDate} dateTime={show.startUtc}>{withoutYear(date, 2026)}, 2026</time>
-          : <span className={styles.heroEyebrowDate}>{canceled ? date : `${withoutYear(date, 2026)}${/to be confirmed/i.test(date) ? "" : ", 2026"}`}</span>}
-          <span className={styles.heroDateVenue}>{venue.replace(/ at /i, " · ")}</span></>}</p>
         <h1 id="awards-title" className={styles.awardsLogo}>
           <SiteImage src="/images/na-awards-logo-white.png" alt="" sizes="(max-width: 600px) 180px, 250px" loading="eager" fetchPriority="high" />
           <span className={styles.hidden}>Not Alone Awards 2026</span>
         </h1>
         <PoweredBy className={styles.heroPowered} />
         <PresentedBy size="hero" />
+      </div>
+      {/* Owner (Oct 11): as on the Summit (Ryan, Oct 9), the date and venue sit in the bottom-right corner of the hero —
+          on phones small and tucked under the stack, shrinking with the screen width. */}
+      <div className={styles.awardsCorner}>
+          <p className={`${styles.heroDate} ${styles.heroEyebrow} ${styles.awardsCornerDate}`}>{isPostEvent() ? postEventLabel : <>{show && !canceled
+            ? <time className={styles.heroEyebrowDate} dateTime={show.startUtc}>{withoutYear(date, 2026)}, 2026</time>
+            : <span className={styles.heroEyebrowDate}>{canceled ? date : `${withoutYear(date, 2026)}${/to be confirmed/i.test(date) ? "" : ", 2026"}`}</span>}
+            <span className={styles.heroDateVenue}>{venue.replace(/ at /i, " · ")}</span></>}</p>
       </div>
       {!/wynn las vegas/i.test(venue) && <div className={styles.heroFootnote}><p>Wynn Las Vegas · 2025 venue</p></div>}
     </section>

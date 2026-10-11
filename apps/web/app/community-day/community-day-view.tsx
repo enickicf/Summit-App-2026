@@ -34,8 +34,6 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
             "Community Day" label above it. Owner (Oct 7): the header was too crowded: it is now the title, the Cohen
             Foundation credit, the ICF | NAMI "Presented by" lockup directly under that credit, and the two buttons.
             The date, venue, times and the Awards Show pointer moved down to the Schedule section. */}
-        {/* Owner (Oct 8): the date and place at the top of the header, as on the Summit and Awards heroes. */}
-        <p className={styles.heroEyebrow}>{over ? postEventLabel : <><span className={styles.heroEyebrowDate}>Monday, November 2, 2026</span><span className={styles.heroEyebrowVenue}>Wynn Las Vegas</span></>}</p>
         <h1 id="community-day-title" className={styles.heroTitleMark} aria-label={day.title}>
           <strong>Nevada Mental<br />Health Day</strong>
         </h1>
@@ -46,6 +44,11 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
           {/* Owner (Oct 8): "Full Schedule" (was "Info") scrolls to the day's full schedule on this page. */}
           <a className={`${styles.button} ${styles.outline}`} href="#schedule">Full Schedule</a>
         </div>
+      </div>
+      {/* Owner (Oct 11): as on the Summit and Awards (Ryan, Oct 9), the date and place sit in the header's bottom-right
+          corner — small and tucked under the buttons on phones, shrinking with the screen width. */}
+      <div className={styles.heroCorner}>
+          <p className={`${styles.heroEyebrow} ${styles.heroCornerDate}`}>{over ? postEventLabel : <><span className={styles.heroEyebrowDate}>Monday, November 2, 2026</span><span className={styles.heroEyebrowVenue}>Wynn Las Vegas</span></>}</p>
       </div>
     </section>
 

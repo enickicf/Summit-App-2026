@@ -38,7 +38,8 @@ describe("Nevada Mental Health Day page", () => {
     const hero = text(heroHtml);
     // Owner (Oct 7): the header was too crowded; the date, venue, times and the Awards Show pointer moved to the Schedule.
     // Owner (Oct 8): the date and place at the top of the header (as on the Summit and Awards), "Full Schedule" replaces "Info".
-    expect(hero).toContain("Monday, November 2, 2026 Wynn Las Vegas Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Presented by × Request free tickets Full Schedule");
+    // Owner (Oct 11): the date and place moved to the header's bottom-right corner, after the buttons (as on the Summit).
+    expect(hero).toContain("Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Presented by × Request free tickets Full Schedule Monday, November 2, 2026 Wynn Las Vegas");
     expect(hero).not.toMatch(/PM|Encore|LaFleur|Margaux|Stay for|Awards Show|Community Day/);
     expect(heroHtml).not.toMatch(/<dl\b/);
   });
@@ -192,8 +193,8 @@ describe("Nevada Mental Health Day page", () => {
     const html = await render();
     expect(html).not.toContain(communityDay2026.rsvpUrl);
     expect(html).not.toContain('id="tickets"');
-    expect(text(section(html, "community-day-title"))).toContain(`${postEventLabel} Nevada Mental Health Day`);
     expect(text(section(html, "community-day-title"))).toContain("Presented by × Full Schedule");
+    expect(text(section(html, "community-day-title"))).toContain(`Full Schedule ${postEventLabel}`); // the corner, Oct 11
     expect(text(html)).toContain("What is Community Day?");
   });
 

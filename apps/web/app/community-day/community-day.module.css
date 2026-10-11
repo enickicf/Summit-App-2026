@@ -152,3 +152,25 @@
   .fullSchedule li, .fullSchedule .segment { grid-template-columns:1fr; gap:4px; }
   .fullSchedule .segment { padding-left:14px; }
 }
+
+/* Owner (Oct 11): Ryan's Oct 9 Summit changes carried to the Nevada Mental Health Day page. (1) The date and place in
+   the header's bottom-right corner on wide screens; under the buttons on the right on tablets; tiny on phones; one line
+   each, shrinking with the width. */
+.heroCorner { position:absolute; z-index:2; right:max(24px,calc((100% - 1180px)/2)); bottom:44px; text-align:right; text-shadow:0 2px 18px #0009; }
+.heroCorner .heroEyebrow { margin:0; }
+.heroCorner .heroEyebrowDate, .heroCorner .heroEyebrowVenue { white-space:nowrap; }
+.heroCorner .heroEyebrowVenue { margin-right:-.3em; }
+@media (max-width:900px) {
+  .hero { flex-direction:column; align-items:stretch; }
+  .heroCorner { position:static; width:100%; margin-top:22px; }
+  .heroCorner .heroEyebrowDate { font-size:clamp(13px,4.4vw,20px); }
+  .heroCorner .heroEyebrowVenue { margin-top:.45em; font-size:clamp(8.5px,2.75vw,12px); letter-spacing:.24em; margin-right:-.24em; }
+}
+@media (max-width:600px) {
+  .heroCorner { margin-top:16px; }
+  .heroCorner .heroEyebrowDate { font-size:clamp(9.5px,2.9vw,12px); letter-spacing:.08em; }
+  .heroCorner .heroEyebrowVenue { margin-top:.35em; font-size:clamp(7px,2vw,8.5px); letter-spacing:.22em; margin-right:-.22em; }
+}
+/* (2) The warmer logo-style face (Poppins ExtraBold) on "What is Community Day?" and its statement, as on the Summit
+   headline and mission paragraph. Sizes and colours unchanged. */
+.page .mission h2, .missionDescription { font-weight:800; }

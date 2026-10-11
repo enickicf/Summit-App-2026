@@ -72,8 +72,10 @@ describe("Awards opening presentation", () => {
     expect(html.match(/<img /g)).toHaveLength(5); // Wynn scene, Awards logo, ICF + NAMI, iHeartRadio
     // Owner (Oct 8): the Summit hero's format — one left stack: date block, logo, Cohen credit, then the lockup, which
     // ends the hero; no right-hand aside. The date line then opens the details band.
-    expect(html).toMatch(/^[^]*?<div class="[^"]*heroStack[^"]*"><p class="[^"]*heroEyebrow[^"]*"><time class="[^"]*heroEyebrowDate[^"]*"[^>]*>Monday, November 2, 2026<\/time><span class="[^"]*heroDateVenue[^"]*">Encore Theater · Wynn Las Vegas<\/span><\/p><h1 id="awards-title"/);
-    expect(html).toMatch(/<\/h1><p class="[^"]*">Powered by<strong>Steven &amp; Alexandra<br\/>Cohen Foundation<\/strong><\/p><div class="[^"]*">[^]*?Presented by[^]*?alt="Inspiring Children Foundation"[^]*?aria-hidden="true">×<\/span>[^]*?alt="NAMI, National Alliance on Mental Illness"[^]*?<\/div><\/div><\/section>[^]*?<p class="[^"]*"><time/);
+    // Owner (Oct 11): the date block moved to the hero's bottom-right corner, after the stack (as on the Summit).
+    expect(html).toMatch(/^[^]*?<div class="[^"]*heroStack[^"]*"><h1 id="awards-title"/);
+    expect(html).toMatch(/<div class="[^"]*awardsCorner[^"]*"><p class="[^"]*heroEyebrow[^"]*"><time class="[^"]*heroEyebrowDate[^"]*"[^>]*>Monday, November 2, 2026<\/time><span class="[^"]*heroDateVenue[^"]*">Encore Theater · Wynn Las Vegas<\/span><\/p><\/div>/);
+    expect(html).toMatch(/<\/h1><p class="[^"]*">Powered by<strong>Steven &amp; Alexandra<br\/>Cohen Foundation<\/strong><\/p><div class="[^"]*">[^]*?Presented by[^]*?alt="Inspiring Children Foundation"[^]*?aria-hidden="true">×<\/span>[^]*?alt="NAMI, National Alliance on Mental Illness"[^]*?<\/div><\/div><div class="[^"]*awardsCorner[^"]*">[^]*?<\/section>[^]*?<p class="[^"]*"><time/);
     expect(html).not.toContain("heroAside");
     expect(html.indexOf("Presented by")).toBeGreaterThan(html.indexOf('<h1 id="awards-title"'));
     expect(html).not.toContain("hero-awards-start.jpg");
