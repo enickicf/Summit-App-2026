@@ -11,6 +11,7 @@ import { getSiteSnapshot } from "../../lib/snapshot";
 import heroPhoto from "./encore-theater-community-day.png";
 import styles from "./community-day.module.css";
 import { PresentedBy } from "../../components/presented-by";
+import { PoweredBy } from "../../components/powered-by";
 import { EventPartners } from "../../components/event-partners";
 import { communityDaySchedule2026 } from "../../lib/community-day-schedule-2026";
 
@@ -37,15 +38,17 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
         <h1 id="community-day-title" className={styles.heroTitleMark} aria-label={day.title}>
           <strong>Nevada Mental<br />Health Day</strong>
         </h1>
-        <p className={styles.heroPowered}>Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong></p>
+        {/* Owner (Oct 11): the same header treatment as the Summit and Awards — the stacked Cohen credit and the
+            hero-size ICF × NAMI lockup. */}
+        <PoweredBy className={styles.heroPowered} />
         {/* Owner (Oct 11): on phones and tablets the date sits level with the Presented-by logos, on the right (the buttons
             below are full width); on computers it is in the header's bottom-right corner. */}
         <div className={styles.lockupRow}>
-          <PresentedBy className={styles.presentedBy} />
+          <PresentedBy size="hero" className={styles.presentedBy} />
           {/* Owner (Oct 11): as on the Summit and Awards (Ryan, Oct 9), the date and place sit in the header's bottom-right
               corner; small on phones, shrinking with the screen width. */}
           <div className={styles.heroCorner}>
-              <p className={`${styles.heroEyebrow} ${styles.heroCornerDate}`}>{over ? postEventLabel : <><span className={styles.heroEyebrowDate}>Monday, November 2, 2026</span><span className={styles.heroEyebrowVenue}>Wynn Las Vegas</span></>}</p>
+              <p className={`${styles.heroEyebrow} ${styles.heroCornerDate}`}>{over ? postEventLabel : <><span className={styles.heroEyebrowDate}><span className={styles.cornerPart}>Monday,</span> <span className={styles.cornerPart}>November 2, 2026</span></span><span className={styles.heroEyebrowVenue}>Wynn Las Vegas</span></>}</p>
           </div>
         </div>
         <div className={styles.heroButtons} id="community-day-actions">

@@ -58,7 +58,7 @@ describe("Nevada Mental Health Day page", () => {
     const hero = section(html, "community-day-title");
     expect(hero).toContain("Nevada Mental<br/>Health Day");
     expect(hero).not.toContain(">Community Day<");
-    expect(hero).toContain("Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong>");
+    expect(hero).toContain("Powered by<strong>Steven &amp; Alexandra<br/>Cohen Foundation</strong>");
     const title = html.indexOf("Nevada Mental<br/>Health Day");
     const powered = html.indexOf("Powered by<strong>");
     const presented = html.indexOf("Presented by");
@@ -67,7 +67,8 @@ describe("Nevada Mental Health Day page", () => {
     expect(presented).toBeLessThan(html.indexOf('id="community-day-actions"'));
     // Nothing sits between the Cohen credit and the lockup.
     // Nothing sits between the Cohen credit and the lockup (Oct 11: the lockup row wraps the logos and the date corner).
-    expect(html.slice(powered, presented)).toMatch(/^Powered by<strong>Steven &amp; Alexandra Cohen Foundation<\/strong><\/p><div class="[^"]*lockupRow[^"]*"><div class="[^"]*"><span class="[^"]*">$/);
+    // Oct 11: the stacked credit (as on the Summit and Awards), then the lockup row.
+    expect(html.slice(powered, presented)).toMatch(/^Powered by<strong>Steven &amp; Alexandra<br\/>Cohen Foundation<\/strong><\/p><div class="[^"]*lockupRow[^"]*"><div class="[^"]*"><span class="[^"]*">$/);
   });
 
   it("opens the explanation without repeating the Nevada Mental Health Day line", async () => {
