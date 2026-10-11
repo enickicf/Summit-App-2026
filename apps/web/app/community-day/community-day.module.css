@@ -162,7 +162,7 @@
 .heroCorner .heroEyebrowDate, .heroCorner .heroEyebrowVenue { white-space:nowrap; }
 .heroCorner .heroEyebrowVenue { margin-right:-.3em; }
 @media (max-width:900px) {
-  .heroCopy { max-width:none; }
+  .heroCopy { max-width:none; flex:1 1 auto; width:100%; }
   .lockupRow { position:relative; }
   .heroCorner { right:0; bottom:0; margin:0; }
   .heroCorner .heroEyebrowDate { font-size:clamp(13px,4.4vw,20px); }

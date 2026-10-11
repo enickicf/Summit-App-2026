@@ -762,3 +762,6 @@
   .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroEyebrowDate { font-size: clamp(8px, 2.6vw, 11px); letter-spacing: .04em; line-height: 1.25; }
   .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { margin-top: .5em; font-size: clamp(6.5px, 1.9vw, 8px); letter-spacing: .14em; margin-right: -.14em; line-height: 1.35; }
 }
+/* Owner (Oct 11): the same on every Awards copy — no margin under the lockup on phones and tablets, so the date's bottom
+   is level with the bottom of the logos. */
+@media (max-width: 900px) { .currentAwards .awardsHeroStack .heroStack > :last-child { margin-bottom: 0; } }

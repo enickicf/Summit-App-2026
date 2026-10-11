@@ -479,3 +479,7 @@
   .summit .hero .heroCorner .heroEyebrowDate { font-size:clamp(8px,2.6vw,10px); letter-spacing:.04em; }
   .summit .hero .heroCorner .heroDateVenue { font-size:clamp(6.5px,1.9vw,7.5px); letter-spacing:.16em; margin-right:-.16em; }
 }
+/* Owner (Oct 11, iPhone screenshot): the date was still lower than the logos because the lockup's own bottom margin
+   (18-24px) sat under them; on phones and tablets the lockup ends the stack with no margin, so the date's bottom is
+   level with the bottom of the logos. */
+@media (max-width:900px) { .summit.summit .hero .heroCopy > :last-child { margin-bottom:0; } }
