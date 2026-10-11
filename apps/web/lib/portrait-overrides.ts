@@ -99,6 +99,9 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "king trot": { file: "/2026-headshots/portraits/king-trot-c.jpg", source: "airtable", airtableBytes: 594979 },
   // Oct 4 (owner): Logan Paul (his Airtable headshot, a tight portrait) and Aloe Blacc (no Airtable photo yet).
   "logan paul": { file: "/2026-headshots/portraits/logan-paul-c.jpg", source: "airtable", airtableBytes: 335560 },
+  // Oct 11 (owner): Christiana and Kimbal Musk, Founders; public headshots (sources in /private/tmp/claude-501/musk-headshots/manifest.json).
+  "christiana musk": { file: "/2026-headshots/portraits/christiana-musk.jpg", source: "web", credit: "Her official speaker headshot, Bioneers 2019 speaker page (same photo as her Unreasonable Group profile), 416x625 original" },
+  "kimbal musk": { file: "/2026-headshots/portraits/kimbal-musk.jpg", source: "commons", credit: "1000x2020, KIMBAL_MUSK_OFFICIAL_HEADSHOT.jpg, CC BY-SA 4.0 (cropped), https://commons.wikimedia.org/wiki/File:KIMBAL_MUSK_OFFICIAL_HEADSHOT.jpg", attribution: { label: "1000x2020 / Wikimedia Commons, CC BY-SA 4.0 (cropped)", href: "https://commons.wikimedia.org/wiki/File:KIMBAL_MUSK_OFFICIAL_HEADSHOT.jpg" } },
   "aloe blacc": { file: "/2026-headshots/portraits/aloe-blacc-c.jpg", source: "commons", credit: "Web Summit Rio, Corporate Innovation Summit, Rio de Janeiro, April 28, 2025, CC BY 2.0 (cropped), https://commons.wikimedia.org/wiki/File:Aloe_Blacc_Corporate_Innovation_Summit_event_Rio_de_Janeiro_Riocentro_Web_Summit_Rio_20258310_(54483438773).jpg", attribution: { label: "Web Summit Rio, CC BY 2.0 (cropped)", href: "https://commons.wikimedia.org/wiki/File:Aloe_Blacc_Corporate_Innovation_Summit_event_Rio_de_Janeiro_Riocentro_Web_Summit_Rio_20258310_(54483438773).jpg" } },
   "mario martinez": { file: "/2026-headshots/portraits/mario-martinez-c.jpg", source: "airtable", airtableBytes: 217762 },
   "mike posner": { file: "/2026-headshots/portraits/mike-posner-c.jpg", source: "airtable", airtableBytes: 217258 },
@@ -151,8 +154,7 @@ export const hiddenFromSite2026 = new Set(["hal fisher"].map(personNameKey));
 // Owner (Sept 22): Jay & Erica McGraw were credited as founders before a photo existed (name cards).
 // Owner (Oct 7): the owner supplied a headshot of each (work/new-headshots-20261007/owner-upload-*.jpg), so both are
 // photo cards now (entries above) and nobody is listed without a photo. The set stays for the next such case.
-// Owner (Oct 11): Christiana Musk is a Founder without a photo (her request, Ryan Oct 9).
-export const listedWithoutPhoto2026 = new Set<string>(["christiana musk"]);
+export const listedWithoutPhoto2026 = new Set<string>([]);
 export function hiddenUntilPhoto2026(name: string, image: string | undefined): boolean {
   const key = personNameKey(name);
   return hiddenFromSite2026.has(key) || (!image && !listedWithoutPhoto2026.has(key));

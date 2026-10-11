@@ -2653,5 +2653,15 @@
     "width": 214,
     "height": 190,
     "bytes": 43230
+  },
+  "/2026-headshots/portraits/christiana-musk.jpg": {
+    "width": 900,
+    "height": 900,
+    "bytes": 147060
+  },
+  "/2026-headshots/portraits/kimbal-musk.jpg": {
+    "width": 900,
+    "height": 900,
+    "bytes": 316350
   }
 }
