@@ -86,8 +86,9 @@ export function isCompleteCard(person: SummitPerson) {
 // Founders he did not name keep Airtable order after his list; Ryan Wolfington is always last.
 export const founderOrderRyan2026: RegExp[] = [
   /\bcohen\b/, /^jewel\b/, /^steve wozniak\b/, /^janet wozniak\b/, /\bkislinger\b/, /^(melony|adam) (and \w+ )?lewis\b/,
-  /\bsobrato\b|\bsabroto\b/, /^jeneva bell\b/, /^miriam isa\b/, /^logan paul\b/, /^jay mcgraw\b/, /^erica mcgraw\b/,
-  /\bgillison\b/, /\bkanner\b/, /\bspringer\b/, /^(winston|cameron) (and \w+ )?kelly\b/,
+  /\bsobrato\b|\bsabroto\b/, /^jeneva bell\b/, /^miriam isa\b/, /^logan paul\b/,
+  // Ryan (Oct 9): "put Dan Gillison ... before Jay McGraw"; Ellie Kanner then comes before the Springers.
+  /\bgillison\b/, /^jay mcgraw\b/, /^erica mcgraw\b/, /\bkanner\b/, /\bspringer\b/, /^(winston|cameron) (and \w+ )?kelly\b/,
   // Owner (Oct 11): then the Musks, the Bryan brothers, Sean and Ana Wolfington, Jen Smorgon and Jennifer Donnelly.
   /^christiana musk\b/, /^kimbal musk\b/, /^mike bryan\b/, /^bob bryan\b/, /^(sean|ana) (and \w+ )?wolfington\b/,
   /^jen smorgon\b/, /^jennifer donnelly\b/

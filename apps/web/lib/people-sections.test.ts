@@ -187,7 +187,7 @@ describe("Founders order (Ryan, Oct 9 meeting)", () => {
     const input = ["Ryan Wolfington", "Bob Bryan", "Jen Smorgon", "Kimbal Musk", "Mike Bryan", "Jennifer Donnelly", "Sean and Ana Wolfington", "Winston and Cameron Kelly", "Melinda and Noah Springer", "Ellie Kanner", "Daniel Gillison", "Erica McGraw", "Jay McGraw", "Logan Paul", "Miriam Isa", "Jeneva Bell", "Sheri Sobrato", "Melony and Adam Lewis", "Nick Kislinger", "Janet Wozniak", "Steve Wozniak", "Jewel", "Christiana Musk", "Steven and Alexandra Cohen"];
     expect(founderOrder2026(input.map(mk)).map(p => p.name)).toEqual([
       "Steven and Alexandra Cohen", "Jewel", "Steve Wozniak", "Janet Wozniak", "Nick Kislinger", "Melony and Adam Lewis", "Sheri Sobrato",
-      "Jeneva Bell", "Miriam Isa", "Logan Paul", "Jay McGraw", "Erica McGraw", "Daniel Gillison", "Ellie Kanner", "Melinda and Noah Springer",
+      "Jeneva Bell", "Miriam Isa", "Logan Paul", "Daniel Gillison", "Jay McGraw", "Erica McGraw", "Ellie Kanner", "Melinda and Noah Springer",
       "Winston and Cameron Kelly", "Christiana Musk", "Kimbal Musk", "Mike Bryan", "Bob Bryan", "Sean and Ana Wolfington", "Jen Smorgon", "Jennifer Donnelly", "Ryan Wolfington"
     ]);
   });
