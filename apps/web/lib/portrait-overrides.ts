@@ -100,7 +100,7 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   // Oct 4 (owner): Logan Paul (his Airtable headshot, a tight portrait) and Aloe Blacc (no Airtable photo yet).
   "logan paul": { file: "/2026-headshots/portraits/logan-paul-c.jpg", source: "airtable", airtableBytes: 335560 },
   // Oct 11 (owner): Christiana and Kimbal Musk, Founders; public headshots (sources in /private/tmp/claude-501/musk-headshots/manifest.json).
-  "christiana musk": { file: "/2026-headshots/portraits/christiana-musk.jpg", source: "web", credit: "Her official speaker headshot, Bioneers 2019 speaker page (same photo as her Unreasonable Group profile), 416x625 original" },
+  "christiana musk": { file: "/2026-headshots/portraits/christiana-musk-2.jpg", source: "web", credit: "Her portrait in a cream hat (dark gray backdrop), the lead photo of her Aug 7, 2024 TIME op-ed as shared on her own LinkedIn post (908x974 screenshot; photo area only, no resizing); owner chose this photo Oct 11" },
   // Oct 11: Dr. George Rapier III, ICF's 2025 square headshot, face-centered.
   "george rapier": { file: "/2026-headshots/portraits/george-rapier.jpg", source: "icf-card", credit: "ICF 2025 Summit founder headshot (Dr. George Rapier III headshot 2025 sq crop)" },
   "kimbal musk": { file: "/2026-headshots/portraits/kimbal-musk.jpg", source: "commons", credit: "1000x2020, KIMBAL_MUSK_OFFICIAL_HEADSHOT.jpg, CC BY-SA 4.0 (cropped), https://commons.wikimedia.org/wiki/File:KIMBAL_MUSK_OFFICIAL_HEADSHOT.jpg", attribution: { label: "1000x2020 / Wikimedia Commons, CC BY-SA 4.0 (cropped)", href: "https://commons.wikimedia.org/wiki/File:KIMBAL_MUSK_OFFICIAL_HEADSHOT.jpg" } },
