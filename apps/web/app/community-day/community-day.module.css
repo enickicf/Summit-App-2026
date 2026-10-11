@@ -119,8 +119,9 @@
 }
 
 /* Owner (Oct 7): the "Presented by" lockup sits directly under the Cohen Foundation credit. */
-.heroCopy > .presentedBy { margin:26px 0 0; }
-@media(max-width:760px) { .heroCopy > .presentedBy { margin:20px 0 0; } }
+.heroCopy > .presentedBy, .heroCopy > .lockupRow { margin:26px 0 0; }
+.lockupRow > .presentedBy { margin:0; }
+@media(max-width:760px) { .heroCopy > .presentedBy, .heroCopy > .lockupRow { margin:20px 0 0; } }
 
 /* Owner (Oct 4, 2026): the Awards lineup sits on this page in its own dark look; the menu's Schedule link and
    the Info button land with the section heading clear of the top edge. */
@@ -151,4 +152,58 @@
 @media (max-width:600px) {
   .fullSchedule li, .fullSchedule .segment { grid-template-columns:1fr; gap:4px; }
   .fullSchedule .segment { padding-left:14px; }
+}
+
+/* Owner (Oct 11): Ryan's Oct 9 Summit changes carried to the Nevada Mental Health Day page. (1) The date and place in
+   the header's bottom-right corner on wide screens; under the buttons on the right on tablets; tiny on phones; one line
+   each, shrinking with the width. */
+.heroCorner { position:absolute; z-index:2; right:max(24px,calc((100% - 1180px)/2)); bottom:44px; text-align:right; text-shadow:0 2px 18px #0009; }
+.heroCorner .heroEyebrow { margin:0; }
+.heroCorner .heroEyebrowDate, .heroCorner .heroEyebrowVenue { white-space:nowrap; }
+.heroCorner .heroEyebrowVenue { margin-right:-.3em; }
+@media (max-width:900px) {
+  .heroCopy { max-width:none; flex:1 1 auto; width:100%; }
+  .lockupRow { position:relative; }
+  .heroCorner { right:0; bottom:0; margin:0; }
+  .heroCorner .heroEyebrowDate { font-size:clamp(13px,4.4vw,20px); }
+  .heroCorner .heroEyebrowVenue { margin-top:.45em; font-size:clamp(8.5px,2.75vw,12px); letter-spacing:.24em; margin-right:-.24em; }
+}
+@media (max-width:600px) {
+  .heroCorner .heroEyebrowDate { font-size:clamp(9.5px,2.9vw,12px); letter-spacing:.08em; }
+  .heroCorner .heroEyebrowVenue { margin-top:.35em; font-size:clamp(7px,2vw,8.5px); letter-spacing:.22em; margin-right:-.22em; }
+}
+/* (2) The warmer logo-style face (Poppins ExtraBold) on "What is Community Day?" and its statement, as on the Summit
+   headline and mission paragraph. Sizes and colours unchanged. */
+.page .mission h2, .missionDescription { font-weight:800; }
+
+/* Owner (Oct 11): the header matches the Summit and Awards exactly: the small spaced-caps "Powered by" label over the
+   foundation's name on two lines, the hero-size ICF × NAMI lockup, and the date beside the lockup on the right with its
+   bottom level with the logos (on phones the date stacks into "Monday," / "November 2, 2026" so it fits). */
+.hero .heroPowered { margin:18px 0 0; color:rgba(255,255,255,.78); font-size:12px; font-weight:700; line-height:1; letter-spacing:.22em; text-transform:uppercase; }
+.hero .heroPowered strong { display:block; margin-top:10px; color:#ffffff; font-size:clamp(28px,2.5vw,36px); font-weight:700; line-height:1.12; letter-spacing:-0.01em; text-transform:none; }
+.lockupRow > .presentedBy { margin:0; }
+@media (max-width:600px) {
+  .hero .heroPowered { font-size:11px; }
+  .hero .heroPowered strong { font-size:26px; margin-top:8px; }
+  /* the Summit's two-line format on phones: "NOVEMBER 2, 2026" over "WYNN LAS VEGAS" at the same sizes */
+  .heroCorner .cornerFirst { display:none; }
+  .heroCorner .heroEyebrowDate { font-size:clamp(9.5px,2.9vw,12px); letter-spacing:.08em; line-height:1.2; }
+  .heroCorner .heroEyebrowVenue { margin-top:.35em; font-size:clamp(7px,2vw,8.5px); letter-spacing:.22em; margin-right:-.22em; }
+}
+@media (max-width:380px) {
+  .heroCorner .heroEyebrowDate { font-size:clamp(8px,2.6vw,10px); letter-spacing:.04em; }
+  .heroCorner .heroEyebrowVenue { font-size:clamp(6.5px,1.9vw,7.5px); letter-spacing:.16em; margin-right:-.16em; }
+}
+/* Owner (Oct 11): on computers the date's bottom is level with the bottom of the buttons (Full Schedule): the corner is
+   placed against the bottom-right of the header's content column, which spans the full width; on tablets and phones it
+   stays beside the logos (rules above). */
+@media (min-width:901px) {
+  .heroCopy { position:relative; max-width:none; flex:1 1 auto; width:100%; }
+  .lockupRow { position:static; }
+  .heroCorner { right:0; bottom:0; }
+}
+/* Owner (Oct 11): on computers the Nevada corner uses the Summit's exact sizes (date clamp 24-30px, venue 16px .32em). */
+@media (min-width:901px) {
+  .heroCorner .heroEyebrowDate { font-size:clamp(24px,2.11vw,30px); letter-spacing:.06em; }
+  .heroCorner .heroEyebrowVenue { margin-top:8px; font-size:16px; letter-spacing:.32em; margin-right:-.32em; }
 }

@@ -99,6 +99,11 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "king trot": { file: "/2026-headshots/portraits/king-trot-c.jpg", source: "airtable", airtableBytes: 594979 },
   // Oct 4 (owner): Logan Paul (his Airtable headshot, a tight portrait) and Aloe Blacc (no Airtable photo yet).
   "logan paul": { file: "/2026-headshots/portraits/logan-paul-c.jpg", source: "airtable", airtableBytes: 335560 },
+  // Oct 11 (owner): Christiana and Kimbal Musk, Founders; public headshots (sources in /private/tmp/claude-501/musk-headshots/manifest.json).
+  "christiana musk": { file: "/2026-headshots/portraits/christiana-musk-2.jpg", source: "web", credit: "Her portrait in a cream hat (dark gray backdrop), the lead photo of her Aug 7, 2024 TIME op-ed as shared on her own LinkedIn post (908x974 screenshot; photo area only, no resizing); owner chose this photo Oct 11" },
+  // Oct 11: Dr. George Rapier III, ICF's 2025 square headshot, face-centered.
+  "george rapier": { file: "/2026-headshots/portraits/george-rapier.jpg", source: "icf-card", credit: "ICF 2025 Summit founder headshot (Dr. George Rapier III headshot 2025 sq crop)" },
+  "kimbal musk": { file: "/2026-headshots/portraits/kimbal-musk.jpg", source: "commons", credit: "1000x2020, KIMBAL_MUSK_OFFICIAL_HEADSHOT.jpg, CC BY-SA 4.0 (cropped), https://commons.wikimedia.org/wiki/File:KIMBAL_MUSK_OFFICIAL_HEADSHOT.jpg", attribution: { label: "1000x2020 / Wikimedia Commons, CC BY-SA 4.0 (cropped)", href: "https://commons.wikimedia.org/wiki/File:KIMBAL_MUSK_OFFICIAL_HEADSHOT.jpg" } },
   "aloe blacc": { file: "/2026-headshots/portraits/aloe-blacc-c.jpg", source: "commons", credit: "Web Summit Rio, Corporate Innovation Summit, Rio de Janeiro, April 28, 2025, CC BY 2.0 (cropped), https://commons.wikimedia.org/wiki/File:Aloe_Blacc_Corporate_Innovation_Summit_event_Rio_de_Janeiro_Riocentro_Web_Summit_Rio_20258310_(54483438773).jpg", attribution: { label: "Web Summit Rio, CC BY 2.0 (cropped)", href: "https://commons.wikimedia.org/wiki/File:Aloe_Blacc_Corporate_Innovation_Summit_event_Rio_de_Janeiro_Riocentro_Web_Summit_Rio_20258310_(54483438773).jpg" } },
   "mario martinez": { file: "/2026-headshots/portraits/mario-martinez-c.jpg", source: "airtable", airtableBytes: 217762 },
   "mike posner": { file: "/2026-headshots/portraits/mike-posner-c.jpg", source: "airtable", airtableBytes: 217258 },

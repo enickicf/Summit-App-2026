@@ -10,6 +10,10 @@ import styles from "./community-day-navigation.module.css";
 // tab) and "Awards" (the Awards page; it was labelled "Concert"), with Donate as the ICF-style sticker on the far
 // right exactly like the Summit and Awards menus. No Summit, Directory or Venue tab. Reached from a private
 // partner copy of the Awards site (/nami/community-day, ...), the page, Tickets and Awards stay inside that copy.
+// Owner (Oct 11): on a review link every link between the sites stays on that review link (the live notaloneawards.org
+// page would show the live, older layout). The live site keeps its address on notaloneawards.org.
+const awardsLink = process.env.NEXT_PUBLIC_REVIEW_BUILD === "1" ? "/awards/2026" : communityDay2026.menu.awardsUrl;
+
 export function CommunityDayNavigation({ partner = null }: { partner?: AwardsPartnerSite | null }) {
   return <div className={`${summit.summitHeader} ${styles.header}`}>
     <nav className={`${summit.navigation} ${styles.nav}`} aria-label="Nevada Mental Health Day navigation" id="main-navigation">
@@ -17,7 +21,7 @@ export function CommunityDayNavigation({ partner = null }: { partner?: AwardsPar
       <a className={styles.link} href="#schedule">Schedule</a>
       <a className={styles.link} href={partner?.rsvpUrl ?? communityDay2026.rsvpUrl} target="_blank" rel="noopener">Tickets</a>
       {/* Owner (Oct 5): links from the Summit side to the Awards open in a new tab. */}
-      {partner ? <Link className={styles.link} href={partner.path} target="_blank" rel="noopener">Awards</Link> : <a className={styles.link} href={communityDay2026.menu.awardsUrl} target="_blank" rel="noopener">Awards</a>}
+      {partner ? <Link className={styles.link} href={partner.path} target="_blank" rel="noopener">Awards</Link> : <a className={styles.link} href={awardsLink} target="_blank" rel="noopener">Awards</a>}
       <a className={`${summit.donateButton} ${styles.donate}`} href="https://www.inspiringchildren.org/donate"><Heart size={16} fill="currentColor" aria-hidden="true" />Donate</a>
     </nav>
   </div>;

@@ -17,6 +17,9 @@
 .nami { width:min(100%,162px); height:62px; }
 .times { color:#4a5faa; font-size:30px; font-weight:500; line-height:1; }
 .wynn { width:min(100%,214px); height:96px; }
+/* Ryan (Oct 9): Wise Friend, curriculum partner: a full-width row under the other cards. */
+.curriculum { grid-column:1 / -1; min-height:200px; }
+.wiseFriend { width:min(100%,152px); height:120px; }
 
 /* Awards page: black, hairline gold borders, white logos (the Wynn mark is inverted to white). */
 .dark { background:#090909; color:#ffffff; }
@@ -24,7 +27,7 @@
 .dark .card { border-color:#d2b47b66; background:#141414; }
 .dark .role { color:#d2b47b; }
 .dark .times { color:#d2b47b; }
-.dark .wynn img { filter:brightness(0) invert(1); }
+.dark .wynn img, .dark .wiseFriend img { filter:brightness(0) invert(1); }
 
 @media (max-width:760px) {
   .partners { padding:56px 16px 64px; }
@@ -38,6 +41,8 @@
   .nami { width:min(100%,130px); height:50px; }
   .times { font-size:24px; }
   .wynn { width:min(100%,182px); height:82px; }
+  .curriculum { grid-column:auto; min-height:170px; }
+  .wiseFriend { width:min(100%,128px); height:101px; }
 }
 @media (max-width:360px) {
   .icf { width:106px; height:80px; }

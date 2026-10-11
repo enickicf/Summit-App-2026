@@ -209,6 +209,12 @@ export const foundersListedRegardless = new Set([
   // Owner (Sept 23): Jennifer Donnelly, added by hand until she is in Airtable.
   "jennifer donnelly"
 ]);
+// Owner (Oct 11, 2026): also credited as Founders on the websites although Airtable does not group them "Founder"
+// (Bob and Mike Bryan stay Keynotes as well). Remove a name once Airtable carries the Founder grouping.
+export const ownerFounders2026 = new Set(["bob bryan", "mike bryan"]);
+export function withOwnerGroups<T extends AirtablePerson>(person: T): T {
+  return ownerFounders2026.has(person.name.trim().toLowerCase()) && !person.groups.includes("Founder") ? { ...person, groups: [...person.groups, "Founder"] } : person;
+}
 // Owner (Oct 4, 2026): listed on the websites by the owner's direction while Airtable's status is not yet
 // "Confirmed". Remove a name once Airtable confirms it. Aloe Blacc (A-Talent, status "Pending") was the only entry
 // until Ryan took him off on Oct 8 ("We gotta take Aloe Blacc out"): with the set empty his Pending status keeps him
@@ -217,7 +223,12 @@ export const ownerListedRegardless = new Set<string>([]);
 // Owner (Oct 5, 2026): a confirmed status OR any "Hold Space" percentage puts a person on the website (the Bryan
 // brothers are "Hold Space - 51%"); "Pending", "Declined" and "Donation - Not Attending" do not.
 export const isListableStatus = (status: string) => /confirmed/i.test(status) || /hold space/i.test(status);
+// Owner (Oct 11, 2026): never listed on the websites in any section (lineups, founders, producer credits, profiles),
+// whatever Airtable says. "Take Seth Porter Winterton off the website. I'm making that executive decision."
+// Ryan (Oct 9): "Take Ratcliff out of the Founders" (Airtable groups him Founder; he has no other role on the site).
+export const excludedFromSite2026 = new Set(["seth porter winterton", "john ratcliff"]);
 export function isPublicAirtablePerson(person: AirtablePerson): boolean {
+  if (excludedFromSite2026.has(person.name.trim().toLowerCase())) return false;
   // Sept 22 meeting: every founder is listed whatever the invitation status; everyone else must be confirmed
   // or holding space (owner, Oct 5).
   const founderRegardless = person.groups.includes("Founder");

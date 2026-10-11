@@ -34,7 +34,7 @@ describe("2026 people sections (Airtable-driven, Sept 22 meeting)", () => {
     expect(sections.map(section => section.title)).toEqual(["Keynotes", "Speakers", "Founders", "Attendees"]);
     expect(names(sections, "Keynotes")).toEqual(["Jewel", "Steve Wozniak", "Ray Lewis", "Mike Majlak"]);
     expect(names(sections, "Speakers")).toEqual(["A Musician", "B Host", "F Musician"]); // A, B, F; founders with mid tiers are not here
-    expect(names(sections, "Founders")).toEqual(["Expert Founder", "Only Founder", "Steve Wozniak", "Jewel", "Nick Kislinger"]); // Airtable order
+    expect(names(sections, "Founders")).toEqual(["Jewel", "Steve Wozniak", "Nick Kislinger", "Expert Founder", "Only Founder"]); // Ryan's order (Oct 9), then Airtable order
     expect(names(sections, "Founders")).not.toContain("Ray Lewis"); // owner (Sept 22): not a founder, whatever Airtable says
     expect(names(sections, "Attendees")).toEqual(["Guest Person"]);
     for (const title of ["Keynotes", "Speakers", "Attendees"]) {
@@ -61,7 +61,7 @@ describe("2026 people sections (Airtable-driven, Sept 22 meeting)", () => {
     expect(sections.map(section => section.title)).toEqual(["Lineup", "Founders"]);
     expect(sections[0]!.heading).toBeNull();
     expect(names(sections, "Lineup")).toEqual(["Jewel", "Steve Wozniak", "Ray Lewis", "Mike Majlak", "A Musician", "B Host", "F Musician"]);
-    expect(names(sections, "Founders")).toEqual(["Expert Founder", "Only Founder", "Steve Wozniak", "Jewel", "Nick Kislinger"]);
+    expect(names(sections, "Founders")).toEqual(["Jewel", "Steve Wozniak", "Nick Kislinger", "Expert Founder", "Only Founder"]);
   });
 
   it("completeness gate: no title, photo or bio means no card (the McGraws have an Airtable photo since Sept 28, so no exception remains)", () => {
@@ -180,12 +180,15 @@ describe("Airtable Website Grouping rules", () => {
   });
 });
 
-describe("Founders order (owner, Oct 7)", () => {
-  it("puts the Cohens fourth and Janet right after Steve", async () => {
+describe("Founders order (Ryan, Oct 9 meeting)", () => {
+  it("follows Ryan's list, keeps unnamed founders in Airtable order after it and puts Ryan Wolfington last", async () => {
     const { founderOrder2026 } = await import("./people-sections");
     const mk = (name: string) => ({ name } as unknown as import("./people").SummitPerson);
-    const ordered = founderOrder2026(["Janet Wozniak", "A", "B", "C", "D", "Steven and Alexandra Cohen", "E", "Steve Wozniak", "F"].map(mk)).map(p => p.name);
-    expect(ordered.indexOf("Steven and Alexandra Cohen")).toBe(3);
-    expect(ordered.indexOf("Janet Wozniak")).toBe(ordered.indexOf("Steve Wozniak") + 1);
+    const input = ["Ryan Wolfington", "Bob Bryan", "Jen Smorgon", "Kimbal Musk", "Mike Bryan", "Jennifer Donnelly", "Sean and Ana Wolfington", "Winston and Cameron Kelly", "Melinda and Noah Springer", "Ellie Kanner", "Daniel Gillison", "Erica McGraw", "Jay McGraw", "Logan Paul", "Miriam Isa", "Jeneva Bell", "Sheri Sobrato", "Melony and Adam Lewis", "Nick Kislinger", "Janet Wozniak", "Steve Wozniak", "Jewel", "Christiana Musk", "Steven and Alexandra Cohen"];
+    expect(founderOrder2026(input.map(mk)).map(p => p.name)).toEqual([
+      "Steven and Alexandra Cohen", "Jewel", "Steve Wozniak", "Janet Wozniak", "Nick Kislinger", "Melony and Adam Lewis", "Sheri Sobrato",
+      "Jeneva Bell", "Miriam Isa", "Logan Paul", "Daniel Gillison", "Jay McGraw", "Erica McGraw", "Ellie Kanner", "Melinda and Noah Springer",
+      "Winston and Cameron Kelly", "Christiana Musk", "Kimbal Musk", "Mike Bryan", "Bob Bryan", "Sean and Ana Wolfington", "Jen Smorgon", "Jennifer Donnelly", "Ryan Wolfington"
+    ]);
   });
 });

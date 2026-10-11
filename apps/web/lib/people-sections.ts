@@ -82,19 +82,27 @@ export function isCompleteCard(person: SummitPerson) {
 
 // Owner (Oct 7, 2026): in the Founders list the Cohens sit fourth, and Janet Wozniak sits right after Steve (they have
 // separate headshots, so they stay two cards side by side). Everyone else keeps Airtable's order.
+// Ryan (Oct 9 meeting): the Founders section in his order; couples share one card and sort by either name.
+// Founders he did not name keep Airtable order after his list; Ryan Wolfington is always last.
+export const founderOrderRyan2026: RegExp[] = [
+  /\bcohen\b/, /^jewel\b/, /^steve wozniak\b/, /^janet wozniak\b/, /\bkislinger\b/, /^(melony|adam) (and \w+ )?lewis\b/,
+  /\bsobrato\b|\bsabroto\b/, /^jeneva bell\b/, /^miriam isa\b/, /^logan paul\b/,
+  // Ryan (Oct 9): "put Dan Gillison ... before Jay McGraw"; Ellie Kanner then comes before the Springers.
+  /\bgillison\b/, /^jay mcgraw\b/, /^erica mcgraw\b/, /\bkanner\b/, /\bspringer\b/, /^(winston|cameron) (and \w+ )?kelly\b/,
+  // Owner (Oct 11): then the Musks, the Bryan brothers, Sean and Ana Wolfington, Jen Smorgon and Jennifer Donnelly.
+  /^christiana musk\b/, /^kimbal musk\b/, /^mike bryan\b/, /^bob bryan\b/, /^(sean|ana) (and \w+ )?wolfington\b/,
+  /^jen smorgon\b/, /^jennifer donnelly\b/
+];
 export function founderOrder2026(founders: SummitPerson[]): SummitPerson[] {
-  const list = [...founders];
-  const move = (match: (p: SummitPerson) => boolean, to: number) => {
-    const from = list.findIndex(match);
-    if (from === -1) return;
-    const [person] = list.splice(from, 1);
-    list.splice(Math.min(to, list.length), 0, person!);
+  const rank = (person: SummitPerson) => {
+    const key = personNameKey(person.name);
+    if (/^ryan wolfington\b/.test(key)) return 10_000;
+    const index = founderOrderRyan2026.findIndex(pattern => pattern.test(key));
+    return index === -1 ? 1_000 : index;
   };
-  const janet = list.findIndex(person => personNameKey(person.name) === "janet wozniak");
-  const steve = list.findIndex(person => personNameKey(person.name) === "steve wozniak");
-  if (janet !== -1 && steve !== -1) move(person => personNameKey(person.name) === "janet wozniak", janet < steve ? steve : steve + 1);
-  move(person => /cohen/i.test(person.name), 3);
-  return list;
+  return founders.map((person, index) => ({ person, index, rank: rank(person) }))
+    .sort((a, b) => a.rank - b.rank || a.index - b.index)
+    .map(entry => entry.person);
 }
 
 export function peopleSections(people: SummitPerson[], variant: SectionVariant = "summit"): PeopleSection[] {

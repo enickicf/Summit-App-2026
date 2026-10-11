@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { displayTitle2026, icfAlumni2026 } from "../lib/title-overrides-2026";
+import { airtableTalent2026 } from "../lib/airtable-talent-2026";
+import { RoleLines } from "./role-lines";
 import { ArrowDown, ArrowUpRight, Play } from "lucide-react";
 import type { EventSnapshot } from "@not-alone/validation";
 import source from "../lib/original-sites.json";
@@ -131,6 +134,12 @@ function currentCoChairNames(snapshot: EventSnapshot | null, confirmedNames: Set
   return names;
 }
 
+function coChairRole2026(name: string, role: string): string {
+  if (!icfAlumni2026.has(normalizePersonName(name))) return role;
+  const recorded = airtableTalent2026.find(person => normalizePersonName(person.name) === normalizePersonName(name))?.title;
+  return displayTitle2026(name, recorded || "");
+}
+
 function leadershipGroups({ producers = false, chairsOnly = false, hostsOnly = false, confirmedNames }: LeadershipProps) {
   const all = producers ? summit2025Directory.filter(group => /Producers/.test(group.title)) : summit2025Leadership;
   const images = summit[producers ? 13 : 4]!.images;
@@ -138,7 +147,9 @@ function leadershipGroups({ producers = false, chairsOnly = false, hostsOnly = f
   // Photo positions follow ICF's section order, so they are assigned before any group is left out.
   return all.map(group => ({ ...group,
     // 2025 archive credits keep ICF's own photos exactly; newer owner-approved portraits apply to 2026 only.
-    people: group.people.map(person => { const source = images[position++]!.src; return { ...person, image: (confirmedNames && updatedPortrait(person.name)) || source }; })
+    // Oct 11 (owner): on the 2026 pages an ICF alumnus shows "ICF Alumni" with their Airtable title underneath
+    // (Cherrial's co-chair card), as everywhere else; the 2025 archive keeps ICF's own wording.
+    people: group.people.map(person => { const source = images[position++]!.src; return { ...person, role: confirmedNames ? coChairRole2026(person.name, person.role) : person.role, image: (confirmedNames && updatedPortrait(person.name)) || source }; })
       .filter(person => !confirmedNames || isConfirmed2026OriginalPerson(person.name, confirmedNames))
   })).filter(group => (!chairsOnly || group.title === "Co-Chairs") && (!hostsOnly || group.title !== "Co-Chairs"))
     .filter(group => group.people.length > 0);
@@ -170,7 +181,7 @@ function Leadership(props: LeadershipProps) {
       return <div key={group.title}><h2>{group.title}</h2><div className={photos ? styles.leaders : styles.creditNames}>
       {group.people.map(person => {
         const profile = props.awardsProfiles?.find(profile => normalizePersonName(profile.name) === normalizePersonName(person.name));
-        const card = <>{photos && <SiteImage src={person.image} alt={person.name} sizes="(max-width: 600px) 230px, 250px" />}<h3>{person.name}</h3><p>{person.role}</p></>;
+        const card = <>{photos && <SiteImage src={person.image} alt={person.name} sizes="(max-width: 600px) 230px, 250px" />}<h3>{person.name}</h3><p><RoleLines text={person.role} /></p></>;
         return <article key={person.name}>{profile ? <Link href={`/directory/${encodeURIComponent(profile.slug)}${props.summitLinks ? "" : "?from=awards"}`} prefetch={false} aria-label={`Meet ${person.name}`}>{card}</Link> : card}</article>;
       })}
     </div></div>;
@@ -221,7 +232,7 @@ function ProducerCredits2026({ confirmedNames, profiles, awardsContext = false, 
     {shown.map(group => <div key={group.title}><h2>{group.title}</h2><div className={group.photos ? styles.leaders : styles.creditNames}>
       {group.people.map(person => {
         const profile = profiles.find(entry => normalizePersonName(entry.name) === normalizePersonName(person.name));
-        const card = <>{group.photos && person.image && imageFor(person.image)(person.name)}<h3>{person.name}</h3>{person.role && <p>{person.role}</p>}</>;
+        const card = <>{group.photos && person.image && imageFor(person.image)(person.name)}<h3>{person.name}</h3>{person.role && <p><RoleLines text={person.role} /></p>}</>;
         return <article key={person.name}>{profile ? <Link href={`/directory/${encodeURIComponent(profile.slug)}${awardsContext ? "?from=awards" : ""}`} prefetch={false} aria-label={`Meet ${person.name}`}>{card}</Link> : card}</article>;
       })}
     </div></div>)}
@@ -242,12 +253,12 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     {!archive && <CurrentEventUpdates snapshot={snapshot} initialNowUtc={new Date().toISOString()} />}
     {/* Owner (Sept 21): same hero format as the Awards site (logo, larger foundation credit, date and
         venue, one action), over the 2025 Summit recap with its Villa Bibbiani segments skipped. */}
-    <section className={`${summitStyles.hero} ${summitStyles.heroFormat}`} aria-labelledby="summit-title">
+    <section className={`${summitStyles.hero} ${summitStyles.heroFormat}${archive ? "" : ` ${summitStyles.heroWithCorner}`}`} aria-labelledby="summit-title">
       <SummitVideo background />
       <div className={summitStyles.heroCopy}>
         {/* Owner (Oct 8): a two-line date block above the logo, about the width of the stack below it: the dates in bold
             white, the venue in pearl spaced capitals. From Nov 6, 2026 it reads "2027 — To Be Announced Soon." 2026 only. */}
-        {!archive && <p className={`${summitStyles.heroDate} ${summitStyles.heroEyebrow}`}>{isPostEvent() ? postEventLabel : <><span className={summitStyles.heroEyebrowDate}>{withoutYear(heroDates.main, year).replace("-", "–")}, {year}</span><span className={summitStyles.heroDateVenue}>{venue ?? "Venue to be announced"}</span></>}</p>}
+        {!archive && <p className={`${summitStyles.heroDate} ${summitStyles.heroEyebrow} ${summitStyles.heroEyebrowTop}`}>{isPostEvent() ? postEventLabel : <><span className={summitStyles.heroEyebrowDate}>{withoutYear(heroDates.main, year).replace("-", "–")}, {year}</span><span className={summitStyles.heroDateVenue}>{venue ?? "Venue to be announced"}</span></>}</p>}
         <h1 id="summit-title" className={summitStyles.heroLogo}>
           <SiteImage src="/images/summit-logo.png" alt="" sizes="(max-width: 600px) 170px, 250px" loading="eager" fetchPriority="high" />
           <span className={styles.hidden}>Not Alone Summit {year}</span>
@@ -262,6 +273,12 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
         {archive && <p className={summitStyles.heroDate}><span className={summitStyles.heroEdition}>{year}</span>{withoutYear(summit2025Dates, year)}<span className={summitStyles.heroDateVenue}> | Wynn Las Vegas</span></p>}
         {/* Owner (Oct 8): the hero ends on the Presented-by lockup. */}
       </div>
+      {/* Ryan (Oct 9 call): on computers the dates and venue sit in the hero's bottom-right corner with the Schedule
+          button on top of them; on phones they stay at the top of the stack (the eyebrow above the logo). 2026 only. */}
+      {!archive && <div className={summitStyles.heroCorner}>
+        <a className={summitStyles.heroCornerButton} href="#schedule">Schedule</a>
+        <p className={`${summitStyles.heroDate} ${summitStyles.heroEyebrow} ${summitStyles.heroCornerDate}`}>{isPostEvent() ? postEventLabel : <><span className={summitStyles.heroEyebrowDate}>{withoutYear(heroDates.main, year).replace("-", "–")}, {year}</span><span className={summitStyles.heroDateVenue}>{venue ?? "Venue to be announced"}</span></>}</p>
+      </div>}
     </section>
     {/* Owner (Sept 21): the recap player is removed for now; it will move to a new location. */}
     {/* Owner (Sept 21): ICF-style two-column introduction (bold heading and rich text; Not Alone logo
@@ -339,6 +356,17 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
 // buttons to that group's own form; everything else is identical.
 type AwardsPageProps = { year: 2025 | 2026; program?: EventSnapshot["contentPages"][number] | null; snapshot?: EventSnapshot | null; rsvpUrl?: string | undefined };
 
+// Owner (Oct 11): the Awards hero date and venue are split at their first separator so phones can show the Summit's
+// two-line format (the separator stays in the first part for ", " and is its own span for " · ").
+function StackedParts({ text, split, className }: { text: string; split: string; className?: string | undefined }) {
+  const at = text.indexOf(split);
+  if (at === -1) return <>{text}</>;
+  const keep = split.trim() === "," ? "," : "";
+  // Owner (Oct 11): on phones the first part ("Monday," / "Encore Theater") is left out so the corner reads exactly like
+  // the Summit's — "NOVEMBER 2, 2026" over "WYNN LAS VEGAS" at the same sizes.
+  return <><span className={`${className ?? ""} ${styles.cornerFirst}`}>{text.slice(0, at)}{keep}</span>{keep ? " " : <span className={styles.cornerSep}>{split}</span>}<span className={className}>{text.slice(at + split.length)}</span></>;
+}
+
 function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }: Omit<AwardsPageProps, "year">) {
   const reviewedPeople = awardsPeople(snapshot);
   const displayPeople = awardsDisplayPeople(snapshot);
@@ -368,16 +396,20 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
           lockup. Nothing else; the hero is only as tall as its stack. From Nov 6, 2026 the date block reads
           "2027 — To Be Announced Soon." (lib/event-phase.ts). */}
       <div className={`${styles.heroContent} ${styles.heroStack}`}>
-        <p className={`${styles.heroDate} ${styles.heroEyebrow}`}>{isPostEvent() ? postEventLabel : <>{show && !canceled
-          ? <time className={styles.heroEyebrowDate} dateTime={show.startUtc}>{withoutYear(date, 2026)}, 2026</time>
-          : <span className={styles.heroEyebrowDate}>{canceled ? date : `${withoutYear(date, 2026)}${/to be confirmed/i.test(date) ? "" : ", 2026"}`}</span>}
-          <span className={styles.heroDateVenue}>{venue.replace(/ at /i, " · ")}</span></>}</p>
         <h1 id="awards-title" className={styles.awardsLogo}>
           <SiteImage src="/images/na-awards-logo-white.png" alt="" sizes="(max-width: 600px) 180px, 250px" loading="eager" fetchPriority="high" />
           <span className={styles.hidden}>Not Alone Awards 2026</span>
         </h1>
         <PoweredBy className={styles.heroPowered} />
         <PresentedBy size="hero" />
+      </div>
+      {/* Owner (Oct 11): as on the Summit (Ryan, Oct 9), the date and venue sit in the bottom-right corner of the hero —
+          on phones small and tucked under the stack, shrinking with the screen width. */}
+      <div className={styles.awardsCorner}>
+          <p className={`${styles.heroDate} ${styles.heroEyebrow} ${styles.awardsCornerDate}`}>{isPostEvent() ? postEventLabel : <>{show && !canceled
+            ? <time className={styles.heroEyebrowDate} dateTime={show.startUtc}><StackedParts text={`${withoutYear(date, 2026)}, 2026`} split=", " className={styles.cornerPart} /></time>
+            : <span className={styles.heroEyebrowDate}>{canceled ? date : `${withoutYear(date, 2026)}${/to be confirmed/i.test(date) ? "" : ", 2026"}`}</span>}
+            <span className={styles.heroDateVenue}><StackedParts text={venue.replace(/ at /i, " · ")} split=" · " className={styles.cornerPart} /></span></>}</p>
       </div>
       {!/wynn las vegas/i.test(venue) && <div className={styles.heroFootnote}><p>Wynn Las Vegas · 2025 venue</p></div>}
     </section>

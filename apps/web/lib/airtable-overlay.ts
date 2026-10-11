@@ -9,11 +9,12 @@ import { airtableRos2026, type RosRow } from "./airtable-ros-2026";
 import { isOnWebsiteSchedule, pinnedTime, privateEventScope, websiteSessionSynopsis, websiteSessionTitle, type ScheduleItemWithAttire } from "./schedule-website-rules";
 import { scheduleDoc2026 } from "./schedule-doc-2026";
 import { airtableTalent2026, type RecordedAirtablePerson } from "./airtable-talent-2026";
+import { withOwnerGroups } from "./airtable";
 import { airtablePartners2026 } from "./airtable-partners-2026";
 import { airtableHeadshotCrops } from "./airtable-headshot-crops";
 import { interimBio2026 } from "./interim-bios-2026";
 import { awardsBiographies } from "./awards-people";
-import { titleOverride2026 } from "./title-overrides-2026";
+import { displayTitle2026 } from "./title-overrides-2026";
 
 // Airtable becomes the website's source for 2026 people (who is listed, grouping, title, bio,
 // headshot), the schedule and 2026 partners whenever the read-only connection is configured.
@@ -145,7 +146,10 @@ export async function withAirtable(snapshot: EventSnapshot): Promise<EventSnapsh
   const recorded = stale ? recordedAirtableSchedule() : [];
   const sessions = doc.length ? doc : live ?? (recorded.length ? recorded : null);
   // The same applies to the recorded Airtable people (with local copies of their headshots) and partners.
-  const talent: RecordedAirtablePerson[] | null = liveTalent ?? (stale && airtableTalent2026.length ? airtableTalent2026 : null);
+  const talentSource: RecordedAirtablePerson[] | null = liveTalent ?? (stale && airtableTalent2026.length ? airtableTalent2026 : null);
+  // Owner (Oct 11): owner-credited Founders (lib/airtable.ts ownerFounders2026) get the Founder grouping here, for the
+  // live Airtable link and the recorded copy alike.
+  const talent: RecordedAirtablePerson[] | null = talentSource ? talentSource.map(withOwnerGroups) : null;
   const partners = livePartners ?? (stale && airtablePartners2026.length ? airtablePartners2026 : null);
   if (!talent && !sessions && !partners) return snapshot;
   const next: EventSnapshot = { ...snapshot };
@@ -158,14 +162,15 @@ export async function withAirtable(snapshot: EventSnapshot): Promise<EventSnapsh
       const existing = snapshot.speakers.find(speaker => personNameKey(speaker.name) === key);
       const speakerId = existing?.id ?? airtableUuid(person.recordId);
       // Owner (Oct 8): an owner-dictated title (lib/title-overrides-2026.ts) wins over Airtable's Title column everywhere.
-      const title = titleOverride2026(person.name) ?? person.title;
+      // Oct 11: ICF alumni show "ICF Alumni" with their title on the next line (displayTitle2026).
+      const title = displayTitle2026(person.name, person.title);
       people!.set(key, { ...person, title, speakerId, categories: airtableCategories(person.groups), featured: person.groups.includes(featuredGroup), rank: talent.indexOf(person),
         ...(talentTier(person.groups) ? { tier: talentTier(person.groups)! } : {}), ...(ranks.has(person) ? { topRank: ranks.get(person)! } : {}) });
       return {
         id: speakerId, eventId: snapshot.event.id, name: person.name,
         // Owner (Sept 21, late): the website shows Airtable's Title column only, never Occupation.
         // Sept 22 meeting: the title comes from Airtable (or one already published on the website); nothing is invented.
-        role: titleOverride2026(person.name) ?? (person.title || existing?.role || ""),
+        role: displayTitle2026(person.name, person.title || existing?.role || ""),
         // Airtable's bio wins; then a published one, ICF's own bio, and finally the interim bio.
         bio: person.bio || existing?.bio || awardsBiographies[person.name]?.bio || interimBio2026(person.name) || "",
         headshotUrl: "headshotFile" in person && person.headshotFile ? person.headshotFile

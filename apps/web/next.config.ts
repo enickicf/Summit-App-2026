@@ -28,7 +28,9 @@ const nextConfig: NextConfig = {
       // the edge cache those 404s until the cache was purged). Not listed on purpose: /api/*, the staff
       // portal (cookie-specific), profile pages (their header depends on ?from=awards), /summit/live
       // (minute-by-minute state) and Next's own asset routes. A new deploy clears the cache.
-      ...["/", ...cachedPublicPaths].map(source => ({ source, headers: publicPageCacheHeaders }))
+      // Review links (NEXT_PUBLIC_REVIEW_BUILD=1) are never edge-cached: the owner must always see the latest draft
+      // (Oct 11: a review page was served from a two-day-old stale copy). Production keeps the cache.
+      ...(process.env.NEXT_PUBLIC_REVIEW_BUILD === "1" ? [] : ["/", ...cachedPublicPaths].map(source => ({ source, headers: publicPageCacheHeaders })))
     ];
   }
 };

@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import { RoleLines } from "../../components/role-lines";
 import { isFounder } from "../../lib/people-sections";
 import { SiteImage } from "../../components/site-image";
 import Link from "next/link";
@@ -111,7 +112,7 @@ export default async function PartnersPage() {
           ? <div className={styles.people}>{philanthropists.map(person => <Link key={person.slug} href={`/directory/${person.slug}`} className={styles.person}>
               <span className={styles.personPortrait} aria-hidden="true">{person.image ? <SiteImage src={person.image} alt="" sizes="(max-width: 600px) 44vw, 200px" /> : <span>{personInitials(person.name)}</span>}</span>
               <span className={styles.personName}>{person.name}</span>
-              {person.role && <span className={styles.personRole}>{person.role}</span>}
+              {person.role && <span className={styles.personRole}><RoleLines text={person.role} /></span>}
             </Link>)}</div>
           : <p className={styles.archiveLink}>Philanthropists will be announced.</p>}
       </section>

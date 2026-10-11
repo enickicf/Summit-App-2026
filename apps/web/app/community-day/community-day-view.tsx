@@ -11,6 +11,7 @@ import { getSiteSnapshot } from "../../lib/snapshot";
 import heroPhoto from "./encore-theater-community-day.png";
 import styles from "./community-day.module.css";
 import { PresentedBy } from "../../components/presented-by";
+import { PoweredBy } from "../../components/powered-by";
 import { EventPartners } from "../../components/event-partners";
 import { communityDaySchedule2026 } from "../../lib/community-day-schedule-2026";
 
@@ -34,13 +35,22 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
             "Community Day" label above it. Owner (Oct 7): the header was too crowded: it is now the title, the Cohen
             Foundation credit, the ICF | NAMI "Presented by" lockup directly under that credit, and the two buttons.
             The date, venue, times and the Awards Show pointer moved down to the Schedule section. */}
-        {/* Owner (Oct 8): the date and place at the top of the header, as on the Summit and Awards heroes. */}
-        <p className={styles.heroEyebrow}>{over ? postEventLabel : <><span className={styles.heroEyebrowDate}>Monday, November 2, 2026</span><span className={styles.heroEyebrowVenue}>Wynn Las Vegas</span></>}</p>
         <h1 id="community-day-title" className={styles.heroTitleMark} aria-label={day.title}>
           <strong>Nevada Mental<br />Health Day</strong>
         </h1>
-        <p className={styles.heroPowered}>Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong></p>
-        <PresentedBy className={styles.presentedBy} />
+        {/* Owner (Oct 11): the same header treatment as the Summit and Awards — the stacked Cohen credit and the
+            hero-size ICF × NAMI lockup. */}
+        <PoweredBy className={styles.heroPowered} />
+        {/* Owner (Oct 11): on phones and tablets the date sits level with the Presented-by logos, on the right (the buttons
+            below are full width); on computers it is in the header's bottom-right corner. */}
+        <div className={styles.lockupRow}>
+          <PresentedBy size="hero" className={styles.presentedBy} />
+          {/* Owner (Oct 11): as on the Summit and Awards (Ryan, Oct 9), the date and place sit in the header's bottom-right
+              corner; small on phones, shrinking with the screen width. */}
+          <div className={styles.heroCorner}>
+              <p className={`${styles.heroEyebrow} ${styles.heroCornerDate}`}>{over ? postEventLabel : <><span className={styles.heroEyebrowDate}><span className={`${styles.cornerPart} ${styles.cornerFirst}`}>Monday,</span> <span className={styles.cornerPart}>November 2, 2026</span></span><span className={styles.heroEyebrowVenue}>Wynn Las Vegas</span></>}</p>
+          </div>
+        </div>
         <div className={styles.heroButtons} id="community-day-actions">
           {!over && <a className={styles.button} href={rsvpUrl} target="_blank" rel="noopener">Request free tickets</a>}
           {/* Owner (Oct 8): "Full Schedule" (was "Info") scrolls to the day's full schedule on this page. */}

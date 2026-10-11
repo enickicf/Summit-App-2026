@@ -29,6 +29,12 @@ export function EventPartners({ tone = "light", heading = "Our Partners", headin
         <span className={styles.role}>Host venue</span>
         <span className={`${styles.logo} ${styles.wynn}`}><img src={hostVenue.logo[logo]} alt={hostVenue.name} width={hostVenue.logo.width} height={hostVenue.logo.height} loading="lazy" /></span>
       </div>
+      {/* Ryan (Oct 9): "add Wise Friend as a curriculum partner under Our Partners". A full-width row under the other
+          cards on every page that shows this block (Summit, Awards and every copy, Nevada Mental Health Day). */}
+      <div className={`${styles.card} ${styles.curriculum}`}>
+        <span className={styles.role}>Curriculum partner</span>
+        <span className={`${styles.logo} ${styles.wiseFriend}`}><img src="/2026-partners/wise-friend-wordmark.png" alt="Wise Friend" width={1200} height={948} loading="lazy" /></span>
+      </div>
     </div>
   </section>;
 }

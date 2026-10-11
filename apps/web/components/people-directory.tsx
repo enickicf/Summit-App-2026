@@ -1,4 +1,5 @@
 import { useId } from "react";
+import { RoleLines } from "./role-lines";
 import type { DirectoryGroup } from "../lib/content";
 import styles from "./people-directory.module.css";
 
@@ -17,7 +18,7 @@ export function PeopleDirectory({ groups, tone = "light" }: { groups: DirectoryG
               {group.people.map((person, index) => (
                 <article key={`${group.title}-${person.name}-${index}`}>
                   <h3>{person.name}</h3>
-                  {person.role.trim() && <p>{person.role}</p>}
+                  {person.role.trim() && <p><RoleLines text={person.role} /></p>}
                 </article>
               ))}
             </div>

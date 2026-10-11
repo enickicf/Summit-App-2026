@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { RoleLines } from "../../../components/role-lines";
+import { titleOneLine } from "../../../lib/title-overrides-2026";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
@@ -66,7 +68,7 @@ export async function generateMetadata({ params, searchParams }: ProfilePageProp
   const title = `${person.name} | Not Alone ${archived ? `${context} 2025 Archive` : awardsHost ? "Awards 2026 Host" : `${context} 2026`}`;
   const description = archived
     ? `${person.name} in the 2025 Not Alone ${context} archive.${person.role.trim() ? ` ${person.role.trim()}` : ""}`
-    : awardsHost ? "Meet Loni Love, host of the 2026 Not Alone Awards." : fromAwards ? `${person.name}: ${person.role}. View their biography in the 2026 Not Alone Awards directory.` : `Published 2026 Summit profile for ${person.name}. Summit attendance does not confirm an Awards appearance, performance, or honor.`;
+    : awardsHost ? "Meet Loni Love, host of the 2026 Not Alone Awards." : fromAwards ? `${person.name}: ${titleOneLine(person.role)}. View their biography in the 2026 Not Alone Awards directory.` : `Published 2026 Summit profile for ${person.name}. Summit attendance does not confirm an Awards appearance, performance, or honor.`;
   const images: { url: string; alt: string }[] = [];
   if (person.image) {
     try {
@@ -122,7 +124,7 @@ export default async function PersonPage({ params, searchParams }: ProfilePagePr
       <div><p className="eyebrow">{archived ? `2025 ${fromAwards ? "Awards" : "Summit"} archive` : awardsHost ? "2026 Awards Host" : fromAwards ? "2026 Awards" : "2026 Summit"}</p>
         <h1 id="profile-name">{person.name}</h1>
         {!awardsHost && visibleCategories.length > 0 && <p className={styles.categories}>{visibleCategories.join(" · ")}</p>}
-        {(awardsHost || person.role.trim()) && <p className="profileRole">{awardsHost ? "Host, Not Alone Awards 2026" : person.role}</p>}
+        {(awardsHost || person.role.trim()) && <p className="profileRole">{awardsHost ? "Host, Not Alone Awards 2026" : <RoleLines text={person.role} />}</p>}
         {person.bio.trim() && <p className="profileBio">{person.bio}</p>}
         {photoCredit && <p className={styles.photoCredit}>Photo: <a href={photoCredit.href} target="_blank" rel="noreferrer">{photoCredit.label}</a></p>}
         {fromAwards && !archived && awardsBiographies[person.name] && !snapshot?.speakers.find(speaker => speaker.id === person.slug)?.bio.trim() && <a href={awardsBiographies[person.name]!.source}>Biography source</a>}

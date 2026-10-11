@@ -77,6 +77,8 @@ const interimBios: Record<string, string> = {
   "Clayton Alenik": "Clayton Alenik, co-founder of Wise Friend, is confirmed for the 2026 Not Alone Summit.",
   "Remington Rhodes": "Remington Rhodes is a confirmed guest of the 2026 Not Alone Summit.",
   "Erik Blamoville": "Erik Blamoville is a confirmed guest of the 2026 Not Alone Summit.",
+  "Kimbal Musk": "Kimbal Musk, chairman of The Kitchen Restaurant Group, Square Roots and Big Green, is a founder of the Not Alone Summit.",
+  "Christiana Musk": "Christiana Musk, co-founder of Flourish Trust, is a founder of the Not Alone Summit.",
   "Jennifer Donnelly": "Jennifer Donnelly, The Ultimate Matchmaker, is a founder of the Not Alone Summit.",
   "Ryan Chen": "Ryan Chen, co-founder of Neurogum, is confirmed for the 2026 Not Alone Summit."
 };

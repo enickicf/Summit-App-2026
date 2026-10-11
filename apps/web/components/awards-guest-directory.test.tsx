@@ -74,7 +74,7 @@ describe("Awards guest gallery", () => {
   it("shows producers in the people sections only by their other roles, never as producers", () => {
     const genericProducers = producers.map(person => ({ ...person, role: "Confirmed 2026 guest", categories: ["Attendees" as const] }));
     const html = renderToStaticMarkup(<AwardsGuestDirectory people={genericProducers} />);
-    expect(producers).toHaveLength(5);
+    expect(producers).toHaveLength(6); // Oct 11: Dr. George Rapier III (a 2025 ICF producer credit) is now a 2026 Founder
     // Jewel is a musician; the others are attendees here (their producer credits have their own section).
     expect(html.slice(html.indexOf('aria-label="Lineup"'))).toContain("<h3>Jewel</h3>");
     expect(html).not.toMatch(/Producer<\/p>/);

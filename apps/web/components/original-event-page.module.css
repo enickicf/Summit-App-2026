@@ -729,3 +729,57 @@
 .currentAwards section:global(#mission) { background: #121212; padding-top: 56px; padding-bottom: 56px; border-top: 0; border-bottom: 0; margin-top: 0; }
 .currentAwards section:global(#awards-host) { background: #090909; border-top: 0; }
 @media (max-width: 600px) { .currentAwards section:global(#mission) { padding-top: 40px; padding-bottom: 40px; } }
+
+/* Owner (Oct 11): Ryan's Oct 9 Summit changes carried to every Awards copy. (1) The date and venue sit in the hero's
+   bottom-right corner (wide screens), under the stack on the right on tablets, tiny on phones, shrinking with the width. */
+.currentAwards .awardsHeroStack .awardsCorner { position: absolute; z-index: 3; right: max(24px, calc((100% - 1180px) / 2)); bottom: 34px; text-align: right; text-shadow: 0 2px 18px #0009; }
+.currentAwards .awardsHeroStack .awardsCorner .heroEyebrow { margin: 0; }
+.currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroEyebrowDate, .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { white-space: nowrap; }
+.currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { margin-right: -.24em; }
+@media (max-width: 900px) {
+  /* Owner (Oct 11): level with the bottom of the Presented-by logos, in the stack's bottom-right corner (same grid cell). */
+  .currentAwards .awardsHero.awardsHeroStack { display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; }
+  .currentAwards .awardsHeroStack .heroStack { grid-area: 1 / 1; }
+  .currentAwards .awardsHeroStack .awardsCorner { grid-area: 1 / 1; position: static; justify-self: end; align-self: end; width: auto; margin: 0; }
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroEyebrowDate { font-size: clamp(13px, 4.4vw, 20px); }
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { margin-top: .45em; font-size: clamp(8.5px, 2.75vw, 12px); letter-spacing: .24em; }
+}
+@media (max-width: 600px) {
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroEyebrowDate { font-size: clamp(9.5px, 2.9vw, 12px); letter-spacing: .08em; }
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { margin-top: .35em; font-size: clamp(7px, 2vw, 8.5px); letter-spacing: .22em; margin-right: -.22em; }
+}
+/* (2) The warmer logo-style face (Poppins ExtraBold) on the Awards statement and the mission's opening line, as on
+   the Summit headline and mission paragraph. Sizes and colours unchanged. */
+.currentAwards .awardsStatementBand p, .currentAwards .awardsStatementBand .awardsHonorLede,
+.currentAwards .awardsMission p:first-child, .currentAwards .awardsMission p:first-child strong { font-weight: 800; }
+
+/* Owner (Oct 11, phones): the Awards corner matches the Summit's exactly — two lines, "NOVEMBER 2, 2026" over
+   "WYNN LAS VEGAS", at the Summit's sizes, beside the Presented-by logos and level with their bottom. "Monday," and
+   "Encore Theater ·" are left out on phones only (the full text shows on tablets and computers; the Encore Theater is in
+   the schedule box below). */
+@media (max-width: 600px) {
+  .currentAwards .awardsHeroStack .awardsCorner .cornerFirst, .currentAwards .awardsHeroStack .awardsCorner .cornerSep { display: none; }
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroEyebrowDate { font-size: clamp(9.5px, 2.9vw, 12px); letter-spacing: .08em; line-height: 1.2; }
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { margin-top: .35em; font-size: clamp(7px, 2vw, 8.5px); letter-spacing: .22em; margin-right: -.22em; line-height: 1.2; }
+}
+@media (max-width: 380px) {
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroEyebrowDate { font-size: clamp(8px, 2.6vw, 10px); letter-spacing: .04em; }
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { font-size: clamp(6.5px, 1.9vw, 7.5px); letter-spacing: .16em; margin-right: -.16em; }
+}
+/* Owner (Oct 11): the same on every Awards copy — no margin under the lockup on phones and tablets, so the date's bottom
+   is level with the bottom of the logos. */
+@media (max-width: 900px) { .currentAwards .awardsHeroStack .heroStack > :last-child { margin-bottom: 0; } }
+
+/* Owner (Oct 11): at EVERY screen size the Awards corner's bottom is tied to the bottom of the Presented-by logos (same
+   grid cell as the stack, bottom-right); the lockup's 24px bottom margin moves into the hero's padding so the hero keeps
+   its height on computers. */
+.currentAwards .awardsHero.awardsHeroStack { display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; padding-bottom: 58px; }
+.currentAwards .awardsHeroStack .heroStack { grid-area: 1 / 1; }
+.currentAwards .awardsHeroStack .awardsCorner { grid-area: 1 / 1; position: relative; right: auto; bottom: auto; justify-self: end; align-self: end; margin: 0; }
+.currentAwards .awardsHeroStack .heroStack > :last-child { margin-bottom: 0; }
+@media (max-width: 600px) { .currentAwards .awardsHero.awardsHeroStack { padding-bottom: 30px; } }
+/* Owner (Oct 11): on computers the Awards corner uses the Summit's exact sizes (date clamp 24-30px, venue 16px .32em). */
+@media (min-width: 901px) {
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroEyebrowDate { font-size: clamp(24px, 2.11vw, 30px); letter-spacing: .06em; }
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { margin-top: 8px; font-size: 16px; letter-spacing: .32em; margin-right: -.32em; }
+}

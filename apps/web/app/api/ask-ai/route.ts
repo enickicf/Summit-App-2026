@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { titleOneLine } from "../../../lib/title-overrides-2026";
 import { directoryPeople } from "../../../lib/people";
 import { personNameKey } from "../../../lib/person-portraits";
 import { getSiteSnapshot } from "../../../lib/snapshot";
@@ -36,7 +37,7 @@ export async function POST(request: Request) {
         const programAnswer = publishedProgramAnswer(question, snapshot, new Date().toISOString(), { personSchedule: true });
         if (programAnswer) return respond(programAnswer);
       }
-      return respond(`${person.name} is listed for 2026 as ${person.role}. Attendance does not confirm a speaking slot or award. Check the published schedule for appearance details.`);
+      return respond(`${person.name} is listed for 2026 as ${titleOneLine(person.role)}. Attendance does not confirm a speaking slot or award. Check the published schedule for appearance details.`);
     }
     const awardsAnswer = awardsFactAnswer(question);
     if (awardsAnswer) return respond(awardsAnswer);

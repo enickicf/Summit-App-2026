@@ -17,7 +17,9 @@ export const ownerProducerCredits2026: ReadonlyArray<{ name: string; group: stri
 // (b) Ryan asked to be taken off the producer credits ("you can just take me off... I didn't even want to be on
 // that"). He remains a Founder everywhere else (Founders section, Partners page, profile). The owner can empty
 // this set to put him back.
-export const producerCreditsHidden2026 = new Set(["Ryan Wolfington"].map(personNameKey));
+// Ryan (Oct 9 meeting) reversed this: "put Trent second, put me third" in the Executive Producers. Nobody is hidden now
+// (Seth Porter Winterton is kept off the whole website by lib/airtable.ts excludedFromSite2026, owner Oct 11).
+export const producerCreditsHidden2026 = new Set<string>([]);
 export const isHiddenProducerCredit = (name: string) => producerCreditsHidden2026.has(personNameKey(name));
 
 // (c) Ryan: "put them in alphabetical order". Alphabetical by SURNAME: the last word of the name, ignoring
@@ -37,6 +39,38 @@ export function sortProducerCredits<P extends { name: string }>(people: readonly
   return [...people].sort((a, b) => surnameOf(a.name).localeCompare(surnameOf(b.name), "en", { sensitivity: "base" }));
 }
 
+// (d) Ryan (Oct 9 meeting): "Put [Trevor] Short up ... first. On the [executive] producers, put Trent second, put me third";
+// producers "Sally ... Sophie, then Paige, then Raquelle"; associate producers "Casey first, Nick second", then "Denise"
+// (Sydney King, "Sydney's third"), Clark Cummings, then Cherrial (with the owner, who is off the site), then Ricky,
+// "and then the rest", Isabella last. Trevor Short and Trent Alenik move up from Producers to Executive Producers.
+// Names in these lists come first in this order; everyone else in the group follows, alphabetical by surname.
+export const producerGroupMoves2026: ReadonlyMap<string, string> = new Map([
+  ["Trevor Short", "Executive Producers"], ["Trent Alenik", "Executive Producers"]
+].map(([name, group]) => [personNameKey(name!), group!]));
+export const producerOrder2026: Readonly<Record<string, readonly string[]>> = {
+  "Executive Producers": ["Trevor Short", "Trent Alenik", "Ryan Wolfington"],
+  Producers: ["Sally Dewhurst", "Sophie Novak", "Paige Neuenschwander", "Raquelle Stevens"],
+  // Owner (Oct 11) corrected the first reading: "Denise, their[d]" is "Sydney's third" (Sydney King), and "and then the
+  // rest, and it's about last" is "the rest, and Isabel[la] last" (producerLast2026).
+  "Associate Producers": ["Casey Caruso", "Nick Ekern", "Sydney King", "Clark Cummings", "Cherrial Odell", "Ricky Sypert"]
+};
+export const producerLast2026: Readonly<Record<string, readonly string[]>> = {
+  "Associate Producers": ["Isabella Wolfington"]
+};
+export function orderProducerGroup<P extends { name: string }>(title: string, people: readonly P[]): P[] {
+  const order = (producerOrder2026[title] ?? []).map(personNameKey);
+  const last = (producerLast2026[title] ?? []).map(personNameKey);
+  const rank = (person: P) => {
+    const key = personNameKey(person.name);
+    const index = order.indexOf(key);
+    if (index !== -1) return index;
+    const end = last.indexOf(key);
+    return end === -1 ? order.length : order.length + 1 + end;
+  };
+  const rest = sortProducerCredits(people);
+  return [...rest].sort((a, b) => rank(a) - rank(b));
+}
+
 // The three rules together, for the component: merge the owner additions (Airtable source only), drop the hidden
 // names, sort every group by surname. Groups keep their order, titles and photo setting; a group may come back empty.
 export function applyProducerCreditRules<G extends ProducerCreditGroup>(groups: readonly G[], live?: ReadonlyMap<string, { title: string; occupation: string }> | null): G[] {
@@ -50,5 +84,15 @@ export function applyProducerCreditRules<G extends ProducerCreditGroup>(groups: 
       group.people.push({ name: credit.name, role: record.title || record.occupation || "" } as G["people"][number]);
     }
   }
-  return merged.map(group => ({ ...group, people: sortProducerCredits(group.people.filter(person => !isHiddenProducerCredit(person.name))) }));
+  // Ryan (Oct 9): move people to the group he named (only when that group is on the page).
+  for (const group of merged) {
+    for (const person of [...group.people]) {
+      const target = producerGroupMoves2026.get(personNameKey(person.name));
+      const destination = target && target !== group.title ? merged.find(entry => entry.title === target) : undefined;
+      if (!destination) continue;
+      group.people.splice(group.people.indexOf(person), 1);
+      if (!destination.people.some(existing => personNameKey(existing.name) === personNameKey(person.name))) destination.people.push(person);
+    }
+  }
+  return merged.map(group => ({ ...group, people: orderProducerGroup(group.title, group.people.filter(person => !isHiddenProducerCredit(person.name))) }));
 }
