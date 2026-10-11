@@ -87,7 +87,10 @@ export function isCompleteCard(person: SummitPerson) {
 export const founderOrderRyan2026: RegExp[] = [
   /\bcohen\b/, /^jewel\b/, /^steve wozniak\b/, /^janet wozniak\b/, /\bkislinger\b/, /^(melony|adam) (and \w+ )?lewis\b/,
   /\bsobrato\b|\bsabroto\b/, /^jeneva bell\b/, /^miriam isa\b/, /^logan paul\b/, /^jay mcgraw\b/, /^erica mcgraw\b/,
-  /\bgillison\b/, /\bkanner\b/, /\bspringer\b/, /^(winston|cameron) (and \w+ )?kelly\b/, /^(sean|ana) (and \w+ )?wolfington\b/
+  /\bgillison\b/, /\bkanner\b/, /\bspringer\b/, /^(winston|cameron) (and \w+ )?kelly\b/,
+  // Owner (Oct 11): then the Musks, the Bryan brothers, Sean and Ana Wolfington, Jen Smorgon and Jennifer Donnelly.
+  /^christiana musk\b/, /^kimbal musk\b/, /^mike bryan\b/, /^bob bryan\b/, /^(sean|ana) (and \w+ )?wolfington\b/,
+  /^jen smorgon\b/, /^jennifer donnelly\b/
 ];
 export function founderOrder2026(founders: SummitPerson[]): SummitPerson[] {
   const rank = (person: SummitPerson) => {

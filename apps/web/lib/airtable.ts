@@ -209,6 +209,12 @@ export const foundersListedRegardless = new Set([
   // Owner (Sept 23): Jennifer Donnelly, added by hand until she is in Airtable.
   "jennifer donnelly"
 ]);
+// Owner (Oct 11, 2026): also credited as Founders on the websites although Airtable does not group them "Founder"
+// (Bob and Mike Bryan stay Keynotes as well). Remove a name once Airtable carries the Founder grouping.
+export const ownerFounders2026 = new Set(["bob bryan", "mike bryan"]);
+export function withOwnerGroups<T extends AirtablePerson>(person: T): T {
+  return ownerFounders2026.has(person.name.trim().toLowerCase()) && !person.groups.includes("Founder") ? { ...person, groups: [...person.groups, "Founder"] } : person;
+}
 // Owner (Oct 4, 2026): listed on the websites by the owner's direction while Airtable's status is not yet
 // "Confirmed". Remove a name once Airtable confirms it. Aloe Blacc (A-Talent, status "Pending") was the only entry
 // until Ryan took him off on Oct 8 ("We gotta take Aloe Blacc out"): with the set empty his Pending status keeps him
