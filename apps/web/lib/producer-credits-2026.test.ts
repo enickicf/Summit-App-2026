@@ -8,12 +8,9 @@ describe("producer credits (Ryan, Oct 8)", () => {
     expect(ownerProducerCredits2026).toEqual([{ name: "Raquelle Stevens", group: "Producers" }]);
   });
 
-  it("hides Ryan Wolfington from the producer credits only (the set can be emptied to put him back)", () => {
-    expect(producerCreditsHidden2026).toEqual(new Set(["ryan wolfington"]));
-    expect(isHiddenProducerCredit("Ryan Wolfington")).toBe(true);
-    expect(isHiddenProducerCredit("  ryan WOLFINGTON ")).toBe(true);
-    expect(isHiddenProducerCredit("Isabella Wolfington")).toBe(false);
-    expect(isHiddenProducerCredit("Jewel")).toBe(false);
+  it("hides nobody now: Ryan asked on Oct 9 to be the third Executive Producer", () => {
+    expect(producerCreditsHidden2026.size).toBe(0);
+    expect(isHiddenProducerCredit("Ryan Wolfington")).toBe(false);
   });
 
   it("reads the surname as the last word, ignoring suffixes, parentheticals and a couple's first names", () => {
@@ -56,30 +53,26 @@ describe("producer credits (Ryan, Oct 8)", () => {
     ["ryan wolfington", { title: "Founder, Inspiring Children Foundation and Not Alone", occupation: "" }]
   ]);
 
-  it("with Airtable as the source: merges Raquelle into Producers with her Airtable title, drops Ryan, sorts each group", () => {
+  it("with Airtable as the source: Ryan's Oct 9 groups and order, Raquelle merged into Producers", () => {
     const credited = applyProducerCreditRules(groups, live);
     expect(credited.map(group => group.title)).toEqual(["Executive Producers", "Producers", "Co-Producers", "Associate Producers"]);
-    expect(credited[0]).toEqual({ title: "Executive Producers", photos: true, people: [{ name: "Aphrah Brokaw", role: "COO", image: "/a.jpg" }, { name: "Jewel", role: "Singer", image: "/j.jpg" }] });
-    expect(credited[1]!.people).toEqual([{ name: "Trent Alenik", role: "CEO" }, { name: "Deb Cullen", role: "Producer" }, { name: "Raquelle Stevens", role: "Author/ Producer" }, { name: "Jan Thwaites", role: "Co-Founder" }]);
+    // Trevor (when present) first, Trent moved up from Producers second, Ryan third, then the others by surname.
+    expect(credited[0]!.people.map(person => person.name)).toEqual(["Trent Alenik", "Ryan Wolfington", "Aphrah Brokaw", "Jewel"]);
+    expect(credited[1]!.people.map(person => person.name)).toEqual(["Raquelle Stevens", "Deb Cullen", "Jan Thwaites"]);
     expect(credited[1]!.people.find(person => person.name === "Raquelle Stevens")).not.toHaveProperty("image"); // a name card
-    expect(credited[2]!.people).toEqual([]);
     expect(credited[3]!.people.map(person => person.name)).toEqual(["Casey Caruso", "Seth Porter Winterton"]);
     expect(groups[0]!.people.map(person => person.name)).toEqual(["Ryan Wolfington", "Jewel", "Aphrah Brokaw"]); // input untouched
   });
 
-  it("does not add Raquelle twice once Airtable credits her itself, and skips her when her record is not listed", () => {
-    const already = groups.map(group => group.title === "Producers" ? { ...group, people: [...group.people, { name: "Raquelle Stevens", role: "Author/ Producer" }] } : group);
-    expect(applyProducerCreditRules(already, live)[1]!.people.filter(person => person.name === "Raquelle Stevens")).toHaveLength(1);
-    expect(applyProducerCreditRules(groups, new Map())[1]!.people.map(person => person.name)).toEqual(["Trent Alenik", "Deb Cullen", "Jan Thwaites"]);
-  });
-
-  it("without Airtable (the Sept 21 credits): no addition, but Ryan is still off and the order is alphabetical", () => {
-    const fallback = [
-      { title: "Producers", photos: false, people: [{ name: "Jewel", role: "Producer" }, { name: "Ryan Wolfington", role: "Producer" }, { name: "Aphrah Brokaw", role: "Producer" }] },
-      { title: "Executive Producers", photos: true, people: [{ name: "Trevor Short", role: "Executive Producer", image: "/t.jpg" }, { name: "Trent Alenik", role: "Executive Producer", image: "/ta.jpg" }] }
+  it("orders every group as Ryan dictated, then the rest by surname", () => {
+    const full = [
+      { title: "Executive Producers", photos: true, people: ["Jewel", "Aphrah Brokaw", "Ryan Wolfington"].map(name => ({ name, role: "" })) },
+      { title: "Producers", photos: false, people: ["Trevor Short", "Trent Alenik", "Jan Thwaites", "Raquelle Stevens", "Paige Neuenschwander", "Sophie Novak", "Sally Dewhurst", "Deb Cullen"].map(name => ({ name, role: "" })) },
+      { title: "Associate Producers", photos: false, people: ["Will Elmore Jr.", "Ricky Sypert", "Cherrial Odell", "Clark Cummings", "Isabella Wolfington", "Nick Ekern", "Casey Caruso", "Bianca Mok", "Payton McDonald"].map(name => ({ name, role: "" })) }
     ];
-    const credited = applyProducerCreditRules(fallback, null);
-    expect(credited[0]!.people.map(person => person.name)).toEqual(["Aphrah Brokaw", "Jewel"]);
-    expect(credited[1]!.people.map(person => person.name)).toEqual(["Trent Alenik", "Trevor Short"]);
+    const credited = applyProducerCreditRules(full, new Map());
+    expect(credited[0]!.people.map(person => person.name)).toEqual(["Trevor Short", "Trent Alenik", "Ryan Wolfington", "Aphrah Brokaw", "Jewel"]);
+    expect(credited[1]!.people.map(person => person.name)).toEqual(["Sally Dewhurst", "Sophie Novak", "Paige Neuenschwander", "Raquelle Stevens", "Deb Cullen", "Jan Thwaites"]);
+    expect(credited[2]!.people.map(person => person.name)).toEqual(["Casey Caruso", "Nick Ekern", "Isabella Wolfington", "Clark Cummings", "Cherrial Odell", "Ricky Sypert", "Will Elmore Jr.", "Payton McDonald", "Bianca Mok"]);
   });
 });

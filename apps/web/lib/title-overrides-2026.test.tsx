@@ -17,8 +17,8 @@ const ryanTitle = "Founder, Inspiring Children Foundation and Not Alone";
 // Ryan Wolfington (Oct 8, 2026): "Take off 'co-founder' for Not Alone... I would put 'Founder, Inspiring Children
 // Foundation and Not Alone'."
 describe("owner title override (Ryan, Oct 8)", () => {
-  it("is keyed by the normalized name and covers Ryan only", () => {
-    expect(titleOverrides2026).toEqual(new Map([["ryan wolfington", ryanTitle]]));
+  it("is keyed by the normalized name and covers Ryan and Paige", () => {
+    expect(titleOverrides2026).toEqual(new Map([["ryan wolfington", ryanTitle], ["paige neuenschwander", "ICF Partnerships Manager"]]));
     expect(titleOverride2026("Ryan Wolfington")).toBe(ryanTitle);
     expect(titleOverride2026("  RYAN  Wolfington ")).toBe(ryanTitle);
     expect(titleOverride2026("Isabella Wolfington")).toBeUndefined();

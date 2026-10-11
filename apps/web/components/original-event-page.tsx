@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { displayTitle2026, icfAlumni2026 } from "../lib/title-overrides-2026";
+import { airtableTalent2026 } from "../lib/airtable-talent-2026";
+import { RoleLines } from "./role-lines";
 import { ArrowDown, ArrowUpRight, Play } from "lucide-react";
 import type { EventSnapshot } from "@not-alone/validation";
 import source from "../lib/original-sites.json";
@@ -131,6 +134,12 @@ function currentCoChairNames(snapshot: EventSnapshot | null, confirmedNames: Set
   return names;
 }
 
+function coChairRole2026(name: string, role: string): string {
+  if (!icfAlumni2026.has(normalizePersonName(name))) return role;
+  const recorded = airtableTalent2026.find(person => normalizePersonName(person.name) === normalizePersonName(name))?.title;
+  return displayTitle2026(name, recorded || "");
+}
+
 function leadershipGroups({ producers = false, chairsOnly = false, hostsOnly = false, confirmedNames }: LeadershipProps) {
   const all = producers ? summit2025Directory.filter(group => /Producers/.test(group.title)) : summit2025Leadership;
   const images = summit[producers ? 13 : 4]!.images;
@@ -138,7 +147,9 @@ function leadershipGroups({ producers = false, chairsOnly = false, hostsOnly = f
   // Photo positions follow ICF's section order, so they are assigned before any group is left out.
   return all.map(group => ({ ...group,
     // 2025 archive credits keep ICF's own photos exactly; newer owner-approved portraits apply to 2026 only.
-    people: group.people.map(person => { const source = images[position++]!.src; return { ...person, image: (confirmedNames && updatedPortrait(person.name)) || source }; })
+    // Oct 11 (owner): on the 2026 pages an ICF alumnus shows "ICF Alumni" with their Airtable title underneath
+    // (Cherrial's co-chair card), as everywhere else; the 2025 archive keeps ICF's own wording.
+    people: group.people.map(person => { const source = images[position++]!.src; return { ...person, role: confirmedNames ? coChairRole2026(person.name, person.role) : person.role, image: (confirmedNames && updatedPortrait(person.name)) || source }; })
       .filter(person => !confirmedNames || isConfirmed2026OriginalPerson(person.name, confirmedNames))
   })).filter(group => (!chairsOnly || group.title === "Co-Chairs") && (!hostsOnly || group.title !== "Co-Chairs"))
     .filter(group => group.people.length > 0);
@@ -170,7 +181,7 @@ function Leadership(props: LeadershipProps) {
       return <div key={group.title}><h2>{group.title}</h2><div className={photos ? styles.leaders : styles.creditNames}>
       {group.people.map(person => {
         const profile = props.awardsProfiles?.find(profile => normalizePersonName(profile.name) === normalizePersonName(person.name));
-        const card = <>{photos && <SiteImage src={person.image} alt={person.name} sizes="(max-width: 600px) 230px, 250px" />}<h3>{person.name}</h3><p>{person.role}</p></>;
+        const card = <>{photos && <SiteImage src={person.image} alt={person.name} sizes="(max-width: 600px) 230px, 250px" />}<h3>{person.name}</h3><p><RoleLines text={person.role} /></p></>;
         return <article key={person.name}>{profile ? <Link href={`/directory/${encodeURIComponent(profile.slug)}${props.summitLinks ? "" : "?from=awards"}`} prefetch={false} aria-label={`Meet ${person.name}`}>{card}</Link> : card}</article>;
       })}
     </div></div>;
@@ -221,7 +232,7 @@ function ProducerCredits2026({ confirmedNames, profiles, awardsContext = false, 
     {shown.map(group => <div key={group.title}><h2>{group.title}</h2><div className={group.photos ? styles.leaders : styles.creditNames}>
       {group.people.map(person => {
         const profile = profiles.find(entry => normalizePersonName(entry.name) === normalizePersonName(person.name));
-        const card = <>{group.photos && person.image && imageFor(person.image)(person.name)}<h3>{person.name}</h3>{person.role && <p>{person.role}</p>}</>;
+        const card = <>{group.photos && person.image && imageFor(person.image)(person.name)}<h3>{person.name}</h3>{person.role && <p><RoleLines text={person.role} /></p>}</>;
         return <article key={person.name}>{profile ? <Link href={`/directory/${encodeURIComponent(profile.slug)}${awardsContext ? "?from=awards" : ""}`} prefetch={false} aria-label={`Meet ${person.name}`}>{card}</Link> : card}</article>;
       })}
     </div></div>)}

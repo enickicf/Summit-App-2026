@@ -223,7 +223,12 @@ export const ownerListedRegardless = new Set<string>([]);
 // Owner (Oct 5, 2026): a confirmed status OR any "Hold Space" percentage puts a person on the website (the Bryan
 // brothers are "Hold Space - 51%"); "Pending", "Declined" and "Donation - Not Attending" do not.
 export const isListableStatus = (status: string) => /confirmed/i.test(status) || /hold space/i.test(status);
+// Owner (Oct 11, 2026): never listed on the websites in any section (lineups, founders, producer credits, profiles),
+// whatever Airtable says. "Take Seth Porter Winterton off the website. I'm making that executive decision."
+// Ryan (Oct 9): "Take Ratcliff out of the Founders" (Airtable groups him Founder; he has no other role on the site).
+export const excludedFromSite2026 = new Set(["seth porter winterton", "john ratcliff"]);
 export function isPublicAirtablePerson(person: AirtablePerson): boolean {
+  if (excludedFromSite2026.has(person.name.trim().toLowerCase())) return false;
   // Sept 22 meeting: every founder is listed whatever the invitation status; everyone else must be confirmed
   // or holding space (owner, Oct 5).
   const founderRegardless = person.groups.includes("Founder");

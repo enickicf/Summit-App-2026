@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { RoleLines } from "./role-lines";
 import { Fragment, useState } from "react";
 import type { PersonCategory, SummitPerson } from "../lib/people";
 import { awardsGuestCategories, awardsPerson } from "../lib/awards-people";
@@ -40,7 +41,7 @@ function GuestPortrait({ person }: { person: SummitPerson }) {
 function GuestName({ person, category }: { person: SummitPerson; category?: string }) {
   const role = (category && person.categoryRoles?.[category as keyof typeof person.categoryRoles]) || person.role;
   const genericRole = /^confirmed\s+2026\s+(?:summit\s+)?guest$/i.test(role.trim());
-  return <div><h3>{person.name}</h3>{role && !genericRole && <p>{role}</p>}</div>;
+  return <div><h3>{person.name}</h3>{role && !genericRole && <p><RoleLines text={role} /></p>}</div>;
 }
 
 // Categories listed in the people sections (co-chairs and producers have their own sections).

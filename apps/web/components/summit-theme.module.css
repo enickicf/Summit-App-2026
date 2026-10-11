@@ -433,8 +433,6 @@
 .summit .hero .heroCornerButton { display:inline-flex; align-items:center; justify-content:center; min-height:46px; padding:10px 28px; border-radius:4px; background:#fff; color:#111; font-size:15px; font-weight:700; text-shadow:none; pointer-events:auto; }
 .summit .hero .heroCornerButton:hover { background:#d0d4ea; }
 .summit .hero .heroCornerButton:focus-visible { outline:3px solid #fff; outline-offset:3px; }
-@media (min-width:901px) { .summit .heroCopy .heroEyebrowTop { display:none; } }
-@media (max-width:900px) { .summit .hero .heroCorner { display:none; } }
 /* Ryan (Oct 9): the corner's date block uses the hero eyebrow's look (the eyebrow rules are scoped to .heroCopy). */
 .summit .hero .heroCorner .heroCornerDate { color:#fff; font-size:inherit; letter-spacing:0; text-transform:none; line-height:1.2; }
 .summit .hero .heroCorner .heroEyebrowDate { display:block; color:#fff; font-size:clamp(24px,2.11vw,30px); font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
@@ -445,3 +443,21 @@
    only where Ryan asked: Poppins ExtraBold (800, self-hosted; the logo's heavy geometric sans), sizes and colours unchanged. */
 .summit.summit > section:global(#about).introBar h2, .summit.summit > section:global(#about).introBar h2 .introAccent { font-weight:800; letter-spacing:-0.015em; }
 .summit.summit .narrativeBand p, .summit.summit .narrativeBand p .narrativeLede { font-weight:800; }
+/* Ryan (Oct 9): the mission paragraph "a little bigger and more quotey ... more personable" (owner, Oct 11: yes, in
+   addition to the font). Set as a centred statement under a large opening quotation mark; words, colours and the
+   bold blue opening phrase unchanged. */
+.summit.summit .narrativeBand { text-align:center; padding-top:64px; padding-bottom:60px; }
+.summit.summit .narrativeBand p { max-width:900px; margin:0 auto; text-align:center; font-size:clamp(22px,2.3vw,30px); line-height:1.42; text-wrap:balance; }
+.summit.summit .narrativeBand p::before { content:"\201C"; display:block; margin:0 auto 6px; font-size:clamp(72px,7vw,104px); font-weight:800; line-height:.62; color:#8fb1e0; }
+@media (max-width:600px) { .summit.summit .narrativeBand { padding-top:48px; padding-bottom:44px; } .summit.summit .narrativeBand p { font-size:20px; line-height:1.45; } }
+/* Owner (Oct 11): the date and venue sit at the bottom right on every screen size (no copy at the top); the Schedule
+   button shows only on wide screens and drops away once the screen gets narrow (it is in the menu anyway). On
+   tablets and phones the corner follows the hero stack in the normal flow, right-aligned, so it never covers it. */
+.summit .heroCopy .heroEyebrowTop { display:none; }
+@media (max-width:900px) {
+  .summit .hero .heroCornerButton { display:none; }
+  .summit.summit .hero { flex-direction:column; align-items:stretch; justify-content:center; }
+  .summit .hero .heroCorner { position:static; align-self:stretch; width:100%; margin:22px 0 0; gap:0; }
+  .summit .hero .heroCorner .heroEyebrowDate { font-size:20px; }
+  .summit .hero .heroCorner .heroDateVenue { margin-top:6px; font-size:12px; letter-spacing:.26em; margin-right:-.26em; }
+}

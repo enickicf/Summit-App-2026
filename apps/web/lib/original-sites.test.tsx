@@ -206,7 +206,9 @@ describe("source-faithful, year-separated event pages", () => {
       for (const group of [...summit2025Leadership.filter(group => group.title === "Co-Chairs"), ...summit2025Directory.filter(group => /Producers/.test(group.title))]) {
         for (const person of group.people) {
           if (person.name === "Ryan Wolfington") continue; // Ryan (Oct 8): off the 2026 producer credits
-          const credit = `<h3>${escape(person.name)}</h3><p>${escape(person.role)}</p>`;
+          // Owner (Oct 11): on the 2026 pages Cherrial's co-chair credit reads "ICF Alumni" with her title underneath.
+          const role = group.title === "Co-Chairs" && person.name === "Cherrial Odell" ? "ICF Alumni<br/>Stanford Graduate, and Founder of Wellness Buddies" : escape(person.role);
+          const credit = `<h3>${escape(person.name)}</h3><p>${role}</p>`;
           // Sept 21 meeting: Jewel is credited as a 2026 Producer as well as co-chair.
           if (group.title === "Executive Producers" && person.name === "Jewel") expect(html).toContain(credit);
           else if (confirmed.has(person.name) || (group.title === "Co-Chairs" && person.name === "Cherrial Odell")) expect(html).toContain(credit);
@@ -233,8 +235,8 @@ describe("source-faithful, year-separated event pages", () => {
     const cards = peopleSections(awardsDisplayPeople(event2026Snapshot).filter(person => isKeynote(person) || [...awardsGuestCategories, "Hosts", "Attendees"].some(category => person.categories.includes(category as never))), "awards").flatMap(section => section.people);
     expect(roster.match(/data-awards-guest=/g)).toHaveLength(cards.length);
     expect(roster.match(/\?from=awards/g)).toHaveLength(cards.length);
-    // Producer (owner, Sept 23): Ryan Oz, Deb Cullen; Producers: Jewel, Aphrah Brokaw (Ryan Wolfington off the credits, Ryan Oct 8); Executive Producers: Trevor Short, Trent Alenik.
-    expect(production.match(/<article>/g)).toHaveLength(6);
+    // Producer (owner, Sept 23): Ryan Oz, Deb Cullen; Producers: Jewel, Ryan Wolfington, Aphrah Brokaw (Ryan back on the credits, Oct 9); Executive Producers: Trevor Short, Trent Alenik.
+    expect(production.match(/<article>/g)).toHaveLength(7);
     expect(production.indexOf("<h2>Producer</h2>")).toBeLessThan(production.indexOf("<h2>Producers</h2>"));
     expect(production.indexOf("<h2>Producers</h2>")).toBeLessThan(production.indexOf("<h2>Executive Producers</h2>"));
     expect(html.indexOf('id="producers"')).toBeGreaterThan(html.indexOf('id="directory"'));
@@ -243,7 +245,7 @@ describe("source-faithful, year-separated event pages", () => {
       const name = `<h3>${escape(person.name)}</h3>`;
       if (producerCredit2026(person.name)) {
         // Ryan (Oct 8): Ryan Wolfington asked to be taken off the producer credits (lib/producer-credits-2026.ts).
-        if (person.name === "Ryan Wolfington") expect(production).not.toContain(name); else expect(production).toContain(name);
+        expect(production).toContain(name); // Ryan (Oct 9): back on the producer credits
         if (eligible.some(guest => guest.name === person.name)) expect(roster).toContain(name); else expect(roster).not.toContain(name);
       } else if (["Sean Wolfington", "Ana Wolfington", "Melinda Springer", "Noah Springer"].includes(person.name)) expect(roster).not.toContain(name);
       else if (cards.some(card => card.person.name === person.name)) expect(roster).toContain(name); // Owner (Sept 22): only well-known people and founders on the Awards lineup
@@ -349,7 +351,7 @@ describe("source-faithful, year-separated event pages", () => {
     const html = renderToStaticMarkup(<OriginalSummitPage year={2026} snapshot={live} />);
     const directory = html.split('id="directory"')[1]!.split('id="producers"')[0]!;
     for (const name of ["Trevor Short", "Jewel", "Steve Wozniak"]) expect(html).toContain(`<h3>${name}</h3>`);
-    expect(html).not.toContain("<h3>Ryan Wolfington</h3>"); // Ryan (Oct 8): off the producer credits; still a Founder card in the directory
+    expect(html).toContain("<h3>Ryan Wolfington</h3>"); // Ryan (Oct 9): back on the producer credits (third Executive Producer); also a Founder card in the directory
     // Jewel and Steve Wozniak are keynotes (owner, Sept 21); producer-only credits stay out of the people sections.
     for (const name of ["Jewel", "Ryan Wolfington", "Steve Wozniak"]) expect(directory).toContain(`>${name}</h4>`);
     expect(directory).not.toContain(">Trevor Short</h4>");
