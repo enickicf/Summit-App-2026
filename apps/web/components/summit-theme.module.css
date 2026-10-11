@@ -443,5 +443,5 @@
 /* Ryan (Oct 9): the headline "A National Convening…" and the mission paragraph in a warmer face like the logo's
    "alone summit" lettering. Owner (Oct 11): take only the font from the logo (no colours or other logo styling) and
    only where Ryan asked: Poppins ExtraBold (800, self-hosted; the logo's heavy geometric sans), sizes and colours unchanged. */
-.summit.summit .introThin h2, .summit.summit .introThin h2 .introAccent { font-weight:800; letter-spacing:-0.015em; }
+.summit.summit > section:global(#about).introBar h2, .summit.summit > section:global(#about).introBar h2 .introAccent { font-weight:800; letter-spacing:-0.015em; }
 .summit.summit .narrativeBand p, .summit.summit .narrativeBand p .narrativeLede { font-weight:800; }
