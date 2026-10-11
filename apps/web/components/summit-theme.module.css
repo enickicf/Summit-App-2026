@@ -456,8 +456,11 @@
 .summit .heroCopy .heroEyebrowTop { display:none; }
 @media (max-width:900px) {
   .summit .hero .heroCornerButton { display:none; }
-  .summit.summit .hero { flex-direction:column; align-items:stretch; justify-content:center; }
-  .summit .hero .heroCorner { position:static; align-self:stretch; width:100%; margin:22px 0 0; gap:0; }
+  /* Owner (Oct 11, iPhone screenshot): the date must not sit lower than the stack; it shares the stack's grid cell and
+     sits in its bottom-right corner, its bottom level with the bottom of the Presented-by logos. */
+  .summit.summit .hero { display:grid; grid-template-columns:minmax(0,1fr); align-content:center; }
+  .summit.summit .hero .heroCopy { grid-area:1 / 1; }
+  .summit .hero .heroCorner { grid-area:1 / 1; position:static; justify-self:end; align-self:end; width:auto; margin:0; gap:0; }
   /* Owner (Oct 11): on narrow screens the date and venue shrink with the width of the screen (one line each, never
      wrapping or overlapping): 20px / 12px at tablet width down to about 14px / 9px on a 320px phone. */
   .summit .hero .heroCorner .heroEyebrowDate { font-size:clamp(13px,4.4vw,20px); white-space:nowrap; }
@@ -466,10 +469,13 @@
 /* Owner (Oct 11, from his iPhone screenshot): on phones the date and venue are tiny and tucked in the bottom-right
    corner (still one line each, shrinking with the width). Tablets and computers keep the larger sizes above. */
 @media (max-width:600px) {
-  .summit .hero .heroCorner { margin-top:16px; }
   .summit .hero .heroCorner .heroEyebrowDate { font-size:clamp(9.5px,2.9vw,12px); letter-spacing:.08em; }
   .summit .hero .heroCorner .heroDateVenue { margin-top:.35em; font-size:clamp(7px,2vw,8.5px); letter-spacing:.22em; margin-right:-.22em; }
 }
 /* Owner (Oct 11): Jewel's quote in a friendlier rounded face (Nunito ExtraBold, self-hosted as "Not Alone Rounded"),
    slightly different from the Poppins headline and mission with the same warmth. Size and colours unchanged. */
 .summit.summit .pullQuote blockquote p { font-family: "Not Alone Rounded", "Original Poppins", Arial, sans-serif; font-weight: 800; letter-spacing: 0; }
+@media (max-width:380px) {
+  .summit .hero .heroCorner .heroEyebrowDate { font-size:clamp(8px,2.6vw,10px); letter-spacing:.04em; }
+  .summit .hero .heroCorner .heroDateVenue { font-size:clamp(6.5px,1.9vw,7.5px); letter-spacing:.16em; margin-right:-.16em; }
+}

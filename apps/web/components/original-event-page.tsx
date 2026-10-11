@@ -356,6 +356,16 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
 // buttons to that group's own form; everything else is identical.
 type AwardsPageProps = { year: 2025 | 2026; program?: EventSnapshot["contentPages"][number] | null; snapshot?: EventSnapshot | null; rsvpUrl?: string | undefined };
 
+// Owner (Oct 11): the Awards hero date and venue can stack into short lines on phones (beside the Presented-by logos)
+// without changing a word: the text is split at its first separator into two parts that are inline on wide screens
+// and stacked on phones (the separator stays in the first part for ", " and is hidden for " · ").
+function StackedParts({ text, split, className }: { text: string; split: string; className?: string | undefined }) {
+  const at = text.indexOf(split);
+  if (at === -1) return <>{text}</>;
+  const keep = split.trim() === "," ? "," : "";
+  return <><span className={className}>{text.slice(0, at)}{keep}</span>{keep ? " " : <span className={styles.cornerSep}>{split}</span>}<span className={className}>{text.slice(at + split.length)}</span></>;
+}
+
 function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }: Omit<AwardsPageProps, "year">) {
   const reviewedPeople = awardsPeople(snapshot);
   const displayPeople = awardsDisplayPeople(snapshot);
@@ -396,9 +406,9 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
           on phones small and tucked under the stack, shrinking with the screen width. */}
       <div className={styles.awardsCorner}>
           <p className={`${styles.heroDate} ${styles.heroEyebrow} ${styles.awardsCornerDate}`}>{isPostEvent() ? postEventLabel : <>{show && !canceled
-            ? <time className={styles.heroEyebrowDate} dateTime={show.startUtc}>{withoutYear(date, 2026)}, 2026</time>
+            ? <time className={styles.heroEyebrowDate} dateTime={show.startUtc}><StackedParts text={`${withoutYear(date, 2026)}, 2026`} split=", " className={styles.cornerPart} /></time>
             : <span className={styles.heroEyebrowDate}>{canceled ? date : `${withoutYear(date, 2026)}${/to be confirmed/i.test(date) ? "" : ", 2026"}`}</span>}
-            <span className={styles.heroDateVenue}>{venue.replace(/ at /i, " · ")}</span></>}</p>
+            <span className={styles.heroDateVenue}><StackedParts text={venue.replace(/ at /i, " · ")} split=" · " className={styles.cornerPart} /></span></>}</p>
       </div>
       {!/wynn las vegas/i.test(venue) && <div className={styles.heroFootnote}><p>Wynn Las Vegas · 2025 venue</p></div>}
     </section>

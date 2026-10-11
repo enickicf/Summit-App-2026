@@ -44,7 +44,7 @@ describe("Awards opening presentation", () => {
     // full date with the year; the details card under it names the date only.
     expect(html).not.toContain(">2026</span>");
     expect(html).toContain("Monday, November 2</time>");
-    expect(html.match(/Monday, November 2, 2026<\/time>/g)).toHaveLength(1);
+    expect(html.match(/Monday,<\/span> <span class="[^"]*">November 2, 2026<\/span><\/time>/g)).toHaveLength(1); // Oct 11: parts stack on phones
     // Owner (Oct 7 meeting): the hero's timing line is Doors Open 6:30 and the Awards Show start 7:30; the full run sits in "The Evening".
     expect(html).toContain('<dl class="' + styles.heroScheduleTimes + '" aria-label="Doors and Awards Show start"><div><dt>Doors Open</dt><dd>6:30 PM</dd></div><div><dt>Awards Show</dt><dd>7:30 PM</dd></div></dl>');
     expect(html).not.toMatch(/Nevada Day|Community Day|Pre-Show|7:30 PM-10:00 PM|8:00 PM/);
@@ -74,7 +74,7 @@ describe("Awards opening presentation", () => {
     // ends the hero; no right-hand aside. The date line then opens the details band.
     // Owner (Oct 11): the date block moved to the hero's bottom-right corner, after the stack (as on the Summit).
     expect(html).toMatch(/^[^]*?<div class="[^"]*heroStack[^"]*"><h1 id="awards-title"/);
-    expect(html).toMatch(/<div class="[^"]*awardsCorner[^"]*"><p class="[^"]*heroEyebrow[^"]*"><time class="[^"]*heroEyebrowDate[^"]*"[^>]*>Monday, November 2, 2026<\/time><span class="[^"]*heroDateVenue[^"]*">Encore Theater · Wynn Las Vegas<\/span><\/p><\/div>/);
+    expect(html).toMatch(/<div class="[^"]*awardsCorner[^"]*"><p class="[^"]*heroEyebrow[^"]*"><time class="[^"]*heroEyebrowDate[^"]*"[^>]*><span class="[^"]*">Monday,<\/span> <span class="[^"]*">November 2, 2026<\/span><\/time><span class="[^"]*heroDateVenue[^"]*"><span class="[^"]*">Encore Theater<\/span><span class="[^"]*"> · <\/span><span class="[^"]*">Wynn Las Vegas<\/span><\/span><\/p><\/div>/);
     expect(html).toMatch(/<\/h1><p class="[^"]*">Powered by<strong>Steven &amp; Alexandra<br\/>Cohen Foundation<\/strong><\/p><div class="[^"]*">[^]*?Presented by[^]*?alt="Inspiring Children Foundation"[^]*?aria-hidden="true">×<\/span>[^]*?alt="NAMI, National Alliance on Mental Illness"[^]*?<\/div><\/div><div class="[^"]*awardsCorner[^"]*">[^]*?<\/section>[^]*?<p class="[^"]*"><time/);
     expect(html).not.toContain("heroAside");
     expect(html.indexOf("Presented by")).toBeGreaterThan(html.indexOf('<h1 id="awards-title"'));

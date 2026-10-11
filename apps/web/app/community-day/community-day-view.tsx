@@ -38,17 +38,21 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
           <strong>Nevada Mental<br />Health Day</strong>
         </h1>
         <p className={styles.heroPowered}>Powered by<strong>Steven &amp; Alexandra Cohen Foundation</strong></p>
-        <PresentedBy className={styles.presentedBy} />
+        {/* Owner (Oct 11): on phones and tablets the date sits level with the Presented-by logos, on the right (the buttons
+            below are full width); on computers it is in the header's bottom-right corner. */}
+        <div className={styles.lockupRow}>
+          <PresentedBy className={styles.presentedBy} />
+          {/* Owner (Oct 11): as on the Summit and Awards (Ryan, Oct 9), the date and place sit in the header's bottom-right
+              corner; small on phones, shrinking with the screen width. */}
+          <div className={styles.heroCorner}>
+              <p className={`${styles.heroEyebrow} ${styles.heroCornerDate}`}>{over ? postEventLabel : <><span className={styles.heroEyebrowDate}>Monday, November 2, 2026</span><span className={styles.heroEyebrowVenue}>Wynn Las Vegas</span></>}</p>
+          </div>
+        </div>
         <div className={styles.heroButtons} id="community-day-actions">
           {!over && <a className={styles.button} href={rsvpUrl} target="_blank" rel="noopener">Request free tickets</a>}
           {/* Owner (Oct 8): "Full Schedule" (was "Info") scrolls to the day's full schedule on this page. */}
           <a className={`${styles.button} ${styles.outline}`} href="#schedule">Full Schedule</a>
         </div>
-      </div>
-      {/* Owner (Oct 11): as on the Summit and Awards (Ryan, Oct 9), the date and place sit in the header's bottom-right
-          corner — small and tucked under the buttons on phones, shrinking with the screen width. */}
-      <div className={styles.heroCorner}>
-          <p className={`${styles.heroEyebrow} ${styles.heroCornerDate}`}>{over ? postEventLabel : <><span className={styles.heroEyebrowDate}>Monday, November 2, 2026</span><span className={styles.heroEyebrowVenue}>Wynn Las Vegas</span></>}</p>
       </div>
     </section>
 

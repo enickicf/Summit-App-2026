@@ -737,13 +737,14 @@
 .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroEyebrowDate, .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { white-space: nowrap; }
 .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { margin-right: -.24em; }
 @media (max-width: 900px) {
-  .currentAwards .awardsHero.awardsHeroStack { flex-direction: column; align-items: stretch; }
-  .currentAwards .awardsHeroStack .awardsCorner { position: static; width: 100%; margin-top: 22px; }
+  /* Owner (Oct 11): level with the bottom of the Presented-by logos, in the stack's bottom-right corner (same grid cell). */
+  .currentAwards .awardsHero.awardsHeroStack { display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; }
+  .currentAwards .awardsHeroStack .heroStack { grid-area: 1 / 1; }
+  .currentAwards .awardsHeroStack .awardsCorner { grid-area: 1 / 1; position: static; justify-self: end; align-self: end; width: auto; margin: 0; }
   .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroEyebrowDate { font-size: clamp(13px, 4.4vw, 20px); }
   .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { margin-top: .45em; font-size: clamp(8.5px, 2.75vw, 12px); letter-spacing: .24em; }
 }
 @media (max-width: 600px) {
-  .currentAwards .awardsHeroStack .awardsCorner { margin-top: 16px; }
   .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroEyebrowDate { font-size: clamp(9.5px, 2.9vw, 12px); letter-spacing: .08em; }
   .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { margin-top: .35em; font-size: clamp(7px, 2vw, 8.5px); letter-spacing: .22em; margin-right: -.22em; }
 }
@@ -751,3 +752,13 @@
    the Summit headline and mission paragraph. Sizes and colours unchanged. */
 .currentAwards .awardsStatementBand p, .currentAwards .awardsStatementBand .awardsHonorLede,
 .currentAwards .awardsMission p:first-child, .currentAwards .awardsMission p:first-child strong { font-weight: 800; }
+
+/* Owner (Oct 11, phones): the Awards date and venue sit beside the Presented-by logos, level with their bottom, never
+   below the stack and never touching the logos: each splits into short stacked lines ("Monday," / "November 2, 2026",
+   "Encore Theater" / "Wynn Las Vegas"), tiny and shrinking with the screen width. */
+@media (max-width: 600px) {
+  .currentAwards .awardsHeroStack .awardsCorner .cornerPart { display: block; }
+  .currentAwards .awardsHeroStack .awardsCorner .cornerSep { display: none; }
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroEyebrowDate { font-size: clamp(8px, 2.6vw, 11px); letter-spacing: .04em; line-height: 1.25; }
+  .currentAwards .awardsHeroStack .awardsCorner .heroEyebrow .heroDateVenue { margin-top: .5em; font-size: clamp(6.5px, 1.9vw, 8px); letter-spacing: .14em; margin-right: -.14em; line-height: 1.35; }
+}

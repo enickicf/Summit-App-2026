@@ -39,7 +39,7 @@ describe("Nevada Mental Health Day page", () => {
     // Owner (Oct 7): the header was too crowded; the date, venue, times and the Awards Show pointer moved to the Schedule.
     // Owner (Oct 8): the date and place at the top of the header (as on the Summit and Awards), "Full Schedule" replaces "Info".
     // Owner (Oct 11): the date and place moved to the header's bottom-right corner, after the buttons (as on the Summit).
-    expect(hero).toContain("Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Presented by × Request free tickets Full Schedule Monday, November 2, 2026 Wynn Las Vegas");
+    expect(hero).toContain("Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Presented by × Monday, November 2, 2026 Wynn Las Vegas Request free tickets Full Schedule");
     expect(hero).not.toMatch(/PM|Encore|LaFleur|Margaux|Stay for|Awards Show|Community Day/);
     expect(heroHtml).not.toMatch(/<dl\b/);
   });
@@ -66,7 +66,8 @@ describe("Nevada Mental Health Day page", () => {
     expect(powered).toBeLessThan(presented);
     expect(presented).toBeLessThan(html.indexOf('id="community-day-actions"'));
     // Nothing sits between the Cohen credit and the lockup.
-    expect(html.slice(powered, presented)).toMatch(/^Powered by<strong>Steven &amp; Alexandra Cohen Foundation<\/strong><\/p><div class="[^"]*"><span class="[^"]*">$/);
+    // Nothing sits between the Cohen credit and the lockup (Oct 11: the lockup row wraps the logos and the date corner).
+    expect(html.slice(powered, presented)).toMatch(/^Powered by<strong>Steven &amp; Alexandra Cohen Foundation<\/strong><\/p><div class="[^"]*lockupRow[^"]*"><div class="[^"]*"><span class="[^"]*">$/);
   });
 
   it("opens the explanation without repeating the Nevada Mental Health Day line", async () => {
@@ -193,8 +194,7 @@ describe("Nevada Mental Health Day page", () => {
     const html = await render();
     expect(html).not.toContain(communityDay2026.rsvpUrl);
     expect(html).not.toContain('id="tickets"');
-    expect(text(section(html, "community-day-title"))).toContain("Presented by × Full Schedule");
-    expect(text(section(html, "community-day-title"))).toContain(`Full Schedule ${postEventLabel}`); // the corner, Oct 11
+    expect(text(section(html, "community-day-title"))).toContain(`Presented by × ${postEventLabel} Full Schedule`); // the corner, Oct 11
     expect(text(html)).toContain("What is Community Day?");
   });
 
