@@ -41,8 +41,8 @@ export function sortProducerCredits<P extends { name: string }>(people: readonly
 
 // (d) Ryan (Oct 9 meeting): "Put [Trevor] Short up ... first. On the [executive] producers, put Trent second, put me third";
 // producers "Sally ... Sophie, then Paige, then Raquelle"; associate producers "Casey first, Nick second", then "Denise"
-// (unclear on the recording; read as Isabella Wolfington), Clark Cummings, then Cherrial (with the owner, who is off the
-// site), then Ricky, "and then the rest". Trevor Short and Trent Alenik move up from Producers to Executive Producers.
+// (Sydney King, "Sydney's third"), Clark Cummings, then Cherrial (with the owner, who is off the site), then Ricky,
+// "and then the rest", Isabella last. Trevor Short and Trent Alenik move up from Producers to Executive Producers.
 // Names in these lists come first in this order; everyone else in the group follows, alphabetical by surname.
 export const producerGroupMoves2026: ReadonlyMap<string, string> = new Map([
   ["Trevor Short", "Executive Producers"], ["Trent Alenik", "Executive Producers"]
@@ -50,11 +50,23 @@ export const producerGroupMoves2026: ReadonlyMap<string, string> = new Map([
 export const producerOrder2026: Readonly<Record<string, readonly string[]>> = {
   "Executive Producers": ["Trevor Short", "Trent Alenik", "Ryan Wolfington"],
   Producers: ["Sally Dewhurst", "Sophie Novak", "Paige Neuenschwander", "Raquelle Stevens"],
-  "Associate Producers": ["Casey Caruso", "Nick Ekern", "Isabella Wolfington", "Clark Cummings", "Cherrial Odell", "Ricky Sypert"]
+  // Owner (Oct 11) corrected the first reading: "Denise, their[d]" is "Sydney's third" (Sydney King), and "and then the
+  // rest, and it's about last" is "the rest, and Isabel[la] last" (producerLast2026).
+  "Associate Producers": ["Casey Caruso", "Nick Ekern", "Sydney King", "Clark Cummings", "Cherrial Odell", "Ricky Sypert"]
+};
+export const producerLast2026: Readonly<Record<string, readonly string[]>> = {
+  "Associate Producers": ["Isabella Wolfington"]
 };
 export function orderProducerGroup<P extends { name: string }>(title: string, people: readonly P[]): P[] {
   const order = (producerOrder2026[title] ?? []).map(personNameKey);
-  const rank = (person: P) => { const index = order.indexOf(personNameKey(person.name)); return index === -1 ? order.length : index; };
+  const last = (producerLast2026[title] ?? []).map(personNameKey);
+  const rank = (person: P) => {
+    const key = personNameKey(person.name);
+    const index = order.indexOf(key);
+    if (index !== -1) return index;
+    const end = last.indexOf(key);
+    return end === -1 ? order.length : order.length + 1 + end;
+  };
   const rest = sortProducerCredits(people);
   return [...rest].sort((a, b) => rank(a) - rank(b));
 }

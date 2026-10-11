@@ -73,6 +73,8 @@ describe("producer credits (Ryan, Oct 8)", () => {
     const credited = applyProducerCreditRules(full, new Map());
     expect(credited[0]!.people.map(person => person.name)).toEqual(["Trevor Short", "Trent Alenik", "Ryan Wolfington", "Aphrah Brokaw", "Jewel"]);
     expect(credited[1]!.people.map(person => person.name)).toEqual(["Sally Dewhurst", "Sophie Novak", "Paige Neuenschwander", "Raquelle Stevens", "Deb Cullen", "Jan Thwaites"]);
-    expect(credited[2]!.people.map(person => person.name)).toEqual(["Casey Caruso", "Nick Ekern", "Isabella Wolfington", "Clark Cummings", "Cherrial Odell", "Ricky Sypert", "Will Elmore Jr.", "Payton McDonald", "Bianca Mok"]);
+    expect(credited[2]!.people.map(person => person.name)).toEqual(["Casey Caruso", "Nick Ekern", "Clark Cummings", "Cherrial Odell", "Ricky Sypert", "Will Elmore Jr.", "Payton McDonald", "Bianca Mok", "Isabella Wolfington"]);
+    const withSydney = applyProducerCreditRules([{ title: "Associate Producers", photos: false, people: ["Isabella Wolfington", "Max Novak", "Sydney King", "Ricky Sypert", "Casey Caruso"].map(name => ({ name, role: "" })) }], new Map());
+    expect(withSydney[0]!.people.map(person => person.name)).toEqual(["Casey Caruso", "Sydney King", "Ricky Sypert", "Max Novak", "Isabella Wolfington"]);
   });
 });
