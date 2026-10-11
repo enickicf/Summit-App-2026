@@ -458,6 +458,8 @@
   .summit .hero .heroCornerButton { display:none; }
   .summit.summit .hero { flex-direction:column; align-items:stretch; justify-content:center; }
   .summit .hero .heroCorner { position:static; align-self:stretch; width:100%; margin:22px 0 0; gap:0; }
-  .summit .hero .heroCorner .heroEyebrowDate { font-size:20px; }
-  .summit .hero .heroCorner .heroDateVenue { margin-top:6px; font-size:12px; letter-spacing:.26em; margin-right:-.26em; }
+  /* Owner (Oct 11): on narrow screens the date and venue shrink with the width of the screen (one line each, never
+     wrapping or overlapping): 20px / 12px at tablet width down to about 14px / 9px on a 320px phone. */
+  .summit .hero .heroCorner .heroEyebrowDate { font-size:clamp(13px,4.4vw,20px); white-space:nowrap; }
+  .summit .hero .heroCorner .heroDateVenue { margin-top:.45em; font-size:clamp(8.5px,2.75vw,12px); letter-spacing:.24em; margin-right:-.24em; white-space:nowrap; }
 }
