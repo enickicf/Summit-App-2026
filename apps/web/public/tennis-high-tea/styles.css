@@ -30,3 +30,8 @@ body:has(.reference-layout){background:#fff}.reference-layout.event{display:bloc
 .waiver-agree.selected{background:#eef3fc;border-color:#8cafdf;box-shadow:0 0 0 1px #8cafdf}
 .hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
 .waiver-agree input[type=checkbox]{width:21px;height:21px;flex-shrink:0;accent-color:#3d619b}
+
+/* Oct 12: optional text updates consent. */
+.text-consent{align-items:flex-start;font-size:13px;font-weight:400;line-height:1.55;color:#4b5263}
+.text-consent input{margin-top:2px}
+.text-consent.selected{background:#eef3fc;border-color:#8cafdf;box-shadow:0 0 0 1px #8cafdf}

@@ -10,7 +10,7 @@ form.addEventListener('change',refresh);
 const post=async body=>{let last;for(let i=0;i<4;i++){try{const r=await fetch('/api/wellness',{method:'POST',headers:{'Content-Type':'application/json'},body});if(r.status<500)return r;last=r;}catch(e){last=e;}await new Promise(res=>setTimeout(res,600*(i+1)));}if(last instanceof Response)return last;throw last;};
 form.addEventListener('submit',async event=>{event.preventDefault();const f=new FormData(form);error.hidden=true;
   const sessions=f.getAll('sessions');
-  const data={id:id||(id=crypto.randomUUID()),name:f.get('name').trim(),email:f.get('email').trim(),phone:f.get('phone').trim(),sessions,waiverAccepted:f.has('waiverAccepted'),signature:(f.get('signature')||'').trim(),waiverVersion:f.get('waiverVersion')||'',website:f.get('website')||''};
+  const data={id:id||(id=crypto.randomUUID()),name:f.get('name').trim(),email:f.get('email').trim(),phone:f.get('phone').trim(),sessions,waiverAccepted:f.has('waiverAccepted'),signature:(f.get('signature')||'').trim(),waiverVersion:f.get('waiverVersion')||'',website:f.get('website')||'',textConsent:f.has('textConsent')};
   if(!sessions.length){error.textContent='Please choose at least one class.';error.hidden=false;return;}
   const button=form.querySelector('button');button.disabled=true;button.textContent='Saving your sign-up…';
   try{const r=await post(JSON.stringify(data));let result={};try{result=await r.json();}catch{}if(!r.ok)throw Error(result.error||'We couldn’t save your sign-up. Please try again; your details are still here.');

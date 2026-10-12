@@ -8,3 +8,8 @@
 .exclusive{font-size:13px;line-height:1.6;color:#4b5263;margin:4px 0 16px}
 .reference-layout .confirmed-activities p{margin:6px 0}
 @media(max-width:700px){.class-grid{grid-template-columns:1fr}.reference-layout .class-option{min-height:64px}}
+
+/* Oct 12: optional text updates consent. */
+.text-consent{align-items:flex-start;font-size:13px;font-weight:400;line-height:1.55;color:#4b5263}
+.text-consent input{margin-top:2px}
+.text-consent.selected{background:#eef3fc;border-color:#8cafdf;box-shadow:0 0 0 1px #8cafdf}

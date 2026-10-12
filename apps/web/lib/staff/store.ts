@@ -4,6 +4,7 @@ import { dirname, join } from "node:path";
 import { z } from "zod";
 import type { Store } from "@netlify/blobs";
 import { signatureMatchesName } from "../morning-workshops";
+import { textConsentColumns, textConsentCsvColumns } from "./text-consent";
 
 // Owner (Sept 23): one clean staff portal for the Awards ticket requests (RSVP form) and the new
 // nomination form. Submissions are stored in the website's Netlify Blobs store in production (no
@@ -68,6 +69,8 @@ export const rsvpPayloadSchema = z.object({
   guestCount: z.coerce.number().int().min(1).max(maxPartySize).optional().default(1),
   guests: z.array(partyGuestSchema).max(maxPartySize - 1).optional(),
   notes: text(900).optional().default(""),
+  // Owner (Oct 12): optional "text me updates" checkbox (lib/staff/text-consent.ts). Absent on forms from before Oct 12.
+  textConsent: z.preprocess(value => value === undefined || value === null || value === "" ? undefined : value === true || value === "on" || value === "yes" || value === "true", z.boolean()).optional(),
   website: text(200).optional().default("") // honeypot: bots fill it, people never see it
 }).strip();
 export type RsvpPayload = z.infer<typeof rsvpPayloadSchema>;
@@ -135,6 +138,8 @@ export const siteVisitFormSchema = z.object({
   tennis: z.boolean(),
   tea: z.boolean(),
   transport: z.enum(siteVisitTransportValues),
+  // Owner (Oct 12): optional "text me updates" checkbox (lib/staff/text-consent.ts). Absent on forms from before Oct 12.
+  textConsent: z.preprocess(value => value === undefined || value === null || value === "" ? undefined : value === true || value === "on" || value === "yes" || value === "true", z.boolean()).optional(),
   waiverAccepted: z.preprocess(value => value === true || value === "on" || value === "true", z.boolean()).optional(),
   signature: text(120).optional(),
   waiverVersion: text(40).optional(),
@@ -149,6 +154,8 @@ export const wellnessFormSchema = z.object({
   email,
   phone: text(40).refine(value => /^[0-9+().\-\s]+$/.test(value) && value.replace(/\D/g, "").length >= 7, "Please enter a phone number."),
   sessions: z.array(text(80)).max(16),
+  // Owner (Oct 12): optional "text me updates" checkbox (lib/staff/text-consent.ts). Absent on forms from before Oct 12.
+  textConsent: z.preprocess(value => value === undefined || value === null || value === "" ? undefined : value === true || value === "on" || value === "yes" || value === "true", z.boolean()).optional(),
   waiverAccepted: z.preprocess(value => value === true || value === "on" || value === "true", z.boolean()).optional(),
   signature: text(120).optional(),
   waiverVersion: text(40).optional(),
@@ -176,6 +183,8 @@ export const workshopPayloadSchema = z.object({
   email: email.optional(),
   phone: text(40).optional(),
   transport: z.enum(siteVisitTransportValues).optional(),
+  // Owner (Oct 12): optional "text me updates" checkbox (lib/staff/text-consent.ts). Absent on forms from before Oct 12.
+  textConsent: z.preprocess(value => value === undefined || value === null || value === "" ? undefined : value === true || value === "on" || value === "yes" || value === "true", z.boolean()).optional(),
   website: text(200).optional().default("") // honeypot
 }).strip();
 export type WorkshopPayload = z.infer<typeof workshopPayloadSchema>;
@@ -201,11 +210,23 @@ export type PokerSubmission = Submission<Omit<PokerPayload, "website">> & { remo
 // onward; sign-ups stored before then (and wellness sign-ups) have none of them.
 export type WorkshopSubmission = Submission<Omit<WorkshopPayload, "website"> & { category: "workshop" | "siteVisit" | "wellness"; waiverAcceptedAt?: string }>;
 // Sept 28: one record per confirmation email sent for an RSVP (id = the RSVP id, submittedAt = when it was sent).
+// Oct 12 (owner): text message preferences. "yes" = gave consent on the text-updates page; "no" = opted out (on that page,
+// by replying STOP, or recorded by staff). The latest record for a phone number or email wins, and an opt-out overrides
+// any consent given on a form, so the guest is never texted again until they say yes.
+export const textPreferenceSchema = z.object({
+  name: text(180).optional().default(""),
+  email: z.union([email, z.literal("")]).optional().default(""),
+  phone: text(40).refine(value => value.replace(/\D/g, "").length >= 7, "Please enter a phone number."),
+  choice: z.enum(["yes", "no"]),
+  website: text(200).optional().default("") // honeypot
+}).strip();
+export type TextPreferenceRecord = Submission<Omit<z.infer<typeof textPreferenceSchema>, "website"> & { via: "page" | "staff" | "stop-reply"; note?: string }>;
 export type RsvpEmailRecord = Submission<{ email: string; subject: string; rsvpId: string }>;
 
 // "vipRsvp" (Sept 30): requests from the unlisted VIP link, kept apart from the mass RSVPs and shown only in the VIP portal.
-export type SubmissionKind = "rsvp" | "nomination" | "poker" | "rsvpEmail" | "workshop" | "vipRsvp";
-export type AnySubmission = RsvpSubmission | NominationSubmission | PokerSubmission | RsvpEmailRecord | WorkshopSubmission;
+// "textPreference" (Oct 12): a guest's text message choice (yes / opt out) from the text-updates page or recorded by staff.
+export type SubmissionKind = "rsvp" | "nomination" | "poker" | "rsvpEmail" | "workshop" | "vipRsvp" | "textPreference";
+export type AnySubmission = RsvpSubmission | NominationSubmission | PokerSubmission | RsvpEmailRecord | WorkshopSubmission | TextPreferenceRecord;
 export interface SubmissionStore {
   add(kind: "rsvp", record: RsvpSubmission): Promise<void>;
   add(kind: "nomination", record: NominationSubmission): Promise<void>;
@@ -213,12 +234,14 @@ export interface SubmissionStore {
   add(kind: "rsvpEmail", record: RsvpEmailRecord): Promise<void>;
   add(kind: "workshop", record: WorkshopSubmission): Promise<void>;
   add(kind: "vipRsvp", record: RsvpSubmission): Promise<void>;
+  add(kind: "textPreference", record: TextPreferenceRecord): Promise<void>;
   list(kind: "rsvp"): Promise<RsvpSubmission[]>;
   list(kind: "nomination"): Promise<NominationSubmission[]>;
   list(kind: "poker"): Promise<PokerSubmission[]>;
   list(kind: "rsvpEmail"): Promise<RsvpEmailRecord[]>;
   list(kind: "workshop"): Promise<WorkshopSubmission[]>;
   list(kind: "vipRsvp"): Promise<RsvpSubmission[]>;
+  list(kind: "textPreference"): Promise<TextPreferenceRecord[]>;
   // Sept 28 (owner): permanent deletion of test entries; the route only allows it for records already marked removed.
   delete(kind: SubmissionKind, record: { id: string; submittedAt: string }): Promise<void>;
 }
@@ -226,9 +249,10 @@ export interface SubmissionStore {
 const keyFor = (record: { submittedAt: string; id: string }) => `${record.submittedAt}-${record.id}`;
 const byNewest = <T extends { submittedAt: string }>(records: T[]) => [...records].sort((a, b) => b.submittedAt.localeCompare(a.submittedAt));
 
-export function memorySubmissionStore(initial: { rsvp?: RsvpSubmission[]; nomination?: NominationSubmission[]; poker?: PokerSubmission[]; rsvpEmail?: RsvpEmailRecord[]; workshop?: WorkshopSubmission[]; vipRsvp?: RsvpSubmission[] } = {}): SubmissionStore {
-  const data = { rsvp: new Map<string, RsvpSubmission>(), nomination: new Map<string, NominationSubmission>(), poker: new Map<string, PokerSubmission>(), rsvpEmail: new Map<string, RsvpEmailRecord>(), workshop: new Map<string, WorkshopSubmission>(), vipRsvp: new Map<string, RsvpSubmission>() };
+export function memorySubmissionStore(initial: { rsvp?: RsvpSubmission[]; nomination?: NominationSubmission[]; poker?: PokerSubmission[]; rsvpEmail?: RsvpEmailRecord[]; workshop?: WorkshopSubmission[]; vipRsvp?: RsvpSubmission[]; textPreference?: TextPreferenceRecord[] } = {}): SubmissionStore {
+  const data = { rsvp: new Map<string, RsvpSubmission>(), nomination: new Map<string, NominationSubmission>(), poker: new Map<string, PokerSubmission>(), rsvpEmail: new Map<string, RsvpEmailRecord>(), workshop: new Map<string, WorkshopSubmission>(), vipRsvp: new Map<string, RsvpSubmission>(), textPreference: new Map<string, TextPreferenceRecord>() };
   for (const record of initial.vipRsvp ?? []) data.vipRsvp.set(keyFor(record), record);
+  for (const record of initial.textPreference ?? []) data.textPreference.set(keyFor(record), record);
   for (const record of initial.rsvp ?? []) data.rsvp.set(keyFor(record), record);
   for (const record of initial.nomination ?? []) data.nomination.set(keyFor(record), record);
   for (const record of initial.poker ?? []) data.poker.set(keyFor(record), record);
@@ -243,7 +267,7 @@ export function memorySubmissionStore(initial: { rsvp?: RsvpSubmission[]; nomina
 
 // Development/test store: one JSON file, never committed (work/ is local operational data).
 export function fileSubmissionStore(file: string): SubmissionStore {
-  const empty = () => ({ rsvp: [] as RsvpSubmission[], nomination: [] as NominationSubmission[], poker: [] as PokerSubmission[], rsvpEmail: [] as RsvpEmailRecord[], workshop: [] as WorkshopSubmission[], vipRsvp: [] as RsvpSubmission[] });
+  const empty = () => ({ rsvp: [] as RsvpSubmission[], nomination: [] as NominationSubmission[], poker: [] as PokerSubmission[], rsvpEmail: [] as RsvpEmailRecord[], workshop: [] as WorkshopSubmission[], vipRsvp: [] as RsvpSubmission[], textPreference: [] as TextPreferenceRecord[] });
   const read = (): ReturnType<typeof empty> => {
     // A store file written before a kind existed simply has no list for it.
     try { return existsSync(file) ? { ...empty(), ...JSON.parse(readFileSync(file, "utf8")) } : empty(); } catch { return empty(); }
@@ -390,7 +414,7 @@ export function rsvpForm(record: Pick<RsvpSubmission, "vip" | "partner" | "tier"
 export const rsvpExportForms = { vip: "VIP", "nami-vip": "NAMI VIP", "lake-las-vegas-vip": "Lake Las Vegas VIP", "lake-las-vegas": "Lake Las Vegas", nami: "NAMI", usta: "USTA", standard: "Standard" } as const;
 export type RsvpExportForm = keyof typeof rsvpExportForms;
 export const rsvpsOfForm = (records: RsvpSubmission[], form: RsvpExportForm) => records.filter(record => rsvpForm(record) === rsvpExportForms[form]);
-export const withRsvpForm = (records: RsvpSubmission[]) => records.map(record => ({ ...record, form: rsvpForm(record), attendingLabel: record.attending ? rsvpAttendingLabels[record.attending] : (record.communityDay ? rsvpAttendingLabels.both : ""), heardFromLabel: record.heardFrom ? rsvpHeardFromLabels[record.heardFrom] : "", guestDetails: (record.guests ?? []).map(partyGuestLine).join("; ") }));
+export const withRsvpForm = (records: RsvpSubmission[], textPreferences: readonly TextPreferenceRecord[] = []) => records.map(record => ({ ...record, form: rsvpForm(record), attendingLabel: record.attending ? rsvpAttendingLabels[record.attending] : (record.communityDay ? rsvpAttendingLabels.both : ""), heardFromLabel: record.heardFrom ? rsvpHeardFromLabels[record.heardFrom] : "", guestDetails: (record.guests ?? []).map(partyGuestLine).join("; "), ...textConsentColumns(record, textPreferences) }));
 // Owner (Sept 30): the mass RSVP lists never include a VIP request, and the VIP portal reads only VIP requests.
 // Owner (Oct 1, 2026, superseding the Sept 30 split): "make the backend of the VIP RSVP the same now since
 // we are upping security, but make the forms still different". All RSVPs, VIP or not, live under "rsvp" and
@@ -425,7 +449,7 @@ function csvCell(value: unknown): string {
 export function toCsv(rows: Record<string, unknown>[], columns: string[]): string {
   return [columns.join(","), ...rows.map(row => columns.map(column => csvCell(row[column])).join(","))].join("\r\n") + "\r\n";
 }
-export const rsvpCsvColumns = ["submittedAt", "form", "name", "email", "phone", "organization", "professionalRole", "invitedBy", "heardFromLabel", "vip", "partner", "tier", "attendanceStatus", "attendingLabel", "communityDay", "guestCount", "guestDetails", "notes", "source", "id", "removedAt", "removedReason"];
+export const rsvpCsvColumns = ["submittedAt", "form", "name", "email", "phone", "organization", "professionalRole", "invitedBy", "heardFromLabel", "vip", "partner", "tier", "attendanceStatus", "attendingLabel", "communityDay", "guestCount", "guestDetails", ...textConsentCsvColumns, "notes", "source", "id", "removedAt", "removedReason"];
 
 // Which part(s) of the evening a request covers: the Awards Show (their response) and/or Community Day (the toggle).
 export function comingTo(record: Pick<RsvpSubmission, "attendanceStatus" | "communityDay"> & { attending?: RsvpAttending | undefined }): ("awards" | "communityDay")[] {

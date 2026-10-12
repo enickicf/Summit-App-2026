@@ -2,9 +2,10 @@ import { SiteImage } from "./site-image";
 import { PortalViewSwitch } from "./portal-views";
 import { PortalAutoRefresh } from "./portal-auto-refresh";
 import { RsvpEmailTools } from "./rsvp-email-tools";
-import { activeOf, activeRsvps, comingTo, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, ustaRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels, siteVisitTransportLabels, type SiteVisitTransport } from "../lib/staff/store";
+import { activeOf, activeRsvps, comingTo, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, ustaRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels, siteVisitTransportLabels, type SiteVisitTransport, type TextPreferenceRecord } from "../lib/staff/store";
 import styles from "../app/staff/staff.module.css";
 import { wellnessSessions } from "../lib/wellness-signups-2026";
+import { textConsentLabels, textConsentProtocolNote, textConsentShortLabels, textConsentStatus, textContactRows, textOptOutFooter } from "../lib/staff/text-consent";
 
 export type LineupGroup = { title: string; people: { name: string; role: string; rank: number | null; tier: string | null; photo: boolean }[] };
 
@@ -29,11 +30,18 @@ function RowAction({ row, action, kind = "rsvp" }: { row: { id: string }; action
   return <form method="post" action="/api/staff/rsvps" className={styles.rowAction}><input type="hidden" name="id" value={row.id} /><input type="hidden" name="kind" value={kind} /><input type="hidden" name="action" value={action} />{action === "remove" && <input type="hidden" name="reason" value="Removed by staff" />}<button type="submit" className={action === "delete" ? styles.dangerButton : styles.linkButton}>{action === "remove" ? "Remove" : action === "restore" ? "Restore" : "Delete permanently"}</button></form>;
 }
 
-function RsvpTable({ rows, action = "remove" }: { rows: RsvpSubmission[]; action?: "remove" | "restore" }) {
+// Owner (Oct 12): text message consent (lib/staff/text-consent.ts): "Yes (box)" = ticked the box on the form;
+// "Tickets only" = gave a phone without the box (event and ticket texts only, opt out any time).
+function TextConsent({ record, prefs = [] }: { record: { phone?: string | undefined; email?: string | undefined; textConsent?: boolean | undefined; submittedAt: string }; prefs?: readonly TextPreferenceRecord[] }) {
+  const status = textConsentStatus(record, prefs);
+  return <span title={textConsentLabels[status]} className={status === "none" ? styles.muted : status === "optedOut" ? styles.optedOut : undefined}>{textConsentShortLabels[status]}</span>;
+}
+
+function RsvpTable({ rows, action = "remove", prefs = [] }: { rows: RsvpSubmission[]; action?: "remove" | "restore"; prefs?: readonly TextPreferenceRecord[] }) {
   return <div className={styles.tableWrap}><table className={styles.table}>
-    <thead><tr><th>Submitted</th><th>Form</th><th>Name</th><th>Coming to</th><th>Email</th><th>Phone</th><th>Organization</th><th>Role / title</th><th>Invited by</th><th>Heard from</th><th>Party</th><th>Notes</th><th>Source</th>{action === "restore" && <th>Removed</th>}<th></th></tr></thead>
+    <thead><tr><th>Submitted</th><th>Form</th><th>Name</th><th>Coming to</th><th>Email</th><th>Phone</th><th>Texts</th><th>Organization</th><th>Role / title</th><th>Invited by</th><th>Heard from</th><th>Party</th><th>Notes</th><th>Source</th>{action === "restore" && <th>Removed</th>}<th></th></tr></thead>
     <tbody>{rows.map(row => <tr key={row.id}>
-      <td className={styles.nowrap}>{when(row.submittedAt)}</td><td className={styles.nowrap}>{rsvpForm(row)}</td><td className={styles.strong}>{row.name}{/* Owner (Oct 5): the other people in the party, with their own email and phone. */}{row.guests?.length ? <ul className={styles.partyGuests}>{row.guests.map((guest, index) => <li key={index}><span>{guest.name}</span> · <a href={`mailto:${guest.email}`}>{guest.email}</a> · {guest.phone}</li>)}</ul> : null}</td><td><ComingTo record={row} /></td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td className={styles.nowrap}>{row.phone}</td><td>{row.organization}</td><td>{row.professionalRole}</td><td>{row.invitedBy}</td><td>{row.heardFrom ? rsvpHeardFromLabels[row.heardFrom] : ""}</td>
+      <td className={styles.nowrap}>{when(row.submittedAt)}</td><td className={styles.nowrap}>{rsvpForm(row)}</td><td className={styles.strong}>{row.name}{/* Owner (Oct 5): the other people in the party, with their own email and phone. */}{row.guests?.length ? <ul className={styles.partyGuests}>{row.guests.map((guest, index) => <li key={index}><span>{guest.name}</span> · <a href={`mailto:${guest.email}`}>{guest.email}</a> · {guest.phone}</li>)}</ul> : null}</td><td><ComingTo record={row} /></td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td className={styles.nowrap}>{row.phone}</td><td className={styles.nowrap}><TextConsent record={row} prefs={prefs} /></td><td>{row.organization}</td><td>{row.professionalRole}</td><td>{row.invitedBy}</td><td>{row.heardFrom ? rsvpHeardFromLabels[row.heardFrom] : ""}</td>
       <td className={styles.center}>{row.guestCount}</td><td className={styles.notes}>{row.notes}</td><td className={styles.muted}>{row.source === "import" ? "Previous portal" : "Form"}</td>{action === "restore" && <td className={styles.notes}>{row.removedAt ? when(row.removedAt) : ""}{row.removedReason ? ` · ${row.removedReason}` : ""}</td>}<td><span className={styles.badges}><RowAction row={row} action={action} />{action === "restore" && <RowAction row={row} action="delete" />}</span></td>
     </tr>)}</tbody>
   </table></div>;
@@ -89,7 +97,7 @@ export function groupWellness(rows: WorkshopSubmission[]) {
 // Oct 7: and the signed waiver (the full name typed with the first sign-up that carried one); sign-ups from before
 // Oct 7 have no waiver and show "—".
 export function groupSiteVisit(rows: WorkshopSubmission[]) {
-  const people = new Map<string, { key: string; name: string; tennis: boolean; highTea: boolean; first: string; signature?: string; email?: string; phone?: string; transport?: SiteVisitTransport }>();
+  const people = new Map<string, { key: string; name: string; tennis: boolean; highTea: boolean; first: string; signature?: string; email?: string; phone?: string; transport?: SiteVisitTransport; textConsent?: boolean }>();
   for (const row of [...rows].sort((a, b) => a.submittedAt.localeCompare(b.submittedAt))) {
     const key = row.name.trim().toLowerCase().replace(/\s+/g, " ");
     const entry = people.get(key) ?? { key, name: row.name.trim(), tennis: false, highTea: false, first: row.submittedAt };
@@ -101,6 +109,7 @@ export function groupSiteVisit(rows: WorkshopSubmission[]) {
     if (row.email) entry.email = row.email;
     if (row.phone) entry.phone = row.phone;
     if (row.transport) entry.transport = row.transport;
+    if (row.textConsent !== undefined) entry.textConsent = row.textConsent;
     people.set(key, entry);
   }
   return [...people.values()];
@@ -108,7 +117,7 @@ export function groupSiteVisit(rows: WorkshopSubmission[]) {
 
 // Owner (Sept 23): one clean, Not Alone-themed staff portal: ticket requests (with running totals at
 // the top), nominations in their own section, and the current Awards lineup for reference.
-export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup, generatedAt }: { rsvps: RsvpSubmission[]; nominations: NominationSubmission[]; poker: PokerSubmission[]; workshops?: WorkshopSubmission[]; lineup: LineupGroup[]; generatedAt: string }) {
+export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPreferences = [], lineup, generatedAt }: { rsvps: RsvpSubmission[]; nominations: NominationSubmission[]; poker: PokerSubmission[]; workshops?: WorkshopSubmission[]; textPreferences?: TextPreferenceRecord[]; lineup: LineupGroup[]; generatedAt: string }) {
   // Removed requests (test entries) leave every list and total but stay stored under "Removed".
   const active = activeRsvps(rsvps);
   const removed = removedRsvps(rsvps);
@@ -125,6 +134,13 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
   const sponsors = pokerActive.filter(isPokerSponsor);
   const workshopRows = workshops.filter(row => row.category !== "siteVisit" && row.category !== "wellness");
   const wellnessRows = workshops.filter(row => row.category === "wellness");
+  // Oct 12 (owner): text message consent and opt-outs, one row per phone number (lib/staff/text-consent.ts).
+  const textContacts = textContactRows([
+    ...active.map(row => ({ name: row.name, email: row.email, phone: row.phone, submittedAt: row.submittedAt, textConsent: row.textConsent, source: "Awards / Community Day RSVP" })),
+    ...workshops.filter(row => row.phone).map(row => ({ name: row.name, email: row.email ?? "", phone: row.phone ?? "", submittedAt: row.submittedAt, textConsent: row.textConsent, source: row.category === "wellness" ? "Wellness classes" : "Tennis & High Tea" }))
+  ], textPreferences);
+  const textCount = (status: string) => textContacts.filter(row => row.status === status).length;
+  const textChoices = [...textPreferences].sort((a, b) => b.submittedAt.localeCompare(a.submittedAt));
   const wellnessGroups = groupWellness(wellnessRows);
   const wellnessPeople = new Set(wellnessRows.map(row => row.name.trim().toLowerCase().replace(/\s+/g, " "))).size;
   const workshopGroups = groupWorkshops(workshopRows);
@@ -141,6 +157,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
         <a href="#workshops" data-view-tab="workshops" aria-selected="false">Summit workshops</a>
         <a href="#site-visit" data-view-tab="site-visit" aria-selected="false">Tennis &amp; High Tea</a>
         <a href="#wellness" data-view-tab="wellness" aria-selected="false">Wellness</a>
+        <a href="#texts" data-view-tab="texts" aria-selected="false">Texts</a>
         <a href="#poker" data-view-tab="poker" aria-selected="false">Sponsorship</a>
         {/* Owner (Sept 30): a complete copy of everything, downloadable from any device at any time. */}
         <a href="/api/staff/export?kind=all" className={styles.linkButton}>Download full backup</a>
@@ -168,39 +185,39 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
       <section className={styles.section} id="vip" aria-labelledby="vip-title">
         <div className={styles.sectionHead}><h2 id="vip-title">VIP RSVPs</h2><span className={`${styles.badge} ${styles.badgeVip}`}>{totals.vipGuests} guests · {totals.vipTickets} tickets</span><a className={styles.button} href="/api/staff/export?kind=rsvp&amp;form=vip">VIP list</a><a className={styles.button} href="/api/staff/export?kind=rsvp&amp;form=nami-vip">NAMI VIP list</a><a className={styles.button} href="/api/staff/export?kind=rsvp&amp;form=lake-las-vegas-vip">Lake Las Vegas VIP list</a></div>
         <p className={styles.help}>Requests from the private VIP RSVP links: VIP (artists, honorees, personal invitations), NAMI VIP and Lake Las Vegas VIP (the Form column says which). Organization, title and who invited them are required on that form. They also appear in the full list below with a <span className={`${styles.badge} ${styles.badgeVip}`}>VIP</span> badge.</p>
-        {vip.length === 0 ? <p className={styles.empty}>No VIP RSVPs yet.</p> : <RsvpTable rows={vip} />}
+        {vip.length === 0 ? <p className={styles.empty}>No VIP RSVPs yet.</p> : <RsvpTable prefs={textPreferences} rows={vip} />}
       </section>
 
       {/* Owner (Oct 3): requests from the private Lake Las Vegas RSVP form, with their own seating list. */}
       <section className={styles.section} id="lake-las-vegas" aria-labelledby="lake-las-vegas-title">
         <div className={styles.sectionHead}><h2 id="lake-las-vegas-title">Lake Las Vegas RSVPs</h2><span className={`${styles.badge} ${styles.badgeLake}`}>{totals.lakeLasVegasGuests} guests · {totals.lakeLasVegasTickets} tickets</span><a className={styles.button} href="/api/staff/export?kind=rsvp&amp;form=lake-las-vegas">Download list</a></div>
         <p className={styles.help}>Requests from the private Lake Las Vegas RSVP link. They also appear in the full list below with a <span className={`${styles.badge} ${styles.badgeLake}`}>Lake Las Vegas</span> badge.</p>
-        {lakeLasVegas.length === 0 ? <p className={styles.empty}>No Lake Las Vegas RSVPs yet.</p> : <RsvpTable rows={lakeLasVegas} />}
+        {lakeLasVegas.length === 0 ? <p className={styles.empty}>No Lake Las Vegas RSVPs yet.</p> : <RsvpTable prefs={textPreferences} rows={lakeLasVegas} />}
       </section>
 
       {/* Owner (Oct 2): requests from the NAMI form (/rsvp/nami), tagged NAMI; they also appear in the full list. */}
       <section className={styles.section} id="nami" aria-labelledby="nami-title">
         <div className={styles.sectionHead}><h2 id="nami-title">NAMI RSVPs</h2><span className={`${styles.badge} ${styles.badgeNami}`}>{totals.namiGuests} guests · {totals.namiTickets} tickets</span><a className={styles.button} href="/api/staff/export?kind=rsvp&amp;form=nami">Download list</a></div>
         <p className={styles.help}>Requests from NAMI's private RSVP link. They also appear in the full list below with a <span className={`${styles.badge} ${styles.badgeNami}`}>NAMI</span> badge.</p>
-        {nami.length === 0 ? <p className={styles.empty}>No NAMI RSVPs yet.</p> : <RsvpTable rows={nami} />}
+        {nami.length === 0 ? <p className={styles.empty}>No NAMI RSVPs yet.</p> : <RsvpTable prefs={textPreferences} rows={nami} />}
       </section>
 
       <section className={styles.section} id="usta" aria-labelledby="usta-title">
         <div className={styles.sectionHead}><h2 id="usta-title">USTA RSVPs</h2><span className={`${styles.badge} ${styles.badgeUsta}`}>{totals.ustaGuests} guests · {totals.ustaTickets} tickets</span><a className={styles.button} href="/api/staff/export?kind=rsvp&amp;form=usta">Download list</a></div>
         <p className={styles.help}>Requests from USTA's private Community Day + Awards RSVP link. They also appear in the full list below with a <span className={`${styles.badge} ${styles.badgeUsta}`}>USTA</span> badge.</p>
-        {usta.length === 0 ? <p className={styles.empty}>No USTA RSVPs yet.</p> : <RsvpTable rows={usta} />}
+        {usta.length === 0 ? <p className={styles.empty}>No USTA RSVPs yet.</p> : <RsvpTable prefs={textPreferences} rows={usta} />}
       </section>
 
       <section className={styles.section} id="tickets" aria-labelledby="tickets-title">
         <div className={styles.sectionHead}><h2 id="tickets-title">Awards ticket requests</h2><a className={styles.button} href="/api/staff/export?kind=rsvp">Download CSV</a></div>
         <p className={styles.help}>Everything the RSVP form collects, newest first. Submitting the form is a waiting-list request, not a ticket. <span className={`${styles.badge} ${styles.badgeAwards}`}>Awards</span> = requested Awards Show tickets (every request counts as planning to attend); <span className={`${styles.badge} ${styles.badgeCommunity}`}>Community Day</span> = said yes to Community Day (asked from Sept 23; earlier requests show Awards only).</p>
-        {active.length === 0 ? <p className={styles.empty}>No ticket requests yet.</p> : <RsvpTable rows={active} />}
+        {active.length === 0 ? <p className={styles.empty}>No ticket requests yet.</p> : <RsvpTable prefs={textPreferences} rows={active} />}
       </section>
 
       <section className={styles.section} id="community-day" aria-labelledby="community-day-title">
         <div className={styles.sectionHead}><h2 id="community-day-title">Community Day RSVPs</h2><span className={`${styles.badge} ${styles.badgeCommunity}`}>{totals.communityDayGuests} guests · {totals.communityDayTickets} tickets</span></div>
         <p className={styles.help}>Guests who chose Nevada Mental Health Day (Community Day) on an RSVP form: Wellness & Check-In 12–3 PM, Summit Sessions 3–6:30 PM. Those also attending the Awards Show carry both badges.</p>
-        {communityDay.length === 0 ? <p className={styles.empty}>No Community Day RSVPs yet.</p> : <RsvpTable rows={communityDay} />}
+        {communityDay.length === 0 ? <p className={styles.empty}>No Community Day RSVPs yet.</p> : <RsvpTable prefs={textPreferences} rows={communityDay} />}
       </section>
 
       <section className={styles.section} id="nominations" aria-labelledby="nominations-title">
@@ -218,7 +235,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
       <section className={styles.section} id="removed" aria-labelledby="removed-title">
         <div className={styles.sectionHead}><h2 id="removed-title">Removed guests</h2><span className={styles.badge}>{removed.length} {removed.length === 1 ? "request" : "requests"}</span></div>
         <p className={styles.help}>Requests taken out of the lists above (test entries, duplicates). Nothing is deleted: every field is kept here and in the CSV download, and any request can be restored.</p>
-        {removed.length === 0 ? <p className={styles.empty}>No removed requests.</p> : <RsvpTable rows={removed} action="restore" />}
+        {removed.length === 0 ? <p className={styles.empty}>No removed requests.</p> : <RsvpTable prefs={textPreferences} rows={removed} action="restore" />}
       </section>
 
       <section className={styles.section} id="lineup" aria-labelledby="lineup-title">
@@ -260,8 +277,8 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
         <div className={styles.sectionHead}><h2 id="site-visit-title">Tennis &amp; High Tea</h2><a className={styles.button} href="/api/staff/export?kind=site-visit">Download CSV</a></div>
         <p className={styles.help}>Thursday November 5 ICF site visit sign-ups from the Tennis &amp; High Tea form (notalonesummit.org/tennis-high-tea) and the schedule page. <span className={`${styles.badge} ${styles.badgeTennis}`}>Tennis</span> = signed up for Tennis; <span className={`${styles.badge} ${styles.badgeTea}`}>High Tea</span> = signed up for High Tea; both badges when both. Waiver = the full name typed to sign the activity waiver (sign-ups from Oct 7 on; earlier sign-ups show —). Attendees only; remove anyone not on the guest list.</p>
         {siteVisitPeople.length === 0 ? <p className={styles.empty}>No Tennis or High Tea sign-ups yet.</p> : <div className={styles.tableWrap}><table className={styles.table}>
-          <thead><tr><th>Name</th><th>Signed up for</th><th>Email</th><th>Phone</th><th>Getting there</th><th>Waiver</th><th>First sign-up</th></tr></thead>
-          <tbody>{siteVisitPeople.map(person => <tr key={person.key}><td className={styles.strong}>{person.name}</td><td><span className={styles.badges}>{person.tennis && <span className={`${styles.badge} ${styles.badgeTennis}`}>Tennis</span>}{person.highTea && <span className={`${styles.badge} ${styles.badgeTea}`}>High Tea</span>}</span></td><td>{person.email ? <a href={`mailto:${person.email}`}>{person.email}</a> : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{person.phone || <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{person.transport ? siteVisitTransportLabels[person.transport] : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{person.signature ? `Signed: ${person.signature}` : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{when(person.first)}</td></tr>)}</tbody>
+          <thead><tr><th>Name</th><th>Signed up for</th><th>Email</th><th>Phone</th><th>Texts</th><th>Getting there</th><th>Waiver</th><th>First sign-up</th></tr></thead>
+          <tbody>{siteVisitPeople.map(person => <tr key={person.key}><td className={styles.strong}>{person.name}</td><td><span className={styles.badges}>{person.tennis && <span className={`${styles.badge} ${styles.badgeTennis}`}>Tennis</span>}{person.highTea && <span className={`${styles.badge} ${styles.badgeTea}`}>High Tea</span>}</span></td><td>{person.email ? <a href={`mailto:${person.email}`}>{person.email}</a> : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{person.phone || <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}><TextConsent record={{ phone: person.phone, email: person.email, textConsent: person.textConsent, submittedAt: person.first }} prefs={textPreferences} /></td><td className={styles.nowrap}>{person.transport ? siteVisitTransportLabels[person.transport] : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{person.signature ? `Signed: ${person.signature}` : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{when(person.first)}</td></tr>)}</tbody>
         </table></div>}
       </section>
     </div>
@@ -279,8 +296,37 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
         {wellnessRows.length === 0 ? <p className={styles.empty}>No wellness sign-ups yet.</p> : <div className={styles.cards}>{wellnessGroups.map(group => <article key={group.key} className={styles.card}>
           <p className={styles.cardKicker}>{group.day} · {group.time}</p>
           <h3>{group.title} <span className={styles.count}>{group.people.length}</span></h3>
-          <ol className={styles.lineupList}>{group.people.map(row => <li key={row.id}><span className={styles.strong}>{row.name}</span>{row.email ? <> · <a href={`mailto:${row.email}`}>{row.email}</a></> : null}{row.phone ? <span className={styles.muted}> · {row.phone}</span> : null}<span className={styles.muted}> · {row.signature ? `Signed: ${row.signature}` : "No waiver"} · {when(row.submittedAt)}</span></li>)}</ol>
+          <ol className={styles.lineupList}>{group.people.map(row => <li key={row.id}><span className={styles.strong}>{row.name}</span>{row.email ? <> · <a href={`mailto:${row.email}`}>{row.email}</a></> : null}{row.phone ? <span className={styles.muted}> · {row.phone}</span> : null}<span className={styles.muted}> · Texts: <TextConsent record={row} prefs={textPreferences} /> · {row.signature ? `Signed: ${row.signature}` : "No waiver"} · {when(row.submittedAt)}</span></li>)}</ol>
         </article>)}</div>}
+      </section>
+    </div>
+
+    {/* Oct 12 (owner): who may be texted. Never text an opted-out number; news only to "Yes"; every text ends "Reply STOP to opt out." */}
+    <div data-view="texts" id="texts" hidden>
+      <section className={styles.stats} aria-label="Text message consent totals">
+        <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{textCount("checkbox")}</span><span className={styles.statLabel}>Yes: may text</span><span className={styles.statNote}>Event, tickets and ICF news</span></div>
+        <div className={styles.stat}><span className={styles.statValue}>{textCount("phone")}</span><span className={styles.statLabel}>Tickets only</span><span className={styles.statNote}>Phone given, no consent box yet: ask them on the text-updates page</span></div>
+        <div className={styles.stat}><span className={styles.statValue}>{textCount("optedOut")}</span><span className={styles.statLabel}>Opted out</span><span className={styles.statNote}>Never text these numbers</span></div>
+        <div className={styles.stat}><span className={styles.statValue}>{textContacts.length}</span><span className={styles.statLabel}>Phone numbers</span></div>
+      </section>
+
+      <section className={styles.section} id="texts-list" aria-labelledby="texts-title">
+        <div className={styles.sectionHead}><h2 id="texts-title">Text message consent</h2><a className={styles.button} href="/api/staff/export?kind=texts">Download CSV</a></div>
+        <p className={styles.help}>{textConsentProtocolNote}. <strong>Yes</strong> = ticked the consent box on a form or said yes on the text-updates page (event, tickets and Inspiring Children Foundation news). <strong>Tickets only</strong> = gave a phone number without the box: event and ticket texts only. <strong>Opted out</strong> = said no, replied STOP or asked staff: never text them. Every text must end with &ldquo;{textOptOutFooter}&rdquo; To ask the &ldquo;Tickets only&rdquo; guests for consent, send them the link <a href="https://notalonesummit.org/text-updates">notalonesummit.org/text-updates</a>.</p>
+        <form method="post" action="/api/staff/text-preferences" className={styles.inlineForm}>
+          <strong>Record a choice</strong>
+          <input name="name" placeholder="Name" maxLength={180} />
+          <input name="phone" placeholder="Phone *" required maxLength={40} />
+          <input name="email" type="email" placeholder="Email" maxLength={254} />
+          <select name="choice" defaultValue="no"><option value="no">Opted out</option><option value="yes">Said yes</option></select>
+          <select name="via" defaultValue="stop-reply"><option value="stop-reply">Replied STOP</option><option value="staff">Told staff</option></select>
+          <input name="note" placeholder="Note" maxLength={300} />
+          <button type="submit" className={styles.button}>Save</button>
+        </form>
+        {textChoices.length === 0 ? <p className={styles.empty}>No opt-outs or text-updates page answers yet.</p> : <div className={styles.tableWrap}><table className={styles.table}>
+          <thead><tr><th>When</th><th>Choice</th><th>Name</th><th>Phone</th><th>Email</th><th>How</th><th>Note</th></tr></thead>
+          <tbody>{textChoices.map(pref => <tr key={pref.id}><td className={styles.nowrap}>{when(pref.submittedAt)}</td><td className={pref.choice === "no" ? styles.optedOut : styles.strong}>{pref.choice === "no" ? "Opted out" : "Yes"}</td><td>{pref.name}</td><td className={styles.nowrap}>{pref.phone}</td><td>{pref.email}</td><td className={styles.nowrap}>{pref.via === "page" ? "Text-updates page" : pref.via === "stop-reply" ? "Replied STOP" : "Told staff"}</td><td className={styles.notes}>{pref.note ?? ""}</td></tr>)}</tbody>
+        </table></div>}
       </section>
     </div>
 
@@ -322,6 +368,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
       </section>
     </div>
 
+    <p className={styles.footer}>Texts column: {textConsentProtocolNote}. &ldquo;Yes&rdquo; = gave consent (event, tickets and ICF news); &ldquo;Tickets only&rdquo; = gave a phone number without the box (event and ticket texts only); &ldquo;Opted out&rdquo; = never text. Every text must end &ldquo;Reply STOP to opt out.&rdquo; See the Texts tab.</p>
     <p className={styles.footer}>Generated {when(generatedAt)} · Refreshes automatically every minute while open · Password-protected staff page · Not indexed</p>
   </main>;
 }

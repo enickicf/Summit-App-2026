@@ -13,11 +13,11 @@ export default async function StaffPage() {
   const jar = await cookies();
   if (!isStaffSession(jar.get(staffCookieName)?.value)) redirect("/staff/login");
   const store = await getSubmissionStore();
-  const [rsvps, nominations, poker, workshops, snapshot] = await Promise.all([listAllRsvps(store), store.list("nomination"), store.list("poker"), store.list("workshop"), getSiteSnapshot().catch(() => null)]);
+  const [rsvps, nominations, poker, workshops, textPreferences, snapshot] = await Promise.all([listAllRsvps(store), store.list("nomination"), store.list("poker"), store.list("workshop"), store.list("textPreference"), getSiteSnapshot().catch(() => null)]);
   const sections = snapshot ? peopleSections(awardsDisplayPeople(snapshot), "awards") : [];
   const lineup = sections.map(section => ({
     title: section.heading === null ? "Lineup" : section.title,
     people: section.people.map(({ person, role }) => ({ name: person.name, role, rank: person.rank ?? null, tier: person.tier ?? null, photo: Boolean(person.image) }))
   }));
-  return <StaffPortal rsvps={rsvps} nominations={nominations} poker={poker} workshops={workshops} lineup={lineup} generatedAt={new Date().toISOString()} />;
+  return <StaffPortal rsvps={rsvps} nominations={nominations} poker={poker} workshops={workshops} textPreferences={textPreferences} lineup={lineup} generatedAt={new Date().toISOString()} />;
 }
