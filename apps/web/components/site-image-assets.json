@@ -2703,5 +2703,30 @@
     "width": 900,
     "height": 900,
     "bytes": 285045
+  },
+  "/2026-partners/sackcloth-and-ashes.png": {
+    "width": 2675,
+    "height": 291,
+    "bytes": 45762
+  },
+  "/2026-partners/partee-golf.png": {
+    "width": 1400,
+    "height": 304,
+    "bytes": 190742
+  },
+  "/2026-partners/bee-harmony-honey.png": {
+    "width": 1037,
+    "height": 180,
+    "bytes": 32427
+  },
+  "/2026-partners/fight-for-lives.png": {
+    "width": 747,
+    "height": 185,
+    "bytes": 27546
+  },
+  "/2026-partners/hey-im-here-for-you.png": {
+    "width": 999,
+    "height": 183,
+    "bytes": 31457
   }
 }

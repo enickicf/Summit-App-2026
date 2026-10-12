@@ -59,6 +59,16 @@ const partnerLogoFiles: Record<string, string> = {
   "resonance foundation": "/2026-partners/resonance-foundation.png",
   // Oct 7: the owner calls it (and its logo reads) Resonance Philanthropies; either Airtable name finds the logo.
   "resonance philanthropies": "/2026-partners/resonance-foundation.png",
+  // Oct 12: new Confirmed Airtable partners. ParTee Golf LV (parteegolflv.com) and Sackcloth & Ashes (sackclothandashes.com)
+  // logos from their own sites; NAMI Books uses NAMI's logo.
+  "partee golf": "/2026-partners/partee-golf.png",
+  "sackcloth and ashes": "/2026-partners/sackcloth-and-ashes.png",
+  "nami books": "/2026-partners/nami.png",
+  // Oct 12 (owner: "invent them logos at least for now that are not alone summit themed"): placeholders in the Summit's own
+  // style (Poppins ExtraBold, Summit blues, the Not Alone heart) for partners with no logo online; replace with the real file.
+  "bee harmony honey": "/2026-partners/bee-harmony-honey.png",
+  "fight for lives": "/2026-partners/fight-for-lives.png",
+  "hey i m here for you": "/2026-partners/hey-im-here-for-you.png",
   "bryan brothers foundation": "/2026-partners/bryan-bros-foundation.png", // Oct 12: from bryanbros.com/foundation (background made transparent) until Nick's files arrive
   "wise friend": "/2026-partners/wise-friend-wordmark.png", // owner, Oct 5: the mark with the name "Wise Friend" under it (their symbol alone reads as nothing)
   "big league wiffleball": "/2026-partners/big-league-wiffleball.png",
