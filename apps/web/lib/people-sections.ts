@@ -90,7 +90,7 @@ export const founderOrderRyan2026: RegExp[] = [
   // Ryan (Oct 9): "put Dan Gillison ... before Jay McGraw"; Ellie Kanner then comes before the Springers.
   /\bgillison\b/, /^jay mcgraw\b/, /^erica mcgraw\b/, /\bkanner\b/, /\bspringer\b/, /^(winston|cameron) (and \w+ )?kelly\b/,
   // Owner (Oct 11): then the Musks, the Bryan brothers, Sean and Ana Wolfington, Jen Smorgon and Jennifer Donnelly.
-  /^christiana musk\b/, /^kimbal musk\b/, /^mike bryan\b/, /^bob bryan\b/, /^(bob|mike) (and \w+ )?bryan\b/, /^(sean|ana) (and \w+ )?wolfington\b/,
+  /^christiana musk\b/, /^kimbal musk\b/, /^(christiana|kimbal) (and \w+ )?musk\b/, /^mike bryan\b/, /^bob bryan\b/, /^(bob|mike) (and \w+ )?bryan\b/, /^(sean|ana) (and \w+ )?wolfington\b/,
   /^jen smorgon\b/, /^jennifer donnelly\b/
 ];
 export function founderOrder2026(founders: SummitPerson[]): SummitPerson[] {

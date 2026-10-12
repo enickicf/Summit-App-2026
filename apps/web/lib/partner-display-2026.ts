@@ -14,7 +14,10 @@ const internalLabels = new Set(["icf items cold creek plunges"]);
 // Oct 12 (owner, relaying Ryan): partners listed by the owner that Airtable's Partners page does not carry (yet). They are
 // added to the recorded copy and to the live Airtable link alike; once Airtable lists one, its own row wins.
 export const ownerPartners2026: readonly AirtablePartner[] = [
-  { recordId: "owner-bryan-brothers-foundation", name: "Bryan Brothers Foundation", item: "", group: "Partners", status: "Confirmed" }
+  { recordId: "owner-bryan-brothers-foundation", name: "Bryan Brothers Foundation", item: "", group: "Partners", status: "Confirmed" },
+  // Oct 12 (owner: "yes"): Fight For Lives (Miguel Tyson's organization in Airtable). No website or logo could be found
+  // (fightforlives.com / fightforlivesfoundation.org are parked), so it shows as a name card until a logo is supplied.
+  { recordId: "owner-fight-for-lives", name: "Fight For Lives", item: "", group: "Partners", status: "Confirmed" }
 ];
 export function withOwnerPartners<T extends { name: string }>(partners: readonly T[], extra: readonly T[]): T[] {
   const present = new Set(partners.map(partner => partnerLogoKey(partner.name)));

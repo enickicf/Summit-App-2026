@@ -230,6 +230,9 @@ export function awardsDisplayPeople(snapshot: EventSnapshot | null): SummitPerso
     // cards until each has a usable headshot; see lib/portrait-overrides.ts).
     { first: "Melony Lewis", second: "Adam Lewis", name: "Melony and Adam Lewis", slug: "2026-melony-adam-lewis", bio: "Melony and Adam Lewis are founders of the Not Alone Summit." },
     { first: "Winston Kelly", second: "Cameron Kelly", name: "Winston and Cameron Kelly", slug: "2026-winston-cameron-kelly", bio: "Winston and Cameron Kelly are founders of the Not Alone Summit." },
+    // Oct 12 (owner: "Ryan wants Christiana and Kimbal Musk shown together"; "find one online that is recent"): one card with a
+    // photo of the two of them (their own Instagram post, Nov 2024, as published by Lifestyle Asia; 1080x1080).
+    { first: "Christiana Musk", second: "Kimbal Musk", name: "Christiana and Kimbal Musk", slug: "2026-christiana-kimbal-musk", bio: "Christiana and Kimbal Musk are founders of the Not Alone Summit.", image: "/2026-headshots/portraits/christiana-kimbal-musk.jpg" },
     // Oct 12 (owner, relaying Ryan): the Bryan brothers share one card everywhere (Keynotes and Founders), with a photo of
     // the two of them (lib/portrait-overrides.ts "bob and mike bryan", credited on the profile).
     { first: "Mike Bryan", second: "Bob Bryan", name: "Bob and Mike Bryan", slug: "2026-bob-mike-bryan", bio: "Bob and Mike Bryan are the most successful doubles team in tennis history and founders of the Not Alone Summit.", image: "/2026-headshots/portraits/bob-mike-bryan.jpg" },

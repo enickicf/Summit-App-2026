@@ -204,6 +204,6 @@ describe("Airtable -> website, automatically", () => {
     expect(at("Awards Show").startUtc).toBe("2026-11-03T03:30:00.000Z");
     expect(at("Awards Show").endUtc).toBe("2026-11-03T06:00:00.000Z");
     expect(at("High Tea").endUtc).toBe(at("High Tea").startUtc);
-    expect(airtableOverlay(snapshot)!.partners!.map(partner => partner.name)).toEqual(["Glow", "Bryan Brothers Foundation"]); // Oct 12: + the owner-listed partner
+    expect(airtableOverlay(snapshot)!.partners!.map(partner => partner.name)).toEqual(["Glow", "Bryan Brothers Foundation", "Fight For Lives"]); // Oct 12: + the owner-listed partner
   });
 });
