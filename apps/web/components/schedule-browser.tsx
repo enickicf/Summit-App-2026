@@ -18,6 +18,7 @@ import {
 } from "../app/schedule/schedule-presentation";
 import { isPokerNight, pokerNight } from "../lib/poker-night-links";
 import { isWorkshopSignup } from "../lib/morning-workshops";
+import { isWellnessSignupEntry, wellnessSignupPath } from "../lib/wellness-signups-2026";
 import { sessionAttire } from "../lib/schedule-website-rules";
 import { WorkshopSignup } from "./workshop-signup";
 import styles from "../app/schedule/schedule.module.css";
@@ -123,6 +124,7 @@ export function ScheduleBrowser({ days, eventTimeZone, initialNowUtc, noticeSnap
                           <a href={pokerNight.site} target="_blank" rel="noopener noreferrer">RSVP &amp; details</a>
                         </p> : null}
                         {/* Owner (Sept 28): name-only sign-up for the wellness workshops and the Thursday Tennis / High Tea, on the schedule page only. */}
+                        {isWellnessSignupEntry(item.title) ? <p className={styles.pokerLinks}><a href={wellnessSignupPath}>Sign up for wellness classes</a></p> : null}
                         {isWorkshopSignup(item) ? <WorkshopSignup item={item} eventTimeZone={eventTimeZone} /> : null}
                       </article>
                     );

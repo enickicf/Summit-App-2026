@@ -31,3 +31,9 @@ export function wellnessClash(ids: readonly string[]): [WellnessSession, Wellnes
   }
   return null;
 }
+
+// Oct 12 (owner: "put the wellness sign up link on the website as well"): the Summit schedule's "Wellness Activity"
+// entries (the Nov 3 and Nov 4 mornings this form covers) carry a "Sign up for wellness classes" button to /wellness.
+// Not the Nov 2 "Wellness Activities & Check-In" block, which the form does not cover.
+export const wellnessSignupPath = "/wellness";
+export const isWellnessSignupEntry = (title: string) => /^wellness activity$/i.test(title.trim());
