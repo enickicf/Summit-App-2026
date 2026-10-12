@@ -142,6 +142,20 @@ export const siteVisitFormSchema = z.object({
 }).strip();
 export type SiteVisitFormPayload = z.infer<typeof siteVisitFormSchema>;
 
+// Oct 12: the wellness class form (public/wellness, lib/wellness-signups-2026.ts): contact details, the chosen classes
+// (ids from wellnessSessions) and the same signed activity waiver as Tennis & High Tea.
+export const wellnessFormSchema = z.object({
+  name: personName(120),
+  email,
+  phone: text(40).refine(value => /^[0-9+().\-\s]+$/.test(value) && value.replace(/\D/g, "").length >= 7, "Please enter a phone number."),
+  sessions: z.array(text(80)).max(16),
+  waiverAccepted: z.preprocess(value => value === true || value === "on" || value === "true", z.boolean()).optional(),
+  signature: text(120).optional(),
+  waiverVersion: text(40).optional(),
+  website: text(200).optional().default("") // honeypot
+}).strip();
+export type WellnessFormPayload = z.infer<typeof wellnessFormSchema>;
+
 // Owner (Sept 28): morning workshop sign-ups from the Summit schedule page. Name only; the sign-up is
 // exclusive to Summit attendees (invitation-only), and anyone not on the guest list is removed by staff.
 // Owner (Oct 7): a Tennis / High Tea sign-up also carries a signed waiver: the box ticked (waiverAccepted), the
@@ -185,7 +199,7 @@ export type NominationSubmission = Submission<Omit<NominationPayload, "website">
 export type PokerSubmission = Submission<Omit<PokerPayload, "website">> & { removedAt?: string; removedReason?: string };
 // Oct 7: waiverAccepted / signature / waiverVersion / waiverAcceptedAt are set on Tennis / High Tea sign-ups from Oct 7
 // onward; sign-ups stored before then (and wellness sign-ups) have none of them.
-export type WorkshopSubmission = Submission<Omit<WorkshopPayload, "website"> & { category: "workshop" | "siteVisit"; waiverAcceptedAt?: string }>;
+export type WorkshopSubmission = Submission<Omit<WorkshopPayload, "website"> & { category: "workshop" | "siteVisit" | "wellness"; waiverAcceptedAt?: string }>;
 // Sept 28: one record per confirmation email sent for an RSVP (id = the RSVP id, submittedAt = when it was sent).
 export type RsvpEmailRecord = Submission<{ email: string; subject: string; rsvpId: string }>;
 
@@ -449,6 +463,7 @@ export const pokerInterestLabels: Record<PokerInterest, string> = {
 export const workshopCsvColumns = ["submittedAt", "name", "category", "sessionTitle", "sessionDay", "sessionTime", "sessionId", "source", "id"];
 // Oct 7: the Tennis / High Tea spreadsheet also carries the signed waiver (empty for sign-ups from before Oct 7).
 export const siteVisitCsvColumns = [...workshopCsvColumns, "waiverAccepted", "signature", "waiverVersion", "email", "phone", "transport"];
+export const wellnessCsvColumns = ["submittedAt", "sessionDay", "sessionTime", "sessionTitle", "name", "email", "phone", "waiverAccepted", "signature", "waiverVersion", "sessionId", "id"];
 export const pokerCsvColumns = ["submittedAt", "name", "email", "phone", "organization", "interest", "sponsorship", "seats", "experience", "notes", "source", "id", "removedAt", "removedReason"];
 
 /** A sponsor is anyone who asked for a level; their pledged value is the matrix's own figure. */

@@ -10,7 +10,8 @@ const nextConfig: NextConfig = {
   transpilePackages: ["@not-alone/config", "@not-alone/test-fixtures"],
   // Oct 9: the Tennis & High Tea form (the ICF designer's static page in public/tennis-high-tea) at a clean address.
   async rewrites() {
-    return [{ source: "/tennis-high-tea", destination: "/tennis-high-tea/index.html" }];
+    // Oct 12: the wellness class form (public/wellness) the same way.
+    return [{ source: "/tennis-high-tea", destination: "/tennis-high-tea/index.html" }, { source: "/wellness", destination: "/wellness/index.html" }];
   },
   async headers() {
     return [

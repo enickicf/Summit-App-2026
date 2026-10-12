@@ -4,6 +4,7 @@ import { PortalAutoRefresh } from "./portal-auto-refresh";
 import { RsvpEmailTools } from "./rsvp-email-tools";
 import { activeOf, activeRsvps, comingTo, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, ustaRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels, siteVisitTransportLabels, type SiteVisitTransport } from "../lib/staff/store";
 import styles from "../app/staff/staff.module.css";
+import { wellnessSessions } from "../lib/wellness-signups-2026";
 
 export type LineupGroup = { title: string; people: { name: string; role: string; rank: number | null; tier: string | null; photo: boolean }[] };
 
@@ -71,6 +72,19 @@ export function groupWorkshops(rows: WorkshopSubmission[]) {
   return [...groups.values()].sort((a, b) => a.day.localeCompare(b.day) || a.time.localeCompare(b.time));
 }
 
+// Oct 12: wellness sign-ups grouped by class, in the order of the morning (day, start time), oldest sign-up first.
+const wellnessDays = ["Tuesday, November 3", "Wednesday, November 4"];
+export function groupWellness(rows: WorkshopSubmission[]) {
+  const order = new Map(wellnessSessions.map((session, index) => [session.id, index]));
+  const groups = new Map<string, { key: string; day: string; time: string; title: string; people: WorkshopSubmission[] }>();
+  for (const row of [...rows].sort((a, b) => a.submittedAt.localeCompare(b.submittedAt))) {
+    if (!groups.has(row.sessionId)) groups.set(row.sessionId, { key: row.sessionId, day: row.sessionDay, time: row.sessionTime, title: row.sessionTitle, people: [] });
+    groups.get(row.sessionId)!.people.push(row);
+  }
+  const rank = (id: string) => order.get(id) ?? Number.MAX_SAFE_INTEGER;
+  return [...groups.values()].sort((a, b) => rank(a.key) - rank(b.key));
+}
+
 // Thursday site visit: one row per person (name, case-insensitive) with Tennis / High Tea badges.
 // Oct 7: and the signed waiver (the full name typed with the first sign-up that carried one); sign-ups from before
 // Oct 7 have no waiver and show "—".
@@ -109,7 +123,10 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
   const pokerCounts = pokerTotals(pokerActive);
   const sponsorship = pokerSponsorshipTotals(pokerActive);
   const sponsors = pokerActive.filter(isPokerSponsor);
-  const workshopRows = workshops.filter(row => row.category !== "siteVisit");
+  const workshopRows = workshops.filter(row => row.category !== "siteVisit" && row.category !== "wellness");
+  const wellnessRows = workshops.filter(row => row.category === "wellness");
+  const wellnessGroups = groupWellness(wellnessRows);
+  const wellnessPeople = new Set(wellnessRows.map(row => row.name.trim().toLowerCase().replace(/\s+/g, " "))).size;
   const workshopGroups = groupWorkshops(workshopRows);
   const siteVisitPeople = groupSiteVisit(workshops.filter(row => row.category === "siteVisit"));
   const tennis = siteVisitPeople.filter(person => person.tennis).length, highTea = siteVisitPeople.filter(person => person.highTea).length;
@@ -123,6 +140,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
         <a href="#awards" data-view-tab="awards" aria-selected="true">Awards</a>
         <a href="#workshops" data-view-tab="workshops" aria-selected="false">Summit workshops</a>
         <a href="#site-visit" data-view-tab="site-visit" aria-selected="false">Tennis &amp; High Tea</a>
+        <a href="#wellness" data-view-tab="wellness" aria-selected="false">Wellness</a>
         <a href="#poker" data-view-tab="poker" aria-selected="false">Sponsorship</a>
         {/* Owner (Sept 30): a complete copy of everything, downloadable from any device at any time. */}
         <a href="/api/staff/export?kind=all" className={styles.linkButton}>Download full backup</a>
@@ -245,6 +263,24 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], lineup,
           <thead><tr><th>Name</th><th>Signed up for</th><th>Email</th><th>Phone</th><th>Getting there</th><th>Waiver</th><th>First sign-up</th></tr></thead>
           <tbody>{siteVisitPeople.map(person => <tr key={person.key}><td className={styles.strong}>{person.name}</td><td><span className={styles.badges}>{person.tennis && <span className={`${styles.badge} ${styles.badgeTennis}`}>Tennis</span>}{person.highTea && <span className={`${styles.badge} ${styles.badgeTea}`}>High Tea</span>}</span></td><td>{person.email ? <a href={`mailto:${person.email}`}>{person.email}</a> : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{person.phone || <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{person.transport ? siteVisitTransportLabels[person.transport] : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{person.signature ? `Signed: ${person.signature}` : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{when(person.first)}</td></tr>)}</tbody>
         </table></div>}
+      </section>
+    </div>
+
+    {/* Oct 12 (Kristin via owner): the morning wellness classes (Nov 3 and 4) from notalonesummit.org/wellness, one list per class. */}
+    <div data-view="wellness" id="wellness" hidden>
+      <section className={styles.stats} aria-label="Wellness totals">
+        <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{wellnessPeople}</span><span className={styles.statLabel}>People signed up</span><span className={styles.statNote}>{wellnessRows.length} class sign-ups in total</span></div>
+        {wellnessDays.map(day => { const count = wellnessRows.filter(row => row.sessionDay === day).length; return <div key={day} className={styles.stat}><span className={styles.statValue}>{count}</span><span className={styles.statLabel}>{day}</span><span className={styles.statNote}>Class sign-ups that morning</span></div>; })}
+      </section>
+
+      <section className={styles.section} id="wellness-list" aria-labelledby="wellness-title">
+        <div className={styles.sectionHead}><h2 id="wellness-title">Wellness classes</h2><a className={styles.button} href="/api/staff/export?kind=wellness">Download CSV</a></div>
+        <p className={styles.help}>Sign-ups from the wellness form (notalonesummit.org/wellness) for the Tuesday November 3 and Wednesday November 4 morning classes: Fitness, Pilates with Yvette Baker, Movement &amp; Breathwork and drop-in Pickleball. One list per class, oldest sign-up first. Waiver = the full name typed to sign the activity waiver. Attendees only; remove anyone not on the guest list.</p>
+        {wellnessRows.length === 0 ? <p className={styles.empty}>No wellness sign-ups yet.</p> : <div className={styles.cards}>{wellnessGroups.map(group => <article key={group.key} className={styles.card}>
+          <p className={styles.cardKicker}>{group.day} · {group.time}</p>
+          <h3>{group.title} <span className={styles.count}>{group.people.length}</span></h3>
+          <ol className={styles.lineupList}>{group.people.map(row => <li key={row.id}><span className={styles.strong}>{row.name}</span>{row.email ? <> · <a href={`mailto:${row.email}`}>{row.email}</a></> : null}{row.phone ? <span className={styles.muted}> · {row.phone}</span> : null}<span className={styles.muted}> · {row.signature ? `Signed: ${row.signature}` : "No waiver"} · {when(row.submittedAt)}</span></li>)}</ol>
+        </article>)}</div>}
       </section>
     </div>
 

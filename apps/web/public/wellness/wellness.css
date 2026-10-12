@@ -1,0 +1,10 @@
+/* Oct 12: the wellness class form, on top of the Tennis & High Tea form's styles. */
+.reference-layout fieldset.class-day{display:block;margin:28px 0 8px}
+.class-day legend{font-size:17px;margin-bottom:12px}
+.class-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px}
+.reference-layout .class-option{margin-top:0;min-height:72px}
+.class-option small{margin-top:2px;line-height:1.45}
+.class-option.disabled{opacity:.45;cursor:not-allowed;background:#f6f7fa}
+.exclusive{font-size:13px;line-height:1.6;color:#4b5263;margin:4px 0 16px}
+.reference-layout .confirmed-activities p{margin:6px 0}
+@media(max-width:700px){.class-grid{grid-template-columns:1fr}.reference-layout .class-option{min-height:64px}}

@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { isStaffSession, staffCookieName } from "../../../../lib/staff/auth";
-import { activeRsvps, getSubmissionStore, listAllRsvps, rsvpExportForms, rsvpsOfForm, type RsvpExportForm, withRsvpForm, nominationCsvColumns, pokerCsvColumns, rsvpCsvColumns, siteVisitCsvColumns, toCsv, workshopCsvColumns } from "../../../../lib/staff/store";
+import { activeRsvps, getSubmissionStore, listAllRsvps, rsvpExportForms, rsvpsOfForm, type RsvpExportForm, withRsvpForm, nominationCsvColumns, pokerCsvColumns, rsvpCsvColumns, siteVisitCsvColumns, toCsv, wellnessCsvColumns, workshopCsvColumns } from "../../../../lib/staff/store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -27,8 +27,13 @@ export async function GET(request: Request) {
     const csv = toCsv((await store.list("workshop")).filter(row => row.category === "siteVisit"), siteVisitCsvColumns);
     return new Response(csv, { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-summit-tennis-high-tea-signups-${stamp}.csv"`, "Cache-Control": "no-store" } });
   }
+  // Oct 12: the morning wellness classes (notalonesummit.org/wellness), with contact details and the signed waiver.
+  if (kind === "wellness") {
+    const csv = toCsv((await store.list("workshop")).filter(row => row.category === "wellness"), wellnessCsvColumns);
+    return new Response(csv, { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-summit-wellness-signups-${stamp}.csv"`, "Cache-Control": "no-store" } });
+  }
   if (kind === "workshops") {
-    const csv = toCsv((await store.list("workshop")).filter(row => row.category !== "siteVisit"), workshopCsvColumns);
+    const csv = toCsv((await store.list("workshop")).filter(row => row.category !== "siteVisit" && row.category !== "wellness"), workshopCsvColumns);
     return new Response(csv, { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-summit-workshop-signups-${stamp}.csv"`, "Cache-Control": "no-store" } });
   }
   if (kind === "poker") {
