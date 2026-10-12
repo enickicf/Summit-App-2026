@@ -2719,14 +2719,19 @@
     "height": 185,
     "bytes": 27546
   },
-  "/2026-partners/hey-im-here-for-you.png": {
-    "width": 999,
-    "height": 183,
-    "bytes": 31457
-  },
   "/2026-partners/bee-harmony-honey-official.png": {
     "width": 361,
     "height": 280,
     "bytes": 9215
+  },
+  "/2026-partners/hey-im-here-for-you-official.png": {
+    "width": 541,
+    "height": 512,
+    "bytes": 80889
+  },
+  "/2026-partners/villa-bibbiani-official.png": {
+    "width": 563,
+    "height": 512,
+    "bytes": 117781
   }
 }

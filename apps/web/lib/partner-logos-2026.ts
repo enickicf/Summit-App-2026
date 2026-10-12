@@ -64,12 +64,14 @@ const partnerLogoFiles: Record<string, string> = {
   "partee golf": "/2026-partners/partee-golf.png",
   // Oct 12: Bee Harmony Honey's official logo, the file the team uploaded to Airtable (BeeHarmony_Honey_Vert_BW.png).
   "bee harmony honey": "/2026-partners/bee-harmony-honey-official.png",
+  // Oct 12: official files the team uploaded to Airtable's Partners Logo field (hihfy_logo_blue.png; PNG image 4.png).
+  "hey i m here for you": "/2026-partners/hey-im-here-for-you-official.png",
+  "villa bibbiani": "/2026-partners/villa-bibbiani-official.png",
   "sackcloth and ashes": "/2026-partners/sackcloth-and-ashes.png",
   "nami books": "/2026-partners/nami.png",
-  // Oct 12 (owner: "invent them logos at least for now that are not alone summit themed"): placeholders in the Summit's own
-  // style (Poppins ExtraBold, Summit blues, the Not Alone heart) for partners with no logo online; replace with the real file.
+  // Oct 12 (owner: "invent them logos at least for now that are not alone summit themed"): placeholder in the Summit's own
+  // style (Poppins ExtraBold, Summit blues, the Not Alone heart) for a partner with no logo online or in Airtable; replace with the real file.
   "fight for lives": "/2026-partners/fight-for-lives.png",
-  "hey i m here for you": "/2026-partners/hey-im-here-for-you.png",
   "bryan brothers foundation": "/2026-partners/bryan-bros-foundation.png", // Oct 12: from bryanbros.com/foundation (background made transparent) until Nick's files arrive
   "wise friend": "/2026-partners/wise-friend-wordmark.png", // owner, Oct 5: the mark with the name "Wise Friend" under it (their symbol alone reads as nothing)
   "big league wiffleball": "/2026-partners/big-league-wiffleball.png",
@@ -88,8 +90,7 @@ const partnerLogoFiles: Record<string, string> = {
   "moon valley plants": "/2026-partners/moon-valley-nurseries.png",
   "moon valley nurseries": "/2026-partners/moon-valley-nurseries.png",
   // One card for the two By Dzign records; lib/partner-display-2026.ts names it "By Dzign".
-  "by dzign": "/2026-partners/by-dzign.png",
-  "villa bibbiani": "/2026-partners/villa-bibbiani.png"
+  "by dzign": "/2026-partners/by-dzign.png"
 };
 
 export function partnerLogoKey(name: string): string {

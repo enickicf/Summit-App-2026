@@ -28,7 +28,7 @@ describe("2026 partner logos", () => {
     expect(partnerLogo2026("TÖST")).toBe("/2026-partners/tost.png");
     expect(partnerLogo2026("Moon Valley Plants")).toBe("/2026-partners/moon-valley-nurseries.png");
     expect(partnerLogo2026("By Dzign")).toBe("/2026-partners/by-dzign.png");
-    for (const [name, file] of [["Tubby Todd", "tubby-todd"], ["Nomad Sauna", "nomad-sauna"], ["Tape Art", "tape-art"], ["Pickleroll", "pickleroll"], ["Villa Bibbiani", "villa-bibbiani"]]) {
+    for (const [name, file] of [["Tubby Todd", "tubby-todd"], ["Nomad Sauna", "nomad-sauna"], ["Tape Art", "tape-art"], ["Pickleroll", "pickleroll"], ["Villa Bibbiani", "villa-bibbiani-official"]]) {
       expect(partnerLogo2026(name!), name).toBe(`/2026-partners/${file}.png`);
     }
     // The internal label is never a card, so it needs no logo.

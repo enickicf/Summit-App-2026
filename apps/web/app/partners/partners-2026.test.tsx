@@ -103,7 +103,7 @@ describe("2026 partners page", () => {
     expect(html).not.toContain("ICF Items");
     expect(html).not.toContain("Cold Creek");
     // Every new logo is served from public/2026-partners through the image optimizer.
-    for (const file of ["tubby-todd", "tost", "nomad-sauna", "tape-art", "pickleroll", "moon-valley-nurseries", "by-dzign", "villa-bibbiani"]) {
+    for (const file of ["tubby-todd", "tost", "nomad-sauna", "tape-art", "pickleroll", "moon-valley-nurseries", "by-dzign", "villa-bibbiani-official"]) {
       expect(html, file).toContain(`%2F2026-partners%2F${file}.png`);
     }
   });
