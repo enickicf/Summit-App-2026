@@ -11,6 +11,7 @@ import { scheduleDoc2026 } from "./schedule-doc-2026";
 import { airtableTalent2026, type RecordedAirtablePerson } from "./airtable-talent-2026";
 import { withOwnerGroups } from "./airtable";
 import { airtablePartners2026 } from "./airtable-partners-2026";
+import { ownerPartners2026, withOwnerPartners } from "./partner-display-2026";
 import { airtableHeadshotCrops } from "./airtable-headshot-crops";
 import { interimBio2026 } from "./interim-bios-2026";
 import { awardsBiographies } from "./awards-people";
@@ -150,7 +151,9 @@ export async function withAirtable(snapshot: EventSnapshot): Promise<EventSnapsh
   // Owner (Oct 11): owner-credited Founders (lib/airtable.ts ownerFounders2026) get the Founder grouping here, for the
   // live Airtable link and the recorded copy alike.
   const talent: RecordedAirtablePerson[] | null = talentSource ? talentSource.map(withOwnerGroups) : null;
-  const partners = livePartners ?? (stale && airtablePartners2026.length ? airtablePartners2026 : null);
+  const partnerSource = livePartners ?? (stale && airtablePartners2026.length ? airtablePartners2026 : null);
+  // Oct 12: owner-listed partners (lib/partner-display-2026.ts ownerPartners2026) join either source.
+  const partners = partnerSource ? withOwnerPartners(partnerSource, ownerPartners2026) : null;
   if (!talent && !sessions && !partners) return snapshot;
   const next: EventSnapshot = { ...snapshot };
   let people: Map<string, AirtableOverlayPerson> | null = null;

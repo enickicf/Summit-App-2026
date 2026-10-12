@@ -28,7 +28,9 @@ export const awards2026Editorial = {
 
 // Ryan Wolfington, NAS web meeting (September 21, 2026): list Pam & Duncan Goldie-Morrison as
 // founders to credit their giving. Editorial credit only; not an attendance record.
-export const ownerApprovedFounders2026 = ["Pam & Duncan Goldie-Morrison"] as const;
+// Oct 12 (owner, relaying Paige: Ryan wants Pam and Duncan removed as founders): no owner-approved founders remain; the
+// 2025 archive keeps ICF's own listing of them.
+export const ownerApprovedFounders2026: readonly string[] = [];
 
 export const awards2025WinnersSource = "https://shorefire.com/releases/entry/jewel-inspiring-children-foundation-celebrate-mental-health-innovators-with-inaugural-not-alone-awardsin-las-vegas";
 

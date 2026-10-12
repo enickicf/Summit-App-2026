@@ -1,3 +1,4 @@
+import type { AirtablePartner } from "./airtable";
 import { partnerLogoKey } from "./partner-logos-2026";
 
 // Display rules for the 2026 Partners page (Oct 7, 2026 Airtable re-read). The recorded and live Airtable rows
@@ -9,6 +10,16 @@ import { partnerLogoKey } from "./partner-logos-2026";
 //   page lists them, Airtable order within a group), so Hugz ("Partner" + "Vendors") stays in the Partners group
 //   where it is today even though Airtable's grid lists its Vendors row first.
 const internalLabels = new Set(["icf items cold creek plunges"]);
+
+// Oct 12 (owner, relaying Ryan): partners listed by the owner that Airtable's Partners page does not carry (yet). They are
+// added to the recorded copy and to the live Airtable link alike; once Airtable lists one, its own row wins.
+export const ownerPartners2026: readonly AirtablePartner[] = [
+  { recordId: "owner-bryan-brothers-foundation", name: "Bryan Brothers Foundation", item: "", group: "Partners", status: "Confirmed" }
+];
+export function withOwnerPartners<T extends { name: string }>(partners: readonly T[], extra: readonly T[]): T[] {
+  const present = new Set(partners.map(partner => partnerLogoKey(partner.name)));
+  return [...partners, ...extra.filter(partner => !present.has(partnerLogoKey(partner.name)))];
+}
 
 // Airtable's "Partner" (singular) joins the Partners group; "Curriculum Partner" follows it.
 export const partnerGroupOf = (partner: { group: string }): string => !partner.group || partner.group === "Partner" ? "Partners" : partner.group;

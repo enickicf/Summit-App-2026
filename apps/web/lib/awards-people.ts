@@ -230,6 +230,9 @@ export function awardsDisplayPeople(snapshot: EventSnapshot | null): SummitPerso
     // cards until each has a usable headshot; see lib/portrait-overrides.ts).
     { first: "Melony Lewis", second: "Adam Lewis", name: "Melony and Adam Lewis", slug: "2026-melony-adam-lewis", bio: "Melony and Adam Lewis are founders of the Not Alone Summit." },
     { first: "Winston Kelly", second: "Cameron Kelly", name: "Winston and Cameron Kelly", slug: "2026-winston-cameron-kelly", bio: "Winston and Cameron Kelly are founders of the Not Alone Summit." },
+    // Oct 12 (owner, relaying Ryan): the Bryan brothers share one card everywhere (Keynotes and Founders), with a photo of
+    // the two of them (lib/portrait-overrides.ts "bob and mike bryan", credited on the profile).
+    { first: "Mike Bryan", second: "Bob Bryan", name: "Bob and Mike Bryan", slug: "2026-bob-mike-bryan", bio: "Bob and Mike Bryan are the most successful doubles team in tennis history and founders of the Not Alone Summit.", image: "/2026-headshots/portraits/bob-mike-bryan.jpg" },
     // Sept 22: Airtable now holds Steven and Alexandra as two records; the website keeps ICF's joint card and photo.
     { first: "Steven Cohen", second: "Alexandra Cohen", name: "Steven and Alexandra Cohen", slug: "2026-steven-alexandra-cohen", bio: "The Steven & Alexandra Cohen Foundation powers the Not Alone Summit and Awards; Steven and Alexandra Cohen are founders of the Not Alone Summit.", image: "/original-2025/020a823cfe4f160d93b0.png" }
   ];

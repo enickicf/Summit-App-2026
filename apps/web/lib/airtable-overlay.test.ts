@@ -52,7 +52,8 @@ describe("withAirtable", () => {
     expect(overlay.people!.get("jewel")).toMatchObject({ featured: true, categories: ["Co-Chairs", "Musicians", "Executive Producers"] });
     expect(next.scheduleItems.map(item => item.title)).toEqual(["Awards Show"]);
     expect(next.scheduleItems[0]!.endUtc).toBe("2026-11-03T06:00:00.000Z");
-    expect(overlay.partners).toEqual([{ recordId: "recFFFFFFFFFFFFFF", name: "Glow", item: "", group: "Gifting Suite", status: "Confirmed" }]);
+    // Oct 12: Airtable's rows first, then the owner-listed partners Airtable does not carry.
+    expect(overlay.partners).toEqual([{ recordId: "recFFFFFFFFFFFFFF", name: "Glow", item: "", group: "Gifting Suite", status: "Confirmed" }, { recordId: "owner-bryan-brothers-foundation", name: "Bryan Brothers Foundation", item: "", group: "Partners", status: "Confirmed" }]);
     for (const call of vi.mocked(fetch).mock.calls) expect((call[1] as RequestInit).method ?? "GET").toBe("GET");
   });
   it("leaves a newer staff publication unchanged without a token", async () => {
