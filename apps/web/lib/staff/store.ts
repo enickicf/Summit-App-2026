@@ -90,6 +90,8 @@ export const nominationPayloadSchema = z.object({
   category: required(120),
   reason: required(2000),
   links: text(600).optional().default(""),
+  // Owner (Oct 13): the nomination form also carries the optional "text me updates" box (lib/staff/text-consent.ts).
+  textConsent: z.preprocess(value => value === undefined || value === null || value === "" ? undefined : value === true || value === "on" || value === "yes" || value === "true", z.boolean()).optional(),
   website: text(200).optional().default("")
 }).strip();
 export type NominationPayload = z.infer<typeof nominationPayloadSchema>;

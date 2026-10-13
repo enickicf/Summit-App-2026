@@ -138,6 +138,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
   const dinnerActive = activeOf(closingDinner);
   const dinner = closingDinnerTotals(dinnerActive);
   const textContacts = textContactRows([
+    ...nominations.filter(row => row.nominatorPhone).map(row => ({ name: row.nominatorName, email: row.nominatorEmail, phone: row.nominatorPhone, submittedAt: row.submittedAt, textConsent: row.textConsent, source: "Award nomination" })),
     ...dinnerActive.map(row => ({ name: row.name, email: row.email, phone: row.phone, submittedAt: row.submittedAt, textConsent: row.textConsent, source: "Closing Dinner request" })),
     ...active.map(row => ({ name: row.name, email: row.email, phone: row.phone, submittedAt: row.submittedAt, textConsent: row.textConsent, source: "Awards / Community Day RSVP" })),
     ...workshops.filter(row => row.phone).map(row => ({ name: row.name, email: row.email ?? "", phone: row.phone ?? "", submittedAt: row.submittedAt, textConsent: row.textConsent, source: row.category === "wellness" ? "Wellness classes" : "Tennis & High Tea" }))

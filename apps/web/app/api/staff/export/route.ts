@@ -24,8 +24,9 @@ export async function GET(request: Request) {
   }
   // Oct 12 (owner): everyone we hold a phone number for, one row per number, with text message consent / opt-out.
   if (kind === "texts") {
-    const [rsvp, workshop, closingDinner] = await Promise.all([listAllRsvps(store), store.list("workshop"), store.list("closingDinner")]);
+    const [rsvp, workshop, closingDinner, nomination] = await Promise.all([listAllRsvps(store), store.list("workshop"), store.list("closingDinner"), store.list("nomination")]);
     const contacts: TextContact[] = [
+      ...nomination.filter(row => row.nominatorPhone).map(row => ({ name: row.nominatorName, email: row.nominatorEmail, phone: row.nominatorPhone, submittedAt: row.submittedAt, textConsent: row.textConsent, source: "Award nomination" })),
       ...activeOf(closingDinner).map(row => ({ name: row.name, email: row.email, phone: row.phone, submittedAt: row.submittedAt, textConsent: row.textConsent, source: "Closing Dinner request" })),
       ...activeRsvps(rsvp).map(row => ({ name: row.name, email: row.email, phone: row.phone, submittedAt: row.submittedAt, textConsent: row.textConsent, source: "Awards / Community Day RSVP" })),
       ...workshop.filter(row => row.phone).map(row => ({ name: row.name, email: row.email ?? "", phone: row.phone ?? "", submittedAt: row.submittedAt, textConsent: row.textConsent, source: row.category === "wellness" ? "Wellness classes" : "Tennis & High Tea" }))
@@ -39,7 +40,7 @@ export async function GET(request: Request) {
     return new Response(toCsv(rows, closingDinnerCsvColumns), { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-closing-dinner-requests-${stamp}.csv"`, "Cache-Control": "no-store" } });
   }
   if (kind === "nominations") {
-    const csv = toCsv(await store.list("nomination"), nominationCsvColumns);
+    const csv = toCsv((await store.list("nomination")).map(row => ({ ...row, ...textConsentColumns({ phone: row.nominatorPhone, email: row.nominatorEmail, submittedAt: row.submittedAt, textConsent: row.textConsent }, textPreferences) })), [...nominationCsvColumns, ...textConsentCsvColumns]);
     return new Response(csv, { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-awards-nominations-${stamp}.csv"`, "Cache-Control": "no-store" } });
   }
   if (kind === "site-visit") {

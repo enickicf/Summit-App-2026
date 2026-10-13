@@ -47,3 +47,12 @@ describe("closing dinner requests", () => {
     expect(html).toContain("Plus One");
   });
 });
+
+describe("nomination form text consent (Oct 13)", () => {
+  it("keeps the box", async () => {
+    const { nominationPayloadSchema } = await import("./store");
+    const base = { nominatorName: "Test Person", nominatorEmail: "n@example.com", nominatorPhone: "7025550100", nomineeName: "Some One", category: "Pioneer", reason: "Because." };
+    expect(nominationPayloadSchema.parse({ ...base, textConsent: "yes" }).textConsent).toBe(true);
+    expect(nominationPayloadSchema.parse(base).textConsent).toBeUndefined();
+  });
+});
