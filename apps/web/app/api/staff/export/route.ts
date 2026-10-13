@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { textConsentColumns, textConsentCsvColumns, textContactCsvColumns, textContactRows, type TextContact } from "../../../../lib/staff/text-consent";
 import { isStaffSession, staffCookieName } from "../../../../lib/staff/auth";
-import { activeRsvps, getSubmissionStore, listAllRsvps, rsvpExportForms, rsvpsOfForm, type RsvpExportForm, withRsvpForm, nominationCsvColumns, pokerCsvColumns, rsvpCsvColumns, siteVisitCsvColumns, toCsv, wellnessCsvColumns, workshopCsvColumns } from "../../../../lib/staff/store";
+import { activeOf, activeRsvps, closingDinnerCsvColumns, closingDinnerSeats, getSubmissionStore, listAllRsvps, rsvpExportForms, rsvpsOfForm, type RsvpExportForm, withRsvpForm, nominationCsvColumns, pokerCsvColumns, rsvpCsvColumns, siteVisitCsvColumns, toCsv, wellnessCsvColumns, workshopCsvColumns } from "../../../../lib/staff/store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -17,20 +17,26 @@ export async function GET(request: Request) {
   const stamp = new Date().toISOString().slice(0, 10);
   // Owner (Sept 28): one JSON file with everything (incl. removed requests and the confirmation-email log) for backups.
   if (kind === "all") {
-    const [rsvp, nomination, poker, rsvpEmail, workshop] = await Promise.all([listAllRsvps(store), store.list("nomination"), store.list("poker"), store.list("rsvpEmail"), store.list("workshop")]);
+    const [rsvp, nomination, poker, rsvpEmail, workshop, closingDinner] = await Promise.all([listAllRsvps(store), store.list("nomination"), store.list("poker"), store.list("rsvpEmail"), store.list("workshop"), store.list("closingDinner")]);
     const textPreference = textPreferences;
-    const body = JSON.stringify({ exportedAt: new Date().toISOString(), site: "notalonesummit.org/staff", rsvp, nomination, poker, rsvpEmail, workshop, textPreference }, null, 2);
+    const body = JSON.stringify({ exportedAt: new Date().toISOString(), site: "notalonesummit.org/staff", rsvp, nomination, poker, rsvpEmail, workshop, textPreference, closingDinner }, null, 2);
     return new Response(body, { headers: { "Content-Type": "application/json; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-staff-portal-backup-${stamp}.json"`, "Cache-Control": "no-store" } });
   }
   // Oct 12 (owner): everyone we hold a phone number for, one row per number, with text message consent / opt-out.
   if (kind === "texts") {
-    const [rsvp, workshop] = await Promise.all([listAllRsvps(store), store.list("workshop")]);
+    const [rsvp, workshop, closingDinner] = await Promise.all([listAllRsvps(store), store.list("workshop"), store.list("closingDinner")]);
     const contacts: TextContact[] = [
+      ...activeOf(closingDinner).map(row => ({ name: row.name, email: row.email, phone: row.phone, submittedAt: row.submittedAt, textConsent: row.textConsent, source: "Closing Dinner request" })),
       ...activeRsvps(rsvp).map(row => ({ name: row.name, email: row.email, phone: row.phone, submittedAt: row.submittedAt, textConsent: row.textConsent, source: "Awards / Community Day RSVP" })),
       ...workshop.filter(row => row.phone).map(row => ({ name: row.name, email: row.email ?? "", phone: row.phone ?? "", submittedAt: row.submittedAt, textConsent: row.textConsent, source: row.category === "wellness" ? "Wellness classes" : "Tennis & High Tea" }))
     ];
     const csv = toCsv(textContactRows(contacts, textPreferences), textContactCsvColumns);
     return new Response(csv, { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-text-message-consent-${stamp}.csv"`, "Cache-Control": "no-store" } });
+  }
+  // Oct 13 (owner / Ryan): the Nov 4 closing night dinner requests, one row per request with the guest's guest.
+  if (kind === "closing-dinner") {
+    const rows = (await store.list("closingDinner")).map(row => ({ ...row, seats: closingDinnerSeats(row), ...textConsentColumns(row, textPreferences) }));
+    return new Response(toCsv(rows, closingDinnerCsvColumns), { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-closing-dinner-requests-${stamp}.csv"`, "Cache-Control": "no-store" } });
   }
   if (kind === "nominations") {
     const csv = toCsv(await store.list("nomination"), nominationCsvColumns);

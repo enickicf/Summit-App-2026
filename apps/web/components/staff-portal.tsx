@@ -2,7 +2,7 @@ import { SiteImage } from "./site-image";
 import { PortalViewSwitch } from "./portal-views";
 import { PortalAutoRefresh } from "./portal-auto-refresh";
 import { RsvpEmailTools } from "./rsvp-email-tools";
-import { activeOf, activeRsvps, comingTo, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, ustaRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels, siteVisitTransportLabels, type SiteVisitTransport, type TextPreferenceRecord } from "../lib/staff/store";
+import { activeOf, activeRsvps, comingTo, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, ustaRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels, siteVisitTransportLabels, type SiteVisitTransport, type TextPreferenceRecord, type ClosingDinnerSubmission, closingDinnerSeats, closingDinnerTotals } from "../lib/staff/store";
 import styles from "../app/staff/staff.module.css";
 import { wellnessSessions } from "../lib/wellness-signups-2026";
 import { textConsentLabels, textConsentProtocolNote, textConsentShortLabels, textConsentStatus, textContactRows, textOptOutFooter } from "../lib/staff/text-consent";
@@ -117,7 +117,7 @@ export function groupSiteVisit(rows: WorkshopSubmission[]) {
 
 // Owner (Sept 23): one clean, Not Alone-themed staff portal: ticket requests (with running totals at
 // the top), nominations in their own section, and the current Awards lineup for reference.
-export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPreferences = [], lineup, generatedAt }: { rsvps: RsvpSubmission[]; nominations: NominationSubmission[]; poker: PokerSubmission[]; workshops?: WorkshopSubmission[]; textPreferences?: TextPreferenceRecord[]; lineup: LineupGroup[]; generatedAt: string }) {
+export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPreferences = [], closingDinner = [], lineup, generatedAt }: { rsvps: RsvpSubmission[]; nominations: NominationSubmission[]; poker: PokerSubmission[]; workshops?: WorkshopSubmission[]; textPreferences?: TextPreferenceRecord[]; closingDinner?: ClosingDinnerSubmission[]; lineup: LineupGroup[]; generatedAt: string }) {
   // Removed requests (test entries) leave every list and total but stay stored under "Removed".
   const active = activeRsvps(rsvps);
   const removed = removedRsvps(rsvps);
@@ -135,7 +135,10 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
   const workshopRows = workshops.filter(row => row.category !== "siteVisit" && row.category !== "wellness");
   const wellnessRows = workshops.filter(row => row.category === "wellness");
   // Oct 12 (owner): text message consent and opt-outs, one row per phone number (lib/staff/text-consent.ts).
+  const dinnerActive = activeOf(closingDinner);
+  const dinner = closingDinnerTotals(dinnerActive);
   const textContacts = textContactRows([
+    ...dinnerActive.map(row => ({ name: row.name, email: row.email, phone: row.phone, submittedAt: row.submittedAt, textConsent: row.textConsent, source: "Closing Dinner request" })),
     ...active.map(row => ({ name: row.name, email: row.email, phone: row.phone, submittedAt: row.submittedAt, textConsent: row.textConsent, source: "Awards / Community Day RSVP" })),
     ...workshops.filter(row => row.phone).map(row => ({ name: row.name, email: row.email ?? "", phone: row.phone ?? "", submittedAt: row.submittedAt, textConsent: row.textConsent, source: row.category === "wellness" ? "Wellness classes" : "Tennis & High Tea" }))
   ], textPreferences);
@@ -157,6 +160,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
         <a href="#workshops" data-view-tab="workshops" aria-selected="false">Summit workshops</a>
         <a href="#site-visit" data-view-tab="site-visit" aria-selected="false">Tennis &amp; High Tea</a>
         <a href="#wellness" data-view-tab="wellness" aria-selected="false">Wellness</a>
+        <a href="#closing-dinner" data-view-tab="closing-dinner" aria-selected="false">Closing Dinner</a>
         <a href="#texts" data-view-tab="texts" aria-selected="false">Texts</a>
         <a href="#poker" data-view-tab="poker" aria-selected="false">Sponsorship</a>
         {/* Owner (Sept 30): a complete copy of everything, downloadable from any device at any time. */}
@@ -298,6 +302,23 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
           <h3>{group.title} <span className={styles.count}>{group.people.length}</span></h3>
           <ol className={styles.lineupList}>{group.people.map(row => <li key={row.id}><span className={styles.strong}>{row.name}</span>{row.email ? <> · <a href={`mailto:${row.email}`}>{row.email}</a></> : null}{row.phone ? <span className={styles.muted}> · {row.phone}</span> : null}<span className={styles.muted}> · Texts: <TextConsent record={row} prefs={textPreferences} /> · {row.signature ? `Signed: ${row.signature}` : "No waiver"} · {when(row.submittedAt)}</span></li>)}</ol>
         </article>)}</div>}
+      </section>
+    </div>
+
+    {/* Oct 13 (owner / Ryan): requests for the closing night dinner and live performance with Jewel (Nov 4). */}
+    <div data-view="closing-dinner" id="closing-dinner" hidden>
+      <section className={styles.stats} aria-label="Closing Dinner totals">
+        <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{dinner.seatsRequested}</span><span className={styles.statLabel}>Seats requested</span><span className={styles.statNote}>Each request counted once per email (its latest)</span></div>
+        <div className={styles.stat}><span className={styles.statValue}>{dinner.requests}</span><span className={styles.statLabel}>Requests</span><span className={styles.statNote}>{dinner.formsSubmitted} forms submitted</span></div>
+        <div className={styles.stat}><span className={styles.statValue}>{dinner.withGuest}</span><span className={styles.statLabel}>Bringing a guest</span></div>
+      </section>
+      <section className={styles.section} id="closing-dinner-list" aria-labelledby="closing-dinner-title">
+        <div className={styles.sectionHead}><h2 id="closing-dinner-title">Closing Dinner requests</h2><a className={styles.button} href="/api/staff/export?kind=closing-dinner">Download CSV</a></div>
+        <p className={styles.help}>Closing night dinner and live performance with Jewel, Wednesday November 4, 7:00&ndash;10:00 PM, Margaux Ballroom at Wynn Las Vegas. Requests from the unlisted VIP form (notaloneawards.org/rsvp/closing-dinner-yiqy7fw0j3), oldest first: space is limited and first come, first served. A request is not a seat; the team emails each guest whose spot is secured.</p>
+        {dinnerActive.length === 0 ? <p className={styles.empty}>No closing dinner requests yet.</p> : <div className={styles.tableWrap}><table className={styles.table}>
+          <thead><tr><th>#</th><th>When</th><th>Name</th><th>Organization / title</th><th>Email</th><th>Phone</th><th>Seats</th><th>Guest</th><th>Texts</th><th>Notes</th></tr></thead>
+          <tbody>{[...dinnerActive].sort((a, b) => a.submittedAt.localeCompare(b.submittedAt)).map((row, index) => <tr key={row.id}><td>{index + 1}</td><td className={styles.nowrap}>{when(row.submittedAt)}</td><td className={styles.strong}>{row.name}</td><td>{[row.organization, row.professionalRole].filter(Boolean).join(" · ")}</td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td className={styles.nowrap}>{row.phone}</td><td>{closingDinnerSeats(row)}</td><td>{row.bringingGuest ? `${row.guestName} <${row.guestEmail}> ${row.guestPhone}` : "—"}</td><td className={styles.nowrap}>{textConsentShortLabels[textConsentStatus(row, textPreferences)]}</td><td className={styles.notes}>{row.notes}</td></tr>)}</tbody>
+        </table></div>}
       </section>
     </div>
 

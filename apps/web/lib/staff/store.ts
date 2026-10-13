@@ -220,13 +220,50 @@ export const textPreferenceSchema = z.object({
   choice: z.enum(["yes", "no"]),
   website: text(200).optional().default("") // honeypot
 }).strip();
+// Owner / Ryan (Oct 13): the closing night dinner and live performance with Jewel (Wed Nov 4, 7:00-10:00 PM, Margaux
+// Ballroom). Unlisted request form on the RSVP site (closing-dinner-yiqy7fw0j3). A request is not a seat: space is limited,
+// first come first served, and the team emails the guest if a spot is secured. One request = the guest, plus one guest
+// if they bring one (name, email and phone then required).
+export const closingDinnerPayloadSchema = z.object({
+  name: personName(180),
+  email,
+  phone: text(80).refine(value => value.replace(/\D/g, "").length >= 7, "Please enter a phone number."),
+  organization: required(240),
+  professionalRole: required(180),
+  bringingGuest: z.preprocess(value => value === true || value === "on" || value === "yes" || value === "true", z.boolean()).optional().default(false),
+  guestName: text(180).optional().default(""),
+  guestEmail: z.union([email, z.literal("")]).optional().default(""),
+  guestPhone: text(80).optional().default(""),
+  notes: text(900).optional().default(""),
+  textConsent: z.preprocess(value => value === undefined || value === null || value === "" ? undefined : value === true || value === "on" || value === "yes" || value === "true", z.boolean()).optional(),
+  website: text(200).optional().default("") // honeypot
+}).strip();
+export type ClosingDinnerPayload = z.infer<typeof closingDinnerPayloadSchema>;
+/** Which guest field is missing when the guest is bringing someone; null when complete (or no guest). */
+export function closingDinnerGuestProblem(payload: Pick<ClosingDinnerPayload, "bringingGuest" | "guestName" | "guestEmail" | "guestPhone">): { field: string; error: string } | null {
+  if (!payload.bringingGuest) return null;
+  if (payload.guestName.trim().length < 2) return { field: "guestName", error: "Please add your guest\u2019s full name." };
+  if (!payload.guestEmail) return { field: "guestEmail", error: "Please add your guest\u2019s email address." };
+  if (payload.guestPhone.replace(/\D/g, "").length < 7) return { field: "guestPhone", error: "Please add your guest\u2019s phone number." };
+  return null;
+}
+export type ClosingDinnerSubmission = Submission<Omit<ClosingDinnerPayload, "website">> & { removedAt?: string; removedReason?: string };
+export const closingDinnerSeats = (record: Pick<ClosingDinnerSubmission, "bringingGuest">) => record.bringingGuest ? 2 : 1;
+export function closingDinnerTotals(records: ClosingDinnerSubmission[]) {
+  const latestByEmail = new Map<string, ClosingDinnerSubmission>();
+  for (const record of byNewest(records)) if (!latestByEmail.has(record.email)) latestByEmail.set(record.email, record);
+  const latest = [...latestByEmail.values()];
+  return { formsSubmitted: records.length, requests: latest.length, seatsRequested: latest.reduce((total, record) => total + closingDinnerSeats(record), 0), withGuest: latest.filter(record => record.bringingGuest).length };
+}
+export const closingDinnerCsvColumns = ["submittedAt", "name", "email", "phone", "organization", "professionalRole", "bringingGuest", "seats", "guestName", "guestEmail", "guestPhone", "notes", "textMessageConsent", "textConsentDate", "textConsentProtocol", "source", "id", "removedAt", "removedReason"];
 export type TextPreferenceRecord = Submission<Omit<z.infer<typeof textPreferenceSchema>, "website"> & { via: "page" | "staff" | "stop-reply"; note?: string }>;
 export type RsvpEmailRecord = Submission<{ email: string; subject: string; rsvpId: string }>;
 
 // "vipRsvp" (Sept 30): requests from the unlisted VIP link, kept apart from the mass RSVPs and shown only in the VIP portal.
 // "textPreference" (Oct 12): a guest's text message choice (yes / opt out) from the text-updates page or recorded by staff.
-export type SubmissionKind = "rsvp" | "nomination" | "poker" | "rsvpEmail" | "workshop" | "vipRsvp" | "textPreference";
-export type AnySubmission = RsvpSubmission | NominationSubmission | PokerSubmission | RsvpEmailRecord | WorkshopSubmission | TextPreferenceRecord;
+// "closingDinner" (Oct 13): requests for the Nov 4 closing night dinner with Jewel.
+export type SubmissionKind = "rsvp" | "nomination" | "poker" | "rsvpEmail" | "workshop" | "vipRsvp" | "textPreference" | "closingDinner";
+export type AnySubmission = RsvpSubmission | NominationSubmission | PokerSubmission | RsvpEmailRecord | WorkshopSubmission | TextPreferenceRecord | ClosingDinnerSubmission;
 export interface SubmissionStore {
   add(kind: "rsvp", record: RsvpSubmission): Promise<void>;
   add(kind: "nomination", record: NominationSubmission): Promise<void>;
@@ -235,6 +272,7 @@ export interface SubmissionStore {
   add(kind: "workshop", record: WorkshopSubmission): Promise<void>;
   add(kind: "vipRsvp", record: RsvpSubmission): Promise<void>;
   add(kind: "textPreference", record: TextPreferenceRecord): Promise<void>;
+  add(kind: "closingDinner", record: ClosingDinnerSubmission): Promise<void>;
   list(kind: "rsvp"): Promise<RsvpSubmission[]>;
   list(kind: "nomination"): Promise<NominationSubmission[]>;
   list(kind: "poker"): Promise<PokerSubmission[]>;
@@ -242,6 +280,7 @@ export interface SubmissionStore {
   list(kind: "workshop"): Promise<WorkshopSubmission[]>;
   list(kind: "vipRsvp"): Promise<RsvpSubmission[]>;
   list(kind: "textPreference"): Promise<TextPreferenceRecord[]>;
+  list(kind: "closingDinner"): Promise<ClosingDinnerSubmission[]>;
   // Sept 28 (owner): permanent deletion of test entries; the route only allows it for records already marked removed.
   delete(kind: SubmissionKind, record: { id: string; submittedAt: string }): Promise<void>;
 }
@@ -249,8 +288,9 @@ export interface SubmissionStore {
 const keyFor = (record: { submittedAt: string; id: string }) => `${record.submittedAt}-${record.id}`;
 const byNewest = <T extends { submittedAt: string }>(records: T[]) => [...records].sort((a, b) => b.submittedAt.localeCompare(a.submittedAt));
 
-export function memorySubmissionStore(initial: { rsvp?: RsvpSubmission[]; nomination?: NominationSubmission[]; poker?: PokerSubmission[]; rsvpEmail?: RsvpEmailRecord[]; workshop?: WorkshopSubmission[]; vipRsvp?: RsvpSubmission[]; textPreference?: TextPreferenceRecord[] } = {}): SubmissionStore {
-  const data = { rsvp: new Map<string, RsvpSubmission>(), nomination: new Map<string, NominationSubmission>(), poker: new Map<string, PokerSubmission>(), rsvpEmail: new Map<string, RsvpEmailRecord>(), workshop: new Map<string, WorkshopSubmission>(), vipRsvp: new Map<string, RsvpSubmission>(), textPreference: new Map<string, TextPreferenceRecord>() };
+export function memorySubmissionStore(initial: { rsvp?: RsvpSubmission[]; nomination?: NominationSubmission[]; poker?: PokerSubmission[]; rsvpEmail?: RsvpEmailRecord[]; workshop?: WorkshopSubmission[]; vipRsvp?: RsvpSubmission[]; textPreference?: TextPreferenceRecord[]; closingDinner?: ClosingDinnerSubmission[] } = {}): SubmissionStore {
+  const data = { rsvp: new Map<string, RsvpSubmission>(), nomination: new Map<string, NominationSubmission>(), poker: new Map<string, PokerSubmission>(), rsvpEmail: new Map<string, RsvpEmailRecord>(), workshop: new Map<string, WorkshopSubmission>(), vipRsvp: new Map<string, RsvpSubmission>(), textPreference: new Map<string, TextPreferenceRecord>(), closingDinner: new Map<string, ClosingDinnerSubmission>() };
+  for (const record of initial.closingDinner ?? []) data.closingDinner.set(keyFor(record), record);
   for (const record of initial.vipRsvp ?? []) data.vipRsvp.set(keyFor(record), record);
   for (const record of initial.textPreference ?? []) data.textPreference.set(keyFor(record), record);
   for (const record of initial.rsvp ?? []) data.rsvp.set(keyFor(record), record);
@@ -267,7 +307,7 @@ export function memorySubmissionStore(initial: { rsvp?: RsvpSubmission[]; nomina
 
 // Development/test store: one JSON file, never committed (work/ is local operational data).
 export function fileSubmissionStore(file: string): SubmissionStore {
-  const empty = () => ({ rsvp: [] as RsvpSubmission[], nomination: [] as NominationSubmission[], poker: [] as PokerSubmission[], rsvpEmail: [] as RsvpEmailRecord[], workshop: [] as WorkshopSubmission[], vipRsvp: [] as RsvpSubmission[], textPreference: [] as TextPreferenceRecord[] });
+  const empty = () => ({ rsvp: [] as RsvpSubmission[], nomination: [] as NominationSubmission[], poker: [] as PokerSubmission[], rsvpEmail: [] as RsvpEmailRecord[], workshop: [] as WorkshopSubmission[], vipRsvp: [] as RsvpSubmission[], textPreference: [] as TextPreferenceRecord[], closingDinner: [] as ClosingDinnerSubmission[] });
   const read = (): ReturnType<typeof empty> => {
     // A store file written before a kind existed simply has no list for it.
     try { return existsSync(file) ? { ...empty(), ...JSON.parse(readFileSync(file, "utf8")) } : empty(); } catch { return empty(); }
