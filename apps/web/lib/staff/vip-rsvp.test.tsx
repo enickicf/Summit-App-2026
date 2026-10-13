@@ -40,3 +40,18 @@ describe("VIP RSVPs share the staff portal backend (owner, Oct 1, 2026)", () => 
     for (const text of ["VIP tickets", "<th>Invited by</th>", ">Ryan<", ">VIP<", "Regular Guest"]) expect(html).toContain(text);
   });
 });
+
+// Owner / Ryan (Oct 13): the VIP form also offers Nevada Mental Health Day ("simply select it in your RSVP form").
+describe("VIP form with Nevada Mental Health Day", () => {
+  const vipPost = (attending: string) => new Request("https://notaloneawards.org/api/rsvp", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: "Test Guest", email: `${attending}@example.com`, phone: "7025550100", attendanceStatus: "attending", vip: "on", organization: "Org", professionalRole: "Director", invitedBy: "Ryan", attending, communityDay: attending === "awards" ? "" : "on" }) });
+  it("stores the choice so the VIP section shows the Awards and Community Day badges", async () => {
+    const store = memorySubmissionStore();
+    for (const attending of ["both", "community-day", "awards"]) expect((await handleRsvpPost(vipPost(attending), store, async () => {}, null)).status).toBeLessThan(300);
+    const vip = await listVipRsvps(store);
+    expect(vip.map(record => record.attending).sort()).toEqual(["awards", "both", "community-day"]);
+    const totals = rsvpTotals(vip);
+    expect(totals).toMatchObject({ vipGuests: 3, communityDayGuests: 2, communityDayOnlyGuests: 1, vipTickets: 2 });
+    const html = renderToStaticMarkup(<StaffPortal rsvps={vip} nominations={[]} poker={[]} lineup={[]} generatedAt="2026-10-13T20:00:00Z" />);
+    expect(html).toContain("Community Day");
+  });
+});
