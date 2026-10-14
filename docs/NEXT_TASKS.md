@@ -1,5 +1,7 @@
 # Next Tasks
 
+**October 14 website follow-ups:** (1) provide a base-scoped, read-only Airtable token for live syncing of approved public fields; (2) check the payment method in the `marketing@inspiringchildren.org` OpenAI API organization; (3) decide whether the `codex/site-improvements` branch should be pushed to the public GitHub repository, since it includes 159 earlier commits beyond remote `main`. The approved Summit/Awards/Community Day website changes are already live on the shared Netlify site; these follow-ups are not release blockers for that deployment.
+
 Perform these in order. Each item requires evidence before moving to the next.
 
 **Staff portal follow-ups (Sept 23):** (1) decide whether ticket requests get an approve / waitlist / decline status in the portal (and who sends the approval email); (2) the automatic waiting-list confirmation email still needs a sending service for music@inspiringchildren.org; (3) the previous Codex-hosted RSVP backend still receives a mirror copy of each RSVP; retire it (and the `awards_rsvps` D1 table / summit-outreach-ai mirror) once the team works from the new portal; (4) the shared password is the one the owner chose on Sept 23; change it in the Netlify env (`STAFF_PORTAL_PASSWORD`) whenever needed (everyone is signed out automatically).

@@ -1,5 +1,12 @@
 # Exact Stopping Point
 
+## Latest website status — October 14, 2026
+
+- **IMPLEMENTED and LIVE:** The owner approved the public Ask AI scope and the production rollout. Shared Netlify site `not-alone-summit` deploy `6acfcb591cf82ae4f42ad926` serves notalonesummit.org, notaloneawards.org, and Community Day. Ask AI uses the existing server-only OpenAI key associated with `marketing@inspiringchildren.org`; the public model is restricted to approved official domains and filtered public facts. The Bryan Brothers card label is “Winningest Double Team in History,” the full bio contains verified achievements, and profile Back restores the originating scroll position. Root lint, typecheck, and tests passed; the web suite had 693 tests. The production live-site check passed 33/33 and phone/desktop browser checks passed on all three pages. See `ASK_AI_PUBLIC_SCOPE_2026-10-14.md`.
+- **PARTIAL:** Netlify has no `AIRTABLE_TOKEN`; Ask AI uses the published event snapshot and approved public copy, without live Airtable auto-sync. The billing card on the OpenAI account remains unverified. The local `codex/site-improvements` branch has not been pushed to the public GitHub repository; GitHub `main` is 159 commits behind this production-derived branch, so publishing it would also publish those earlier commits.
+
+## Historical migration stopping point — September 18, 2026
+
 September 18, 2026: normal development is stopped for emergency provider migration. No unfinished feature implementation is currently authorized. Latest website cleanliness/portrait requests are implemented locally. Next concrete action: read memory, inspect files without resetting, then obtain the owner's next instruction. Migration authorizes documentation and safe copying only.
 
 ## Completed Local Work That Must Survive

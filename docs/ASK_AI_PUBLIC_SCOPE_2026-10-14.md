@@ -1,6 +1,6 @@
 # Ask AI public scope for owner approval
 
-Status: owner approved this public-data scope on October 14, 2026. Implementation is on the `codex/site-improvements` review branch. Production deployment remains pending a review of the finished build.
+Status: IMPLEMENTED on `codex/site-improvements` and deployed to the shared Summit/Awards/Community Day Netlify production site on October 14, 2026 (deploy `6acfcb591cf82ae4f42ad926`). The Airtable auto-sync connection is PARTIAL as described below.
 
 ## What visitors can ask
 
@@ -40,8 +40,9 @@ The owner approved using public Airtable-derived facts in short answers, excludi
 
 ## Review build and remaining connection
 
-- Draft: https://ask-ai-review-20261014--not-alone-summit.netlify.app (production has not been updated).
+- Draft: https://ask-ai-review-20261014--not-alone-summit.netlify.app. Production: https://notalonesummit.org and https://notaloneawards.org, with Community Day at https://notaloneawards.org/community-day.
 - The draft OpenAI endpoint returned an answer with approved ICF source links; it also returned the public Community Day schedule and refused a raw Airtable RSVP request. The ICF youth contribution answer is now grounded directly in ICF's published Tools page.
 - Phone (390 px) and desktop (1440 px) checks found Ask AI and the Bryan Brothers label on Summit, Awards, and Community Day. Returning from the Bryan Brothers biography restored the exact prior scroll position on all six checks.
 - Web typecheck and 693 tests passed. Netlify bundled the Ask AI edge rate limit.
 - The site can use only published, approved Airtable fields through its existing public extract. The Netlify site has no `AIRTABLE_TOKEN` in production or deploy-preview, so live Airtable auto-sync is still disconnected. A base-scoped read-only token is needed before claiming a current Airtable connection.
+- Production verification: 33/33 live-site checks passed with one build ID; the OpenAI-backed answer returned official public links, the raw RSVP-record request was refused, and Community Day returned its public schedule. Phone and desktop checks on all three pages confirmed the short Bryan Brothers label, full bio, and exact scroll restoration after browser Back.
