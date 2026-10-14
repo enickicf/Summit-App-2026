@@ -36,7 +36,7 @@ Where sources conflict, prefer the latest owner-approved public editorial fact, 
 
 ## Approval needed
 
-The owner approved using public Airtable-derived facts in short answers, excluding raw entries and all private or staff-only fields, and approved the three official domains above. The site already has a working OpenAI API integration; a secret API key is configured on Netlify. The local stored key successfully completed a model and domain-limited web search test. Netlify masks its key, so its billing account cannot be inferred from local credentials. The OpenAI API payment method must be checked in the billing account that owns the deployed key.
+The owner approved using public Airtable-derived facts in short answers, excluding raw entries and all private or staff-only fields, and approved the three official domains above. The site already has a working OpenAI API integration; a secret API key is configured on Netlify. The local stored key authenticates as `marketing@inspiringchildren.org` and completed a model and domain-limited web search test. Netlify masks its key; the visible ending matches the local key in all three deploy contexts, and the Sept 18 handoff records that both were saved from the same key. The exact payment method remains unverified and must be checked in that OpenAI API account's billing settings.
 
 ## Review build and remaining connection
 
