@@ -5,7 +5,7 @@ import { awardsDisplayPeople } from "../../../lib/awards-people";
 import { personNameKey } from "../../../lib/person-portraits";
 import { getSiteSnapshot } from "../../../lib/snapshot";
 import { publishedProgramAnswer } from "../../../lib/published-program-answer";
-import { awardsFactAnswer, buildAskAiKnowledge, communityDayAnswer, icfFactAnswer, isMentalHealthQuestion, isRelevantQuestion, mentalHealthAnswer, offTopicAnswer } from "../../../lib/ask-ai-knowledge";
+import { awardsFactAnswer, buildAskAiKnowledge, communityDayAnswer, icfFactAnswer, icfYouthContributionAnswer, isMentalHealthQuestion, isRelevantQuestion, mentalHealthAnswer, offTopicAnswer } from "../../../lib/ask-ai-knowledge";
 import { allowModelCall, cachedAnswer, createAskAiModelAnswer, isAskAiModelEnabled, rememberAnswer } from "../../../lib/ask-ai-model";
 import { QuestionRequestError, readQuestion } from "./request";
 
@@ -66,6 +66,8 @@ export async function POST(request: Request) {
       return respond(`${snapshot.event.name}: ${snapshot.event.venueName}, ${snapshot.event.city}. Check the published venue guide for confirmed room details.`);
     }
     // Free answers first; only relevant questions that no local rule answers may reach the model.
+    const youthAnswer = icfYouthContributionAnswer(question);
+    if (youthAnswer) return respond(youthAnswer, 200, [{ title: "ICF Mental Fitness Tools", url: "https://www.inspiringchildren.org/tools" }]);
     const factAnswer = icfFactAnswer(question);
     if (factAnswer) return respond(factAnswer, 200, [{ title: "Inspiring Children Foundation", url: "https://www.inspiringchildren.org/na-program" }]);
     // Zero-cost gate: unrelated questions are answered locally and never reach the API.

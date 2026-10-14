@@ -72,6 +72,14 @@ export function icfFactAnswer(question: string): string | null {
   return icfFacts.find(fact => fact.pattern.test(normalized))?.answer() ?? null;
 }
 
+/** ICF explicitly credits its youth and alumni for the public Challenge and tools. */
+export function icfYouthContributionAnswer(question: string): string | null {
+  if (!/\b(youth|students?|children|alumni)\b/i.test(question)
+    || !/\b(challenge|tools?|campaign)\b/i.test(question)
+    || !/\b(creat\w*|develop\w*|contribut\w*|involv\w*|ran|run|made|make|build|built|role|help\w*)\b/i.test(question)) return null;
+  return "Inspiring Children Foundation says its youth and alumni helped create and run much of the #NotAloneChallenge. They also helped develop its free mental fitness tools, with oversight from the foundation’s Mental Health Advisory Committee.";
+}
+
 const topicWords = /\b(summit|not alone|awards?|icf|inspiring|children|child|kids|youth|students?|foundation|nonprofit|non-profit|charity|mission|pillars?|program|programs|challenge|event|events|schedule|agenda|session|sessions|speakers?|guests?|talent|founders?|co-?chairs?|hosts?|producers?|partners?|sponsors?|venue|wynn|encore|las vegas|vegas|rsvp|tickets?|register|registration|attend|attending|attendance|donate|donation|mental health|emotional health|wellness|jewel|wozniak|loni|panel|panels|dinner|lunch|breakfast|reception|red carpet|tennis|pickleball|high tea|poker|bike|ride|dress code|parking|hotel|stream|iheart|livestream|contact|scholarships?|leadership program|updates?|announcements?|news|appear(ing|ance|s)?|perform(ing|ance|er|ers|s)?|allowed|bring|wear|attire)\b/i;
 
 /** Local, zero-cost relevance gate: only on-topic questions may spend model tokens. */
@@ -132,7 +140,9 @@ export function buildAskAiKnowledge(snapshot: EventSnapshot, question = "") {
       about: communityDay2026.about,
       publicSchedule: communityDaySchedule2026().map(item => ({ title: item.title, time: item.time, room: item.room, synopsis: item.synopsis }))
     },
-    inspiringChildrenFoundation: { overview: icfOverview, taxStatus: icfTaxStatus, program: programCopy, donate: "https://www.inspiringchildren.org/donate", mailingAddress: contactAddress },
+    inspiringChildrenFoundation: { overview: icfOverview, taxStatus: icfTaxStatus, program: programCopy,
+      youthContribution: { fact: "ICF youth and alumni helped create and run much of the #NotAloneChallenge and helped develop its free mental fitness tools with Mental Health Advisory Committee oversight.", source: "https://www.inspiringchildren.org/tools" },
+      donate: "https://www.inspiringchildren.org/donate", mailingAddress: contactAddress },
     schedule: publicItems.map(item => ({
       title: item.title,
       status: item.status,

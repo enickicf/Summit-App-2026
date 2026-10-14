@@ -261,7 +261,7 @@ export function awardsDisplayPeople(snapshot: EventSnapshot | null): SummitPerso
         order: Math.min(first.order ?? Number.MAX_SAFE_INTEGER, second.order ?? Number.MAX_SAFE_INTEGER), ...best, ...(image ? { image } : {}) }
       : { ...first, name: couple.name, slug: couple.slug, bio: couple.bio };
     if (couple.slug === "2026-bob-mike-bryan") {
-      shared.role = "Winningest Doubles Team in History";
+      shared.role = "Winningest Double Team in History";
       shared.categoryRoles = Object.fromEntries(shared.categories.map(category => [category, shared.role]));
       shared.bio = "Bob and Mike Bryan are the winningest doubles team in history. Together they won a record 119 ATP Tour titles, including 16 Grand Slam doubles titles and 39 Masters 1000 titles. They spent 438 weeks as the world's No. 1 doubles team and finished a record 10 seasons as the year-end No. 1 team. Their achievements also include four ATP Finals titles, Olympic gold in London in 2012, Olympic bronze in Beijing in 2008, and a Davis Cup title in 2007. They are members of the International Tennis Hall of Fame and founders of the Not Alone Summit.";
     }

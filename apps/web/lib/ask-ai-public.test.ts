@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { event2026Snapshot } from "@not-alone/test-fixtures/event-2026";
-import { buildAskAiKnowledge } from "./ask-ai-knowledge";
+import { buildAskAiKnowledge, icfYouthContributionAnswer } from "./ask-ai-knowledge";
 import { publicSource } from "./ask-ai-model";
 
 describe("Ask AI public boundary", () => {
@@ -21,5 +21,10 @@ describe("Ask AI public boundary", () => {
     expect(publicSource({ title: "Staff", url: "https://notalonesummit.org/staff" })).toBe(false);
     expect(publicSource({ title: "Other", url: "https://example.com/na-program" })).toBe(false);
     expect(publicSource({ title: "Wrong protocol", url: "javascript:alert(1)" })).toBe(false);
+  });
+
+  it("answers ICF youth contribution questions from published ICF copy", () => {
+    expect(icfYouthContributionAnswer("How did ICF youth contribute to the Not Alone tools and campaign?"))
+      .toContain("helped create and run much of the #NotAloneChallenge");
   });
 });
