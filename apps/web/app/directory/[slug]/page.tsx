@@ -12,6 +12,7 @@ import { robotsForPage, siteMetadataPolicy } from "../../../lib/site-metadata";
 import { archiveProfile } from "./archive-profile";
 import { ProfilePortrait } from "./portrait";
 import { CurrentEventUpdates } from "../../../components/current-event-updates";
+import { ProfileBackLink } from "../../../components/profile-return";
 import { awards2026Editorial } from "../../../lib/awards-editorial";
 import { portraitAttribution2026 } from "../../../lib/portrait-overrides";
 import styles from "./profile.module.css";
@@ -118,7 +119,7 @@ export default async function PersonPage({ params, searchParams }: ProfilePagePr
   });
   return <main id="main-content" tabIndex={-1} className={`profilePage ${styles.page}${fromAwards ? ` ${styles.awards}` : ""}`}>
     {!archived && !fromAwards && <CurrentEventUpdates snapshot={snapshot} initialNowUtc={new Date().toISOString()} />}
-    <Link href={returnHref} className="backLink">Back to {person.year}{fromAwards ? " Awards" : ""} {returnToChairs ? "co-chairs" : returnToProduction ? "production" : archived && fromAwards ? "archive" : "directory"}</Link>
+    <ProfileBackLink href={returnHref}>Back to {person.year}{fromAwards ? " Awards" : ""} {returnToChairs ? "co-chairs" : returnToProduction ? "production" : archived && fromAwards ? "archive" : "directory"}</ProfileBackLink>
     <section className="profileHero" aria-labelledby="profile-name">
       <ProfilePortrait name={person.name} image={person.image} />
       <div><p className="eyebrow">{archived ? `2025 ${fromAwards ? "Awards" : "Summit"} archive` : awardsHost ? "2026 Awards Host" : fromAwards ? "2026 Awards" : "2026 Summit"}</p>

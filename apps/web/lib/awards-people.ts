@@ -260,6 +260,11 @@ export function awardsDisplayPeople(snapshot: EventSnapshot | null): SummitPerso
         categories: [...new Set([...first.categories, ...second.categories])], featured: Boolean(first.featured || second.featured),
         order: Math.min(first.order ?? Number.MAX_SAFE_INTEGER, second.order ?? Number.MAX_SAFE_INTEGER), ...best, ...(image ? { image } : {}) }
       : { ...first, name: couple.name, slug: couple.slug, bio: couple.bio };
+    if (couple.slug === "2026-bob-mike-bryan") {
+      shared.role = "Winningest Tennis Doubles Team in History";
+      shared.categoryRoles = Object.fromEntries(shared.categories.map(category => [category, shared.role]));
+      shared.bio = "With 119 team titles and 16 major doubles titles, Bob and Mike Bryan are the winningest tennis doubles team in history. They are founders of the Not Alone Summit.";
+    }
     people = people.flatMap(person => person.name === couple.first ? [shared] : person.name === couple.second ? [] : [person]);
   }
   return people;

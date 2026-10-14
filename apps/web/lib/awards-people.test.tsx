@@ -53,6 +53,14 @@ describe("curated Awards people", () => {
     expect(awardsPeople(event2026Snapshot).map(person => person.name)).toContain("Ana Wolfington");
   });
 
+  it("uses the Bryan brothers' requested title on their shared public card and profile", () => {
+    const brothers = awardsDisplayPeople(event2026Snapshot).find(person => person.slug === "2026-bob-mike-bryan")!;
+    expect(brothers.role).toBe("Winningest Tennis Doubles Team in History");
+    expect(Object.values(brothers.categoryRoles ?? {})).toEqual(expect.arrayContaining([brothers.role]));
+    expect(brothers.bio).toContain("119 team titles and 16 major doubles titles");
+    expect(awardsPeople(event2026Snapshot).some(person => person.name === "Bob Bryan")).toBe(true);
+  });
+
   it("uses preserved historical imagery and designated public headshots for the requested Awards guests", () => {
     const selected = awardsPeople(event2026Snapshot);
     // Owner (Sept 21): every 2026 portrait is a reviewed local crop (lib/portrait-overrides.ts); nothing is hotlinked.
