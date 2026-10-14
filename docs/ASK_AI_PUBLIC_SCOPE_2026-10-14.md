@@ -37,3 +37,11 @@ Where sources conflict, prefer the latest owner-approved public editorial fact, 
 ## Approval needed
 
 The owner approved using public Airtable-derived facts in short answers, excluding raw entries and all private or staff-only fields, and approved the three official domains above. The site already has a working OpenAI API integration; a secret API key is configured on Netlify. The local stored key successfully completed a model and domain-limited web search test. Netlify masks its key, so its billing account cannot be inferred from local credentials. The OpenAI API payment method must be checked in the billing account that owns the deployed key.
+
+## Review build and remaining connection
+
+- Draft: https://ask-ai-review-20261014--not-alone-summit.netlify.app (production has not been updated).
+- The draft OpenAI endpoint returned an answer with approved ICF source links; it also returned the public Community Day schedule and refused a raw Airtable RSVP request. The ICF youth contribution answer is now grounded directly in ICF's published Tools page.
+- Phone (390 px) and desktop (1440 px) checks found Ask AI and the Bryan Brothers label on Summit, Awards, and Community Day. Returning from the Bryan Brothers biography restored the exact prior scroll position on all six checks.
+- Web typecheck and 693 tests passed. Netlify bundled the Ask AI edge rate limit.
+- The site can use only published, approved Airtable fields through its existing public extract. The Netlify site has no `AIRTABLE_TOKEN` in production or deploy-preview, so live Airtable auto-sync is still disconnected. A base-scoped read-only token is needed before claiming a current Airtable connection.
