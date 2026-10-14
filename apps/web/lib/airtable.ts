@@ -85,14 +85,15 @@ const list = (value: unknown): string[] => Array.isArray(value) ? value.map(text
 export async function getAirtableTalent(): Promise<AirtablePerson[] | null> {
   const f = airtableFields.talent;
   const stageName = (await tableMetaContaining(f.name))?.fields.find(field => field.name && stageNameColumn.test(field.name))?.id;
-  const records = await listRecords(f.name, [...Object.values(f), ...(stageName ? [stageName] : [])]);
+  // Only the fields approved for the public website cross the Airtable boundary.
+  const records = await listRecords(f.name, [f.name, f.status, f.grouping, f.title, f.bio, f.headshot, ...(stageName ? [stageName] : [])]);
   return records?.map(record => ({
     recordId: record.id,
     name: (stageName && text(record.fields[stageName])) || text(record.fields[f.name]),
     status: text(record.fields[f.status]),
     groups: list(record.fields[f.grouping]),
-    occupation: text(record.fields[f.occupation]),
-    organization: text(record.fields[f.organization]),
+    occupation: "",
+    organization: "",
     title: text(record.fields[f.title]),
     bio: text(record.fields[f.bio]),
     hasHeadshot: Array.isArray(record.fields[f.headshot]) && (record.fields[f.headshot] as unknown[]).length > 0,
@@ -106,7 +107,8 @@ export async function getAirtableSchedule(): Promise<AirtableSession[] | null> {
   const meta = await tableMetaContaining(f.activity);
   const attireId = meta?.fields.find(field => field.name && attireColumn.test(field.name))?.id;
   const websitePublicId = meta?.fields.find(field => field.name && websitePublicColumn.test(field.name))?.id;
-  const records = await listRecords(f.activity, [...Object.values(f), ...(attireId ? [attireId] : []), ...(websitePublicId ? [websitePublicId] : [])]);
+  const records = await listRecords(f.activity, [f.activity, f.date, f.start, f.end, f.location, f.synopsis,
+    ...(attireId ? [attireId] : []), ...(websitePublicId ? [websitePublicId] : [])]);
   return records?.map(record => ({
     recordId: record.id,
     title: text(record.fields[f.activity]),
@@ -115,8 +117,8 @@ export async function getAirtableSchedule(): Promise<AirtableSession[] | null> {
     endText: text(record.fields[f.end]),
     location: text(record.fields[f.location]),
     synopsis: text(record.fields[f.synopsis]),
-    forum: text(record.fields[f.forum]),
-    websiteTime: text(record.fields[f.websiteTime]),
+    forum: "",
+    websiteTime: "",
     attire: attireId ? text(record.fields[attireId]) : "",
     // The checkbox arrives as true/absent; without the column the website falls back to its block list.
     ...(websitePublicId ? { websitePublic: text(record.fields[websitePublicId]) } : {})

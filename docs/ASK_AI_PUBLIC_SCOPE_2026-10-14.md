@@ -1,6 +1,6 @@
 # Ask AI public scope for owner approval
 
-Status: proposed scope only. No expanded Ask AI data access or live deployment is authorized by this document.
+Status: owner approved this public-data scope on October 14, 2026. Implementation is on the `codex/site-improvements` review branch. Production deployment remains pending a review of the finished build.
 
 ## What visitors can ask
 
@@ -36,4 +36,4 @@ Where sources conflict, prefer the latest owner-approved public editorial fact, 
 
 ## Approval needed
 
-Please confirm that approved public facts derived from Airtable may be used in short answers, while raw data entries and every private or staff-only field are excluded. Please also confirm the three official domains above as the initial online source list. After approval: implement, run the evaluation, provide a review build, then request a separate go-ahead for production deployment.
+The owner approved using public Airtable-derived facts in short answers, excluding raw entries and all private or staff-only fields, and approved the three official domains above. The site already has a working OpenAI API integration; a secret API key is configured on Netlify. The local stored key successfully completed a model and domain-limited web search test. Netlify masks its key, so its billing account cannot be inferred from local credentials. The OpenAI API payment method must be checked in the billing account that owns the deployed key.

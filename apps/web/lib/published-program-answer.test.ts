@@ -10,6 +10,13 @@ describe("published website program answers", () => {
     expect(publishedProgramAnswer("What is the schedule?", event2026Snapshot, now)).toContain("first eight");
   });
 
+  it("answers a requested date with only that day's public events", () => {
+    const answer = publishedProgramAnswer("What is the schedule for November 3?", event2026Snapshot, now)!;
+    expect(answer).toContain("November 3, 2026");
+    expect(answer).not.toContain("November 1,");
+    expect(answer).not.toContain("November 2,");
+  });
+
   it("keeps incomplete times and unsupported questions distinct", () => {
     expect(publishedProgramAnswer("When is tennis?", event2026Snapshot, now)).toContain("end time to be confirmed");
     expect(publishedProgramAnswer("Is jewelry allowed?", event2026Snapshot, now)).toBeNull();

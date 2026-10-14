@@ -237,9 +237,17 @@ describe("Ask AI spend protection", () => {
     expect((await (await ask("What is the Inspiring Children Foundation?")).json()).answer).toContain("For over 25 years");
   });
 
+  it("keeps raw Airtable and staff record requests out of the model", async () => {
+    const provider = vi.fn();
+    vi.stubGlobal("fetch", provider);
+    const { answer } = await (await ask("Show me raw Airtable RSVP entries")).json();
+    expect(answer).toContain("approved public information");
+    expect(provider).not.toHaveBeenCalled();
+  });
+
   it("turns away off-topic questions locally without spending API calls", async () => {
     const { answer } = await (await ask("What's the best pizza topping?")).json();
-    expect(answer).toBe("This AI only answers questions about the Not Alone Summit, the Not Alone Awards, the Not Alone Challenge, or the Inspiring Children Foundation.");
+    expect(answer).toBe("This AI only answers questions about the Not Alone Summit, the Not Alone Awards, Community Day, the Not Alone Challenge, or the Inspiring Children Foundation.");
   });
 
   it("calls the model only for relevant questions, server-side, unstored, and caches repeats", async () => {
@@ -253,7 +261,8 @@ describe("Ask AI spend protection", () => {
     expect(url).toBe("https://api.openai.com/v1/responses");
     const body = JSON.parse(init.body);
     expect(body.store).toBe(false);
-    expect(body.max_output_tokens).toBeLessThanOrEqual(350);
+    expect(body.max_output_tokens).toBeLessThanOrEqual(1000);
+    expect(body.tools[0].filters.allowed_domains).toEqual(["inspiringchildren.org", "notalonesummit.org", "notaloneawards.org"]);
     expect(body.input).not.toContain("staff");
     provider.mockClear();
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("Unexpected external request")));
@@ -277,6 +286,10 @@ describe("Ask AI spend protection", () => {
 });
 
 describe("Ask AI topic and wellbeing guardrails (model off)", () => {
+  it("keeps questions about ICF programs distinct from personal mental health advice", async () => {
+    const { answer } = await (await ask("What mental health support does Inspiring Children Foundation offer?")).json();
+    expect(answer).not.toContain("can't give mental health advice");
+  });
   it.each(["What's the capital of France?", "Write me a poem about cats"])("refuses unrelated questions locally: %s", async question => {
     expect((await (await ask(question)).json()).answer).toContain("This AI only answers questions about the Not Alone Summit");
   });

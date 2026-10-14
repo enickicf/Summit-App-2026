@@ -1,10 +1,13 @@
 import { z } from "zod";
 
 export const questionSchema = z.string().trim().min(2).max(500);
-const responseSchema = z.object({ answer: z.string().trim().min(1) });
-export const ASK_AI_TIMEOUT_MS = 15_000;
+const responseSchema = z.object({ answer: z.string().trim().min(1), sources: z.array(z.object({ title: z.string(), url: z.url().refine(value => {
+  const parsed = new URL(value);
+  return parsed.protocol === "https:" && ["inspiringchildren.org", "notalonesummit.org", "notaloneawards.org"].includes(parsed.hostname.replace(/^www\./, ""));
+}) })).max(3).optional() });
+export const ASK_AI_TIMEOUT_MS = 25_000;
 
-export type AskAiResult = { status: "success"; answer: string } | { status: "error"; message: string };
+export type AskAiResult = { status: "success"; answer: string; sources?: Array<{ title: string; url: string }> } | { status: "error"; message: string };
 
 export async function askAi(question: string, signal: AbortSignal): Promise<AskAiResult> {
   const parsed = questionSchema.safeParse(question);
@@ -44,7 +47,7 @@ export async function askAi(question: string, signal: AbortSignal): Promise<AskA
     }
     const data = responseSchema.safeParse(payload);
     if (!data.success) return { status: "error", message: "An answer could not be read. Please try again, or contact the event team." };
-    return { status: "success", answer: data.data.answer };
+    return { status: "success", answer: data.data.answer, ...(data.data.sources?.length ? { sources: data.data.sources } : {}) };
   } catch {
     if (timedOut) return { status: "error", message: "The answer took too long. Please try again, or use the Schedule or Contact pages." };
     if (signal.aborted) return { status: "error", message: "The request was canceled." };

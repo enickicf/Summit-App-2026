@@ -14,12 +14,18 @@
 .submit { display:inline-flex; align-items:center; justify-content:center; justify-self:start; gap:10px; min-width:120px; min-height:46px; padding:10px 20px; border:0; border-radius:8px; background:linear-gradient(125deg,#222222,#111111); color:#fff; font:inherit; font-weight:600; cursor:pointer; box-shadow:0 10px 24px #11111133; }
 .submit:disabled { opacity:.7; cursor:wait; }
 .submit:focus-visible { outline:3px solid #8fb1e0; outline-offset:3px; }
+.suggestions { display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; }
+.suggestions button { border:1px solid #b7bfdc; border-radius:999px; background:#fff; color:#263b73; padding:8px 12px; font:inherit; font-size:12px; cursor:pointer; text-align:left; }
+.suggestions button:hover, .suggestions button:focus-visible { border-color:#263b73; text-decoration:underline; }
 
 .response { margin-top:20px; overflow-wrap:anywhere; white-space:pre-wrap; line-height:1.7; }
 .response h2 { margin:0 0 6px; color:#111111; font-size:13px; font-weight:600; text-transform:uppercase; }
 .response p { margin:0 0 10px; }
 .response:empty, .error:empty { margin:0; }
 .question { color:#555555; font-size:14px; font-style:italic; }
+.sources { margin-top:16px; font-size:13px; }
+.sources ul { margin:4px 0 0; padding-left:20px; }
+.sources a { color:#273d96; text-decoration:underline; }
 .error { margin:14px 0 0; color:#9d2929; }
 
 @media (max-width:480px) { .page { padding:36px 16px 56px; } .intro h1 { font-size:30px; } .card { padding:18px; } }

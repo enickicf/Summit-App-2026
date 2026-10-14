@@ -17,13 +17,14 @@ export function AskAiFeedback({ pending, result, submittedQuestion }: {
         <h2>Answer</h2>
         <p className={styles.question}>{submittedQuestion}</p>
         <p>{result.answer}</p>
+        {Boolean(result.sources?.length) && <div className={styles.sources}><strong>Sources</strong><ul>{result.sources?.map(source => <li key={source.url}><a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a></li>)}</ul></div>}
       </> : null}
     </div>
     <p className={styles.error} id="ask-ai-error" role="alert">{result?.status === "error" ? result.message : ""}</p>
   </>;
 }
 
-export function AskAiForm() {
+export function AskAiForm({ suggestions = ["What is the schedule for November 3?", "What does Inspiring Children Foundation do?", "Who are the Bryan Brothers?"] }: { suggestions?: string[] } = {}) {
   const [question, setQuestion] = useState("");
   const [submittedQuestion, setSubmittedQuestion] = useState("");
   const [result, setResult] = useState<AskAiResult | null>(null);
@@ -83,6 +84,7 @@ export function AskAiForm() {
         <Send size={18} aria-hidden="true" /> {pending ? "Asking..." : "Ask"}
       </button>
     </form>
+    <div className={styles.suggestions} aria-label="Example questions">{suggestions.map(suggestion => <button key={suggestion} type="button" onClick={() => { setQuestion(suggestion); input.current?.focus(); }}>{suggestion}</button>)}</div>
     <AskAiFeedback pending={pending} result={result} submittedQuestion={submittedQuestion} />
   </div>;
 }

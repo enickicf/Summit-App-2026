@@ -38,7 +38,7 @@ describe("Sept 23 site updates", () => {
     expect(archive.match(/aria-current="page"/g)).toHaveLength(1);
   });
 
-  it("floating Ask AI widget shows on Summit pages only, with an obvious launcher", () => {
+  it("floating Ask AI widget shows on Summit and Awards pages, with an obvious launcher", () => {
     route.pathname = "/";
     const home = renderToStaticMarkup(<AskAiWidget />);
     expect(home).toContain('data-analytics-id="ask-ai-launcher"');
@@ -47,7 +47,7 @@ describe("Sept 23 site updates", () => {
     route.pathname = "/ask-ai";
     expect(renderToStaticMarkup(<AskAiWidget />)).toBe("");
     route.pathname = "/awards/2026";
-    expect(renderToStaticMarkup(<AskAiWidget />)).toBe("");
+    expect(renderToStaticMarkup(<AskAiWidget />)).toContain('data-analytics-id="ask-ai-launcher"');
     route.pathname = "/";
   });
 

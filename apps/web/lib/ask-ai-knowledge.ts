@@ -4,6 +4,9 @@ import source from "./original-sites.json";
 import { awards2026Editorial, awards2026Evening } from "./awards-editorial";
 import { awardsDoorsOpen2026 } from "./event-partners-2026";
 import { directoryPeople } from "./people";
+import { awardsDisplayPeople } from "./awards-people";
+import { communityDay2026 } from "./community-day-2026";
+import { communityDaySchedule2026 } from "./community-day-schedule-2026";
 import { personNameKey } from "./person-portraits";
 import { isFoundersOnly } from "../app/schedule/schedule-presentation";
 
@@ -50,6 +53,14 @@ export function awardsFactAnswer(question: string): string | null {
 }
 
 const awardsShowTime2026 = awards2026Evening.find(entry => entry.label === "Awards Show")!.time;
+
+export function communityDayAnswer(question: string): string | null {
+  if (!/\b(?:community day|nevada mental health day)\b/i.test(question)) return null;
+  if (/\b(what happens|schedule|agenda|times?|when|starts?|doors?|activities|sessions?)\b/i.test(question)) {
+    return `Nevada Mental Health Day is ${communityDay2026.date}. Public schedule: ${communityDaySchedule2026().map(item => `${item.time} ${item.title}${item.room ? ` at ${item.room}` : ""}`).join("; ")}. See the Community Day page for updates.`;
+  }
+  return `${communityDay2026.about} See the Community Day page for the public schedule and ticket information.`;
+}
 // Owner (Oct 7 meeting): no Pre-Show is announced publicly, so the legacy "Pre-Show: 7:30 PM; end time to be
 // confirmed." pending note never reaches the model (it is still canonical published text elsewhere).
 // Owner (Oct 7): the Red Carpet is never on the website either, so Ask AI does not quote it.
@@ -65,6 +76,7 @@ const topicWords = /\b(summit|not alone|awards?|icf|inspiring|children|child|kid
 
 /** Local, zero-cost relevance gate: only on-topic questions may spend model tokens. */
 export function isRelevantQuestion(question: string, snapshot: EventSnapshot): boolean {
+  if (/\bbryan brothers\b/i.test(question)) return true;
   if (topicWords.test(question)) return true;
   const key = ` ${personNameKey(question)} `;
   if (directoryPeople(snapshot).some(person => key.includes(` ${personNameKey(person.name)} `))) return true;
@@ -72,7 +84,7 @@ export function isRelevantQuestion(question: string, snapshot: EventSnapshot): b
     && item.title.length > 3 && key.includes(` ${personNameKey(item.title)} `));
 }
 
-export const offTopicAnswer = "This AI only answers questions about the Not Alone Summit, the Not Alone Awards, the Not Alone Challenge, or the Inspiring Children Foundation.";
+export const offTopicAnswer = "This AI only answers questions about the Not Alone Summit, the Not Alone Awards, Community Day, the Not Alone Challenge, or the Inspiring Children Foundation.";
 
 export const notAloneToolsUrl = "https://www.inspiringchildren.org/notalonetools";
 
@@ -80,14 +92,19 @@ export const notAloneToolsUrl = "https://www.inspiringchildren.org/notalonetools
 const mentalHealthHelp = /\b(suicid\w*|kill (myself|me)|end my life|want to die|self[- ]?harm\w*|hurt(ing)? myself|depress\w*|anxiety|anxious|panic attacks?|mental health (tips?|advice|help|support)|therap(y|ist)|coping|cope|grie(f|ving)|eating disorders?|addiction|overdose|insomnia|can'?t sleep|lonely|loneliness|hopeless|overwhelmed)\b|\bi(?: am|'m)? (feel(?:ing)? )?(so |really |very )?(sad|down|alone|stressed|scared|worthless|empty)\b|\bhow (do|can|should) i (deal|cope|calm|stop feeling|feel better|get over|handle)\b/i;
 
 export function isMentalHealthQuestion(question: string) {
+  if (/\b(?:icf|inspiring children|not alone|foundation|program)\b/i.test(question)
+    && /\b(?:what|which|how)\b/i.test(question)
+    && !/\b(?:i|me|my|myself)\b/i.test(question)) return false;
   return mentalHealthHelp.test(question);
 }
 
 export const mentalHealthAnswer = `I can't give mental health advice here, but you're not alone. The Not Alone Mental Fitness Tools, created by youth and reviewed by experts, are free at ${notAloneToolsUrl}. If this is an emergency, call 911. For crisis support, call or text 988 (Suicide & Crisis Lifeline).`;
 
 /** Compact, public-only knowledge pack for the model. Drafts, staff data and private contacts never enter it. */
-export function buildAskAiKnowledge(snapshot: EventSnapshot) {
+export function buildAskAiKnowledge(snapshot: EventSnapshot, question = "") {
   const publicItems = snapshot.scheduleItems.filter(item => item.published && item.visibilityScope.id === "public" && item.eventId === snapshot.event.id);
+  const normalized = ` ${personNameKey(question)} `;
+  const matchingProfiles = awardsDisplayPeople(snapshot).filter(person => normalized.includes(` ${personNameKey(person.name)} `)).slice(0, 2);
   return {
     summit: {
       name: snapshot.event.name,
@@ -109,6 +126,12 @@ export function buildAskAiKnowledge(snapshot: EventSnapshot) {
       evening: awards2026Evening.map(entry => `${entry.label} ${entry.time}`).join(" · "),
       rsvp: awards2026Editorial.rsvpUrl
     },
+    communityDay2026: {
+      title: communityDay2026.title,
+      date: communityDay2026.date,
+      about: communityDay2026.about,
+      publicSchedule: communityDaySchedule2026().map(item => ({ title: item.title, time: item.time, room: item.room, synopsis: item.synopsis }))
+    },
     inspiringChildrenFoundation: { overview: icfOverview, taxStatus: icfTaxStatus, program: programCopy, donate: "https://www.inspiringchildren.org/donate", mailingAddress: contactAddress },
     schedule: publicItems.map(item => ({
       title: item.title,
@@ -116,10 +139,13 @@ export function buildAskAiKnowledge(snapshot: EventSnapshot) {
       startUtc: item.startUtc,
       endUtc: item.endUtc,
       location: publicLocation(item.locationName),
+      publicSummary: item.summary,
       foundersOnly: isFoundersOnly(item)
     })),
     pendingNotes: snapshot.contentPages.filter(page => page.published && page.slug.startsWith("schedule-pending")).map(page => withoutPreShow(page.body)),
     guests: directoryPeople(snapshot).map(person => ({ name: person.name, role: person.role })),
+    matchingPublishedProfiles: matchingProfiles.map(person => ({ name: person.name, role: person.role, bio: person.bio.slice(0, 1200), profile: `https://notalonesummit.org/directory/${encodeURIComponent(person.slug)}` })),
+    partners: snapshot.sponsors.filter(sponsor => sponsor.published).map(sponsor => ({ name: sponsor.name, tier: sponsor.tier, website: sponsor.websiteUrl })),
     faqs: snapshot.faqs.filter(faq => faq.published).map(faq => ({ question: faq.question, answer: faq.answer }))
   };
 }
