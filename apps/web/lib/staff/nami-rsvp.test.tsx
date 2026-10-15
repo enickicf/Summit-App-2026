@@ -37,6 +37,7 @@ describe("private partner copies of the Awards site (owner, Oct 4; supersedes Oc
     const { join } = await import("node:path");
     const { awardsPartnerSites } = await import("../awards-partner-sites");
     expect(awardsPartnerSites.map(site => [site.path, site.rsvpUrl])).toEqual([
+      ["/vip", "https://notaloneawards.org/rsvp/vip-fls0u8ccn2vs"],
       ["/nami", "https://notaloneawards.org/rsvp/nami-9wvfjfkt40dd"],
       ["/nami/vip", "https://notaloneawards.org/rsvp/nami-vip-zton04cqu1"],
       ["/lakelasvegas", "https://notaloneawards.org/rsvp/lake-las-vegas-3u3hr0lqil"],

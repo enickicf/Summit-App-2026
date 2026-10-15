@@ -42,6 +42,7 @@ export function SiteHeader() {
           (the day is Nevada Mental Health Day); the link itself is unchanged. */}
       <Link href={partner ? partnerCommunityDayPath(partner) : "/community-day"}>NV Mental Health Day</Link>
       <a href={partner?.rsvpUrl ?? awards2026Editorial.rsvpUrl} target="_blank" rel="noopener">Tickets</a>
+      {partner?.closingDinnerUrl && <a href={partner.closingDinnerUrl} target="_blank" rel="noopener">Closing dinner</a>}
       <a href={awards2026Editorial.nominateUrl} target="_blank" rel="noopener">Nominate</a>
       <a className={styles.donateButton} href="https://www.inspiringchildren.org/donate"><Heart size={16} fill="currentColor" aria-hidden="true" />Donate</a>
     </nav>
