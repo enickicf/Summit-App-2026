@@ -11,14 +11,14 @@ import { wellnessClash, wellnessSessions } from "./wellness-signups-2026";
 
 // Oct 12 (Kristin via owner): the morning wellness class sign-up at /wellness, listed in the portal's Wellness view.
 const post = (body: unknown) => new Request("https://notalonesummit.org/api/wellness", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-const valid = { name: "Test Guest", email: "guest@example.com", phone: "+1 702 555 0100", sessions: ["wellness-nov3-pilates-1", "wellness-nov3-pickleball", "wellness-nov4-movement-breathwork"], waiverAccepted: true, signature: "test guest", waiverVersion: siteVisitWaiver.version, website: "" };
+const valid = { name: "Test Guest", email: "guest@example.com", phone: "+1 702 555 0100", sessions: ["wellness-nov3-pilates-1", "wellness-nov3-pickleball", "wellness-nov4-fitness-2"], waiverAccepted: true, signature: "test guest", waiverVersion: siteVisitWaiver.version, website: "" };
 
 describe("wellness form API", () => {
   it("stores one wellness sign-up per class with contact details and the signed waiver", async () => {
     const store = memorySubmissionStore();
     expect((await handleWellnessPost(post(valid), store)).status).toBe(201);
     const rows = await store.list("workshop");
-    expect(rows.map(row => `${row.sessionDay} ${row.sessionTitle}`).sort()).toEqual(["Tuesday, November 3 Pickleball", "Tuesday, November 3 Pilates 1", "Wednesday, November 4 Movement & Breathwork"]);
+    expect(rows.map(row => `${row.sessionDay} ${row.sessionTitle}`).sort()).toEqual(["Tuesday, November 3 Pickleball Clinic", "Tuesday, November 3 Reformer Pilates 1", "Wednesday, November 4 Fitness 2 with Kelly Richardson"]);
     for (const row of rows) expect(row).toMatchObject({ category: "wellness", email: "guest@example.com", phone: "+1 702 555 0100", waiverAccepted: true, signature: "test guest" });
     expect(toCsv(rows, wellnessCsvColumns)).toContain("guest@example.com");
   });
@@ -26,8 +26,9 @@ describe("wellness form API", () => {
   it("refuses overlapping classes, unknown classes, no class, and a missing or mismatched signature", async () => {
     const store = memorySubmissionStore();
     for (const body of [
-      { ...valid, sessions: ["wellness-nov3-fitness-1", "wellness-nov3-pilates-1"] },
-      { ...valid, sessions: ["wellness-nov4-movement-breathwork", "wellness-nov4-pilates-4"] },
+      { ...valid, sessions: ["wellness-nov3-breathwork", "wellness-nov3-pilates-1"] },
+      { ...valid, sessions: ["wellness-nov4-fitness-1", "wellness-nov4-pilates-1"] },
+      { ...valid, sessions: ["wellness-nov4-movement-breathwork"] }, // Oct 20: not offered on Wednesday any more (Airtable)
       { ...valid, sessions: ["wellness-nov3-yoga"] },
       { ...valid, sessions: [] },
       { ...valid, waiverAccepted: false },
@@ -38,7 +39,8 @@ describe("wellness form API", () => {
 
   it("lets the same class on different mornings and drop-in pickleball sit beside anything", () => {
     expect(wellnessClash(["wellness-nov3-pilates-1", "wellness-nov4-pilates-1"])).toBeNull();
-    expect(wellnessClash(["wellness-nov3-pickleball", "wellness-nov3-fitness-1", "wellness-nov3-pilates-2"])).toBeNull();
+    expect(wellnessClash(["wellness-nov3-pickleball", "wellness-nov3-pilates-1", "wellness-nov3-pilates-2"])).toBeNull();
+    expect(wellnessClash(["wellness-nov3-breathwork", "wellness-nov3-pilates-2"])).not.toBeNull(); // 8:00-8:45 overlaps 8:30
   });
 });
 
