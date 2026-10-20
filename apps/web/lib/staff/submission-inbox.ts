@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { withRetry } from "./store";
+import { checkSubmissionLimit, rememberAccepted } from "./submission-limit";
 
 // Owner (Oct 19, 2026): "we should not have any missing submissions ... this entire event is riding on me".
 // Every form request is written, word for word, to its own append-only Blobs store (`submission-inbox`)
@@ -31,6 +32,8 @@ export type InboxEntry = {
   status?: number;
   error?: string;
   outcomeAt?: string;
+  // Oct 20: "already-submitted" = refused as a second submission (the person already has a saved record).
+  reason?: "already-submitted";
 };
 
 export interface InboxStore {
@@ -109,15 +112,19 @@ export function withSubmissionInbox(endpoint: string, handler: (request: Request
     // The handler gets an identical, unread request (the original body was consumed above).
     const replay = new Request(request.url, { method: request.method, headers: request.headers, body });
     let response: Response;
-    try { response = await handler(replay); }
+    // Oct 20 (owner): one submission per person per form type, except the unlimited test submitters (submission-limit.ts).
+    const refused = await checkSubmissionLimit(endpoint, body, entry);
+    if (refused) response = refused;
+    else try { response = await handler(replay); }
     catch (error) {
       console.error(`[submission-inbox] ${endpoint}: handler crashed`, error instanceof Error ? error.message : error);
       response = Response.json({ ok: false, error: "We could not save your request. Please try again." }, { status: 500, headers: { "Cache-Control": "no-store" } });
     }
+    if (response.status < 300) rememberAccepted(endpoint, body, entry);
     if (response.status >= 300) {
       let error = "";
       try { const answer = await response.clone().json() as { error?: unknown }; error = typeof answer?.error === "string" ? answer.error : ""; } catch { /* non-JSON answer */ }
-      const failed: InboxEntry = { ...entry, status: response.status, error, outcomeAt: new Date().toISOString() };
+      const failed: InboxEntry = { ...entry, status: response.status, error, outcomeAt: new Date().toISOString(), ...(refused ? { reason: "already-submitted" as const } : {}) };
       console.warn(`[submission-inbox] NOT SAVED ${endpoint} ${response.status} ${error} | ${entry.email || entry.name || "unknown sender"}`);
       await inbox?.set(keyFor("failed", failed), failed).catch(err => console.error(`[submission-inbox] ${endpoint}: could not store failed copy`, err instanceof Error ? err.message : err));
     }
@@ -138,6 +145,7 @@ export async function listReceivedSubmissions(): Promise<InboxEntry[]> {
 export function unresolvedFailures(failed: InboxEntry[], saved: { email?: string; phone?: string; submittedAt: string; requesterEmail?: string }[]): InboxEntry[] {
   const digits = (value?: string) => (value ?? "").replace(/\D/g, "").slice(-10);
   return failed.filter(entry => {
+    if (entry.reason === "already-submitted") return false; // they already have a saved record
     const email = entry.email.toLowerCase(), phone = digits(entry.phone);
     return !saved.some(record => {
       const sameEmail = Boolean(email) && [record.email, record.requesterEmail].some(value => (value ?? "").toLowerCase() === email);

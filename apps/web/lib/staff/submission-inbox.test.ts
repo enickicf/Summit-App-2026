@@ -1,11 +1,14 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { setLimitStoreForTests } from "./submission-limit";
+import { memorySubmissionStore } from "./store";
 import { contactFromBody, memoryInboxStore, setInboxForTests, unresolvedFailures, withSubmissionInbox } from "./submission-inbox";
 
 // Owner (Oct 19): no submission may be lost, including requests the API refuses.
 const post = (body: string) => new Request("https://notaloneawards.org/api/rsvp", { method: "POST", headers: { "Content-Type": "application/json", origin: "https://notaloneawards.org" }, body });
 const guest = JSON.stringify({ name: "Ada Guest", email: "ada@example.com", phone: "702-555-0100" });
 
-afterEach(() => setInboxForTests(null));
+beforeEach(() => setLimitStoreForTests(memorySubmissionStore())); // the one-per-person limit (Oct 20) starts empty in every test
+afterEach(() => { setInboxForTests(null); setLimitStoreForTests(null); });
 
 describe("submission inbox", () => {
   it("stores every request before the handler, and a refused one again with the message the guest saw", async () => {
