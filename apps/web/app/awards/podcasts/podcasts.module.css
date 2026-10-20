@@ -138,3 +138,8 @@
 @media (max-width: 600px) { .announcement { font-size: 16px; margin-top: 10px; } }
 .card .stats { flex-wrap: nowrap; }
 .card .stat { flex: 1 1 auto; max-width: none; }
+/* Oct 20 (owner, screenshot: "spacing here under Vogue is weird"): the g of "Vogue" hung onto its label because values and
+   labels had no gap (numbers have no descenders, so only Vogue showed it). Every value now has the same small gap below. */
+.card .stat strong, .dialog .stat strong { line-height: 1.05; margin-bottom: 6px; }
+.card .stat { line-height: 1.35; }
+.card .stats { gap: 14px; }
