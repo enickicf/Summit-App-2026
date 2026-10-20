@@ -27,3 +27,8 @@ export function noticeOnlySnapshot<T>(snapshot: T): T {
   const kept = Object.fromEntries(Object.entries(snapshot).map(([key, value]) => [key, Array.isArray(value) && key !== "notices" && key !== "scheduleItems" ? [] : value]));
   return withoutRooms(kept as T);
 }
+
+// Owner (Oct 20, 2026): "u can actually put full summit schedule meaning plus locations on the main summit website now".
+// The public Summit schedule (/schedule and the schedule block on the Summit home) shows each session's room again; this
+// lifts Ryan's Sept 29 rule for the schedule only (the venue page, Ask AI and the live companion still name no rooms).
+export const summitScheduleShowsRooms = true;

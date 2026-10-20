@@ -2,7 +2,7 @@ import { InvitationBadge } from "./invitation-badge";
 import Link from "next/link";
 import { displayTitle2026, icfAlumni2026 } from "../lib/title-overrides-2026";
 import { airtableTalent2026 } from "../lib/airtable-talent-2026";
-import { noticeOnlySnapshot, withoutRooms } from "../lib/room-privacy";
+import { noticeOnlySnapshot, summitScheduleShowsRooms, withoutRooms } from "../lib/room-privacy";
 import { RoleLines } from "./role-lines";
 import { ArrowDown, ArrowUpRight, Play } from "lucide-react";
 import type { EventSnapshot } from "@not-alone/validation";
@@ -331,7 +331,7 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     {!archive && snapshot && <section className={`${styles.band} ${summitStyles.scheduleBand}`} id="schedule" aria-labelledby="summit-schedule-title">
       <h2 id="summit-schedule-title">Schedule</h2>
       <p className={summitStyles.scheduleDates}>{heroDates.main} · {snapshot.event.venueName}</p>
-      <ScheduleBrowser days={withoutRooms(groupPublishedProgramByDay(snapshot))} eventTimeZone={snapshot.event.timeZone} initialNowUtc={new Date().toISOString()} />
+      <ScheduleBrowser days={summitScheduleShowsRooms ? groupPublishedProgramByDay(snapshot) : withoutRooms(groupPublishedProgramByDay(snapshot))} showRooms={summitScheduleShowsRooms} eventTimeZone={snapshot.event.timeZone} initialNowUtc={new Date().toISOString()} />
     </section>}
     {/* Owner (Sept 22): hosts sit just above the co-chairs. */}
     {!archive && <Hosts2026 profiles={reviewedPeople} />}

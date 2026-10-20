@@ -1,7 +1,7 @@
 import { groupPublishedProgramByDay } from "@not-alone/domain";
 import { ScheduleBrowser } from "../../components/schedule-browser";
 import { getPublicSnapshotState } from "../../lib/snapshot";
-import { noticeOnlySnapshot, withoutRooms } from "../../lib/room-privacy";
+import { noticeOnlySnapshot, summitScheduleShowsRooms, withoutRooms } from "../../lib/room-privacy";
 import { SnapshotSourceNotice } from "./snapshot-source-notice";
 import styles from "./schedule.module.css";
 
@@ -22,7 +22,7 @@ export default async function SchedulePage({ initialDay }: { initialDay?: string
         <p className={styles.dates}>{snapshot.event.dateLabel}<span aria-hidden="true"> · </span><span className={styles.venue}>{snapshot.event.venueName}</span></p>
       </header>
       <SnapshotSourceNotice state={state} compact />
-      <ScheduleBrowser days={withoutRooms(days)} eventTimeZone={snapshot.event.timeZone} initialNowUtc={new Date().toISOString()} noticeSnapshot={state.source === "published" ? noticeOnlySnapshot(snapshot) : null} initialDay={initialDay} />
+      <ScheduleBrowser days={summitScheduleShowsRooms ? days : withoutRooms(days)} showRooms={summitScheduleShowsRooms} eventTimeZone={snapshot.event.timeZone} initialNowUtc={new Date().toISOString()} noticeSnapshot={state.source === "published" ? noticeOnlySnapshot(snapshot) : null} initialDay={initialDay} />
     </main>
   );
 }

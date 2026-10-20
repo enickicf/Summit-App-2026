@@ -43,3 +43,12 @@ describe("room names never reach the public pages' data (Oct 20)", () => {
     expect(noticeOnlySnapshot(null)).toBeNull();
   });
 });
+
+describe("Summit schedule shows rooms (owner, Oct 20)", () => {
+  it("passes the real rooms and the Location line on /schedule and the Summit home schedule", async () => {
+    const { summitScheduleShowsRooms } = await import("./room-privacy");
+    expect(summitScheduleShowsRooms).toBe(true);
+    const { readFileSync } = await import("node:fs");
+    for (const file of ["app/schedule/page.tsx", "components/original-event-page.tsx"]) expect(readFileSync(file, "utf8")).toContain("showRooms={summitScheduleShowsRooms}");
+  });
+});
