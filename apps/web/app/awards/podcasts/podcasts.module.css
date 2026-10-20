@@ -123,3 +123,7 @@
 @media (max-width: 600px) { .card .stats, .card .roles { height: auto; } }
 .stat, .stat > :not(strong) { overflow-wrap: normal; word-break: normal; hyphens: none; }
 @media (max-width: 600px) { .card .stat { font-size: 9.5px; letter-spacing: .02em; } }
+/* Oct 20 (owner): slide the whole page up: no empty black band between the menu and "Podcast Interviewers". */
+.section.first { padding-top: 28px; }
+.first .sectionHead { margin-bottom: 26px; }
+@media (max-width: 600px) { .section.first { padding-top: 18px; } .first .sectionHead { margin-bottom: 18px; } }
