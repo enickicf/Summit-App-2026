@@ -29,7 +29,8 @@ describe("classic Summit version", () => {
     expect(html).toContain("presented by <strong>Villa Bibbiani</strong>");
     expect(html).toContain("November 2 - 4, 2026");
     const producers = html.slice(html.indexOf("<h2>Executive Producers</h2>"));
-    const order = ["Jewel", "Ryan Wolfington", "Dr. George Rapier III", "Trevor Short", "Aphrah Brokaw", "Trent Alenik"].map(name => producers.indexOf(`<h4>${name}</h4>`));
+    const order = ["Aphrah Brokaw", "Jewel", "Ryan Wolfington", "Trevor Short", "Trent Alenik"].map(name => producers.indexOf(`<h4>${name}</h4>`));
+    expect(producers.slice(0, producers.indexOf("<h2>Producers</h2>"))).not.toContain("Dr. George Rapier III");
     expect([...order].sort((a, b) => a - b)).toEqual(order);
   });
 

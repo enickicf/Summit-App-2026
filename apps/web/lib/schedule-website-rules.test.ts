@@ -4,15 +4,15 @@ import { isOnWebsiteSchedule, pinnedTime, privateEventScope, websiteSessionSynop
 
 // Owner (Oct 7, 2026): the schedule pulls from Airtable's Run of Show; these are the website's standing rules on top.
 describe("schedule website rules", () => {
-  it("never lists Red Carpet, the Speaker Reception, a Pre-Show or operational rows, whatever Airtable says", () => {
-    for (const title of ["Red Carpet", "Speaker Reception", "Awards Show Pre-Show", "Pre-Show", "Load In, Summit Rehearsals", "Load Out", "27 Heavens - Potentially cut this"]) {
+  it("never lists private founder events, Red Carpet, the Speaker Reception, a Pre-Show or operational rows, whatever Airtable says", () => {
+    for (const title of ["Founders Cocktails", "Founder's Dinner", "Founder’s Dinner", "Red Carpet", "Speaker Reception", "Awards Show Pre-Show", "Pre-Show", "Load In, Summit Rehearsals", "Load Out", "27 Heavens - Potentially cut this"]) {
       expect(isOnWebsiteSchedule({ title }), title).toBe(false);
       expect(isOnWebsiteSchedule({ title, websitePublic: "Public" }), `${title} even when marked Public`).toBe(false);
     }
   });
 
   it("lists the day's blocks and leaves the segments inside them off until the team marks them Public", () => {
-    for (const title of ["Poker Night", "Wellness Activities & Check-In", "Wellness Activity", "Nevada Mental Health Day", "Founders Cocktails", "Founder's Dinner", "Pet Partners Therapy", "Awards Show Doors Open", "Not Alone Awards with iHeartRadio", "Late Night Pickleball + Sauna", "Summit Sessions", "Lunch", "Break", "Dinner - talent", "Evening Talk + Performance/Writer's Round", "Closing Dinner and Performance", "Tennis", "High Tea", "Tennis (ICF Site Visit)"]) {
+    for (const title of ["Poker Night", "Wellness Activities & Check-In", "Wellness Activity", "Nevada Mental Health Day", "Pet Partners Therapy", "Awards Show Doors Open", "Not Alone Awards with iHeartRadio", "Late Night Pickleball + Sauna", "Summit Sessions", "Lunch", "Break", "Dinner - talent", "Evening Talk + Performance/Writer's Round", "Closing Dinner and Performance", "Tennis", "High Tea", "Tennis (ICF Site Visit)"]) {
       expect(isOnWebsiteSchedule({ title }), title).toBe(true);
     }
     for (const title of ["Ray Lewis: Loss, Purpose & Advocacy", "Fitness 1", "Pilates 2", "Song Break", "Hobbies Panel", "Closing Dinner: Welcome & Appreciation", "Dinner & Connection", "Wellness Rooms Open (Approved Hours)", "Auction & Fundraising Appeal"]) {

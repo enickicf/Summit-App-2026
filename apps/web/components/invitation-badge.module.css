@@ -1,0 +1,2 @@
+.badge{position:absolute;z-index:4;top:28px;right:max(24px,calc((100% - 1180px)/2));display:inline-flex;align-items:center;padding:6px 13px;border:1px solid #ddcfaa;border-radius:999px;background:#111a;color:#f0e3c2;font:500 13px/1.3 Poppins,Arial,sans-serif;letter-spacing:.02em;white-space:nowrap}
+@media(max-width:600px){.badge{top:20px;right:22px;font-size:11px;padding:5px 10px}}

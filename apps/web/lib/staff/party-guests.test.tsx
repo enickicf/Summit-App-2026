@@ -49,17 +49,21 @@ describe("every person in a party gives a name, email and phone (owner, Oct 5)",
     }
   });
 
+  it("rejects missing primary phone and invalid guest phones before saving", async () => {
+    for (const body of [{...base,phone:""},{...base,phone:"abc"},{...base,guestCount:2,guests:[{...guest(1),phone:"abc"}]}]) {
+      const {response,stored}=await submit(body);expect(response.status).toBe(400);expect(stored).toHaveLength(0);
+    }
+  });
   it("needs no guest list for a single ticket", async () => {
     const { response, stored } = await submit({ ...base, guestCount: "1", guests: [] });
     expect(response.status).toBe(200);
     expect(stored[0]!.guests).toEqual([]);
   });
 
-  it("still accepts a form from before Oct 5 that sends a party size and no guest list", async () => {
+  it("rejects new submissions that omit the required guest list even from cached forms", async () => {
     const { response, stored } = await submit({ ...base, guestCount: "4" });
-    expect(response.status).toBe(200);
-    expect(stored[0]!.guestCount).toBe(4);
-    expect(stored[0]!.guests).toBeUndefined();
+    expect(response.status).toBe(400);
+    expect(stored).toHaveLength(0);
   });
 
   it("keeps sending the previous backend the fields it always received, without the guest list", async () => {

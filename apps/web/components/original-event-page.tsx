@@ -1,3 +1,4 @@
+import { InvitationBadge } from "./invitation-badge";
 import Link from "next/link";
 import { displayTitle2026, icfAlumni2026 } from "../lib/title-overrides-2026";
 import { airtableTalent2026 } from "../lib/airtable-talent-2026";
@@ -265,7 +266,7 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
         </h1>
         {/* Owner (Oct 8): the credit is a compact stack, "Powered by" over "Steven & Alexandra" / "Cohen Foundation". */}
         <PoweredBy className={summitStyles.heroPowered} />
-        {/* Owner (Oct 7 meeting): "Presented by" Inspiring Children Foundation × NAMI directly under the Cohen credit
+        {/* Owner (Oct 7 meeting): "Presented by" Inspiring Children Foundation &amp; NAMI directly under the Cohen credit
             (Summit logo -> Powered by -> Presented by); 2026 only. */}
         {!archive && <PresentedBy size="hero" />}
         {/* Owner (Sept 23): date and venue on one line, in the Awards hero's format ("November 2–4 | Wynn Las Vegas");
@@ -354,7 +355,7 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
 
 // rsvpUrl (owner, Oct 4): the private partner copies of this page (/nami, /lakelasvegas, ...) send their RSVP
 // buttons to that group's own form; everything else is identical.
-type AwardsPageProps = { year: 2025 | 2026; program?: EventSnapshot["contentPages"][number] | null; snapshot?: EventSnapshot | null; rsvpUrl?: string | undefined };
+type AwardsPageProps = { year: 2025 | 2026; program?: EventSnapshot["contentPages"][number] | null; snapshot?: EventSnapshot | null; rsvpUrl?: string | undefined; invitationTier?: "VIP" | "Uber VIP" | undefined };
 
 // Owner (Oct 11): the Awards hero date and venue are split at their first separator so phones can show the Summit's
 // two-line format (the separator stays in the first part for ", " and is its own span for " · ").
@@ -367,7 +368,7 @@ function StackedParts({ text, split, className }: { text: string; split: string;
   return <><span className={`${className ?? ""} ${styles.cornerFirst}`}>{text.slice(0, at)}{keep}</span>{keep ? " " : <span className={styles.cornerSep}>{split}</span>}<span className={className}>{text.slice(at + split.length)}</span></>;
 }
 
-function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }: Omit<AwardsPageProps, "year">) {
+function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl, invitationTier }: Omit<AwardsPageProps, "year">) {
   const reviewedPeople = awardsPeople(snapshot);
   const displayPeople = awardsDisplayPeople(snapshot);
   const confirmedNames = new Set(reviewedPeople.map(person => normalizePersonName(person.name)));
@@ -387,12 +388,13 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
   const host = reviewedPeople.find(person => person.name === awards2026Editorial.host);
   return <main id="main-content" tabIndex={-1} className={`${styles.page} ${styles.awards} ${styles.currentAwards} ${styles.awards2026}`}>
     <section className={`${styles.awardsHero} ${styles.awardsHeroStack}`} id="awards-program" aria-labelledby="awards-title">
+      {invitationTier && <InvitationBadge tier={invitationTier} />}
       <SiteImage className={styles.heroScene} src="/images/wynn-las-vegas.webp" alt="Wynn Las Vegas overlooking its gardens and waterfall" sizes="100vw" loading="eager" fetchPriority="high" />
       {/* Owner (Sept 21): the hero goes straight into the 2025 Awards highlights; the Wynn photo is kept
           only for visitors who ask their device to reduce motion. */}
       <HeroRecap video="awards" poster={null} className={styles.heroVideo} />
       {/* Owner (Oct 8): the Summit hero's format, exactly — one left-hand stack: a two-line date block (bold white date,
-          venue in spaced capitals), the Awards logo, the Cohen credit, then the Inspiring Children Foundation × NAMI
+          venue in spaced capitals), the Awards logo, the Cohen credit, then the Inspiring Children Foundation &amp; NAMI
           lockup. Nothing else; the hero is only as tall as its stack. From Nov 6, 2026 the date block reads
           "2027 — To Be Announced Soon." (lib/event-phase.ts). */}
       <div className={`${styles.heroContent} ${styles.heroStack}`}>
@@ -448,7 +450,7 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
     {/* Owner (Sept 21): last year's mission statement (ICF's Awards page) stays here. Owner (Oct 7 meeting): its
         opening sentence now credits the presenters, in the owner's exact words. */}
     <section className={`${styles.band} ${styles.awardsIntroduction} ${styles.awardsMission}`} id="mission" aria-label="About the Not Alone Awards">
-      <p>Inspiring Children Foundation × NAMI present the Not Alone Awards Show, powered by the <strong>Steven &amp; Alexandra Cohen Foundation</strong>.</p>
+      <p>Inspiring Children Foundation &amp; NAMI present the Not Alone Awards Show, powered by the <strong>Steven &amp; Alexandra Cohen Foundation</strong>.</p>
       {/* Owner (Sept 21, late): just the opening statement; the longer text is gone. */}
       {/* Owner (Oct 8): "The awards show", not "The award show" (2026 page only; the 2025 archive keeps ICF's text). */}
       {awards[1]!.blocks.slice(1, 2).map(block => <p key={block.text}>{block.text.replace(/^The award show\b/, "The awards show")}</p>)}
@@ -492,8 +494,8 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl }
   </main>;
 }
 
-export function OriginalAwardsPage({ year, program = null, snapshot = null, rsvpUrl }: AwardsPageProps) {
-  if (year === 2026) return <CurrentAwardsPage program={program} snapshot={snapshot} rsvpUrl={rsvpUrl} />;
+export function OriginalAwardsPage({ year, program = null, snapshot = null, rsvpUrl, invitationTier }: AwardsPageProps) {
+  if (year === 2026) return <CurrentAwardsPage program={program} snapshot={snapshot} rsvpUrl={rsvpUrl} invitationTier={invitationTier} />;
   // Owner (Sept 21): the 2025 archive uses the 2026 Awards format (logo hero over the 2025 highlights),
   // winners above the host, no-solicitation at the bottom, and no "registration closed" block.
   return <main id="main-content" tabIndex={-1} className={`${styles.page} ${styles.awards} ${styles.currentAwards}`}>

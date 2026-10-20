@@ -105,7 +105,7 @@ describe("owner exception (Sept 24 / Oct 8): the Tape Art artists, Raquelle Stev
     const sections = peopleSections(roster, "summit");
     expect(names(sections, "Speakers")).toEqual(["Some Speaker", "Michael Townsend", "Leah Smith", "Jessica Edwards", "Raquelle Stevens"]);
     expect(names(sections, "Attendees")).toEqual(["Nick Dana"]);
-    expect(summitLineup2026).toEqual(new Set(["michael townsend", "leah smith", "raquelle stevens", "jessica edwards"]));
+    expect(summitLineup2026).toEqual(new Set(["michael townsend", "leah smith", "raquelle stevens", "jessica edwards", "kate doerge"]));
   });
   it("keeps their Airtable titles on the lineup card", () => {
     const speakers = peopleSections(roster, "summit").find(section => section.title === "Speakers")!.people;
@@ -121,27 +121,28 @@ describe("owner exception (Sept 24 / Oct 8): the Tape Art artists, Raquelle Stev
   });
 });
 
-describe("owner exception (Ryan, Oct 8): Ben Maxwell is in the Awards lineup as well, once his card is complete", () => {
+describe("owner exceptions: Ben Maxwell and Kate Doerge are in the Awards lineup once their cards are complete", () => {
   const roster = [
     person("Jewel", ["Talent"], { rank: 1, order: 1 }),
     person("Some Speaker", ["Talent"], { tier: "B", order: 2 }),
-    person("Ben Maxwell", ["Experts"], { order: 3 }) // no tier chip: an expert the Summit lists only once a tier is set
+    person("Ben Maxwell", ["Experts"], { order: 3 }),
+    person("Kate Doerge", ["Experts"], { order: 4 })
   ];
   it("lists him at the end of the Awards lineup even without a tier chip, with his photo", () => {
-    expect(awardsLineupAdditions2026).toEqual(new Set(["ben maxwell"]));
-    expect(names(peopleSections(roster, "awards"), "Lineup")).toEqual(["Jewel", "Some Speaker", "Ben Maxwell"]);
+    expect(awardsLineupAdditions2026).toEqual(new Set(["ben maxwell", "kate doerge"]));
+    expect(names(peopleSections(roster, "awards"), "Lineup")).toEqual(["Jewel", "Some Speaker", "Ben Maxwell", "Kate Doerge"]);
   });
   it("keeps his tier order when Airtable gives him one (D-talent today)", () => {
     const tiered = roster.map(p => p.name === "Ben Maxwell" ? person("Ben Maxwell", ["Talent"], { tier: "D", order: 3 }) : p);
-    expect(names(peopleSections([...tiered, person("F Talent", ["Talent"], { tier: "F", order: 4 })], "awards"), "Lineup")).toEqual(["Jewel", "Some Speaker", "Ben Maxwell", "F Talent"]);
-    expect(names(peopleSections(tiered, "summit"), "Speakers")).toEqual(["Some Speaker", "Ben Maxwell"]);
+    expect(names(peopleSections([...tiered, person("F Talent", ["Talent"], { tier: "F", order: 5 })], "awards"), "Lineup")).toEqual(["Jewel", "Some Speaker", "Ben Maxwell", "F Talent", "Kate Doerge"]);
+    expect(names(peopleSections(tiered, "summit"), "Speakers")).toEqual(["Some Speaker", "Ben Maxwell", "Kate Doerge"]);
   });
   it("waits for a photo: the completeness gate still applies", () => {
     const noPhoto = roster.map(p => p.name === "Ben Maxwell" ? person("Ben Maxwell", ["Experts"], { order: 3, image: "" }) : p);
-    expect(names(peopleSections(noPhoto, "awards"), "Lineup")).toEqual(["Jewel", "Some Speaker"]);
+    expect(names(peopleSections(noPhoto, "awards"), "Lineup")).toEqual(["Jewel", "Some Speaker", "Kate Doerge"]);
   });
-  it("does not change the Summit page (Airtable alone decides there)", () => {
-    expect(names(peopleSections(roster, "summit"), "Speakers")).toEqual(["Some Speaker"]);
+  it("keeps the explicit Summit exceptions independent of Awards placement", () => {
+    expect(names(peopleSections(roster, "summit"), "Speakers")).toEqual(["Some Speaker", "Kate Doerge"]);
     expect(peopleSections(roster, "summit").flatMap(section => section.people.map(entry => entry.person.name))).not.toContain("Ben Maxwell");
   });
 });

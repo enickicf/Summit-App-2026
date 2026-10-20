@@ -1,6 +1,6 @@
 // Owner (Oct 5, 2026): one partner credit for every 2026 page (Summit, Awards and its partner copies, Community
 // Day). The Steven & Alexandra Cohen Foundation is "Powered by"; the Inspiring Children Foundation and NAMI
-// present the events together (one box, "Presented by", joined by an x); Wynn Las Vegas is the host venue in
+// present the events together (one box, "Presented by", joined by a plus sign); Wynn Las Vegas is the host venue in
 // its own box. Nowhere may NAMI be called a "community partner".
 export type PartnerLogo = { light: string; dark: string; width: number; height: number };
 export type EventPartner = { name: string; shortName: string; logo: PartnerLogo };

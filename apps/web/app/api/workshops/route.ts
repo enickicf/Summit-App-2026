@@ -1,3 +1,5 @@
+import { sendRequestReceipt } from "../../../lib/staff/request-receipt";
+import type { Sender } from "../../../lib/staff/rsvp-email";
 import { NextResponse } from "next/server";
 import { getSubmissionStore, newSubmission, siteVisitWaiverProblem, workshopPayloadSchema, type SubmissionStore } from "../../../lib/staff/store";
 import { signupOpenByCategory, waiverRequiredFor, workshopCategory } from "../../../lib/morning-workshops";
@@ -9,7 +11,7 @@ export const dynamic = "force-dynamic";
 // "Summit workshops" and "Tennis & High Tea" sections; staff remove anyone not on the guest list.
 // Owner (Oct 5): the wellness workshop sign-ups are closed (410). Owner (Oct 7): Tennis / High Tea are open
 // again and must carry the signed waiver (lib/morning-workshops.ts siteVisitWaiver).
-export async function handleWorkshopPost(request: Request, store?: SubmissionStore): Promise<Response> {
+export async function handleWorkshopPost(request: Request, store?: SubmissionStore, sender?: Sender | null): Promise<Response> {
   const headers = { "Cache-Control": "no-store" };
   if (Number(request.headers.get("content-length") ?? 0) > 10_000) return NextResponse.json({ ok: false, error: "Request is too large." }, { status: 413, headers });
   let body: unknown;
@@ -31,12 +33,15 @@ export async function handleWorkshopPost(request: Request, store?: SubmissionSto
     if (problem) return NextResponse.json({ ok: false, ...problem }, { status: 400, headers });
     waiver = { waiverAccepted: true, signature: (signature ?? "").trim(), waiverVersion: (waiverVersion ?? "").trim(), waiverAcceptedAt: now.toISOString() };
   }
+  const target = store ?? await getSubmissionStore();
+  const saved = newSubmission({ ...payload, category, ...waiver }, now);
   try {
-    await (store ?? await getSubmissionStore()).add("workshop", newSubmission({ ...payload, category, ...waiver }, now));
+    await target.add("workshop", saved);
   } catch (error) {
     console.error("workshop store failed", error instanceof Error ? error.message : error);
     return NextResponse.json({ ok: false, error: "We could not save your sign-up. Please try again." }, { status: 500, headers });
   }
+  if (saved.email) await sendRequestReceipt(saved.id, saved.name, saved.email, [payload.sessionTitle], target, sender);
   return NextResponse.json({ ok: true }, { headers });
 }
 

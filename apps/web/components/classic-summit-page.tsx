@@ -89,8 +89,12 @@ export function ClassicSummitPage({ year = 2026, snapshot = null }: { year?: 202
   const coChairs = leaders(4, "Co-Chairs", ["Jewel", "Steve Wozniak", "Cherrial Odell"], current);
   const [summitHost] = leaders(4, "Summit Host", ["Jason Kennedy"], current);
   const [awardsHost] = leaders(4, "Awards Host", ["Loni Love"], current);
-  const executive = leaders(13, "Executive Producers", ["Jewel", "Ryan Wolfington", "Dr. George Rapier III", "Trevor Short"], current);
-  const producers = leaders(13, "Producers", ["Aphrah Brokaw", "Trent Alenik"], current);
+  const originalExecutive = leaders(13, "Executive Producers", ["Jewel", "Ryan Wolfington", "Dr. George Rapier III", "Trevor Short"], current);
+  const originalProducers = leaders(13, "Producers", ["Aphrah Brokaw", "Trent Alenik"], current);
+  const originalProduction = [...originalExecutive, ...originalProducers];
+  const pickProduction = (names: string[]) => names.flatMap(name => originalProduction.filter(person => person.name === name));
+  const executive = current ? pickProduction(["Aphrah Brokaw", "Jewel", "Ryan Wolfington"]) : originalExecutive;
+  const producers = current ? pickProduction(["Trevor Short", "Trent Alenik"]) : originalProducers;
   const attendees2026 = current ? attendeeSections(snapshot) : [];
   // Without a 2026 guest list the ICF page's own attendee sections are shown. ICF Alumni stays from ICF.
   // ICF Alumni has no 2026 source of its own, so ICF's current alumni list stays.

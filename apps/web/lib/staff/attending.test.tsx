@@ -36,14 +36,14 @@ describe("What are you attending? (owner, Oct 6)", () => {
 
   it("the confirmation email names only what the guest chose", () => {
     const only = rsvpConfirmationEmail(rsvp({ attending: "community-day", communityDay: true }));
-    expect(only.subject).toBe("We received your RSVP – Community Day");
-    expect(only.text).toContain("Thank you for your RSVP to Community Day.");
-    expect(only.text).toContain("Attending: Community Day");
+    expect(only.subject).toBe("We received your RSVP – Nevada Mental Health Day");
+    expect(only.text).toContain("Thank you for your RSVP to Nevada Mental Health Day.");
+    expect(only.text).toContain("Attending: Nevada Mental Health Day");
     expect(only.text).not.toContain("Awards Show 7:30");
     const show = rsvpConfirmationEmail(rsvp({ attending: "awards" }));
     expect(show.subject).toBe("We received your RSVP – Not Alone Awards Show");
-    expect(show.text).not.toContain("Community Day");
+    expect(show.text).not.toContain("Nevada Mental Health Day");
     const both = rsvpConfirmationEmail(rsvp({ attending: "both", communityDay: true }));
-    expect(both.subject).toContain("Community Day & Not Alone Awards Show");
+    expect(both.subject).toContain("Nevada Mental Health Day & Not Alone Awards Show");
   });
 });

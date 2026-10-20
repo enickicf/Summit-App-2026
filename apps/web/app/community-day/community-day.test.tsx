@@ -39,7 +39,7 @@ describe("Nevada Mental Health Day page", () => {
     // Owner (Oct 7): the header was too crowded; the date, venue, times and the Awards Show pointer moved to the Schedule.
     // Owner (Oct 8): the date and place at the top of the header (as on the Summit and Awards), "Full Schedule" replaces "Info".
     // Owner (Oct 11): the date and place moved to the header's bottom-right corner, after the buttons (as on the Summit).
-    expect(hero).toContain("Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Presented by × Monday, November 2, 2026 Wynn Las Vegas Request free tickets Full Schedule");
+    expect(hero).toContain("Nevada Mental Health Day Powered by Steven & Alexandra Cohen Foundation Presented by & Monday, November 2, 2026 Wynn Las Vegas Request free tickets Full Schedule");
     expect(hero).not.toMatch(/PM|Encore|LaFleur|Margaux|Stay for|Awards Show|Community Day/);
     expect(heroHtml).not.toMatch(/<dl\b/);
   });
@@ -139,7 +139,7 @@ describe("Nevada Mental Health Day page", () => {
     beforeEvent();
     const html = await render();
     const partners = text(section(html, "community-day-partners-title"));
-    expect(partners).toContain("Our Partners Powered by Presented by × Host venue");
+    expect(partners).toContain("Our Partners Powered by Presented by & Host venue");
     expect(html.toLowerCase()).not.toContain("community partner");
     for (const name of ["Inspiring Children Foundation", "Steven & Alexandra Cohen Foundation", "NAMI, National Alliance on Mental Illness", "Wynn Las Vegas"]) expect(html.replace(/&amp;/g, "&")).toContain(`alt="${name}"`);
     // The hero lockup (under the Cohen credit) is the shared "Presented by" component; the partners block repeats it lower down.
@@ -179,9 +179,9 @@ describe("Nevada Mental Health Day page", () => {
     expect(html).not.toContain(`href="${awards2026Editorial.rsvpUrl}"`);
     const page = text(html);
     expect(page).toContain("Submitting this RSVP does not guarantee admission and is not a ticket. Your request will be added to our ticket waiting list. We will email you if your ticket is approved.");
-    expect(page).toContain("up to ten per request");
+    expect(page).toContain("every ticket holder");
     expect(page).toContain("Enter your organization in the Organization field.");
-    expect(page).toContain("Turn on one of the three: both Nevada Mental Health Day and the Awards Show, only Nevada Mental Health Day, or only the Awards Show (and not Nevada Mental Health Day).");
+    expect(page).toContain("This form requests Nevada Mental Health Day tickets only. Awards Show tickets require the separate Awards RSVP form.");
     // The ticket steps name no times (the Schedule is the one place for them).
     expect(text(section(html, "tickets-title"))).not.toMatch(/\d(:\d\d)? ?PM/);
     // No personal contact details on the page; questions go to ICF's contact page.
@@ -195,7 +195,7 @@ describe("Nevada Mental Health Day page", () => {
     const html = await render();
     expect(html).not.toContain(communityDay2026.rsvpUrl);
     expect(html).not.toContain('id="tickets"');
-    expect(text(section(html, "community-day-title"))).toContain(`Presented by × ${postEventLabel} Full Schedule`); // the corner, Oct 11
+    expect(text(section(html, "community-day-title"))).toContain(`Presented by & ${postEventLabel} Full Schedule`); // the corner, Oct 11
     expect(text(html)).toContain("What is Community Day?");
   });
 

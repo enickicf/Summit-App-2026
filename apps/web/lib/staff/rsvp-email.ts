@@ -5,12 +5,12 @@ import { newSubmission, wantsCommunityDay, type RsvpAttending, type RsvpEmailRec
 // says plainly that the RSVP is not a ticket, that they are on the waiting list, and that the team will
 // reach out about their ticket. Facts here are the approved Awards facts only (date, venue, evening times).
 export type RsvpEmailInput = Pick<RsvpSubmission, "name" | "email" | "guestCount" | "communityDay" | "attendanceStatus"> & { attending?: RsvpAttending | undefined };
-// Oct 6: three cases: Awards Show + Community Day, Awards Show only, Community Day only.
+// Oct 6: three cases: Awards Show + Nevada Mental Health Day, Awards Show only, Nevada Mental Health Day only.
 type Plan = "both" | "awards" | "communityDay";
 const planFor = (guest: { attending?: RsvpAttending | undefined; communityDay: boolean }): Plan => guest.attending === "community-day" ? "communityDay" : wantsCommunityDay(guest) ? "both" : "awards";
 export type RenderedEmail = { subject: string; text: string; html: string };
 
-// Owner (Oct 7 meeting): Nevada Mental Health Day (Community Day) runs in the daytime: Wellness & Check-In 12–3 PM,
+// Owner (Oct 7 meeting): Nevada Mental Health Day (Nevada Mental Health Day) runs in the daytime: Wellness & Check-In 12–3 PM,
 // Summit Sessions 3–6:30 PM; the Awards Show follows at the Encore Theater: Doors 6:30 PM, Awards Show 7:30–10:00 PM.
 // No Pre-Show is announced in any variant.
 const awardsEvening = "Doors 6:30 PM · Awards Show 7:30–10:00 PM";
@@ -18,9 +18,9 @@ const dayTimes = "Wellness & Check-In 12–3 PM · Summit Sessions 3–6:30 PM";
 const evening = `${dayTimes} · ${awardsEvening}`;
 const showOnlyEvening = awardsEvening;
 const communityDayOnlyEvening = dayTimes;
-// Owner (Oct 4, 2026): a guest who asked for Community Day is confirmed for Community Day and the Not Alone
+// Owner (Oct 4, 2026): a guest who asked for Nevada Mental Health Day is confirmed for Nevada Mental Health Day and the Not Alone
 // Awards Show; everyone else for the Not Alone Awards Show only.
-const eventsFor = (plan: Plan) => plan === "both" ? "Community Day and the Not Alone Awards Show" : plan === "communityDay" ? "Community Day" : "the Not Alone Awards Show";
+const eventsFor = (plan: Plan) => plan === "both" ? "Nevada Mental Health Day and the Not Alone Awards Show" : plan === "communityDay" ? "Nevada Mental Health Day" : "the Not Alone Awards Show";
 const firstName = (name: string) => name.trim().split(/\s+/)[0] || "there";
 const esc = (value: string) => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
@@ -28,23 +28,24 @@ export function rsvpConfirmationEmail(guest: RsvpEmailInput): RenderedEmail {
   const party = guest.guestCount === 1 ? "1 guest (you)" : `${guest.guestCount} guests`;
   const plan = planFor(guest);
   const events = eventsFor(plan);
-  const attending = plan === "both" ? "Community Day + Not Alone Awards Show" : plan === "communityDay" ? "Community Day" : "Not Alone Awards Show";
+  const attending = plan === "both" ? "Nevada Mental Health Day + Not Alone Awards Show" : plan === "communityDay" ? "Nevada Mental Health Day" : "Not Alone Awards Show";
+  const venue = plan === "communityDay" ? "LaFleur (wellness & check-in) · Margaux Ballroom (sessions) · Wynn Las Vegas" : plan === "both" ? "Nevada Mental Health Day: LaFleur & Margaux Ballroom · Awards Show: Encore Theater · Wynn Las Vegas" : awards2026Editorial.venue;
   const eveningLine = plan === "both" ? evening : plan === "communityDay" ? communityDayOnlyEvening : showOnlyEvening;
-  const subject = plan === "both" ? "We received your RSVP – Community Day & Not Alone Awards Show" : plan === "communityDay" ? "We received your RSVP – Community Day" : "We received your RSVP – Not Alone Awards Show";
+  const subject = plan === "both" ? "We received your RSVP – Nevada Mental Health Day & Not Alone Awards Show" : plan === "communityDay" ? "We received your RSVP – Nevada Mental Health Day" : "We received your RSVP – Not Alone Awards Show";
   const lines = [
     `Hi ${firstName(guest.name)},`,
     "",
     `Thank you for your RSVP to ${events}. This email confirms we received your submission.`,
     "",
-    "Your request is on our ticket waiting list. Seating at the Encore Theater is limited, and this RSVP is not a ticket. If you are removed from the waiting list, we will reach out by email with your tickets. Nothing more is needed from you right now.",
+    "We’ve received your ticket request. Your tickets are not yet confirmed. When they’re confirmed, our team will contact you by email and/or text with confirmation and ticketing information. Nothing more is needed from you right now.",
     "",
     "Your request",
     `Name: ${guest.name}`,
     `Party size: ${party}`,
     `Attending: ${attending}`,
     "",
-    "The evening",
-    `${awards2026Editorial.date} · ${awards2026Editorial.venue}`,
+    "Event details",
+    `${awards2026Editorial.date} · ${venue}`,
     eveningLine,
     "",
     "This ticket is free. Your support makes it possible.",
@@ -63,16 +64,16 @@ export function rsvpConfirmationEmail(guest: RsvpEmailInput): RenderedEmail {
 <tr><td style="background:#1c1a2e;padding:28px 32px;text-align:center"><img src="https://notaloneawards.org/images/na-awards-logo-white.png" alt="Not Alone Awards" width="220" style="width:220px;max-width:70%;height:auto;display:inline-block"><p style="margin:14px 0 0;color:#bdc7c5;font-size:13px;letter-spacing:0.04em;text-transform:uppercase">Powered by the Steven &amp; Alexandra Cohen Foundation</p></td></tr>
 <tr><td style="padding:32px 32px 8px;font-size:17px;line-height:1.6">
 <p style="margin:0 0 16px">Hi ${esc(firstName(guest.name))},</p>
-<p style="margin:0 0 16px">Thank you for your RSVP to ${plan === "both" ? "<strong>Community Day</strong> and the <strong>Not Alone Awards Show</strong>" : plan === "communityDay" ? "<strong>Community Day</strong>" : "the <strong>Not Alone Awards Show</strong>"}. This email confirms we received your submission.</p>
-<p style="margin:0 0 16px;padding:16px 18px;background:#f4f5fa;border-left:4px solid #4a5faa;border-radius:8px">Your request is on our <strong>ticket waiting list</strong>. Seating at the Encore Theater is limited, and this RSVP is not a ticket. <strong>If you are removed from the waiting list, we will reach out by email with your tickets.</strong> Nothing more is needed from you right now.</p>
+<p style="margin:0 0 16px">Thank you for your RSVP to ${plan === "both" ? "<strong>Nevada Mental Health Day</strong> and the <strong>Not Alone Awards Show</strong>" : plan === "communityDay" ? "<strong>Nevada Mental Health Day</strong>" : "the <strong>Not Alone Awards Show</strong>"}. This email confirms we received your submission.</p>
+<p style="margin:0 0 16px;padding:16px 18px;background:#f4f5fa;border-left:4px solid #4a5faa;border-radius:8px">We’ve received your ticket request. <strong>Your tickets are not yet confirmed.</strong> When they’re confirmed, our team will contact you by email and/or text with confirmation and ticketing information. Nothing more is needed from you right now.</p>
 </td></tr>
 <tr><td style="padding:8px 32px">
 <table role="presentation" cellspacing="0" cellpadding="0" style="font-size:15px;line-height:1.6;color:#1c1a2e"><tr><td style="padding:0 0 6px;color:#4a5faa;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:0.06em">Your request</td></tr>
 <tr><td>${esc(guest.name)} &middot; ${esc(party)} &middot; ${esc(attending)}</td></tr></table>
 </td></tr>
 <tr><td style="padding:20px 32px 8px">
-<table role="presentation" cellspacing="0" cellpadding="0" style="font-size:15px;line-height:1.6;color:#1c1a2e"><tr><td style="padding:0 0 6px;color:#4a5faa;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:0.06em">The evening</td></tr>
-<tr><td><strong>${esc(awards2026Editorial.date)}</strong><br>${esc(awards2026Editorial.venue)}<br>${esc(eveningLine)}</td></tr></table>
+<table role="presentation" cellspacing="0" cellpadding="0" style="font-size:15px;line-height:1.6;color:#1c1a2e"><tr><td style="padding:0 0 6px;color:#4a5faa;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:0.06em">Event details</td></tr>
+<tr><td><strong>${esc(awards2026Editorial.date)}</strong><br>${esc(venue)}<br>${esc(eveningLine)}</td></tr></table>
 </td></tr>
 <tr><td style="padding:24px 32px 8px;text-align:center"><p style="margin:0 0 12px;font-size:16px;font-weight:700">This ticket is free. Your support makes it possible.</p><a href="${awards2026Editorial.donateUrl}" style="display:inline-block;background:#4a5faa;color:#ffffff;text-decoration:none;font-weight:700;padding:12px 26px;border-radius:999px;font-size:15px">Support Inspiring Children Foundation</a></td></tr>
 <tr><td style="padding:24px 32px 32px;font-size:15px;line-height:1.6"><p style="margin:0 0 14px">Questions? Just reply to this email.</p><p style="margin:0">With gratitude,<br><strong>The Not Alone Awards team</strong><br>Inspiring Children Foundation</p></td></tr>
@@ -109,6 +110,9 @@ export const wantsConfirmation = (record: Pick<RsvpSubmission, "attendanceStatus
 export async function sendRsvpConfirmation(record: RsvpSubmission, store: SubmissionStore, sender: Sender | null = defaultSender()): Promise<"sent" | "skipped" | "no-mailer" | "failed"> {
   if (!wantsConfirmation(record)) return "skipped";
   if (!sender) return "no-mailer";
+  // A browser retry reuses the RSVP id. If the first request saved and emailed but
+  // its response never reached the browser, do not send a second receipt.
+  if ((await store.list("rsvpEmail")).some(email => email.rsvpId === record.id)) return "skipped";
   const rendered = rsvpConfirmationEmail(record);
   try {
     await sender({ to: record.email, ...rendered });

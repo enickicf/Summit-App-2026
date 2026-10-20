@@ -19,8 +19,8 @@ describe("curated Awards people", () => {
     expect(selected.find(person => person.name === "Jewel")?.categories).toEqual(expect.arrayContaining(["Co-Chairs", "Musicians"]));
     expect(selected.find(person => person.name === "Jewel")?.categories[0]).toBe("Co-Chairs");
     expect(selected.find(person => person.name === "Jewel")?.categories[0]).toBe("Co-Chairs");
-    expect(selected.find(person => person.name === "Ryan Wolfington")?.categories).toEqual(["Producers", "Founders & Entrepreneurs"]);
-    expect(selected.find(person => person.name === "Trevor Short")?.categories[0]).toBe("Executive Producers");
+    expect(selected.find(person => person.name === "Ryan Wolfington")?.categories).toEqual(["Executive Producers", "Founders & Entrepreneurs"]);
+    expect(selected.find(person => person.name === "Trevor Short")?.categories[0]).toBe("Producers");
     expect(selected.find(person => person.name === "Loni Love")?.categories).toEqual(["Hosts", "Entertainers & Athletes"]);
     expect(selected.find(person => person.name === "Jen Smorgen")?.categories[0]).toBe("Philanthropists");
     expect(selected.find(person => person.name === "Ellie Kanner")?.categories[0]).toBe("Founders & Entrepreneurs");

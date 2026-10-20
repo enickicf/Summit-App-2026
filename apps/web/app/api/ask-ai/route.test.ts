@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { event2026Snapshot } from "@not-alone/test-fixtures/event-2026";
 import { getSiteSnapshot } from "../../../lib/snapshot";
 import { buildAskAiKnowledge } from "../../../lib/ask-ai-knowledge";
+import { commonQuestions2026 } from "../../../lib/ask-ai-common-questions";
 import { POST } from "./route";
 
 vi.mock("../../../lib/snapshot", () => ({ getSiteSnapshot: vi.fn() }));
@@ -20,6 +21,69 @@ afterEach(() => {
 
 const request = (body: string, headers?: HeadersInit) => new Request("https://summit.example.test/api/ask-ai", { method: "POST", body, ...(headers ? { headers } : {}) });
 const ask = (question: string) => POST(request(JSON.stringify({ question }), { "Content-Type": "application/json" }));
+const askOnAwards = (question: string) => POST(new Request("https://notaloneawards.org/api/ask-ai", { method: "POST", body: JSON.stringify({ question }), headers: { "Content-Type": "application/json" } }));
+
+describe("Ask AI ticketing and site context", () => {
+  it("answers all 20 common Awards and Summit questions through the public endpoint", async () => {
+    for (const { question } of commonQuestions2026) {
+      const response = await ask(question);
+      expect(response.status, question).toBe(200);
+      const { answer } = await response.json();
+      expect(answer.length, question).toBeGreaterThan(40);
+      expect(answer, question).not.toContain("I don't have a confirmed answer");
+      expect(answer, question).not.toContain("Published event information is temporarily unavailable");
+    }
+  });
+
+  it("directs a schedule-navigation question to the page rather than dumping agenda rows", async () => {
+    const { answer, sources } = await (await ask("Where can I find the Summit schedule?")).json();
+    expect(answer).toContain("See the published Summit schedule");
+    expect(answer).not.toContain("Poker Night");
+    expect(sources[0].url).toBe("https://notalonesummit.org/schedule");
+  });
+
+  it.each([ask, askOnAwards])("explains conditional ticket confirmation without reading a submission", async submit => {
+    const { answer } = await (await submit("When will I get ticket confirmation?")).json();
+    expect(answer).toContain("If your tickets are confirmed");
+    expect(answer).toContain("email and/or text");
+    expect(answer).toContain("Ask AI cannot check");
+    expect(loadSnapshot).not.toHaveBeenCalled();
+  });
+
+  it("answers Awards and Nevada Mental Health Day fully on the Awards site", async () => {
+    expect((await (await askOnAwards("What time do Awards doors open?")).json()).answer).toContain("6:30 PM");
+    expect((await (await askOnAwards("What is the Nevada Mental Health Day schedule?")).json()).answer).toContain("Public schedule");
+    expect((await (await askOnAwards("Does Nevada Mental Health Day admission include the Awards Show?")).json()).answer).toContain("does not include an Awards Show ticket");
+  });
+
+  it("keeps detailed Summit inquiries on the Awards site at the private-event boundary", async () => {
+    for (const question of ["Who is speaking at the Summit?", "What is the Summit schedule?", "How do I get Summit tickets?"]) {
+      const { answer } = await (await askOnAwards(question)).json();
+      expect(answer).toContain("private, invitation-only event");
+      expect(answer).toContain("Summit website");
+      expect(answer).not.toContain("Molly's Game Poker Night");
+    }
+    expect((await (await askOnAwards("When is the Summit?")).json()).answer).toContain(event2026Snapshot.event.dateLabel);
+    expect((await (await ask("What happens Monday at the summit?")).json()).answer).toContain("Awards Show");
+    const awardsKnowledge = buildAskAiKnowledge(event2026Snapshot, "What is the Summit schedule?", "awards");
+    expect(awardsKnowledge.schedule).toEqual([]);
+    expect(awardsKnowledge.guests).toEqual([]);
+    expect(awardsKnowledge.pendingNotes).toEqual([]);
+  });
+
+  it("uses the browser's Awards context when Netlify forwards to a shared internal host", async () => {
+    const response = await POST(new Request("https://not-alone-summit.netlify.app/api/ask-ai", {
+      method: "POST", body: JSON.stringify({ question: "What is the Summit schedule?" }),
+      headers: { "Content-Type": "application/json", "X-Ask-AI-Site": "awards" }
+    }));
+    expect((await response.json()).answer).toContain("private, invitation-only event");
+    const forwarded = await POST(new Request("https://not-alone-summit.netlify.app/api/ask-ai", {
+      method: "POST", body: JSON.stringify({ question: "What is the Summit schedule?" }),
+      headers: { "Content-Type": "application/json", "X-Forwarded-Host": "notaloneawards.org" }
+    }));
+    expect((await forwarded.json()).answer).toContain("private, invitation-only event");
+  });
+});
 
 describe("public concierge request validation", () => {
   it.each(["{", "", "null", "[]", "{}", '{"question":1}', '{"question":" "}', '{"question":" x "}', JSON.stringify({ question: "x".repeat(501) })])("rejects invalid input without fetching the event: %s", async body => {
@@ -218,6 +282,11 @@ describe("public concierge published facts and failures", () => {
     expect(response.status).toBe(200);
     expect((await response.json()).answer).toContain("messaging is not available");
     expect(loadSnapshot).not.toHaveBeenCalled();
+  });
+
+  it("does not treat a question about how programs connect as attendee messaging", async () => {
+    const { answer } = await (await ask("How does the Not Alone Challenge connect to the Awards Show?")).json();
+    expect(answer).not.toContain("Attendee-to-attendee messaging is not available");
   });
 });
 

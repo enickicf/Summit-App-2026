@@ -88,7 +88,7 @@ describe("Sept 23 site updates", () => {
     for (const html of [s, a]) {
       const block = html.slice(html.indexOf('id="summit-partners"') >= 0 ? html.indexOf('id="summit-partners"') : html.indexOf('id="awards-partners"'));
       expect(block).toMatch(/>Our Partners<\/h[23]>/);
-      expect(block).toMatch(/>Powered by<\/span>[^]*?>Presented by<\/span>[^]*?alt="Inspiring Children Foundation"[^]*?>×<\/span>[^]*?alt="NAMI, National Alliance on Mental Illness"[^]*?>Host venue<\/span>/);
+      expect(block).toMatch(/>Powered by<\/span>[^]*?>Presented by<\/span>[^]*?alt="Inspiring Children Foundation"[^]*?>\+<\/span>[^]*?alt="NAMI, National Alliance on Mental Illness"[^]*?>Host venue<\/span>/);
       expect(html).not.toMatch(/Founding Partners|community partner/i);
       expect(html).not.toContain('id="founding-partners"');
     }

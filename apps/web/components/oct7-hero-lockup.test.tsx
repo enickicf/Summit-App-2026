@@ -12,7 +12,7 @@ import styles from "./presented-by.module.css";
 // The Summit page mounts the live-updates client component, which reads the app router.
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn() }), usePathname: () => "/", useSearchParams: () => new URLSearchParams() }));
 
-// Owner directions from the Oct 7, 2026 meeting (track A): the "Presented by" lockup joins its logos with a ×, sits
+// Owner direction (Oct 16, 2026): the "Presented by" lockup joins its logos with a plus sign and sits
 // directly under the Cohen "Powered by" credit in both heroes, the Awards mission opens with the presenters, and the
 // public Awards evening is Doors Open 6:30 PM / Awards Show 7:30–10:00 PM with no Pre-Show anywhere.
 const program = publishedAwardsProgram(event2026Snapshot)!;
@@ -20,13 +20,13 @@ const awards = renderToStaticMarkup(<OriginalAwardsPage year={2026} snapshot={ev
 const summit = renderToStaticMarkup(<OriginalSummitPage year={2026} snapshot={event2026Snapshot} />);
 const hero = (html: string, title: string) => html.match(new RegExp(`<section[^>]*aria-labelledby="${title}"[^>]*>([\\s\\S]*?)<\\/section>`))![1]!;
 const escape = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-const times = `<span class="${styles.times}" aria-hidden="true">×</span>`;
-// Powered by -> the lockup (label, ICF logo, ×, NAMI logo) -> the next paragraph (the date line).
+const times = `<span class="${styles.times}" aria-hidden="true">+</span>`;
+// Powered by -> the lockup (label, ICF logo, +, NAMI logo) -> the next paragraph (the date line).
 // Owner (Oct 8): the Awards hero takes the Summit format — the lockup directly under the Cohen credit in the same stack.
 const underPoweredBy = new RegExp(`<p class="[^"]*">Powered by<strong>Steven &amp; Alexandra<br/>Cohen Foundation</strong></p><div class="${escape(styles.presentedBy!)} ${escape(styles.heroSize!)} ">[^]*?>Presented by</span><span class="[^"]*"><img[^>]*alt="Inspiring Children Foundation"[^>]*>${escape(times)}<img[^>]*alt="NAMI, National Alliance on Mental Illness"[^>]*></span></div>`); // Ryan (Oct 8): the Summit date line now sits in the hero's bottom-right aside, after the lockup
 
 describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards times", () => {
-  it("joins the Presented-by logos with a × instead of a divider line, in every size and tone", () => {
+  it("joins the Presented-by logos with a plus sign instead of a divider line, in every size and tone", () => {
     for (const props of [{}, { size: "hero" }, { tone: "light" }, { size: "hero", tone: "light" }] as const) {
       const html = renderToStaticMarkup(<PresentedBy {...props} />);
       expect(html).toContain(times);
@@ -78,11 +78,11 @@ describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards tim
   });
 
   it("opens the Awards mission with the presenters, in the owner's exact words", () => {
-    expect(awards).toContain("<p>Inspiring Children Foundation × NAMI present the Not Alone Awards Show, powered by the <strong>Steven &amp; Alexandra Cohen Foundation</strong>.</p>");
+    expect(awards).toContain("<p>Inspiring Children Foundation &amp; NAMI present the Not Alone Awards Show, powered by the <strong>Steven &amp; Alexandra Cohen Foundation</strong>.</p>");
     expect(awards).not.toMatch(/Presenting the Not Alone Awards Show|hosted by <strong>Wynn Resorts|broadcast live on <strong>iHeartRadio/);
     const mission = awards.slice(awards.indexOf('id="mission"'), awards.indexOf('id="awards-host"'));
     // The owner's sentence is the first paragraph; the second (ICF's own statement, awards[1].blocks[1]) stays.
-    expect(mission.indexOf("<p>")).toBe(mission.indexOf("<p>Inspiring Children Foundation × NAMI present"));
+    expect(mission.indexOf("<p>")).toBe(mission.indexOf("<p>Inspiring Children Foundation &amp; NAMI present"));
     expect(mission.slice(0, mission.indexOf('id="awards-narrative"')).match(/<p>/g)).toHaveLength(2); // the narrative block (Oct 7 evening) follows
   });
 

@@ -6,6 +6,7 @@ import { personNameKey } from "../../../lib/person-portraits";
 import { getSiteSnapshot } from "../../../lib/snapshot";
 import { publishedProgramAnswer } from "../../../lib/published-program-answer";
 import { awardsFactAnswer, buildAskAiKnowledge, communityDayAnswer, icfFactAnswer, icfYouthContributionAnswer, isMentalHealthQuestion, isRelevantQuestion, mentalHealthAnswer, offTopicAnswer } from "../../../lib/ask-ai-knowledge";
+import { awardsSummitPrivacyAnswer, commonQuestionAnswer, isDetailedSummitQuestion, ticketProcessAnswer } from "../../../lib/ask-ai-common-questions";
 import { allowModelCall, cachedAnswer, createAskAiModelAnswer, isAskAiModelEnabled, rememberAnswer } from "../../../lib/ask-ai-model";
 import { QuestionRequestError, readQuestion } from "./request";
 
@@ -23,11 +24,26 @@ export async function POST(request: Request) {
       : respond("Please send a valid question.", 400);
   }
   if (isMentalHealthQuestion(question)) return respond(mentalHealthAnswer);
+  const browserSite = request.headers.get("x-ask-ai-site");
+  const browserOrigin = request.headers.get("origin") || request.headers.get("referer") || "";
+  const forwardedHost = request.headers.get("x-forwarded-host")?.split(",")[0]?.trim().replace(/^www\./, "");
+  const hostHeader = request.headers.get("host")?.split(":")[0]?.replace(/^www\./, "");
+  const audience = browserSite === "awards"
+    || forwardedHost === "notaloneawards.org"
+    || hostHeader === "notaloneawards.org"
+    || /^(?:https?:\/\/)?(?:www\.)?notaloneawards\.org(?::\d+)?(?:\/|$)/i.test(browserOrigin)
+    || new URL(request.url).hostname.replace(/^www\./, "") === "notaloneawards.org" ? "awards" : "summit";
+  const ticketAnswer = ticketProcessAnswer(question, audience);
+  if (ticketAnswer) return respond(ticketAnswer.answer, 200, ticketAnswer.sources);
   if (/\b(?:airtable|raw records?|data entries|rsvp entries|submissions?|staff notes?|private contacts?|export|guest emails?|guest phone numbers?)\b/i.test(question)) {
     return respond("I can share only approved public information. For private records or staff details, please contact the event team through its authorized channels.");
   }
-  if (/\b(message|messaging|connect)\b/.test(question)) {
+  if (/\b(message|messaging|chat|connect)\b/.test(question)
+    && /\b(attendees?|guests?|someone|somebody|other people|participants?|each other|another person)\b/.test(question)) {
     return respond("Attendee-to-attendee messaging is not available. Use the Contact page to reach the event team.");
+  }
+  if (audience === "awards" && isDetailedSummitQuestion(question)) {
+    return respond(awardsSummitPrivacyAnswer, 200, [{ title: "Not Alone Summit", url: "https://notalonesummit.org/" }]);
   }
   try {
     const snapshot = await getSiteSnapshot();
@@ -39,7 +55,7 @@ export async function POST(request: Request) {
     if (person) {
       const hasPublishedAppearance = snapshot.scheduleItems.some(item => item.eventId === snapshot.event.id
         && item.published && item.visibilityScope.id === "public" && item.speakerIds.includes(person.slug));
-      if (hasPublishedAppearance) {
+      if (audience === "summit" && hasPublishedAppearance) {
         const programAnswer = publishedProgramAnswer(question, snapshot, new Date().toISOString(), { personSchedule: true });
         if (programAnswer) return respond(programAnswer, 200, [{ title: "Published Summit schedule", url: "https://notalonesummit.org/schedule" }]);
       }
@@ -55,9 +71,14 @@ export async function POST(request: Request) {
     }
     const awardsAnswer = awardsFactAnswer(question);
     if (awardsAnswer) return respond(awardsAnswer, 200, [{ title: "Not Alone Awards 2026", url: "https://notaloneawards.org/awards/2026" }]);
+    const dayAndAwardsQuestion = /\b(?:community day|nevada mental health day)\b/.test(question) && /\bawards?\b/.test(question);
+    const sharedTicketAnswer = dayAndAwardsQuestion ? commonQuestionAnswer(question, snapshot) : null;
+    if (sharedTicketAnswer) return respond(sharedTicketAnswer.answer, 200, sharedTicketAnswer.sources);
     const dayAnswer = communityDayAnswer(question);
     if (dayAnswer) return respond(dayAnswer, 200, [{ title: "Nevada Mental Health Day", url: "https://notaloneawards.org/community-day" }]);
-    const programAnswer = publishedProgramAnswer(question, snapshot, new Date().toISOString());
+    const commonAnswer = commonQuestionAnswer(question, snapshot);
+    if (commonAnswer) return respond(commonAnswer.answer, 200, commonAnswer.sources);
+    const programAnswer = audience === "summit" ? publishedProgramAnswer(question, snapshot, new Date().toISOString()) : null;
     if (programAnswer) return respond(programAnswer, 200, [{ title: "Published Summit schedule", url: "https://notalonesummit.org/schedule" }]);
     if ((/\b(dates?|when)\b/.test(question) && /\b(summit|event)\b/.test(question)) || /^(?:what (?:is|are) (?:the )?)?dates?\??$/.test(question)) {
       return respond(`${snapshot.event.name}: ${snapshot.event.dateLabel}.`);
@@ -73,13 +94,13 @@ export async function POST(request: Request) {
     // Zero-cost gate: unrelated questions are answered locally and never reach the API.
     if (!isRelevantQuestion(question, snapshot)) return respond(offTopicAnswer);
     if (isAskAiModelEnabled()) {
-      const cacheKey = `${snapshot.event.id}:${snapshot.revision ?? ""}:${question.replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ").trim()}`;
+      const cacheKey = `${audience}:${snapshot.event.id}:${snapshot.revision ?? ""}:${question.replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ").trim()}`;
       const cached = cachedAnswer(cacheKey);
       if (cached) return respond(cached.answer, 200, cached.sources);
       const client = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "anonymous";
       if (!allowModelCall(client)) return respond("You've asked several questions in a short time. Please wait a few minutes, or use the Schedule and Contact pages.", 429);
       try {
-        const result = await createAskAiModelAnswer(question, buildAskAiKnowledge(snapshot, question));
+        const result = await createAskAiModelAnswer(question, buildAskAiKnowledge(snapshot, question, audience), fetch, audience);
         const answer = result.relevant && result.answer ? result.answer : offTopicAnswer;
         const sources = result.relevant ? result.sources : [];
         rememberAnswer(cacheKey, { answer, sources });

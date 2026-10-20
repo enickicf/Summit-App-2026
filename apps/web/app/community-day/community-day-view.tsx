@@ -1,3 +1,4 @@
+import { InvitationBadge } from "../../components/invitation-badge";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
@@ -28,6 +29,7 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
   const snapshot = await getSiteSnapshot();
   return <main id="main-content" tabIndex={-1} className={styles.page}>
     <section className={styles.hero} aria-labelledby="community-day-title">
+      {partner?.invitationTier && <InvitationBadge tier={partner.invitationTier} />}
       {/* Imported next to the page (not from /public) so Next measures and optimizes it at build time. */}
       <Image className={styles.heroPhoto} src={heroPhoto} alt={day.heroPhotoAlt} fill sizes="100vw" loading="eager" fetchPriority="high" unoptimized />
       <div className={styles.heroCopy}>
@@ -89,7 +91,7 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
 
     {!over && <section className={styles.tickets} id="tickets" aria-labelledby="tickets-title">
       <h2 id="tickets-title">Request free tickets</h2>
-      <ol className={styles.steps}>{day.tickets.steps.map(step => <li key={step.title}><h3>{step.title}</h3><p>{step.detail}</p></li>)}</ol>
+      <ol className={styles.steps}>{(partner ? [{ title: "Open your invitation form", detail: "Use the invitation-specific RSVP link below and select the events available on that form." }, { title: "Name every ticket holder", detail: "Provide a name, email, phone, organization and title for each person. Check each event and ticket count before submitting." }] : day.tickets.steps).map(step => <li key={step.title}><h3>{step.title}</h3><p>{step.detail}</p></li>)}</ol>
       <a className={`${styles.button} ${styles.solid}`} href={rsvpUrl} target="_blank" rel="noopener">Open the RSVP form<ArrowUpRight size={18} aria-hidden="true" /></a>
       <p className={styles.notice}>{day.tickets.waitingList}</p>
       <p className={styles.questions}>Questions? <Link href="/contact">Contact the Inspiring Children Foundation</Link></p>

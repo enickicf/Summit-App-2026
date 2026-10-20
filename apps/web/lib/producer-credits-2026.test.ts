@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { applyProducerCreditRules, isHiddenProducerCredit, ownerProducerCredits2026, producerCreditsHidden2026, sortProducerCredits, surnameOf } from "./producer-credits-2026";
 
-// Ryan Wolfington, Oct 8, 2026: Raquelle Stevens is a producer (and still a speaker), Ryan is off the credits,
-// and the credits read in alphabetical order.
+// Current 2026 producer credits: the Oct 15 owner correction places only Ryan, Aphrah and Jewel
+// in Executive Producers; Trent and Trevor are Producers.
 describe("producer credits (Ryan, Oct 8)", () => {
   it("adds Raquelle Stevens to the Producers group as an owner addition", () => {
     expect(ownerProducerCredits2026).toEqual([{ name: "Raquelle Stevens", group: "Producers" }]);
@@ -53,12 +53,12 @@ describe("producer credits (Ryan, Oct 8)", () => {
     ["ryan wolfington", { title: "Founder, Inspiring Children Foundation and Not Alone", occupation: "" }]
   ]);
 
-  it("with Airtable as the source: Ryan's Oct 9 groups and order, Raquelle merged into Producers", () => {
+  it("with Airtable as the source: the owner-approved groups and order, Raquelle merged into Producers", () => {
     const credited = applyProducerCreditRules(groups, live);
     expect(credited.map(group => group.title)).toEqual(["Executive Producers", "Producers", "Co-Producers", "Associate Producers"]);
-    // Trevor (when present) first, Trent moved up from Producers second, Ryan third, then the others by surname.
-    expect(credited[0]!.people.map(person => person.name)).toEqual(["Trent Alenik", "Ryan Wolfington", "Aphrah Brokaw", "Jewel"]);
-    expect(credited[1]!.people.map(person => person.name)).toEqual(["Raquelle Stevens", "Deb Cullen", "Jan Thwaites"]);
+    // Trent stays a Producer; Aphrah, Jewel and Ryan alone are Executive Producers.
+    expect(credited[0]!.people.map(person => person.name)).toEqual(["Aphrah Brokaw", "Jewel", "Ryan Wolfington"]);
+    expect(credited[1]!.people.map(person => person.name)).toEqual(["Trent Alenik", "Raquelle Stevens", "Deb Cullen", "Jan Thwaites"]);
     expect(credited[1]!.people.find(person => person.name === "Raquelle Stevens")).not.toHaveProperty("image"); // a name card
     expect(credited[3]!.people.map(person => person.name)).toEqual(["Casey Caruso", "Seth Porter Winterton"]);
     expect(groups[0]!.people.map(person => person.name)).toEqual(["Ryan Wolfington", "Jewel", "Aphrah Brokaw"]); // input untouched
@@ -71,8 +71,8 @@ describe("producer credits (Ryan, Oct 8)", () => {
       { title: "Associate Producers", photos: false, people: ["Will Elmore Jr.", "Ricky Sypert", "Cherrial Odell", "Clark Cummings", "Isabella Wolfington", "Nick Ekern", "Casey Caruso", "Bianca Mok", "Payton McDonald"].map(name => ({ name, role: "" })) }
     ];
     const credited = applyProducerCreditRules(full, new Map());
-    expect(credited[0]!.people.map(person => person.name)).toEqual(["Trevor Short", "Trent Alenik", "Ryan Wolfington", "Aphrah Brokaw", "Jewel"]);
-    expect(credited[1]!.people.map(person => person.name)).toEqual(["Sally Dewhurst", "Sophie Novak", "Paige Neuenschwander", "Raquelle Stevens", "Deb Cullen", "Jan Thwaites"]);
+    expect(credited[0]!.people.map(person => person.name)).toEqual(["Aphrah Brokaw", "Jewel", "Ryan Wolfington"]);
+    expect(credited[1]!.people.map(person => person.name)).toEqual(["Trevor Short", "Trent Alenik", "Sally Dewhurst", "Sophie Novak", "Paige Neuenschwander", "Raquelle Stevens", "Deb Cullen", "Jan Thwaites"]);
     expect(credited[2]!.people.map(person => person.name)).toEqual(["Casey Caruso", "Nick Ekern", "Clark Cummings", "Cherrial Odell", "Ricky Sypert", "Will Elmore Jr.", "Payton McDonald", "Bianca Mok", "Isabella Wolfington"]);
     const withSydney = applyProducerCreditRules([{ title: "Associate Producers", photos: false, people: ["Isabella Wolfington", "Max Novak", "Sydney King", "Ricky Sypert", "Casey Caruso"].map(name => ({ name, role: "" })) }], new Map());
     expect(withSydney[0]!.people.map(person => person.name)).toEqual(["Casey Caruso", "Sydney King", "Ricky Sypert", "Max Novak", "Isabella Wolfington"]);

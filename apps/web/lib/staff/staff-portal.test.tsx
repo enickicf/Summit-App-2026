@@ -80,7 +80,7 @@ describe("RSVP and nomination intake", () => {
     const forwarded: unknown[] = [];
     const response = await handleRsvpPost(post("/api/rsvp/", rsvpForm), store, async payload => { forwarded.push(payload); });
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ ok: true });
+    expect(await response.json()).toMatchObject({ ok: true, requestId: expect.any(String) });
     expect(response.headers.get("access-control-allow-origin")).toBe("https://not-alone-awards-rsvp-2026.netlify.app");
     const [saved] = await store.list("rsvp");
     expect(saved).toMatchObject({ name: "Natasha Buonanno", email: "natasha@example.com", phone: "702-555-0101", professionalRole: "Nursing", attendanceStatus: "attending", communityDay: true, guestCount: 2, notes: "Wheelchair seating please", source: "form" });

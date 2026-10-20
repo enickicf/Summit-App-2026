@@ -4,11 +4,11 @@ import { AwardsYearPage } from "../../components/awards-year-page";
 import { partnerSiteByKey } from "../../lib/awards-partner-sites";
 import { getSiteSnapshot } from "../../lib/snapshot";
 
-// Owner (Oct 4, 2026): general Uber VIP copy of the Awards site, paired with /vip/community-day.
-const site = partnerSiteByKey("uber-vip")!;
+// Owner (Oct 4, 2026): regular VIP copy of the Awards site, paired with /vip/community-day.
+const site = partnerSiteByKey("vip-legacy")!;
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "VIP Invitation · Not Alone Awards 2026", robots: { index: false, follow: false } };
 export default async function PartnerAwardsPage() {
   const snapshot = await getSiteSnapshot();
-  return <AwardsYearPage year={2026} snapshot={snapshot} program={snapshot ? publishedAwardsProgram(snapshot) : null} rsvpUrl={site.rsvpUrl} />;
+  return <AwardsYearPage year={2026} snapshot={snapshot} program={snapshot ? publishedAwardsProgram(snapshot) : null} rsvpUrl={site.rsvpUrl} invitationTier={site.invitationTier} />;
 }

@@ -15,10 +15,10 @@ export function AskAiWidget() {
   const [actionsVisibleOnPhone, setActionsVisibleOnPhone] = useState(false);
   const panelId = useId();
   const suggestions = pathname.startsWith("/awards")
-    ? ["When do the Awards start?", "Who is hosting the Awards?", "What is the Not Alone program?"]
+    ? ["When will I get ticket confirmation?", "What time do Awards doors open?", "Does Nevada Mental Health Day include the Awards Show?"]
     : pathname === "/community-day"
-      ? ["What happens on Community Day?", "When do Awards doors open?", "What does Inspiring Children Foundation do?"]
-      : ["What is the schedule for November 3?", "Who are the Bryan Brothers?", "What does Inspiring Children Foundation do?"];
+      ? ["When will I get ticket confirmation?", "What happens on Nevada Mental Health Day?", "Does Nevada Mental Health Day include an Awards ticket?"]
+      : ["Where can I find the Summit schedule?", "Is the Summit private?", "When will I get ticket confirmation?"];
 
   useEffect(() => {
     if (pathname !== "/community-day") return;
@@ -53,7 +53,7 @@ export function AskAiWidget() {
         <p className={styles.panelTitle}><Sparkles size={18} aria-hidden="true" /> Ask AI</p>
         <button type="button" className={styles.close} onClick={() => setOpen(false)} aria-label="Close Ask AI"><X size={18} aria-hidden="true" /></button>
       </div>
-      <p className={styles.scope} id="ask-ai-scope">Ask about the Not Alone Summit, the Not Alone Awards, or the Inspiring Children Foundation.</p>
+      <p className={styles.scope} id="ask-ai-scope">Ask about the Not Alone Summit, Nevada Mental Health Day, the Not Alone Awards, or the Inspiring Children Foundation.</p>
       <AskAiForm suggestions={suggestions} />
     </section>}
     <button type="button" className={styles.launcher} onClick={() => setOpen(value => !value)} aria-expanded={open} aria-controls={panelId} data-analytics-id="ask-ai-launcher">

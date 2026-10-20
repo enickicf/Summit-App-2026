@@ -1,3 +1,4 @@
+import { eventWaiverSchema, waiverMatchesAttendee, waiverSummary } from "../event-waiver";
 import { randomUUID } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -42,9 +43,15 @@ export const rsvpHeardFromLabels: Record<Exclude<RsvpHeardFrom, "">, string> = {
 // every additional person in the party (the person filling in the form is the first). "guests" holds those
 // additional people. Forms from before Oct 5 sent no list, so the field is optional and older records have none.
 export const maxPartySize = 10;
-export const partyGuestSchema = z.object({ name: personName(180), email, phone: required(80) }).strip();
+export const partyGuestSchema = z.object({ name: personName(180), email, phone: required(80).refine(value => value.replace(/\D/g, "").length >= 7, "Please enter a phone number."), organization: text(240).optional(), professionalRole: text(180).optional(), eventWaiver: eventWaiverSchema.optional() }).strip().refine(p => waiverMatchesAttendee(p.eventWaiver,p.name), "The waiver must be signed personally by the named attendee.");
 export type PartyGuest = z.infer<typeof partyGuestSchema>;
 export const rsvpPayloadSchema = z.object({
+  // A browser-generated identity makes one click safe to retry while preserving every
+  // separate submission as its own record. Older and cached forms may omit both.
+  requestId: z.uuid().optional(),
+  requestedAt: z.iso.datetime().optional(),
+  groupEventTextConsent: z.boolean().optional(),
+  eventWaiver: eventWaiverSchema.optional(),
   name: personName(180),
   email,
   phone: text(80).optional().default(""),
@@ -68,17 +75,18 @@ export const rsvpPayloadSchema = z.object({
   communityDay: z.preprocess(value => value === true || value === "on" || value === "yes" || value === "true", z.boolean()).optional().default(false),
   guestCount: z.coerce.number().int().min(1).max(maxPartySize).optional().default(1),
   guests: z.array(partyGuestSchema).max(maxPartySize - 1).optional(),
+  groupWaiverAttestation: z.preprocess(value => value === undefined || value === null || value === "" ? undefined : value === true || value === "on" || value === "yes" || value === "true", z.boolean()).optional(),
   notes: text(900).optional().default(""),
   // Owner (Oct 12): optional "text me updates" checkbox (lib/staff/text-consent.ts). Absent on forms from before Oct 12.
   textConsent: z.preprocess(value => value === undefined || value === null || value === "" ? undefined : value === true || value === "on" || value === "yes" || value === "true", z.boolean()).optional(),
   website: text(200).optional().default("") // honeypot: bots fill it, people never see it
 }).strip();
 export type RsvpPayload = z.infer<typeof rsvpPayloadSchema>;
-// True when a form that sends the guest list (Oct 5 onward) does not name everyone in the party. A form from
-// before Oct 5 sends no list at all and is still accepted, so a tab left open is never turned away.
-export const partyGuestsIncomplete = (payload: Pick<RsvpPayload, "guestCount" | "guests">) => payload.guests !== undefined && payload.guests.length !== payload.guestCount - 1;
+// Oct 16: every new request must name every ticket holder, including requests from cached forms.
+// Historical stored records remain readable even when they have no guest list.
+export const partyGuestsIncomplete = (payload: Pick<RsvpPayload, "guestCount" | "guests">) => (payload.guests?.length ?? 0) !== payload.guestCount - 1;
 // One line per additional guest, for the portal and the spreadsheet: "Name <email> phone".
-export const partyGuestLine = (guest: PartyGuest) => `${guest.name} <${guest.email}> ${guest.phone}`;
+export const partyGuestLine = (guest: PartyGuest) => `${guest.name} <${guest.email}> ${guest.phone}${guest.organization ? ` · ${guest.organization}` : ""}${guest.professionalRole ? ` · ${guest.professionalRole}` : ""}`;
 
 export const nominationPayloadSchema = z.object({
   nominatorName: personName(180),
@@ -201,7 +209,7 @@ export function siteVisitWaiverProblem(payload: Pick<WorkshopPayload, "name" | "
   return null;
 }
 
-export type Submission<T> = T & { id: string; submittedAt: string; source: "form" | "import"; legacyId?: string };
+export type Submission<T> = T & { id: string; submittedAt: string; source: "form" | "import"; legacyId?: string; invitationLevel?: "vip" | "uber-vip"; invitationRequestId?: string; requesterName?: string; requesterEmail?: string; requesterPhone?: string; requesterOrganization?: string; requesterProfessionalRole?: string };
 // Owner (Sept 28): a request can be removed from the working lists (test entries) without being deleted; it
 // stays in the store with removedAt/removedReason and is shown under "Removed guests" in the portal.
 // invitedBy / vip arrived Sept 30; records stored before then have neither (read as "" / false).
@@ -227,6 +235,10 @@ export const textPreferenceSchema = z.object({
 // first come first served, and the team emails the guest if a spot is secured. One request = the guest, plus one guest
 // if they bring one (name, email and phone then required).
 export const closingDinnerPayloadSchema = z.object({
+  requestId: z.uuid().optional(),
+  requestedAt: z.iso.datetime().optional(),
+  groupEventTextConsent: z.boolean().optional(),
+  eventWaiver: eventWaiverSchema.optional(),
   name: personName(180),
   email,
   phone: text(80).refine(value => value.replace(/\D/g, "").length >= 7, "Please enter a phone number."),
@@ -236,6 +248,10 @@ export const closingDinnerPayloadSchema = z.object({
   guestName: text(180).optional().default(""),
   guestEmail: z.union([email, z.literal("")]).optional().default(""),
   guestPhone: text(80).optional().default(""),
+  guestEventWaiver: eventWaiverSchema.optional(),
+  guestOrganization: text(240).optional(),
+  guestProfessionalRole: text(180).optional(),
+  groupWaiverAttestation: z.preprocess(value => value === undefined || value === null || value === "" ? undefined : value === true || value === "on" || value === "yes" || value === "true", z.boolean()).optional(),
   notes: text(900).optional().default(""),
   textConsent: z.preprocess(value => value === undefined || value === null || value === "" ? undefined : value === true || value === "on" || value === "yes" || value === "true", z.boolean()).optional(),
   website: text(200).optional().default("") // honeypot
@@ -257,7 +273,7 @@ export function closingDinnerTotals(records: ClosingDinnerSubmission[]) {
   const latest = [...latestByEmail.values()];
   return { formsSubmitted: records.length, requests: latest.length, seatsRequested: latest.reduce((total, record) => total + closingDinnerSeats(record), 0), withGuest: latest.filter(record => record.bringingGuest).length };
 }
-export const closingDinnerCsvColumns = ["submittedAt", "name", "email", "phone", "organization", "professionalRole", "bringingGuest", "seats", "guestName", "guestEmail", "guestPhone", "notes", "textMessageConsent", "textConsentDate", "textConsentProtocol", "source", "id", "removedAt", "removedReason"];
+export const closingDinnerCsvColumns = ["submittedAt", "name", "email", "phone", "organization", "professionalRole", "bringingGuest", "seats", "guestName", "guestEmail", "guestPhone", "guestOrganization", "guestProfessionalRole", "groupWaiverAttestation", "waiverStatus", "guestWaiverStatus", "waiverRecord", "guestWaiverRecord", "notes", "textMessageConsent", "textConsentDate", "textConsentProtocol", "invitationLevel", "invitationRequestId", "requesterName", "requesterEmail", "requesterPhone", "requesterOrganization", "requesterProfessionalRole", "source", "id", "removedAt", "removedReason"];
 export type TextPreferenceRecord = Submission<Omit<z.infer<typeof textPreferenceSchema>, "website"> & { via: "page" | "staff" | "stop-reply"; note?: string }>;
 export type RsvpEmailRecord = Submission<{ email: string; subject: string; rsvpId: string }>;
 
@@ -397,6 +413,19 @@ export function newSubmission<T extends object>(payload: T, now: Date = new Date
   return { ...payload, id: randomUUID(), submittedAt: now.toISOString(), source: "form" };
 }
 
+/**
+ * Uses the browser's stable identity when present so a timed-out request can be
+ * retried without creating a second row. A new click receives a new identity.
+ */
+export function newRetrySafeSubmission<T extends object & { requestId?: string | undefined; requestedAt?: string | undefined }>(payload: T, now: Date = new Date()): Submission<T> {
+  return {
+    ...payload,
+    id: payload.requestId ?? randomUUID(),
+    submittedAt: payload.requestedAt ?? now.toISOString(),
+    source: "form"
+  };
+}
+
 // The portal's headline numbers. Owner (Sept 30): a ticket request means the guest plans to attend, so
 // tickets requested = party sizes of every request (only an explicit legacy "unable to attend" is left out),
 // counting each email once (its latest request) so a repeat submission does not double count.
@@ -444,8 +473,9 @@ export const ustaRsvps = (records: RsvpSubmission[]) => records.filter(record =>
 export const lakeLasVegasRsvps = (records: RsvpSubmission[]) => records.filter(record => record.tier === "lake-las-vegas");
 // Owner (Oct 2): every request shows which form it came through. NAMI wins over VIP if both were ever set.
 // Owner (Oct 3): NAMI VIP and Lake Las Vegas VIP are private VIP forms tagged with their group as well.
-export type RsvpForm = "Standard" | "VIP" | "NAMI" | "NAMI VIP" | "USTA" | "Lake Las Vegas" | "Lake Las Vegas VIP" | "Community Day";
-export function rsvpForm(record: Pick<RsvpSubmission, "vip" | "partner" | "tier">): RsvpForm {
+export type RsvpForm = "Uber VIP" | "Standard" | "VIP" | "NAMI" | "NAMI VIP" | "USTA" | "Lake Las Vegas" | "Lake Las Vegas VIP" | "Community Day";
+export function rsvpForm(record: Pick<RsvpSubmission, "vip" | "partner" | "tier" | "invitationLevel">): RsvpForm {
+  if (record.invitationLevel === "uber-vip") return "Uber VIP";
   if (record.partner === "nami") return record.vip ? "NAMI VIP" : "NAMI";
   if (record.partner === "usta") return "USTA";
   if (record.tier === "lake-las-vegas") return record.vip ? "Lake Las Vegas VIP" : "Lake Las Vegas";
@@ -453,10 +483,10 @@ export function rsvpForm(record: Pick<RsvpSubmission, "vip" | "partner" | "tier"
   return record.vip ? "VIP" : "Standard";
 }
 // Owner (Oct 3): one spreadsheet per form, for seating.
-export const rsvpExportForms = { vip: "VIP", "nami-vip": "NAMI VIP", "lake-las-vegas-vip": "Lake Las Vegas VIP", "lake-las-vegas": "Lake Las Vegas", nami: "NAMI", usta: "USTA", standard: "Standard" } as const;
+export const rsvpExportForms = { "uber-vip": "Uber VIP", vip: "VIP", "nami-vip": "NAMI VIP", "lake-las-vegas-vip": "Lake Las Vegas VIP", "lake-las-vegas": "Lake Las Vegas", nami: "NAMI", usta: "USTA", standard: "Standard" } as const;
 export type RsvpExportForm = keyof typeof rsvpExportForms;
 export const rsvpsOfForm = (records: RsvpSubmission[], form: RsvpExportForm) => records.filter(record => rsvpForm(record) === rsvpExportForms[form]);
-export const withRsvpForm = (records: RsvpSubmission[], textPreferences: readonly TextPreferenceRecord[] = []) => records.map(record => ({ ...record, form: rsvpForm(record), attendingLabel: record.attending ? rsvpAttendingLabels[record.attending] : (record.communityDay ? rsvpAttendingLabels.both : ""), heardFromLabel: record.heardFrom ? rsvpHeardFromLabels[record.heardFrom] : "", guestDetails: (record.guests ?? []).map(partyGuestLine).join("; "), ...textConsentColumns(record, textPreferences) }));
+export const withRsvpForm = (records: RsvpSubmission[], textPreferences: readonly TextPreferenceRecord[] = []) => records.map(record => ({ ...record, form: rsvpForm(record), attendingLabel: record.attending ? rsvpAttendingLabels[record.attending] : (record.communityDay ? rsvpAttendingLabels.both : ""), heardFromLabel: record.heardFrom ? rsvpHeardFromLabels[record.heardFrom] : "", guestDetails: (record.guests ?? []).map(partyGuestLine).join("; "), waiverRecord: JSON.stringify(record.eventWaiver ?? null), waiverStatus: waiverSummary(record.eventWaiver), guestWaiverStatus: (record.guests ?? []).map(g=>`${g.name}: ${waiverSummary(g.eventWaiver)}`).join("; "), ...textConsentColumns(record, textPreferences) }));
 // Owner (Sept 30): the mass RSVP lists never include a VIP request, and the VIP portal reads only VIP requests.
 // Owner (Oct 1, 2026, superseding the Sept 30 split): "make the backend of the VIP RSVP the same now since
 // we are upping security, but make the forms still different". All RSVPs, VIP or not, live under "rsvp" and
@@ -491,7 +521,7 @@ function csvCell(value: unknown): string {
 export function toCsv(rows: Record<string, unknown>[], columns: string[]): string {
   return [columns.join(","), ...rows.map(row => columns.map(column => csvCell(row[column])).join(","))].join("\r\n") + "\r\n";
 }
-export const rsvpCsvColumns = ["submittedAt", "form", "name", "email", "phone", "organization", "professionalRole", "invitedBy", "heardFromLabel", "vip", "partner", "tier", "attendanceStatus", "attendingLabel", "communityDay", "guestCount", "guestDetails", ...textConsentCsvColumns, "notes", "source", "id", "removedAt", "removedReason"];
+export const rsvpCsvColumns = ["submittedAt", "form", "name", "email", "phone", "organization", "professionalRole", "invitedBy", "heardFromLabel", "vip", "partner", "tier", "attendanceStatus", "attendingLabel", "communityDay", "guestCount", "guestDetails", "groupWaiverAttestation", "waiverStatus", "guestWaiverStatus", "waiverRecord", ...textConsentCsvColumns, "notes", "invitationLevel", "invitationRequestId", "requesterName", "requesterEmail", "requesterPhone", "requesterOrganization", "requesterProfessionalRole", "source", "id", "removedAt", "removedReason"];
 
 // Which part(s) of the evening a request covers: the Awards Show (their response) and/or Community Day (the toggle).
 export function comingTo(record: Pick<RsvpSubmission, "attendanceStatus" | "communityDay"> & { attending?: RsvpAttending | undefined }): ("awards" | "communityDay")[] {

@@ -24,7 +24,7 @@ export function AskAiFeedback({ pending, result, submittedQuestion }: {
   </>;
 }
 
-export function AskAiForm({ suggestions = ["What is the schedule for November 3?", "What does Inspiring Children Foundation do?", "Who are the Bryan Brothers?"] }: { suggestions?: string[] } = {}) {
+export function AskAiForm({ suggestions = ["When will I get ticket confirmation?", "What time do Awards doors open?", "What is Nevada Mental Health Day?"] }: { suggestions?: string[] } = {}) {
   const [question, setQuestion] = useState("");
   const [submittedQuestion, setSubmittedQuestion] = useState("");
   const [result, setResult] = useState<AskAiResult | null>(null);

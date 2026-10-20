@@ -11,8 +11,6 @@ const rows: Array<[date: string, start: string, end: string, title: string]> = [
   ["2026-11-01", "19:00", "", "Poker Night"],
   ["2026-11-02", "12:00", "3:00 PM", "Wellness Activities & Check-In"],
   ["2026-11-02", "15:30", "6:30 PM", "Nevada Mental Health Day"],
-  ["2026-11-02", "16:30", "5:00 PM", "Founders Cocktails"],
-  ["2026-11-02", "17:00", "7:00 PM", "Founders Dinner"],
   ["2026-11-02", "17:45", "6:15 PM", "Speaker Reception"],
   ["2026-11-02", "18:15", "7:30 PM", "Red Carpet"],
   ["2026-11-02", "18:30", "", "Awards Show Doors Open"],

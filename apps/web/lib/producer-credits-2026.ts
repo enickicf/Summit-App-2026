@@ -39,17 +39,15 @@ export function sortProducerCredits<P extends { name: string }>(people: readonly
   return [...people].sort((a, b) => surnameOf(a.name).localeCompare(surnameOf(b.name), "en", { sensitivity: "base" }));
 }
 
-// (d) Ryan (Oct 9 meeting): "Put [Trevor] Short up ... first. On the [executive] producers, put Trent second, put me third";
-// producers "Sally ... Sophie, then Paige, then Raquelle"; associate producers "Casey first, Nick second", then "Denise"
-// (Sydney King, "Sydney's third"), Clark Cummings, then Cherrial (with the owner, who is off the site), then Ricky,
-// "and then the rest", Isabella last. Trevor Short and Trent Alenik move up from Producers to Executive Producers.
-// Names in these lists come first in this order; everyone else in the group follows, alphabetical by surname.
+// Owner (Oct 15): only Ryan, Aphrah and Jewel are Executive Producers. Trevor and Trent
+// are Producers. Keep the existing named order within the other producer groups.
 export const producerGroupMoves2026: ReadonlyMap<string, string> = new Map([
-  ["Trevor Short", "Executive Producers"], ["Trent Alenik", "Executive Producers"]
+  ["Ryan Wolfington", "Executive Producers"], ["Aphrah Brokaw", "Executive Producers"],
+  ["Jewel", "Executive Producers"], ["Trevor Short", "Producers"], ["Trent Alenik", "Producers"]
 ].map(([name, group]) => [personNameKey(name!), group!]));
 export const producerOrder2026: Readonly<Record<string, readonly string[]>> = {
-  "Executive Producers": ["Trevor Short", "Trent Alenik", "Ryan Wolfington"],
-  Producers: ["Sally Dewhurst", "Sophie Novak", "Paige Neuenschwander", "Raquelle Stevens"],
+  "Executive Producers": ["Aphrah Brokaw", "Jewel", "Ryan Wolfington"],
+  Producers: ["Trevor Short", "Trent Alenik", "Sally Dewhurst", "Sophie Novak", "Paige Neuenschwander", "Raquelle Stevens"],
   // Owner (Oct 11) corrected the first reading: "Denise, their[d]" is "Sydney's third" (Sydney King), and "and then the
   // rest, and it's about last" is "the rest, and Isabel[la] last" (producerLast2026).
   "Associate Producers": ["Casey Caruso", "Nick Ekern", "Sydney King", "Clark Cummings", "Cherrial Odell", "Ricky Sypert"]
@@ -84,7 +82,7 @@ export function applyProducerCreditRules<G extends ProducerCreditGroup>(groups: 
       group.people.push({ name: credit.name, role: record.title || record.occupation || "" } as G["people"][number]);
     }
   }
-  // Ryan (Oct 9): move people to the group he named (only when that group is on the page).
+  // Apply the owner-approved 2026 group for these five names (only when that group is on the page).
   for (const group of merged) {
     for (const person of [...group.people]) {
       const target = producerGroupMoves2026.get(personNameKey(person.name));

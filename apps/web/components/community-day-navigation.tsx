@@ -22,7 +22,6 @@ export function CommunityDayNavigation({ partner = null }: { partner?: AwardsPar
       <a className={styles.link} href={partner?.rsvpUrl ?? communityDay2026.rsvpUrl} target="_blank" rel="noopener">Tickets</a>
       {/* Owner (Oct 5): links from the Summit side to the Awards open in a new tab. */}
       {partner ? <Link className={styles.link} href={partner.path} target="_blank" rel="noopener">Awards</Link> : <a className={styles.link} href={awardsLink} target="_blank" rel="noopener">Awards</a>}
-      {partner?.closingDinnerUrl && <a className={styles.link} href={partner.closingDinnerUrl} target="_blank" rel="noopener">Closing dinner</a>}
       <a className={`${summit.donateButton} ${styles.donate}`} href="https://www.inspiringchildren.org/donate"><Heart size={16} fill="currentColor" aria-hidden="true" />Donate</a>
     </nav>
   </div>;

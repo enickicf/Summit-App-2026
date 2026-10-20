@@ -1,3 +1,5 @@
+import { sendRequestReceipt } from "../../../lib/staff/request-receipt";
+import type { Sender } from "../../../lib/staff/rsvp-email";
 import { NextResponse } from "next/server";
 import { getSubmissionStore, newSubmission, pokerPayloadSchema, type SubmissionStore } from "../../../lib/staff/store";
 
@@ -23,7 +25,7 @@ export async function OPTIONS(request: Request) {
   return new Response(null, { status: 204, headers: pokerCorsHeaders(request.headers.get("origin")) });
 }
 
-export async function handlePokerPost(request: Request, store?: SubmissionStore): Promise<Response> {
+export async function handlePokerPost(request: Request, store?: SubmissionStore, sender?: Sender | null): Promise<Response> {
   const headers = pokerCorsHeaders(request.headers.get("origin"));
   if (Number(request.headers.get("content-length") ?? 0) > 20_000) return NextResponse.json({ ok: false, error: "Request is too large." }, { status: 413, headers });
   let body: unknown;
@@ -42,12 +44,15 @@ export async function handlePokerPost(request: Request, store?: SubmissionStore)
   }
   const { website, ...payload } = parsed.data;
   if (website) return NextResponse.json({ ok: true }, { headers }); // honeypot: answer normally, store nothing
+  const target = store ?? await getSubmissionStore();
+  const saved = newSubmission(payload);
   try {
-    await (store ?? await getSubmissionStore()).add("poker", newSubmission(payload));
+    await target.add("poker", saved);
   } catch (error) {
     console.error("poker store failed", error instanceof Error ? error.message : error);
     return NextResponse.json({ ok: false, error: "We could not save your request. Please try again." }, { status: 500, headers });
   }
+  await sendRequestReceipt(saved.id, saved.name, saved.email, ["All In for Mental Health poker event"], target, sender);
   return NextResponse.json({ ok: true }, { headers });
 }
 

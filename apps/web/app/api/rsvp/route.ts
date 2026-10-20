@@ -1,5 +1,6 @@
+import { waiverMatchesAttendee, waiverReadyForSubmission } from "../../../lib/event-waiver";
 import { NextResponse } from "next/server";
-import { getSubmissionStore, missingVipFields, newSubmission, partyGuestsIncomplete, rsvpPayloadSchema, type SubmissionStore } from "../../../lib/staff/store";
+import { getSubmissionStore, missingVipFields, newRetrySafeSubmission, partyGuestsIncomplete, rsvpPayloadSchema, type SubmissionStore } from "../../../lib/staff/store";
 import { sendRsvpConfirmation, type Sender } from "../../../lib/staff/rsvp-email";
 
 export const runtime = "nodejs";
@@ -32,13 +33,22 @@ export async function handleRsvpPost(request: Request, store?: SubmissionStore, 
     return NextResponse.json({ ok: false, error: message }, { status: 400, headers });
   }
   const { website, ...payload } = parsed.data;
+  if (!waiverMatchesAttendee(payload.eventWaiver,payload.name)) return NextResponse.json({ok:false,error:"The waiver must be signed personally by the named attendee."},{status:400,headers});
   if (website) return NextResponse.json({ ok: true }, { headers }); // honeypot: pretend success, store nothing
   // Owner (Oct 5): every additional person in the party needs a name, an email and a phone number.
-  if (partyGuestsIncomplete(payload)) return NextResponse.json({ ok: false, error: partyGuestsMessage }, { status: 400, headers });
+  if (payload.phone.replace(/\D/g, "").length < 7 || partyGuestsIncomplete(payload)) return NextResponse.json({ ok: false, error: partyGuestsMessage }, { status: 400, headers });
+  if(!payload.organization.trim()||!payload.professionalRole.trim()||!payload.invitedBy.trim())return NextResponse.json({ok:false,error:"Please complete your organization, title and who invited you."},{status:400,headers});
+  if((payload.guests??[]).some(guest=>!guest.organization?.trim()||!guest.professionalRole?.trim()))return NextResponse.json({ok:false,error:partyGuestsMessage},{status:400,headers});
+  const partyEmails=[payload.email,...(payload.guests??[]).map(guest=>guest.email)];
+  if(new Set(partyEmails).size!==partyEmails.length)return NextResponse.json({ok:false,error:"Please use a different email address for every person in your party."},{status:400,headers});
+  const partyLimit=payload.attending==="community-day"?2:10;
+  if(payload.guestCount>partyLimit)return NextResponse.json({ok:false,error:`This RSVP allows up to ${partyLimit} people total.`},{status:400,headers});
+  if(payload.guestCount>1&&!payload.groupWaiverAttestation)return NextResponse.json({ok:false,error:"Please complete the required group agreement for every guest in your request."},{status:400,headers});
+  if(!waiverReadyForSubmission(payload.eventWaiver,payload.name))return NextResponse.json({ok:false,error:"Please personally accept every agreement and sign the waiver before submitting."},{status:400,headers});
   const missing = missingVipFields(payload);
   if (missing.length) return NextResponse.json({ ok: false, error: `Please add ${missing.join(", ")} so the team can seat you.` }, { status: 400, headers });
   const target = store ?? await getSubmissionStore();
-  const record = newSubmission(payload);
+  const record = newRetrySafeSubmission(payload);
   try {
     await target.add("rsvp", record); // Oct 1: VIP and standard requests share one store (the forms differ)
   } catch (error) {
@@ -49,10 +59,10 @@ export async function handleRsvpPost(request: Request, store?: SubmissionStore, 
   await forward(withoutGuestList(body)).catch(() => undefined);
   // Owner (Sept 28): automatic waiting-list confirmation email; best effort, never fails the guest's RSVP.
   await (sender === undefined ? sendRsvpConfirmation(record, target) : sendRsvpConfirmation(record, target, sender)).catch(() => undefined);
-  return NextResponse.json({ ok: true }, { headers });
+  return NextResponse.json({ ok: true, requestId: record.id }, { headers });
 }
 
-const partyGuestsMessage = "Please add the full name, a valid email and a phone number for every person in your party.";
+const partyGuestsMessage = "Please complete every required field, including a unique email and cell number, for every person in your party.";
 function withoutGuestList(body: unknown): unknown {
   if (!body || typeof body !== "object" || Array.isArray(body)) return body;
   const { guests: _guests, ...rest } = body as Record<string, unknown>;

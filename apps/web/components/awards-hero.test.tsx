@@ -66,8 +66,8 @@ describe("Awards opening presentation", () => {
     // Sept 21 meeting: the foundation credit sits directly under the ICF Awards logo, larger than before.
     expect(html).toContain("/images/na-awards-logo-white.png");
     expect(html).toMatch(/na-awards-logo-white[^]*<\/h1><p class="[^"]*">Powered by<strong>Steven &amp; Alexandra<br\/>Cohen Foundation<\/strong><\/p>/); // Oct 8: stacked credit
-    // The Wynn photo (reduced motion only), the Awards logo and the "Presented by" ICF × NAMI logos (owner, Oct 5;
-    // Oct 7 meeting: directly under the Cohen credit, joined by a ×); no still of the film: the hero opens on a
+    // The Wynn photo (reduced motion only), the Awards logo and the "Presented by" ICF + NAMI logos (owner, Oct 5;
+    // owner Oct 16: directly under the Cohen credit, joined by a plus sign); no still of the film: the hero opens on a
     // plain color and the film cross-fades in once it is really playing.
     expect(html.match(/<img /g)).toHaveLength(5); // Wynn scene, Awards logo, ICF + NAMI, iHeartRadio
     // Owner (Oct 8): the Summit hero's format — one left stack: date block, logo, Cohen credit, then the lockup, which
@@ -75,7 +75,7 @@ describe("Awards opening presentation", () => {
     // Owner (Oct 11): the date block moved to the hero's bottom-right corner, after the stack (as on the Summit).
     expect(html).toMatch(/^[^]*?<div class="[^"]*heroStack[^"]*"><h1 id="awards-title"/);
     expect(html).toMatch(/<div class="[^"]*awardsCorner[^"]*"><p class="[^"]*heroEyebrow[^"]*"><time class="[^"]*heroEyebrowDate[^"]*"[^>]*><span class="[^"]*">Monday,<\/span> <span class="[^"]*">November 2, 2026<\/span><\/time><span class="[^"]*heroDateVenue[^"]*"><span class="[^"]*">Encore Theater<\/span><span class="[^"]*"> · <\/span><span class="[^"]*">Wynn Las Vegas<\/span><\/span><\/p><\/div>/);
-    expect(html).toMatch(/<\/h1><p class="[^"]*">Powered by<strong>Steven &amp; Alexandra<br\/>Cohen Foundation<\/strong><\/p><div class="[^"]*">[^]*?Presented by[^]*?alt="Inspiring Children Foundation"[^]*?aria-hidden="true">×<\/span>[^]*?alt="NAMI, National Alliance on Mental Illness"[^]*?<\/div><\/div><div class="[^"]*awardsCorner[^"]*">[^]*?<\/section>[^]*?<p class="[^"]*"><time/);
+    expect(html).toMatch(/<\/h1><p class="[^"]*">Powered by<strong>Steven &amp; Alexandra<br\/>Cohen Foundation<\/strong><\/p><div class="[^"]*">[^]*?Presented by[^]*?alt="Inspiring Children Foundation"[^]*?aria-hidden="true">\+<\/span>[^]*?alt="NAMI, National Alliance on Mental Illness"[^]*?<\/div><\/div><div class="[^"]*awardsCorner[^"]*">[^]*?<\/section>[^]*?<p class="[^"]*"><time/);
     expect(html).not.toContain("heroAside");
     expect(html.indexOf("Presented by")).toBeGreaterThan(html.indexOf('<h1 id="awards-title"'));
     expect(html).not.toContain("hero-awards-start.jpg");

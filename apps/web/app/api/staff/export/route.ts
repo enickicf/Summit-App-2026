@@ -1,3 +1,4 @@
+import { waiverSummary } from "../../../../lib/event-waiver";
 import { cookies } from "next/headers";
 import { textConsentColumns, textConsentCsvColumns, textContactCsvColumns, textContactRows, type TextContact } from "../../../../lib/staff/text-consent";
 import { isStaffSession, staffCookieName } from "../../../../lib/staff/auth";
@@ -27,8 +28,10 @@ export async function GET(request: Request) {
     const [rsvp, workshop, closingDinner, nomination] = await Promise.all([listAllRsvps(store), store.list("workshop"), store.list("closingDinner"), store.list("nomination")]);
     const contacts: TextContact[] = [
       ...nomination.filter(row => row.nominatorPhone).map(row => ({ name: row.nominatorName, email: row.nominatorEmail, phone: row.nominatorPhone, submittedAt: row.submittedAt, textConsent: row.textConsent, source: "Award nomination" })),
-      ...activeOf(closingDinner).map(row => ({ name: row.name, email: row.email, phone: row.phone, submittedAt: row.submittedAt, textConsent: row.textConsent, source: "Closing Dinner request" })),
-      ...activeRsvps(rsvp).map(row => ({ name: row.name, email: row.email, phone: row.phone, submittedAt: row.submittedAt, textConsent: row.textConsent, source: "Awards / Community Day RSVP" })),
+      ...activeOf(closingDinner).map(row => ({ name: row.name, email: row.email, phone: row.phone, submittedAt: row.submittedAt, textConsent: row.textConsent, groupEventTextConsent:row.groupEventTextConsent, source: "Closing Dinner request" })),
+      ...activeRsvps(rsvp).flatMap(row => (row.guests ?? []).map(g => ({...g,submittedAt:row.submittedAt,groupEventTextConsent:row.groupEventTextConsent,source:"RSVP guest"}))),
+      ...activeOf(closingDinner).filter(row=>row.bringingGuest).map(row=>({name:row.guestName,email:row.guestEmail,phone:row.guestPhone,submittedAt:row.submittedAt,groupEventTextConsent:row.groupEventTextConsent,source:"Closing dinner guest"})),
+      ...activeRsvps(rsvp).map(row => ({ name: row.name, email: row.email, phone: row.phone, submittedAt: row.submittedAt, textConsent: row.textConsent, groupEventTextConsent:row.groupEventTextConsent, source: "Awards / Community Day RSVP" })),
       ...workshop.filter(row => row.phone).map(row => ({ name: row.name, email: row.email ?? "", phone: row.phone ?? "", submittedAt: row.submittedAt, textConsent: row.textConsent, source: row.category === "wellness" ? "Wellness classes" : "Tennis & High Tea" }))
     ];
     const csv = toCsv(textContactRows(contacts, textPreferences), textContactCsvColumns);
@@ -36,7 +39,7 @@ export async function GET(request: Request) {
   }
   // Oct 13 (owner / Ryan): the Nov 4 closing night dinner requests, one row per request with the guest's guest.
   if (kind === "closing-dinner") {
-    const rows = (await store.list("closingDinner")).map(row => ({ ...row, seats: closingDinnerSeats(row), ...textConsentColumns(row, textPreferences) }));
+    const rows = (await store.list("closingDinner")).map(row => ({ ...row, seats: closingDinnerSeats(row), waiverStatus:waiverSummary(row.eventWaiver), guestWaiverStatus:row.bringingGuest?waiverSummary(row.guestEventWaiver):"", waiverRecord:JSON.stringify(row.eventWaiver??null), guestWaiverRecord:JSON.stringify(row.guestEventWaiver??null), ...textConsentColumns(row, textPreferences) }));
     return new Response(toCsv(rows, closingDinnerCsvColumns), { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-closing-dinner-requests-${stamp}.csv"`, "Cache-Control": "no-store" } });
   }
   if (kind === "nominations") {

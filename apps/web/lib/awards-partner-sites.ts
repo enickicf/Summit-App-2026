@@ -4,11 +4,13 @@ import { awards2026Editorial } from "./awards-editorial";
 // the websites"). Each is the Awards page with its RSVP buttons pointed at that group's own RSVP form, so the
 // team can send a different address to each group. They are never linked from the public pages, are not in the
 // sitemap and ask search engines not to list them.
-export type AwardsPartnerSite = { key: string; path: string; label: string; rsvpUrl: string; closingDinnerUrl?: string };
+export type AwardsPartnerSite = { key: string; path: string; label: string; rsvpUrl: string; invitationTier?: "VIP" | "Uber VIP" };
 const form = (slug: string) => `${awards2026Editorial.rsvpUrl}/${slug}`;
 export const awardsPartnerSites: AwardsPartnerSite[] = [
-  // General Uber VIP invitation: both event websites share the existing combined VIP form.
-  { key: "uber-vip", path: "/vip", label: "VIP invitation", rsvpUrl: form("vip-fls0u8ccn2vs"), closingDinnerUrl: form("closing-dinner-yiqy7fw0j3") },
+  { key: "ubervip-site", path: "/ubervip", label: "Uber VIP", invitationTier: "Uber VIP", rsvpUrl: form("uber-vip") },
+  { key: "vip-invitation", path: "/vip-invitation", label: "VIP", invitationTier: "VIP", rsvpUrl: form("vip") },
+  // VIP URLs consistently use the regular VIP form; dinner belongs only to Uber VIP.
+  { key: "vip-legacy", path: "/vip", label: "VIP", invitationTier: "VIP", rsvpUrl: form("vip") },
   { key: "nami", path: "/nami", label: "NAMI", rsvpUrl: form("nami-9wvfjfkt40dd") },
   { key: "nami-vip", path: "/nami/vip", label: "NAMI VIP", rsvpUrl: form("nami-vip-zton04cqu1") },
   { key: "lakelasvegas", path: "/lakelasvegas", label: "Lake Las Vegas", rsvpUrl: form("lake-las-vegas-3u3hr0lqil") },

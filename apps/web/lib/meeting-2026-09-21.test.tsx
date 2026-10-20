@@ -26,8 +26,8 @@ describe("Sept 21 meeting website direction", () => {
   it("orders the Awards page: logo, broadcast, lineup, founders, mission, winners, Challenge, no-solicitation", () => {
     // Owner (Sept 21): last year's full mission statement stays at the top until it is replaced.
     // Owner (Oct 4): the lineup comes right after the hero and the iHeartRadio band; the mission follows it.
-    // Owner (Oct 7 meeting): the mission opens "Inspiring Children Foundation × NAMI present the Not Alone Awards Show".
-    const positions = order(awards, ['id="awards-program"', 'id="broadcast"', 'aria-label="Lineup"', 'aria-label="Founders"', 'id="mission"', "Inspiring Children Foundation × NAMI present the Not Alone Awards Show", 'id="winners"', 'id="not-alone-challenge"', 'id="no-solicitation"']);
+    // Owner (Oct 7 meeting): the mission opens "Inspiring Children Foundation &amp; NAMI present the Not Alone Awards Show".
+    const positions = order(awards, ['id="awards-program"', 'id="broadcast"', 'aria-label="Lineup"', 'aria-label="Founders"', 'id="mission"', "Inspiring Children Foundation &amp; NAMI present the Not Alone Awards Show", 'id="winners"', 'id="not-alone-challenge"', 'id="no-solicitation"']);
     expect([...positions].sort((a, b) => a - b)).toEqual(positions);
     // Owner (Sept 21): broadcast line removed; RSVP button reads just "RSVP"; venue sits with the date.
     expect(awards).not.toContain(escape(awards2026Program.broadcast));

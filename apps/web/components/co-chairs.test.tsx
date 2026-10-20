@@ -22,8 +22,8 @@ describe.each([
     expect([...section.matchAll(/<h3>(.*?)<\/h3>/g)].map(match => match[1])).toEqual(["Steve Wozniak", "Jewel", "Cherrial Odell"]);
     expect(section).toContain("<h2>Co-Chairs</h2>");
     expect(section).toContain("<h3>Cherrial Odell</h3><p>ICF Alumni<br/>Stanford Graduate, and Founder of Wellness Buddies</p>"); // owner, Oct 11: ICF alumni read "ICF Alumni" with their title underneath
-    // Owner-supplied photo (Sept 21) replaces the ICF cutout.
-    expect(section.match(/<img[^>]*alt="Cherrial Odell"[^>]*>/)?.[0]).toContain("cherrial-odell-2-c.jpg");
+    // Owner-supplied photo (Oct 15) replaces the previous portrait.
+    expect(section.match(/<img[^>]*alt="Cherrial Odell"[^>]*>/)?.[0]).toContain("cherrial-odell-20261015.jpg");
     expect(html.replace(section, "")).not.toContain("Cherrial Odell");
     expect(directoryPeople(snapshot).map(person => person.name)).not.toContain("Cherrial Odell");
     expect(confirmedSummitGuests2026).not.toContain("Cherrial Odell");

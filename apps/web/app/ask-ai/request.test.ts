@@ -29,11 +29,19 @@ describe("Ask AI request handling", () => {
     const removeListener = vi.spyOn(controller.signal, "removeEventListener");
     expect(await askAi("  Where is the schedule?  ", controller.signal)).toEqual({ status: "success", answer: "Published information." });
     expect(fetchMock).toHaveBeenCalledExactlyOnceWith("/api/ask-ai", {
-      method: "POST", headers: { "Content-Type": "application/json" },
+      method: "POST", headers: { "Content-Type": "application/json", "X-Ask-AI-Site": "summit" },
       body: JSON.stringify({ question: "Where is the schedule?" }), signal: expect.any(AbortSignal)
     });
     expect(removeListener).toHaveBeenCalledWith("abort", expect.any(Function));
     expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it("sends the Awards-domain context through the shared backend", async () => {
+    vi.stubGlobal("window", { location: { hostname: "notaloneawards.org" } });
+    const fetchMock = vi.fn().mockResolvedValue(Response.json({ answer: "Public Awards information." }));
+    vi.stubGlobal("fetch", fetchMock);
+    await askAi("What is the Summit schedule?", new AbortController().signal);
+    expect(fetchMock.mock.calls[0]?.[1].headers["X-Ask-AI-Site"]).toBe("awards");
   });
 
   it.each([400, 408, 413, 429, 500, 503])("handles HTTP %s without displaying its body as an answer", async status => {

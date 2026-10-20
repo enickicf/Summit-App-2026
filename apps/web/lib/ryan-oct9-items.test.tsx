@@ -35,6 +35,16 @@ describe("Ryan, Oct 9 / owner, Oct 11", () => {
     expect(isPublicAirtablePerson(airtableTalent2026.find(person => person.name === "John Ratcliff")!)).toBe(false);
   });
 
+  it("uses Producer wording in Sally and Sophie's public copy", () => {
+    for (const name of ["Sally Dewhurst", "Sophie Novak"]) {
+      const source = airtableTalent2026.find(person => person.name === name)!;
+      const publicPerson = withOwnerGroups(source);
+      expect(`${publicPerson.title} ${publicPerson.bio}`).not.toContain("Executive Producer of the Not Alone Summit");
+      expect(`${publicPerson.title} ${publicPerson.bio}`.toLowerCase()).toContain("producer of the not alone summit");
+      expect(source.bio).toContain("Executive Producer of the Not Alone Summit");
+    }
+  });
+
   it("adds Wise Friend as the curriculum partner in Our Partners (light and dark)", () => {
     for (const tone of ["light", "dark"] as const) {
       const html = renderToStaticMarkup(<EventPartners tone={tone} />);

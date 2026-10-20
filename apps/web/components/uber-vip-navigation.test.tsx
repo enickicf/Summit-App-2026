@@ -7,7 +7,7 @@ import { partnerSiteByKey } from "../lib/awards-partner-sites";
 const route = vi.hoisted(() => ({ pathname: "/vip" }));
 vi.mock("next/navigation", () => ({ usePathname: () => route.pathname, useSearchParams: () => new URLSearchParams() }));
 vi.mock("../lib/snapshot", () => ({ getSiteSnapshot: vi.fn().mockResolvedValue(null) }));
-const vip = partnerSiteByKey("uber-vip")!;
+const vip = partnerSiteByKey("vip-legacy")!;
 const links = (html: string) => [...html.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/g)].map(([, href, label]) => [label!.replace(/<[^>]+>/g, ""), href]);
 
 describe("general Uber VIP invitation websites", () => {
@@ -18,7 +18,7 @@ describe("general Uber VIP invitation websites", () => {
       expect(items).toContainEqual(["Tickets", vip.rsvpUrl]);
       expect(items).toContainEqual(["NV Mental Health Day", "/vip/community-day"]);
       expect(items).toContainEqual(["Awards", "/vip"]);
-      expect(items).toContainEqual(["Closing dinner", vip.closingDinnerUrl]);
+      expect(items.some(([label]) => label === "Closing dinner")).toBe(false);
       expect(items.some(([, href]) => href === "https://notaloneawards.org/rsvp")).toBe(false);
       expect(items.some(([, href]) => href?.endsWith("/rsvp/nevada-mental-health-day"))).toBe(false);
     }
@@ -38,5 +38,32 @@ describe("general Uber VIP invitation websites", () => {
     expect(awards.some(([label]) => label === "Closing dinner")).toBe(false);
     route.pathname = "/community-day";
     expect(links(renderToStaticMarkup(<SiteHeader />))).toContainEqual(["Tickets", "https://notaloneawards.org/rsvp/nevada-mental-health-day"]);
+  });
+});
+
+describe("one-link VIP and Uber VIP websites",()=>{
+  for(const key of ["vip-invitation","ubervip-site"]){
+    const site=partnerSiteByKey(key)!;
+    it(`${key} keeps every event RSVP and menu in the correct tier`,async()=>{
+      for(const pathname of [site.path,site.path+"/community-day"]){
+        route.pathname=pathname;
+        const menu=links(renderToStaticMarkup(<SiteHeader/>));
+        expect(menu).toContainEqual(["Tickets",site.rsvpUrl]);
+        expect(menu).toContainEqual(["Awards",site.path]);
+        expect(menu).toContainEqual(["NV Mental Health Day",site.path+"/community-day"]);
+        expect(menu.some(([label])=>label==="Closing dinner")).toBe(false);
+      }
+      const day=renderToStaticMarkup(await CommunityDayView({partner:site}));
+      const awards=renderToStaticMarkup(<OriginalAwardsPage year={2026} snapshot={null} rsvpUrl={site.rsvpUrl} invitationTier={site.invitationTier}/>);
+      for(const html of [day,awards]){
+        expect(html).toContain(`data-invitation-tier="${site.invitationTier}"`);
+        const ticketLinks=links(html).filter(([,href])=>href?.includes('/rsvp')&&!href?.includes('/nominate'));
+        expect(ticketLinks.length).toBeGreaterThan(0);
+        expect(ticketLinks.every(([,href])=>href===site.rsvpUrl)).toBe(true);
+      }
+    });
+  }
+  it("corrects /vip to the regular VIP destination",()=>{
+    expect(vip.path).toBe('/vip');expect(vip.rsvpUrl).toBe('https://notaloneawards.org/rsvp/vip');
   });
 });

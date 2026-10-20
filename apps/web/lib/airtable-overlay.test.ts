@@ -74,22 +74,21 @@ describe("withAirtable", () => {
     expect(at("Nevada Mental Health Day")).toEqual(["2026-11-02T23:00:00.000Z"]); // 3:00 PM
     expect(at("Wellness Activities & Check-In")).toEqual(["2026-11-02T20:00:00.000Z"]); // 12:00 PM
     expect(one("Wellness Activities & Check-In").endUtc).toBe("2026-11-03T01:00:00.000Z"); // 5:00 PM
-    expect(at("Founders Cocktails")).toEqual(["2026-11-03T00:00:00.000Z"]); // 4:00 PM
+    expect(at("Founders Cocktails")).toEqual([]);
+    expect(at("Founder's Dinner")).toEqual([]);
     expect(at("Closing Dinner and Performance")).toEqual(["2026-11-05T03:00:00.000Z"]); // Nov 4, 7:00 PM
     expect(at("Evening Talk + Performance/Writer's Round")).toEqual(["2026-11-04T04:00:00.000Z"]); // Nov 3, 8:00 PM
     expect(at("High Tea")).toEqual(["2026-11-05T20:00:00.000Z"]);
     expect(next.scheduleItems.some(item => /load (in|out)|eagleman|red carpet|pre-show|speaker reception/i.test(item.title))).toBe(false);
     // Owner (Oct 7): the public schedule lists the day's blocks, not every Run of Show segment, until the team marks
     // segments "Public" in Airtable; attire rides along; the talent dinner reads "Dinner".
-    // Ryan (Oct 8): founders events carry the canonical "founders" scope (red asterisk on the schedule).
+    // Owner (Oct 16): founders events are no longer published on the Summit website schedule.
     expect(next.scheduleItems.some(item => /ray lewis|fitness 1|song break|hobbies panel/i.test(item.title))).toBe(false);
     expect((one("Awards Show") as { attire?: string }).attire).toBe("Semi-Formal with Flair");
     expect((one("Tennis") as { attire?: string }).attire).toBe("Athleisure");
     expect(next.scheduleItems.filter(item => item.title === "Summit Sessions").map(item => (item as { attire?: string }).attire)).toEqual(Array(4).fill("Chic Business Casual"));
     expect((one("Lunch") as { attire?: string }).attire).toBeUndefined();
-    expect(one("Founders Cocktails").eligibilityScope).toEqual({ id: "founders", label: "Founders only" });
-    expect(one("Founder's Dinner").eligibilityScope).toEqual({ id: "founders", label: "Founders only" });
-    expect(next.scheduleItems.filter(item => item.eligibilityScope.id === "founders").map(item => item.title)).toEqual(["Founders Cocktails", "Founder's Dinner"]);
+    expect(next.scheduleItems.filter(item => item.eligibilityScope.id === "founders")).toEqual([]);
     expect(next.scheduleItems.filter(item => item.eligibilityScope.id === "invite-only")).toEqual([]); // no non-founder private row today
     expect(at("Dinner")).toEqual(["2026-11-04T02:30:00.000Z"]); // "Dinner - talent" in Airtable, Nov 3 6:30 PM
     // Oct 8 (Payton/Jan): the Nov 3 dinner is for every Summit guest; Airtable's leftover "talent" synopsis is not shown.

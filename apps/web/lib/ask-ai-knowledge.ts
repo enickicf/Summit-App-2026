@@ -109,17 +109,18 @@ export function isMentalHealthQuestion(question: string) {
 export const mentalHealthAnswer = `I can't give mental health advice here, but you're not alone. The Not Alone Mental Fitness Tools, created by youth and reviewed by experts, are free at ${notAloneToolsUrl}. If this is an emergency, call 911. For crisis support, call or text 988 (Suicide & Crisis Lifeline).`;
 
 /** Compact, public-only knowledge pack for the model. Drafts, staff data and private contacts never enter it. */
-export function buildAskAiKnowledge(snapshot: EventSnapshot, question = "") {
+export function buildAskAiKnowledge(snapshot: EventSnapshot, question = "", audience: "summit" | "awards" = "summit") {
   const publicItems = snapshot.scheduleItems.filter(item => item.published && item.visibilityScope.id === "public" && item.eventId === snapshot.event.id);
   const normalized = ` ${personNameKey(question)} `;
   const matchingProfiles = awardsDisplayPeople(snapshot).filter(person => normalized.includes(` ${personNameKey(person.name)} `)).slice(0, 2);
   return {
+    siteAudience: audience,
     summit: {
       name: snapshot.event.name,
       dates: snapshot.event.dateLabel,
       venue: `${snapshot.event.venueName}, ${snapshot.event.city}`,
       timeZone: snapshot.event.timeZone,
-      purpose: summitPurpose,
+      purpose: audience === "summit" ? summitPurpose : "A private, invitation-only event. Refer detailed Summit questions to the Summit website.",
       poweredBy: "Steven & Alexandra Cohen Foundation"
     },
     awards2026: {
@@ -127,7 +128,7 @@ export function buildAskAiKnowledge(snapshot: EventSnapshot, question = "") {
       venue: awards2026Editorial.venue,
       host: awards2026Editorial.host,
       poweredBy: awards2026Editorial.foundation,
-      presentedBy: "Inspiring Children Foundation × NAMI",
+      presentedBy: "Inspiring Children Foundation + NAMI",
       // Owner (Oct 7 meeting): the public evening; no Pre-Show is announced.
       doorsOpen: awardsDoorsOpen2026,
       awardsShow: awardsShowTime2026,
@@ -140,10 +141,16 @@ export function buildAskAiKnowledge(snapshot: EventSnapshot, question = "") {
       about: communityDay2026.about,
       publicSchedule: communityDaySchedule2026().map(item => ({ title: item.title, time: item.time, room: item.room, synopsis: item.synopsis }))
     },
+    ticketing: {
+      awardsRsvp: awards2026Editorial.rsvpUrl,
+      communityDayRsvp: communityDay2026.rsvpUrl,
+      confirmation: "An RSVP is a request, not a confirmed ticket. If tickets are confirmed, the team contacts the requester by email and/or text with confirmation and ticketing information. An individual request's status is not available to Ask AI.",
+      separateRequests: "Nevada Mental Health Day admission does not include an Awards Show ticket; use the separate Awards Show RSVP form."
+    },
     inspiringChildrenFoundation: { overview: icfOverview, taxStatus: icfTaxStatus, program: programCopy,
       youthContribution: { fact: "ICF youth and alumni helped create and run much of the #NotAloneChallenge and helped develop its free mental fitness tools with Mental Health Advisory Committee oversight.", source: "https://www.inspiringchildren.org/tools" },
       donate: "https://www.inspiringchildren.org/donate", mailingAddress: contactAddress },
-    schedule: publicItems.map(item => ({
+    schedule: (audience === "summit" ? publicItems : []).map(item => ({
       title: item.title,
       status: item.status,
       startUtc: item.startUtc,
@@ -152,10 +159,10 @@ export function buildAskAiKnowledge(snapshot: EventSnapshot, question = "") {
       publicSummary: item.summary,
       foundersOnly: isFoundersOnly(item)
     })),
-    pendingNotes: snapshot.contentPages.filter(page => page.published && page.slug.startsWith("schedule-pending")).map(page => withoutPreShow(page.body)),
-    guests: directoryPeople(snapshot).map(person => ({ name: person.name, role: person.role })),
-    matchingPublishedProfiles: matchingProfiles.map(person => ({ name: person.name, role: person.role, bio: person.bio.slice(0, 1200), profile: `https://notalonesummit.org/directory/${encodeURIComponent(person.slug)}` })),
-    partners: snapshot.sponsors.filter(sponsor => sponsor.published).map(sponsor => ({ name: sponsor.name, tier: sponsor.tier, website: sponsor.websiteUrl })),
-    faqs: snapshot.faqs.filter(faq => faq.published).map(faq => ({ question: faq.question, answer: faq.answer }))
+    pendingNotes: audience === "summit" ? snapshot.contentPages.filter(page => page.published && page.slug.startsWith("schedule-pending")).map(page => withoutPreShow(page.body)) : [],
+    guests: audience === "summit" ? directoryPeople(snapshot).map(person => ({ name: person.name, role: person.role })) : [],
+    matchingPublishedProfiles: audience === "summit" ? matchingProfiles.map(person => ({ name: person.name, role: person.role, bio: person.bio.slice(0, 1200), profile: `https://notalonesummit.org/directory/${encodeURIComponent(person.slug)}` })) : [],
+    partners: audience === "summit" ? snapshot.sponsors.filter(sponsor => sponsor.published).map(sponsor => ({ name: sponsor.name, tier: sponsor.tier, website: sponsor.websiteUrl })) : [],
+    faqs: audience === "summit" ? snapshot.faqs.filter(faq => faq.published).map(faq => ({ question: faq.question, answer: faq.answer })) : []
   };
 }

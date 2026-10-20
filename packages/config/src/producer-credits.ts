@@ -14,16 +14,14 @@ export function originalProducerCredit(name: string) {
   return originalProducerCredits.find(person => person.name.toLowerCase() === normalized || (person.name === "Jewel" && normalized === "jewel murray"));
 }
 
-// 2026 credits as set in the NAS web meeting (Sept 21, 2026): "Producers" is the top tier
-// (Aphrah Brokaw, Ryan Wolfington, Jewel), then "Executive Producers" (Trevor Short, Trent Alenik).
-// Co-producer and lower titles are pending Ryan Wolfington's written approval and are not shown.
-// The 2025 archive keeps originalProducerCredits exactly as ICF published them.
+// Owner (Oct 15, 2026): Ryan Wolfington, Aphrah Brokaw and Jewel alone are 2026 Executive
+// Producers; Trevor Short and Trent Alenik are Producers. The 2025 archive above is historical.
 export const producerCredits2026 = [
-  { name: "Jewel", category: "Producers", role: "Producer" },
-  { name: "Ryan Wolfington", category: "Producers", role: "Producer" },
-  { name: "Aphrah Brokaw", category: "Producers", role: "Producer" },
-  { name: "Trevor Short", category: "Executive Producers", role: "Executive Producer" },
-  { name: "Trent Alenik", category: "Executive Producers", role: "Executive Producer" }
+  { name: "Jewel", category: "Executive Producers", role: "Executive Producer" },
+  { name: "Ryan Wolfington", category: "Executive Producers", role: "Executive Producer" },
+  { name: "Aphrah Brokaw", category: "Executive Producers", role: "Executive Producer" },
+  { name: "Trevor Short", category: "Producers", role: "Producer" },
+  { name: "Trent Alenik", category: "Producers", role: "Producer" }
 ] as const;
 
 export function producerCredit2026(name: string) {

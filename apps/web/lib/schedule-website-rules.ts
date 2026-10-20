@@ -8,8 +8,9 @@ import type { ScheduleItem } from "@not-alone/validation";
 //  - Red Carpet ("hard rule, do not pull that from Airtable or anywhere"), Oct 7.
 //  - Speaker Reception ("cut the speaker reception"), Oct 7.
 //  - Pre-Show ("we're not gonna say there's a pre-show, we're just gonna say 7:30"), Oct 7.
+//  - Founders cocktails and Founder's Dinner (owner: remove both from the Summit website schedule), Oct 16.
 //  - Operational rows (load-in/out, rehearsals) and anything the team has flagged as a possible cut.
-export const neverOnWebsite = /\bred carpet\b|\bspeaker reception\b|\bpre[- ]?show\b|\bload[- ]?(?:in|out)\b|rehearsal|potentially cut/i;
+export const neverOnWebsite = /\bred carpet\b|\bspeaker reception\b|\bpre[- ]?show\b|\bfounders? cocktails?\b|\bfounder['’]?s dinner\b|\bload[- ]?(?:in|out)\b|rehearsal|potentially cut/i;
 
 // Which Run of Show rows are events on the public schedule. Airtable lists every segment of the day (each panel,
 // song break and fitness class) under its parent block; the website lists the blocks, as the owner's schedule
@@ -19,8 +20,6 @@ export const scheduleBlockTitles: RegExp[] = [
   /^poker night$/i,
   /^wellness activit/i, // "Wellness Activity", "Wellness Activities & Check-In"
   /^nevada mental health day$/i,
-  /^founders? cocktails$/i,
-  /^founder['’]?s dinner$/i,
   /^pet partners therapy$/i,
   /^(?:awards show )?doors open$/i,
   /^not alone awards\b|^awards show$/i,

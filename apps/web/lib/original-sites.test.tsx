@@ -24,6 +24,22 @@ const renderToStaticMarkup = (element: Parameters<typeof renderMarkup>[0]) => de
 const hasPortrait = (html: string, src: string, name: string) => [...html.matchAll(/<img[^>]+>/g)].some(([tag]) => tag.includes(`alt="${escape(name)}"`) && tag.includes(escape(src)));
 
 describe("source-faithful, year-separated event pages", () => {
+  it("credits only Ryan, Aphrah and Jewel as 2026 Executive Producers on Summit and Awards", () => {
+    for (const Page of [OriginalSummitPage, OriginalAwardsPage]) {
+      const html = renderToStaticMarkup(<Page year={2026} snapshot={live} />);
+      const section = html.match(/<section[^>]*id="producers"[^>]*>([\s\S]*?)<\/section>/)?.[1] ?? "";
+      const groupNames = (heading: string) => {
+        const start = section.indexOf(`<h2>${heading}</h2>`);
+        expect(start).toBeGreaterThan(-1);
+        const rest = section.slice(start + `<h2>${heading}</h2>`.length);
+        const next = rest.indexOf("<h2>");
+        return [...(next === -1 ? rest : rest.slice(0, next)).matchAll(/<h3>(.*?)<\/h3>/g)].map(match => match[1]);
+      };
+      expect(groupNames("Executive Producers")).toEqual(["Aphrah Brokaw", "Jewel", "Ryan Wolfington"]);
+      expect(groupNames("Producers")).toEqual(expect.arrayContaining(["Trevor Short", "Trent Alenik"]));
+    }
+  });
+
   it("shares the original portrait presentation and uses the owner-approved current host", () => {
     const archive = renderToStaticMarkup(<OriginalAwardsPage year={2025} />);
     const current = renderToStaticMarkup(<OriginalAwardsPage year={2026} snapshot={live} />);

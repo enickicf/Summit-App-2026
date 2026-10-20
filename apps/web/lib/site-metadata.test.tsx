@@ -119,7 +119,7 @@ describe("Year-specific event metadata", () => {
     expect(eventPageMetadata("/awards/2026", live).alternates?.canonical).toBe("https://notaloneawards.org/awards/2026");
     expect(eventPageMetadata("/awards/2026", live).openGraph).toMatchObject({ url: "https://notaloneawards.org/awards/2026" });
     // Share images stay on the Summit origin (metadataBase), where they are served.
-    expect(eventPageMetadata("/awards/2026", live).openGraph).toMatchObject({ images: [{ url: "https://notalonesummit.org/not-alone-awards-logo.png" }] });
+    expect(eventPageMetadata("/awards/2026", live).openGraph).toMatchObject({ images: [{ url: "https://notalonesummit.org/images/hero-awards-start.jpg" }] });
     // Without a configured owner origin nothing moves to the Awards domain.
     for (const path of canonicalEventPaths) expect(canonicalEventUrl(path, { NODE_ENV: "production" })).toBe(new URL(path, existingOwnerSiteUrl).toString());
   });
@@ -137,6 +137,16 @@ describe("Year-specific event metadata", () => {
     const source = JSON.parse(readFileSync(resolve(import.meta.dirname, "original-sites.json"), "utf8")) as { summit: { sections: { images: { src: string }[] }[] } };
     const assets = JSON.parse(readFileSync(resolve(import.meta.dirname, "original-assets.json"), "utf8")) as Record<string, string>;
     expect(eventMetadataContent["/2025"].image.path).toBe(assets[source.summit.sections[0]!.images[0]!.src]);
+  });
+
+  it("uses wide event photography for the current Summit and Awards link previews", () => {
+    for (const path of ["/", "/awards/2026"] as const) {
+      const image = eventMetadataContent[path].image;
+      expect(image.card).toBe("summary_large_image");
+      expect(image.width / image.height).toBeGreaterThan(1.7);
+      expect(image.alt).toMatch(/at the Not Alone (Summit|Awards)/);
+      expect(image.path).not.toMatch(/logo/i);
+    }
   });
 });
 

@@ -46,3 +46,9 @@ The owner approved using public Airtable-derived facts in short answers, excludi
 - Web typecheck and 693 tests passed. Netlify bundled the Ask AI edge rate limit.
 - The site can use only published, approved Airtable fields through its existing public extract. The Netlify site has no `AIRTABLE_TOKEN` in production or deploy-preview, so live Airtable auto-sync is still disconnected. A base-scoped read-only token is needed before claiming a current Airtable connection.
 - Production verification: 33/33 live-site checks passed with one build ID; the OpenAI-backed answer returned official public links, the raw RSVP-record request was refused, and Community Day returned its public schedule. Phone and desktop checks on all three pages confirmed the short Bryan Brothers label, full bio, and exact scroll restoration after browser Back.
+
+## October 15 owner refinement (LIVE: Netlify deploy `6ad15496868ee524d64c4698`)
+
+- On every site, Ask AI says an RSVP is a request, not a confirmed ticket. Once tickets are confirmed, the team will contact the requester by email and/or text with confirmation and ticketing information. Ask AI cannot verify an individual request's status.
+- Twenty common Awards and Summit questions have concise, public-source answers (`apps/web/lib/ask-ai-common-questions.ts`). Nevada Mental Health Day and Awards Show information remains answerable on all event sites.
+- On the Awards domain, detailed Summit inquiries receive the private, invitation-only response and a Summit-site referral. The Awards-domain model context omits Summit schedule, guests, pending notes, partners and FAQs, and its web search is limited to Inspiring Children and Awards domains. On the Summit domain, published Summit details remain available. Existing staff-only and unpublished data exclusions still apply.

@@ -26,7 +26,9 @@ export async function askAi(question: string, signal: AbortSignal): Promise<AskA
   try {
     const response = await fetch("/api/ask-ai", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      // The two public domains share a Netlify backend, so the original browser host carries
+      // the site's answer scope even when a proxy presents its own host to the API route.
+      headers: { "Content-Type": "application/json", "X-Ask-AI-Site": typeof window !== "undefined" && window.location.hostname.replace(/^www\./, "") === "notaloneawards.org" ? "awards" : "summit" },
       body: JSON.stringify({ question: parsed.data }),
       signal: controller.signal
     });

@@ -2,7 +2,7 @@ import { eventPartners2026 } from "../lib/event-partners-2026";
 import styles from "./event-partners.module.css";
 
 // Owner (Oct 5, 2026): the Community Day page's partner block is the model for every 2026 page. Cards: the
-// Cohen Foundation ("Powered by", full width), the Inspiring Children Foundation x NAMI together in ONE box
+// Cohen Foundation ("Powered by", full width), the Inspiring Children Foundation + NAMI together in ONE box
 // ("Presented by"), and Wynn Las Vegas in its own box ("Host venue"). "light" is the Community Day / Summit
 // look; "dark" recolors it for the black Awards page. Replaces the Sept 23 "Founding Partners" block.
 export function EventPartners({ tone = "light", heading = "Our Partners", headingLevel = "h2", id = "partners" }: { tone?: "light" | "dark"; heading?: string; headingLevel?: "h2" | "h3"; id?: string }) {
@@ -21,7 +21,7 @@ export function EventPartners({ tone = "light", heading = "Our Partners", headin
         <span className={styles.role}>Presented by</span>
         <div className={styles.pair}>
           <span className={`${styles.logo} ${styles.icf}`}><img src={presentedBy[0].logo[logo]} alt={presentedBy[0].name} width={presentedBy[0].logo.width} height={presentedBy[0].logo.height} loading="lazy" /></span>
-          <span className={styles.times} aria-hidden="true">×</span>
+          <span className={styles.times} aria-hidden="true">+</span>
           <span className={`${styles.logo} ${styles.nami}`}><img src={presentedBy[1].logo[logo]} alt={presentedBy[1].name} width={presentedBy[1].logo.width} height={presentedBy[1].logo.height} loading="lazy" /></span>
         </div>
       </div>

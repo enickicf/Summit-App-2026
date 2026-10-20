@@ -215,7 +215,17 @@ export const foundersListedRegardless = new Set([
 // (Bob and Mike Bryan stay Keynotes as well). Remove a name once Airtable carries the Founder grouping.
 export const ownerFounders2026 = new Set(["bob bryan", "mike bryan"]);
 export function withOwnerGroups<T extends AirtablePerson>(person: T): T {
-  return ownerFounders2026.has(person.name.trim().toLowerCase()) && !person.groups.includes("Founder") ? { ...person, groups: [...person.groups, "Founder"] } : person;
+  // Owner (Oct 15): the Summit's 2026 Executive Producers are Ryan, Aphrah and Jewel only.
+  // These two Airtable biographies still carry the previous credit; correct public copy without
+  // changing the read-only source record or unrelated television/film production credits.
+  const corrected = ["Sally Dewhurst", "Sophie Novak"].includes(person.name)
+    ? { ...person,
+        title: person.title.replace(/Executive Producer of the Not Alone Summit/g, "Producer of the Not Alone Summit"),
+        bio: person.bio.replace(/an Executive Producer of the Not Alone Summit/g, "a producer of the Not Alone Summit")
+          .replace(/Executive Producer of the Not Alone Summit/g, "producer of the Not Alone Summit") }
+    : person;
+  return ownerFounders2026.has(corrected.name.trim().toLowerCase()) && !corrected.groups.includes("Founder")
+    ? { ...corrected, groups: [...corrected.groups, "Founder"] } : corrected;
 }
 // Owner (Oct 4, 2026): listed on the websites by the owner's direction while Airtable's status is not yet
 // "Confirmed". Remove a name once Airtable confirms it. Aloe Blacc (A-Talent, status "Pending") was the only entry

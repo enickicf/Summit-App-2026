@@ -58,7 +58,7 @@ export const eventMetadataContent = {
   "/": {
     title: "Not Alone Summit 2026",
     description: "The 2026 Not Alone Summit from Inspiring Children Foundation. Published event information and confirmed Summit guest updates.",
-    image: { path: "/images/summit-logo.png", width: 1507, height: 1681, alt: "Not Alone Summit logo", card: "summary" }
+    image: { path: "/images/social-summit-2026.jpg", width: 2134, height: 1200, alt: "Jewel speaking at the Not Alone Summit", card: "summary_large_image" }
   },
   "/2025": {
     title: "Not Alone Summit 2025 Archive",
@@ -73,7 +73,7 @@ export const eventMetadataContent = {
   "/awards/2026": {
     title: "Not Alone Awards 2026",
     description: "Published information for the 2026 Not Alone Awards from Inspiring Children Foundation. Awards appearances and honors are announced separately.",
-    image: { path: "/not-alone-awards-logo.png", width: 736, height: 634, alt: "Not Alone Awards logo", card: "summary" }
+    image: { path: "/images/hero-awards-start.jpg", width: 1920, height: 1080, alt: "Jewel performing at the Not Alone Awards", card: "summary_large_image" }
   }
 
 } as const;
