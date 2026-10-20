@@ -1,7 +1,7 @@
 import { InvitationBadge } from "../../components/invitation-badge";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, MapPin, Shirt } from "lucide-react";
 import { communityDay2026 as day } from "../../lib/community-day-2026";
 import { isPostEvent, postEventLabel } from "../../lib/event-phase";
 import { AwardsGuestDirectory } from "../../components/awards-guest-directory";
@@ -83,7 +83,11 @@ export async function CommunityDayView({ partner = null }: { partner?: AwardsPar
         <p className={styles.sessionTime}>{session.time}</p>
         <div>
           <h3>{session.kind === "awards" ? <a href={awardsPath} target="_blank" rel="noopener">{session.title}</a> : session.title}</h3>
-          <p className={styles.sessionMeta}>{[session.room, session.attire && `Attire: ${session.attire}`].filter(Boolean).join(" · ")}</p>
+          {/* Owner (Oct 20, option A): the same one-line room / attire style as the Summit schedule. */}
+          {(session.room || session.attire) && <p className={styles.sessionMeta}>
+            {session.room && <span><MapPin size={15} aria-hidden="true" />{session.room}</span>}
+            {session.attire && <span><Shirt size={15} aria-hidden="true" />{session.attire}</span>}
+          </p>}
           {session.synopsis && <p className={styles.sessionSynopsis}>{session.synopsis}</p>}
         </div>
       </li>)}</ol>

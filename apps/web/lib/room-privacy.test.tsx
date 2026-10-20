@@ -19,10 +19,10 @@ describe("rooms inside Wynn are private (owner / Ryan, Sept 29, 2026)", () => {
   it("renders the public schedule without any room name", () => {
     const days = groupPublishedProgramByDay(event2026Snapshot);
     const html = renderToStaticMarkup(<ScheduleBrowser days={days} eventTimeZone={event2026Snapshot.event.timeZone} initialNowUtc="2026-11-02T15:00:00.000Z" />);
-    expect(html).not.toContain(">Location<");
+    expect(html).not.toContain("Location: ");
     for (const item of event2026Snapshot.scheduleItems) if (item.locationName.trim()) expect(html).not.toContain(item.locationName.trim());
     const guide = renderToStaticMarkup(<ScheduleBrowser days={days} eventTimeZone={event2026Snapshot.event.timeZone} initialNowUtc="2026-11-02T15:00:00.000Z" showRooms />);
-    expect(guide).toContain(">Location<");
+    expect(guide).toContain("Location: ");
   });
   it("never links the private guide from any page, menu or component", () => {
     const sources = [...files(join(__dirname, "../app")), ...files(join(__dirname, "../components"))].filter(p => /\.(tsx?|css)$/.test(p) && !p.includes("/venue/guide-") && !p.endsWith(".test.tsx") && !p.endsWith(".test.ts"));

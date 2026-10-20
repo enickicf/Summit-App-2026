@@ -143,6 +143,10 @@
 .fullSchedule h3 a { color:inherit; text-decoration:underline; text-underline-offset:4px; }
 .sessionTime { margin:2px 0 0; color:#4a5faa; font-size:16px; font-weight:700; font-variant-numeric:tabular-nums; }
 .sessionMeta { margin:4px 0 0; color:#555555; font-size:14px; font-weight:500; }
+/* Oct 20 (owner, option A): room and attire on one line with small icons, like the Summit schedule. */
+.sessionMeta { display:flex; flex-wrap:wrap; align-items:center; gap:6px 20px; }
+.sessionMeta > span { display:inline-flex; align-items:center; gap:6px; }
+.sessionMeta svg { color:#4a5faa; flex:none; }
 .sessionSynopsis { margin:8px 0 0; color:#222222; font-size:15px; line-height:1.55; }
 .fullSchedule .block { background:#f2f1f5; padding-left:16px; padding-right:16px; border-top-color:transparent; border-radius:6px; margin-top:12px; }
 .fullSchedule .segment { grid-template-columns:150px minmax(0,1fr); padding-left:28px; }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
-import { Lock } from "lucide-react";
+import { Lock, MapPin, Shirt } from "lucide-react";
 import type { EventSnapshot } from "@not-alone/validation";
 import { PublicEventNotices } from "./current-event-updates";
 import {
@@ -117,9 +117,9 @@ export function ScheduleBrowser({ days, eventTimeZone, initialNowUtc, noticeSnap
                         {/* Owner (Oct 7): other private events are listed and marked "Invite only" rather than hidden. */}
                         {!foundersOnly && item.eligibilityScope.id === "invite-only" ? <p className={styles.inviteOnly}><Lock size={15} aria-hidden="true" />Invite only</p> : null}
                         {summary ? <p>{summary}</p> : null}
-                        {/* Owner (Oct 7): the Attire column from Airtable's Run of Show, for every event that carries one. */}
-                        {sessionAttire(item) ? <p className={styles.attire}><span>Attire</span>{sessionAttire(item)}</p> : null}
-                        {showRooms && <p className={styles.location}><span>Location</span>{/^location to be confirmed\.?$/i.test(item.locationName.trim()) ? "To be confirmed" : item.locationName}</p>}
+                        {/* Owner (Oct 7): the Attire column from Airtable's Run of Show, for every event that carries one. Owner (Oct 20,
+                            option A): room and attire share ONE quiet line with a pin and a shirt icon instead of a stacked label table. */}
+                        <SessionDetails room={showRooms ? item.locationName : ""} attire={sessionAttire(item)} />
                         {/* Owner (Sept 28): the poker night has its own site and its own RSVP; this entry is
                             the only place on the Summit site that links to them. */}
                         {isPokerNight(item.title) && pokerNight.live ? <p className={styles.pokerLinks}>
@@ -146,4 +146,15 @@ export function ScheduleBrowser({ days, eventTimeZone, initialNowUtc, noticeSnap
       ))}
     </div></>
   );
+}
+
+/** Room and attire on one line (owner, Oct 20, option A); nothing is rendered when an event has neither. */
+export function SessionDetails({ room, attire }: { room: string; attire?: string | null }) {
+  const place = room.trim() ? (/^location to be confirmed\.?$/i.test(room.trim()) ? "Room to be confirmed" : room.trim()) : "";
+  const dress = (attire ?? "").trim();
+  if (!place && !dress) return null;
+  return <p className={styles.details}>
+    {place ? <span className={styles.detail}><MapPin size={15} strokeWidth={2} aria-hidden="true" /><span className="srOnly">Location: </span>{place}</span> : null}
+    {dress ? <span className={styles.detail}><Shirt size={15} strokeWidth={2} aria-hidden="true" /><span className="srOnly">Attire: </span>{dress}</span> : null}
+  </p>;
 }

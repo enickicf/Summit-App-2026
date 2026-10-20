@@ -129,18 +129,15 @@
 .signupHoneypot { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .privateNote { max-width: 640px; margin: 14px 0 0; font-size: 14px; line-height: 1.5; color: #555; }
 
-/* Owner (Oct 20): "an issue with spacing of some things like attire spacing ... make the schedule look as good as
-   possible". Detail rows (Attire, Location) sit as a small aligned table under the description: labels in one 74px
-   column with the values lined up beside them, a clear 12px gap above the first row and 4px between rows; buttons get
-   one even gap; the last line of every card has no trailing margin so every card ends the same distance from its edge. */
-.session .attire, .session .location { display: grid; grid-template-columns: 74px minmax(0, 1fr); column-gap: 12px; align-items: baseline; color: #333333; font-size: 14px; line-height: 1.5; margin: 0; }
-.session .attire span, .session .location span { color: #777777; font-size: 11px; font-weight: 700; letter-spacing: .1em; margin: 0; text-transform: uppercase; }
-.session > :not(.attire):not(.location) + :is(.attire, .location) { margin-top: 12px; }
-.session > :is(.attire, .location) + :is(.attire, .location) { margin-top: 4px; }
+/* Owner (Oct 20): "an issue with spacing of some things like attire spacing", then option A: the room and the attire share one
+   quiet line under the description, each with a small Summit-blue icon, wrapping to two lines only on narrow screens.
+   Buttons get one even gap; the last line of every card has no trailing margin so every card ends the same distance from
+   its edge. */
+.session .details { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 20px; margin: 12px 0 0; color: #444444; font-size: 14px; line-height: 1.5; }
+.detail { display: inline-flex; align-items: center; gap: 6px; }
+.detail svg { color: #4a5faa; flex: none; }
 .session > .pokerLinks, .session > .signup { margin-top: 16px; }
 .session > p:has(+ .pokerLinks), .session > p:has(+ .signup) { margin-bottom: 0; }
 .session > :last-child { margin-bottom: 0; }
 .session h3 { margin-bottom: 6px; }
-@media (max-width: 700px) {
-  .session .attire, .session .location { grid-template-columns: 66px minmax(0, 1fr); column-gap: 10px; font-size: 13.5px; }
-}
+@media (max-width: 700px) { .session .details { font-size: 13.5px; gap: 6px 16px; } }
