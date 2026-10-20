@@ -1,3 +1,4 @@
+import { withSubmissionInbox } from "../../../lib/staff/submission-inbox";
 import {invitationWaiverLinks,sendWaiverLinks} from "../../../lib/staff/attendee-waiver";
 import { sendInvitationReceipt } from "../../../lib/staff/request-receipt";
 import type { Sender } from "../../../lib/staff/rsvp-email";
@@ -22,4 +23,7 @@ export async function handleInvitationPost(request: Request, store?: SubmissionS
   try { const target = store ?? await getSubmissionStore(); const counts = await saveInvitation(p, target); await sendInvitationReceipt(p, target, sender); const waiverLinks=await invitationWaiverLinks(p,target);const waiverEmailStatus=await sendWaiverLinks(waiverLinks,target,sender); return respond({ ok: true, counts, requestId: p.requestId, waiverLinks:waiverLinks.map(({name,url})=>({name,url})),waiverEmailStatus }); }
   catch { return respond({ ok: false, retryable: true, error: "We could not finish saving every event. Keep this page open and retry the same request; any saved entries will not be duplicated." }, 503); }
 }
-export async function POST(request: Request) { return handleInvitationPost(request); }
+async function postWithoutInbox(request: Request) { return handleInvitationPost(request); }
+
+// Oct 19: every request is stored in the submission inbox before validation (lib/staff/submission-inbox.ts).
+export const POST = withSubmissionInbox("invitation-rsvp", postWithoutInbox);

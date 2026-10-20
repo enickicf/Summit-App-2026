@@ -1,3 +1,4 @@
+import { withSubmissionInbox } from "../../../lib/staff/submission-inbox";
 import { NextResponse } from "next/server";
 import { getSubmissionStore, newSubmission, nominationPayloadSchema, type SubmissionStore } from "../../../lib/staff/store";
 import { corsHeaders } from "../rsvp/route";
@@ -36,6 +37,9 @@ export async function handleNominationPost(request: Request, store?: SubmissionS
   return NextResponse.json({ ok: true }, { headers });
 }
 
-export async function POST(request: Request) {
+async function postWithoutInbox(request: Request) {
   return handleNominationPost(request);
 }
+
+// Oct 19: every request is stored in the submission inbox before validation (lib/staff/submission-inbox.ts).
+export const POST = withSubmissionInbox("nominations", postWithoutInbox);

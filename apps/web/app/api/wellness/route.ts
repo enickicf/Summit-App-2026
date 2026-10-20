@@ -1,3 +1,4 @@
+import { withSubmissionInbox } from "../../../lib/staff/submission-inbox";
 import { NextResponse } from "next/server";
 import { getSubmissionStore, newSubmission, siteVisitWaiverProblem, wellnessFormSchema, type SubmissionStore } from "../../../lib/staff/store";
 import { wellnessClash, wellnessSessionById, wellnessSignupsOpen } from "../../../lib/wellness-signups-2026";
@@ -44,6 +45,9 @@ export async function handleWellnessPost(request: Request, store?: SubmissionSto
   return NextResponse.json({ ok: true }, { status: 201, headers });
 }
 
-export async function POST(request: Request) {
+async function postWithoutInbox(request: Request) {
   return handleWellnessPost(request);
 }
+
+// Oct 19: every request is stored in the submission inbox before validation (lib/staff/submission-inbox.ts).
+export const POST = withSubmissionInbox("wellness", postWithoutInbox);

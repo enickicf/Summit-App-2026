@@ -1,3 +1,4 @@
+import { withSubmissionInbox } from "../../../lib/staff/submission-inbox";
 import { sendRequestReceipt } from "../../../lib/staff/request-receipt";
 import type { Sender } from "../../../lib/staff/rsvp-email";
 import { NextResponse } from "next/server";
@@ -56,6 +57,9 @@ export async function handlePokerPost(request: Request, store?: SubmissionStore,
   return NextResponse.json({ ok: true }, { headers });
 }
 
-export async function POST(request: Request) {
+async function postWithoutInbox(request: Request) {
   return handlePokerPost(request);
 }
+
+// Oct 19: every request is stored in the submission inbox before validation (lib/staff/submission-inbox.ts).
+export const POST = withSubmissionInbox("poker", postWithoutInbox);

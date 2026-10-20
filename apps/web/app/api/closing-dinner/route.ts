@@ -1,3 +1,4 @@
+import { withSubmissionInbox } from "../../../lib/staff/submission-inbox";
 import {dinnerWaiverLinks,sendWaiverLinks} from "../../../lib/staff/attendee-waiver";
 import { waiverMatchesAttendee, waiverReadyForSubmission } from "../../../lib/event-waiver";
 import { sendRequestReceipt } from "../../../lib/staff/request-receipt";
@@ -57,6 +58,9 @@ export async function handleClosingDinnerPost(request: Request, store?: Submissi
   return NextResponse.json({ ok: true,requestId:saved.id,waiverLinks:links.map(({name,url})=>({name,url})),waiverEmailStatus }, { status: 201, headers });
 }
 
-export async function POST(request: Request) {
+async function postWithoutInbox(request: Request) {
   return handleClosingDinnerPost(request);
 }
+
+// Oct 19: every request is stored in the submission inbox before validation (lib/staff/submission-inbox.ts).
+export const POST = withSubmissionInbox("closing-dinner", postWithoutInbox);

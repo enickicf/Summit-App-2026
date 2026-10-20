@@ -1,3 +1,4 @@
+import { withSubmissionInbox } from "../../../lib/staff/submission-inbox";
 import { NextResponse } from "next/server";
 import { getSubmissionStore, newSubmission, textPreferenceSchema, type SubmissionStore } from "../../../lib/staff/store";
 
@@ -28,6 +29,9 @@ export async function handleTextPreferencePost(request: Request, store?: Submiss
   return NextResponse.json({ ok: true }, { status: 201, headers });
 }
 
-export async function POST(request: Request) {
+async function postWithoutInbox(request: Request) {
   return handleTextPreferencePost(request);
 }
+
+// Oct 19: every request is stored in the submission inbox before validation (lib/staff/submission-inbox.ts).
+export const POST = withSubmissionInbox("text-preferences", postWithoutInbox);

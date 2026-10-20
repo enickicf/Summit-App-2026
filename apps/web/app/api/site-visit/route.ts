@@ -1,3 +1,4 @@
+import { withSubmissionInbox } from "../../../lib/staff/submission-inbox";
 import { NextResponse } from "next/server";
 import { getSubmissionStore, newSubmission, siteVisitFormSchema, siteVisitWaiverProblem, type SubmissionStore } from "../../../lib/staff/store";
 import { signupOpenByCategory } from "../../../lib/morning-workshops";
@@ -50,6 +51,9 @@ export async function handleSiteVisitPost(request: Request, store?: SubmissionSt
   return NextResponse.json({ ok: true }, { status: 201, headers });
 }
 
-export async function POST(request: Request) {
+async function postWithoutInbox(request: Request) {
   return handleSiteVisitPost(request);
 }
+
+// Oct 19: every request is stored in the submission inbox before validation (lib/staff/submission-inbox.ts).
+export const POST = withSubmissionInbox("site-visit", postWithoutInbox);

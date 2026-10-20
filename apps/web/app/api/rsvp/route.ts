@@ -1,3 +1,4 @@
+import { withSubmissionInbox } from "../../../lib/staff/submission-inbox";
 import { waiverMatchesAttendee, waiverReadyForSubmission } from "../../../lib/event-waiver";
 import { NextResponse } from "next/server";
 import { getSubmissionStore, missingVipFields, newRetrySafeSubmission, partyGuestsIncomplete, rsvpPayloadSchema, type SubmissionStore } from "../../../lib/staff/store";
@@ -79,6 +80,9 @@ async function forwardToLegacy(payload: unknown): Promise<void> {
   }
 }
 
-export async function POST(request: Request) {
+async function postWithoutInbox(request: Request) {
   return handleRsvpPost(request);
 }
+
+// Oct 19: every request is stored in the submission inbox before validation (lib/staff/submission-inbox.ts).
+export const POST = withSubmissionInbox("rsvp", postWithoutInbox);

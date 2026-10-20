@@ -5,6 +5,7 @@ import { PortalAutoRefresh } from "./portal-auto-refresh";
 import { RsvpEmailTools } from "./rsvp-email-tools";
 import { activeOf, activeRsvps, comingTo, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, ustaRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels, siteVisitTransportLabels, type SiteVisitTransport, type TextPreferenceRecord, type ClosingDinnerSubmission, closingDinnerSeats, closingDinnerTotals } from "../lib/staff/store";
 import styles from "../app/staff/staff.module.css";
+import type { InboxEntry } from "../lib/staff/submission-inbox";
 import { wellnessSessions } from "../lib/wellness-signups-2026";
 import { textConsentLabels, textConsentProtocolNote, textConsentShortLabels, textConsentStatus, textContactRows, textOptOutFooter } from "../lib/staff/text-consent";
 
@@ -118,7 +119,7 @@ export function groupSiteVisit(rows: WorkshopSubmission[]) {
 
 // Owner (Sept 23): one clean, Not Alone-themed staff portal: ticket requests (with running totals at
 // the top), nominations in their own section, and the current Awards lineup for reference.
-export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPreferences = [], closingDinner = [], lineup, generatedAt }: { rsvps: RsvpSubmission[]; nominations: NominationSubmission[]; poker: PokerSubmission[]; workshops?: WorkshopSubmission[]; textPreferences?: TextPreferenceRecord[]; closingDinner?: ClosingDinnerSubmission[]; lineup: LineupGroup[]; generatedAt: string }) {
+export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPreferences = [], closingDinner = [], needsAttention = [], anonymousFailures = 0, lineup, generatedAt }: { rsvps: RsvpSubmission[]; nominations: NominationSubmission[]; poker: PokerSubmission[]; workshops?: WorkshopSubmission[]; textPreferences?: TextPreferenceRecord[]; closingDinner?: ClosingDinnerSubmission[]; needsAttention?: InboxEntry[] | null; anonymousFailures?: number; lineup: LineupGroup[]; generatedAt: string }) {
   // Removed requests (test entries) leave every list and total but stay stored under "Removed".
   const active = activeRsvps(rsvps);
   const removed = removedRsvps(rsvps);
@@ -172,6 +173,16 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
         <form method="post" action="/api/staff/logout"><button type="submit" className={styles.linkButton}>Sign out</button></form>
       </nav>
     </header>
+
+    {/* Oct 19 (owner: "we should not have any missing submissions"): every form request is stored before validation; anything the API did not save is listed here until the same guest completes a request. */}
+    <section className={styles.section} id="needs-attention" aria-labelledby="needs-attention-title" style={needsAttention && needsAttention.length ? { border: "2px solid #c62828", background: "#fff4f4" } : undefined}>
+      <div className={styles.sectionHead}><h2 id="needs-attention-title">{needsAttention === null ? "Submission check unavailable" : needsAttention.length ? `Needs attention: ${needsAttention.length} submission${needsAttention.length === 1 ? "" : "s"} not saved` : "All submissions saved"}</h2><a className={styles.button} href="/api/staff/export?kind=inbox">Download CSV</a><a className={styles.button} href="/api/staff/export?kind=inbox-all">Every submission received</a></div>
+      <p className={styles.help}>{needsAttention === null ? "The submission inbox could not be read just now; refresh in a minute." : "Every request sent from any form is copied into a separate inbox before it is checked. If the form refused it (for example an unsigned waiver or a missing field) or the server failed, it appears here with the guest's details and the message they saw, so the team can contact them. It disappears once the same guest has a saved request."}{anonymousFailures > 0 ? ` ${anonymousFailures} other refused request${anonymousFailures === 1 ? "" : "s"} had no name, email or phone (nobody to contact); they are in the "Every submission received" spreadsheet.` : ""}</p>
+      {needsAttention && needsAttention.length > 0 && <div className={styles.tableWrap}><table className={styles.table}>
+        <thead><tr><th>When</th><th>Form</th><th>Name</th><th>Email</th><th>Phone</th><th>What the guest saw</th><th>Everything they sent</th></tr></thead>
+        <tbody>{needsAttention.map(entry => <tr key={entry.id}><td className={styles.nowrap}>{when(entry.receivedAt)}</td><td>{entry.endpoint}</td><td className={styles.strong}>{entry.name || "—"}</td><td>{entry.email ? <a href={`mailto:${entry.email}`}>{entry.email}</a> : "—"}</td><td className={styles.nowrap}>{entry.phone || "—"}</td><td>{entry.status} {entry.error}</td><td className={styles.notes}><details><summary>Show</summary><pre style={{ whiteSpace: "pre-wrap", maxWidth: 420, fontSize: 11 }}>{entry.body}</pre></details></td></tr>)}</tbody>
+      </table></div>}
+    </section>
 
     <div data-view="awards" id="awards">
       <nav className={styles.sectionNav} aria-label="Awards sections"><a href="#vip">VIP</a><a href="#lake-las-vegas">Lake Las Vegas</a><a href="#nami">NAMI</a><a href="#usta">USTA</a><a href="#tickets">Tickets</a><a href="#community-day">Community Day</a><a href="#nominations">Nominations</a><a href="#removed">Removed</a><a href="#lineup">Lineup</a></nav>

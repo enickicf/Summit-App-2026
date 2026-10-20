@@ -1,5 +1,6 @@
 import { waiverSummary } from "../../../../lib/event-waiver";
 import { cookies } from "next/headers";
+import { inboxCsvColumns, listFailedSubmissions, listReceivedSubmissions } from "../../../../lib/staff/submission-inbox";
 import { textConsentColumns, textConsentCsvColumns, textContactCsvColumns, textContactRows, type TextContact } from "../../../../lib/staff/text-consent";
 import { isStaffSession, staffCookieName } from "../../../../lib/staff/auth";
 import { activeOf, activeRsvps, closingDinnerCsvColumns, closingDinnerSeats, getSubmissionStore, listAllRsvps, rsvpExportForms, rsvpsOfForm, type RsvpExportForm, withRsvpForm, nominationCsvColumns, pokerCsvColumns, rsvpCsvColumns, siteVisitCsvColumns, toCsv, wellnessCsvColumns, workshopCsvColumns } from "../../../../lib/staff/store";
@@ -20,8 +21,15 @@ export async function GET(request: Request) {
   if (kind === "all") {
     const [rsvp, nomination, poker, rsvpEmail, workshop, closingDinner] = await Promise.all([listAllRsvps(store), store.list("nomination"), store.list("poker"), store.list("rsvpEmail"), store.list("workshop"), store.list("closingDinner")]);
     const textPreference = textPreferences;
-    const body = JSON.stringify({ exportedAt: new Date().toISOString(), site: "notalonesummit.org/staff", rsvp, nomination, poker, rsvpEmail, workshop, textPreference, closingDinner }, null, 2);
+    // Oct 19: the submission inbox (every request as sent, and every request that was not saved).
+    const [submissionInboxFailed, submissionInboxReceived] = await Promise.all([listFailedSubmissions().catch(() => null), listReceivedSubmissions().catch(() => null)]);
+    const body = JSON.stringify({ exportedAt: new Date().toISOString(), site: "notalonesummit.org/staff", rsvp, nomination, poker, rsvpEmail, workshop, textPreference, closingDinner, submissionInboxFailed, submissionInboxReceived }, null, 2);
     return new Response(body, { headers: { "Content-Type": "application/json; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-staff-portal-backup-${stamp}.json"`, "Cache-Control": "no-store" } });
+  }
+  // Oct 19: submission inbox spreadsheets: kind=inbox = requests that were NOT saved; kind=inbox-all = every request received.
+  if (kind === "inbox" || kind === "inbox-all") {
+    const rows = kind === "inbox" ? await listFailedSubmissions() : await listReceivedSubmissions();
+    return new Response(toCsv(rows, inboxCsvColumns), { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-${kind === "inbox" ? "submissions-not-saved" : "every-submission-received"}-${stamp}.csv"`, "Cache-Control": "no-store" } });
   }
   // Oct 12 (owner): everyone we hold a phone number for, one row per number, with text message consent / opt-out.
   if (kind === "texts") {
