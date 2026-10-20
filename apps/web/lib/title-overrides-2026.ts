@@ -10,7 +10,10 @@ export const titleOverrides2026: ReadonlyMap<string, string> = new Map([
   ["Ryan Wolfington", "Founder, Inspiring Children Foundation and Not Alone"],
   // Ryan (Oct 9): Paige's title is the ICF partnerships one ("put ICF partnerships ... manager"); her bio describes her
   // as a member of the ICF team, not an alumna, so she does not get the ICF Alumni line.
-  ["Paige Neuenschwander", "ICF Partnerships Manager"]
+  ["Paige Neuenschwander", "ICF Partnerships Manager"],
+  // Oct 20: Airtable has no title for Julie Scelfo yet (occupation "Founder, Mothers against media addiction"); this is
+  // the organization's own wording (wearemama.org/about).
+  ["Julie Scelfo", "Founder & Executive Director, Mothers Against Media Addiction (MAMA)"]
 ].map(([name, title]) => [personNameKey(name!), title!]));
 
 export function titleOverride2026(name: string): string | undefined {

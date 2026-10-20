@@ -13,3 +13,17 @@ export const privateSchedulePath = "/privateschedule-49rrieyh";
 export function publicLocation(locationName: string): string {
   return roomsPublic ? locationName : "";
 }
+
+// Oct 20: the public schedule hid the room line on screen, but the room names still travelled to the browser inside the
+// page data (the client schedule component received every session's locationName and the whole snapshot). Public
+// pages now pass these room-free copies; only the private schedule passes the real rooms.
+export function withoutRooms<T>(value: T): T {
+  return JSON.parse(JSON.stringify(value, (key, field) => (key === "locationName" || key === "locationId" ? "" : key === "locations" && Array.isArray(field) ? [] : field))) as T;
+}
+/** The live-notice components only need the event, its notices and its sessions; everything else (info pages such as
+ *  the staff app's "2026 venue guide", which names rooms) is left out and the rooms are blanked. */
+export function noticeOnlySnapshot<T>(snapshot: T): T {
+  if (!snapshot || typeof snapshot !== "object") return snapshot;
+  const kept = Object.fromEntries(Object.entries(snapshot).map(([key, value]) => [key, Array.isArray(value) && key !== "notices" && key !== "scheduleItems" ? [] : value]));
+  return withoutRooms(kept as T);
+}

@@ -10,17 +10,19 @@ export type PortraitOverride = { file: string; source: string; airtableBytes?: n
 export const portraitOverrides2026: Record<string, PortraitOverride> = {
   // Oct 20, 2026: Airtable headshots of confirmed people who had none on the site (Airtable Talent re-read; face-centred crops).
   "alex accetta": { file: "/2026-headshots/portraits/alex-accetta.jpg", source: "airtable" },
-  "basak kizilisik": { file: "/2026-headshots/portraits/basak-kizilisik.jpg", source: "airtable" },
+  "basak kizilisik": { file: "/2026-headshots/portraits/basak-kizilisik-2.jpg", source: "web" }, // Oct 20: sharper copy of their photo from their own organization / press page (hires agent)
   "blake bonner": { file: "/2026-headshots/portraits/blake-bonner.jpg", source: "airtable" },
   "blu eyes": { file: "/2026-headshots/portraits/blu-eyes.jpg", source: "airtable" },
   "brian hill": { file: "/2026-headshots/portraits/brian-hill.jpg", source: "airtable" },
   "caitlin bonner": { file: "/2026-headshots/portraits/caitlin-bonner.jpg", source: "airtable" },
   "corey j nigro": { file: "/2026-headshots/portraits/dr-corey-j-nigro.jpg", source: "airtable" },
-  "shashita inamdar": { file: "/2026-headshots/portraits/dr-shashita-inamdar.jpg", source: "airtable" },
+  "shashita inamdar": { file: "/2026-headshots/portraits/dr-shashita-inamdar-2.jpg", source: "web" }, // Oct 20: sharper copy of their photo from their own organization / press page (hires agent)
   "franco pascali": { file: "/2026-headshots/portraits/franco-pascali.jpg", source: "airtable" },
-  "geoff ralston": { file: "/2026-headshots/portraits/geoff-ralston.jpg", source: "airtable" },
-  "heather engellis": { file: "/2026-headshots/portraits/heather-engellis.jpg", source: "airtable" },
-  "jen whalen": { file: "/2026-headshots/portraits/jen-whalen.jpg", source: "airtable" },
+  "geoff ralston": { file: "/2026-headshots/portraits/geoff-ralston-2.jpg", source: "commons", credit: "Gdr2023, GeoffHeadshot.jpg, CC BY-SA 4.0 (cropped), https://commons.wikimedia.org/wiki/File:GeoffHeadshot.jpg", attribution: { label: "Gdr2023 / Wikimedia Commons, CC BY-SA 4.0 (cropped)", href: "https://commons.wikimedia.org/wiki/File:GeoffHeadshot.jpg" } },
+  // Oct 20: Julie Scelfo's own press headshot (juliescelfo.com/contact, photo Kevin Abosch); not in Airtable yet.
+  "julie scelfo": { file: "/2026-headshots/portraits/julie-scelfo.jpg", source: "web", credit: "Kevin Abosch, press headshot from https://juliescelfo.com/contact/" },
+  "heather engellis": { file: "/2026-headshots/portraits/heather-engellis-2.jpg", source: "web" }, // Oct 20: sharper copy of their photo from their own organization / press page (hires agent)
+  "jen whalen": { file: "/2026-headshots/portraits/jen-whalen-2.jpg", source: "web" }, // Oct 20: sharper copy of their photo from their own organization / press page (hires agent)
   "julie catineau": { file: "/2026-headshots/portraits/julie-catineau.jpg", source: "airtable" },
   "laura brady": { file: "/2026-headshots/portraits/laura-brady.jpg", source: "airtable" },
   "lauren ann": { file: "/2026-headshots/portraits/lauren-ann.jpg", source: "airtable" },
@@ -28,8 +30,8 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "miguel tyson": { file: "/2026-headshots/portraits/miguel-tyson.jpg", source: "airtable" },
   "remington rhodes": { file: "/2026-headshots/portraits/remington-rhodes.jpg", source: "airtable" },
   "robert goldstein": { file: "/2026-headshots/portraits/robert-goldstein.jpg", source: "airtable" },
-  "ryan chen": { file: "/2026-headshots/portraits/ryan-chen.jpg", source: "airtable" },
-  "tasha rasolkhani kalhorn": { file: "/2026-headshots/portraits/tasha-rasolkhani-kalhorn.jpg", source: "airtable" },
+  "ryan chen": { file: "/2026-headshots/portraits/ryan-chen-2.jpg", source: "web" }, // Oct 20: sharper copy of their photo from their own organization / press page (hires agent)
+  "tasha rasolkhani kalhorn": { file: "/2026-headshots/portraits/tasha-rasolkhani-kalhorn-2.jpg", source: "web" }, // Oct 20: sharper copy of their photo from their own organization / press page (hires agent)
   "theresa magnus": { file: "/2026-headshots/portraits/theresa-magnus.jpg", source: "airtable" },
   "valerie sizemore": { file: "/2026-headshots/portraits/valerie-sizemore.jpg", source: "airtable" },
   // Sept 21 late additions (sources in work/new-headshots-20260921/manifest.json).

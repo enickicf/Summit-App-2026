@@ -32,3 +32,14 @@ describe("rooms inside Wynn are private (owner / Ryan, Sept 29, 2026)", () => {
     expect(readFileSync(join(__dirname, "../app/sitemap.ts"), "utf8")).not.toContain("guide-");
   });
 });
+
+describe("room names never reach the public pages' data (Oct 20)", () => {
+  it("blanks every room in the copies passed to the browser and keeps only what live notices need", async () => {
+    const { withoutRooms, noticeOnlySnapshot } = await import("./room-privacy");
+    const snapshot = { event: { name: "Summit" }, notices: [{ id: "n" }], scheduleItems: [{ title: "Dinner", locationId: "l1", locationName: "Margaux" }], locations: [{ name: "LaFleur" }], infoPages: [{ body: "Margaux is listed for the dinner" }] };
+    const text = JSON.stringify(noticeOnlySnapshot(snapshot)) + JSON.stringify(withoutRooms([{ items: [{ locationName: "Sinatra" }] }]));
+    expect(text).not.toMatch(/Margaux|LaFleur|Sinatra/);
+    expect(noticeOnlySnapshot(snapshot).scheduleItems).toHaveLength(1);
+    expect(noticeOnlySnapshot(null)).toBeNull();
+  });
+});

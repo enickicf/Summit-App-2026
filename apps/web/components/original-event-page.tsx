@@ -2,6 +2,7 @@ import { InvitationBadge } from "./invitation-badge";
 import Link from "next/link";
 import { displayTitle2026, icfAlumni2026 } from "../lib/title-overrides-2026";
 import { airtableTalent2026 } from "../lib/airtable-talent-2026";
+import { noticeOnlySnapshot, withoutRooms } from "../lib/room-privacy";
 import { RoleLines } from "./role-lines";
 import { ArrowDown, ArrowUpRight, Play } from "lucide-react";
 import type { EventSnapshot } from "@not-alone/validation";
@@ -251,7 +252,7 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
   // Owner (Sept 21): the hero shows only the main Summit dates.
   const heroDates = { main: (snapshot?.event.dateLabel ?? "").split(" · ")[0] || "2026 dates to be announced" };
   return <main id="main-content" tabIndex={-1} className={`${styles.page} ${archive ? "" : styles.refined} ${summitStyles.summit}`}>
-    {!archive && <CurrentEventUpdates snapshot={snapshot} initialNowUtc={new Date().toISOString()} />}
+    {!archive && <CurrentEventUpdates snapshot={noticeOnlySnapshot(snapshot)} initialNowUtc={new Date().toISOString()} />}
     {/* Owner (Sept 21): same hero format as the Awards site (logo, larger foundation credit, date and
         venue, one action), over the 2025 Summit recap with its Villa Bibbiani segments skipped. */}
     <section className={`${summitStyles.hero} ${summitStyles.heroFormat}${archive ? "" : ` ${summitStyles.heroWithCorner}`}`} aria-labelledby="summit-title">
@@ -330,7 +331,7 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     {!archive && snapshot && <section className={`${styles.band} ${summitStyles.scheduleBand}`} id="schedule" aria-labelledby="summit-schedule-title">
       <h2 id="summit-schedule-title">Schedule</h2>
       <p className={summitStyles.scheduleDates}>{heroDates.main} · {snapshot.event.venueName}</p>
-      <ScheduleBrowser days={groupPublishedProgramByDay(snapshot)} eventTimeZone={snapshot.event.timeZone} initialNowUtc={new Date().toISOString()} />
+      <ScheduleBrowser days={withoutRooms(groupPublishedProgramByDay(snapshot))} eventTimeZone={snapshot.event.timeZone} initialNowUtc={new Date().toISOString()} />
     </section>}
     {/* Owner (Sept 22): hosts sit just above the co-chairs. */}
     {!archive && <Hosts2026 profiles={reviewedPeople} />}

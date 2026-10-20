@@ -4,6 +4,14 @@ import { personNameKey } from "./person-portraits";
 // Airtable (which always wins), this short bio is shown. It states only what Airtable records about
 // them (role and organization); nothing is invented.
 const interimBios: Record<string, string> = {
+  // Oct 20, 2026: Julie Scelfo has no Airtable bio yet; this line is taken from her organization's own about page
+  // (https://wearemama.org/about/). Her Airtable bio replaces it as soon as one is entered.
+  // Oct 20, 2026 Airtable re-read: role-only lines (only what Airtable records) for listed people without a bio yet.
+  "Christina Steil": "Christina Steil is a confirmed guest of the 2026 Not Alone Summit.",
+  "Dana Moskowitz": "Dana Moskowitz is a Founder of the 2026 Not Alone Summit, attending as a guest of Jeneva Bell.",
+  "Zak Levitt": "Zak Levitt is part of the 2026 Not Alone Summit lineup.",
+  "Jill Hawley": "Jill Hawley is part of the 2026 Not Alone Summit lineup.",
+  "Julie Scelfo": "Julie Scelfo is an award-winning journalist, former New York Times staff writer and media ecologist who founded Mothers Against Media Addiction (MAMA). Under her leadership MAMA has grown to nearly 50 chapters in 23 states and helped pass first-of-its-kind child online-safety laws in New York and California.",
   // Oct 3, 2026 Airtable re-read: role-only lines for the new listable records that have no Airtable bio yet.
   "Laura Brady": "Laura Brady is a confirmed guest of the 2026 Not Alone Summit with Boxing Bullies.",
   "Tasha Rasolkhani-Kalhorn": "Tasha Rasolkhani-Kalhorn is a confirmed guest of the 2026 Not Alone Summit.",
