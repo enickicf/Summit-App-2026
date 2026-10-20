@@ -143,3 +143,4 @@
 .card .stat strong, .dialog .stat strong { line-height: 1.05; margin-bottom: 6px; }
 .card .stat { line-height: 1.35; }
 .card .stats { gap: 10px; }
+.card .stat { min-width: min-content; }
