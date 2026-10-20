@@ -110,3 +110,11 @@
   .stats { min-height: 0; padding: 8px 0; }
   .stat strong { font-size: 16px; }
 }
+/* Oct 20 (symmetry, second pass): stat labels at most two lines and one stats-box height, so the format pills and the
+   bio link sit on the same line in every card of a row. */
+.stat { display: flex; flex-direction: column; min-width: 0; }
+.stat > :not(strong), .stat { overflow-wrap: anywhere; }
+.card .stats { height: 84px; overflow: hidden; align-content: center; }
+.card .roles { margin-top: auto; padding-top: 14px; }
+.card .more { margin-top: 0; }
+@media (max-width: 600px) { .card .stats { height: auto; } .card .roles { margin-top: 8px; padding-top: 0; } }
