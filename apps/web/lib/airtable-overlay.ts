@@ -56,17 +56,23 @@ export function sessionEndUtc(startUtc: string, endText: string): string {
 
 // Owner (Oct 7): which Run of Show rows are on the website is decided by lib/schedule-website-rules.ts (the owner's
 // exclusions such as Red Carpet, the block-level rows, and Airtable's "Website Public/Private" column).
+// The session's local (Las Vegas) day as YYYY-MM-DD, which the owner's day and time rules are keyed by.
+function localDayOf(startUtc: string): string {
+  const { year, month, day } = localDate(startUtc);
+  return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
 function scheduleFromAirtable(sessions: AirtableSession[], snapshot: EventSnapshot): ScheduleItem[] {
   const template = snapshot.scheduleItems.find(item => item.eventId === snapshot.event.id);
   const now = new Date().toISOString();
-  const rows = sessions.filter(session => session.startUtc && isOnWebsiteSchedule(session))
+  const rows = sessions.filter(session => session.startUtc && isOnWebsiteSchedule({ ...session, date: localDayOf(session.startUtc) }))
     .sort((a, b) => a.startUtc!.localeCompare(b.startUtc!));
   const perDay = new Map<string, number>();
   return rows.map(session => {
     // Owner (Oct 7): the owner's pinned times win over Airtable's (live or recorded) until he lifts them.
     const local = localDate(session.startUtc!);
     const localStart = Object.fromEntries(new Intl.DateTimeFormat("en-US", { timeZone, hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date(session.startUtc!)).map(part => [part.type, part.value]));
-    const localDay = `${local.year}-${String(local.month).padStart(2, "0")}-${String(local.day).padStart(2, "0")}`;
+    const localDay = localDayOf(session.startUtc!);
     const pinned = pinnedTime({ title: session.title, date: localDay, start: `${localStart.hour}:${localStart.minute}`, end: session.endText });
     const [pinHour, pinMinute] = pinned.start.split(":").map(Number) as [number, number];
     const startUtc = pinned.start === `${localStart.hour}:${localStart.minute}` ? session.startUtc! : zonedToUtc(local.year, local.month, local.day, pinHour, pinMinute).toISOString();

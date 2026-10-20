@@ -29,7 +29,7 @@ describe("schedule website rules", () => {
 
   it("keeps the owner's Oct 7 times over Airtable's until lifted, and reads the talent dinner as Dinner", () => {
     expect(pinnedTime({ title: "Not Alone Awards with iHeartRadio", date: "2026-11-02", start: "20:00", end: "10:30 PM" })).toEqual({ start: "19:30", end: "10:00 PM" });
-    expect(pinnedTime({ title: "Nevada Mental Health Day", date: "2026-11-02", start: "15:30", end: "6:30 PM" })).toEqual({ start: "15:00", end: "6:30 PM" });
+    expect(pinnedTime({ title: "Nevada Mental Health Day", date: "2026-11-02", start: "15:30", end: "6:30 PM" })).toEqual({ start: "14:30", end: "6:30 PM" });
     expect(pinnedTime({ title: "Founders Cocktails", date: "2026-11-02", start: "16:30", end: "5:00 PM" })).toEqual({ start: "16:00", end: "5:00 PM" });
     expect(pinnedTime({ title: "Evening Talk + Performance/Writer's Round", date: "2026-11-03", start: "20:30", end: "9:30 PM" })).toEqual({ start: "20:00", end: "9:30 PM" });
     expect(pinnedTime({ title: "Lunch", date: "2026-11-03", start: "13:00", end: "2:30 PM" })).toEqual({ start: "13:00", end: "2:30 PM" });

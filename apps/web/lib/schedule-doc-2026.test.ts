@@ -27,7 +27,7 @@ describe("owner's Google Doc schedule (Sept 22), behind SCHEDULE_SOURCE=doc", ()
     const at = (title: string) => next.scheduleItems.find(item => item.title === title)!;
     expect(at("Wellness Activities & Check-In").startUtc).toBe("2026-11-02T20:00:00.000Z"); // Nov 2, 12:00 PM PST
     // Pinned by the owner (Oct 7) over the doc's 3:30 / 8:00: Nevada Mental Health Day 3:00, Awards Show 7:30-10:00.
-    expect(at("Nevada Mental Health Day").startUtc).toBe("2026-11-02T23:00:00.000Z"); // 3:00 PM
+    expect(at("Nevada Mental Health Day").startUtc).toBe("2026-11-02T22:30:00.000Z"); // 2:30 PM (owner, Oct 19)
     expect(at("Nevada Mental Health Day").endUtc).toBe("2026-11-03T02:30:00.000Z"); // 6:30 PM
     expect(at("Awards Show Doors Open").startUtc).toBe("2026-11-03T02:30:00.000Z"); // 6:30 PM
     expect(at("Awards Show").startUtc).toBe("2026-11-03T03:30:00.000Z"); // 7:30 PM

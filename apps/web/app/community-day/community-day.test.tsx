@@ -93,7 +93,7 @@ describe("Nevada Mental Health Day page", () => {
     const scheduleHtml = section(html, "schedule-title");
     const schedule = text(scheduleHtml);
     // Owner (Oct 8): the most basic version — the general events and their locations only.
-    expect(schedule).toContain("Schedule Monday, November 2, 2026 12:00–3:00 PM Wellness & Check-In LaFleur 3:00–6:30 PM Summit Sessions Margaux Ballroom 6:30 PM Awards Show Doors Open Encore Theater 7:30–10:00 PM Not Alone Awards Show Encore Theater");
+    expect(schedule).toContain("Schedule Monday, November 2, 2026 12:00–3:00 PM Wellness & Check-In LaFleur 2:30–6:30 PM Summit Sessions Margaux Ballroom 6:30 PM Awards Show Doors Open Encore Theater 7:30–10:00 PM Not Alone Awards Show Encore Theater");
     expect(schedule).not.toMatch(/Attire|Opening Ceremony|Panel|Break|Red Carpet|Pre-Show|Founders|Pet Partners|Pickleball|Speaker Reception/);
     expect(scheduleHtml).toContain('<h2 id="schedule-title">Schedule</h2>');
     expect(scheduleHtml).toContain('<time dateTime="2026-11-02T12:00:00-08:00">Monday, November 2, 2026</time>');
@@ -106,7 +106,7 @@ describe("Nevada Mental Health Day page", () => {
     expect(schedule).toContain("Margaux Ballroom");
     // No separate Date or Location row, no Pre-Show, no 8:00 PM, no ticket-form pointer.
     expect(schedule).not.toMatch(/Date |Location|Pre-Show|8:00|choose it|The Details/);
-    expect(schedule).toContain("3:00–6:30 PM Summit Sessions"); // the sessions start at 3:00, not 3:30 (owner, Oct 7)
+    expect(schedule).toContain("2:30–6:30 PM Summit Sessions"); // 3:30 -> 3:00 (owner, Oct 7) -> 2:30 (owner, Oct 19, site only)
     expect(schedule).not.toMatch(/free|ticket/i);
   });
 
@@ -158,14 +158,14 @@ describe("Nevada Mental Health Day page", () => {
     expect(show.label).toBe("Not Alone Awards Show");
     expect(show.value).toBe(`Doors open ${awards["Doors Open"]} · Show ${showStart}`);
     expect(show.note).toBe("Encore Theater");
-    // Aphrah / owner (Oct 7): the day itself runs 12:00–6:30 PM (Wellness & Check-In 12–3, Summit Sessions 3–6:30) at the Wynn.
+    // Aphrah / owner (Oct 7): the day itself runs 12:00–6:30 PM (Wellness & Check-In 12–3, Summit Sessions 2:30–6:30) at the Wynn.
     expect(communityDay2026.time).toBe("12:00–6:30 PM");
     expect(communityDay2026.venue).toBe("Wynn Las Vegas");
     expect(communityDay2026.date).toBe(awards2026Editorial.date);
     expect(communityDay2026.dateTime).toBe("2026-11-02T12:00:00-08:00");
     expect(communityDay2026.details.map(item => [item.label, item.value])).toEqual([
       ["Wellness & Check-In", "12–3 PM"],
-      ["Summit Sessions", "3–6:30 PM"],
+      ["Summit Sessions", "2:30–6:30 PM"],
       ["Not Alone Awards Show", "Doors open 6:30 PM · Show 7:30 PM"]
     ]);
     for (const item of communityDay2026.details) expect(`${item.label} ${item.value} ${item.note}`).not.toMatch(/Pre-Show|8:00|3:30/);

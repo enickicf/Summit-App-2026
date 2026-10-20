@@ -53,7 +53,7 @@ describe("withAirtable", () => {
     expect(next.scheduleItems.map(item => item.title)).toEqual(["Awards Show"]);
     expect(next.scheduleItems[0]!.endUtc).toBe("2026-11-03T06:00:00.000Z");
     // Oct 12: Airtable's rows first, then the owner-listed partners Airtable does not carry.
-    expect(overlay.partners).toEqual([{ recordId: "recFFFFFFFFFFFFFF", name: "Glow", item: "", group: "Gifting Suite", status: "Confirmed" }, { recordId: "owner-bryan-brothers-foundation", name: "Bryan Brothers Foundation", item: "", group: "Partners", status: "Confirmed" }, { recordId: "owner-fight-for-lives", name: "Fight For Lives", item: "", group: "Partners", status: "Confirmed" }]);
+    expect(overlay.partners).toEqual([{ recordId: "recFFFFFFFFFFFFFF", name: "Glow", item: "", group: "Gifting Suite", status: "Confirmed" }, { recordId: "owner-bryan-brothers-foundation", name: "Bryan Brothers Foundation", item: "", group: "Partners", status: "Confirmed" }, { recordId: "owner-fight-for-lives", name: "Fight For Lives", item: "", group: "Partners", status: "Confirmed" }, { recordId: "owner-romero-britto", name: "Romero Britto", item: "", group: "Vendors", status: "Confirmed" }]);
     for (const call of vi.mocked(fetch).mock.calls) expect((call[1] as RequestInit).method ?? "GET").toBe("GET");
   });
   it("leaves a newer staff publication unchanged without a token", async () => {
@@ -67,11 +67,11 @@ describe("withAirtable", () => {
     const at = (title: string) => next.scheduleItems.filter(item => item.title === title).map(item => item.startUtc);
     const one = (title: string) => next.scheduleItems.find(item => item.title === title)!;
     expect(at("Poker Night")).toEqual(["2026-11-02T03:00:00.000Z"]); // Nov 1, 7:00 PM PST
-    // Oct 7 read (Bianca's restructure): doors 6:30, the Awards 7:30-10:00 with no Pre-Show row, Nevada Mental Health Day 3:00.
+    // Oct 7 read (Bianca's restructure): doors 6:30, the Awards 7:30-10:00 with no Pre-Show row, Nevada Mental Health Day 2:30 (owner, Oct 19).
     expect(at("Awards Show Doors Open")).toEqual(["2026-11-03T02:30:00.000Z"]); // Nov 2, 6:30 PM
     expect(at("Awards Show")).toEqual(["2026-11-03T03:30:00.000Z"]); // 7:30 PM
     expect(one("Awards Show").endUtc).toBe("2026-11-03T06:00:00.000Z"); // 10:00 PM
-    expect(at("Nevada Mental Health Day")).toEqual(["2026-11-02T23:00:00.000Z"]); // 3:00 PM
+    expect(at("Nevada Mental Health Day")).toEqual(["2026-11-02T22:30:00.000Z"]); // 2:30 PM (owner, Oct 19)
     expect(at("Wellness Activities & Check-In")).toEqual(["2026-11-02T20:00:00.000Z"]); // 12:00 PM
     expect(one("Wellness Activities & Check-In").endUtc).toBe("2026-11-03T01:00:00.000Z"); // 5:00 PM
     expect(at("Founders Cocktails")).toEqual([]);
@@ -96,7 +96,7 @@ describe("withAirtable", () => {
     expect(one("Dinner").summary).not.toMatch(/talent/i);
     // Oct 8: Airtable's "Website Public/Private" checkbox decides; Pet Partners is unticked, so it is off the schedule.
     expect(next.scheduleItems.filter(item => item.title === "Pet Partners Therapy")).toHaveLength(0);
-    expect(next.scheduleItems.filter(item => item.title === "Late Night Pickleball + Sauna").map(item => item.startUtc)).toEqual(["2026-11-04T06:00:00.000Z", "2026-11-05T06:00:00.000Z"]); // Nov 3 and 4 ticked (10 PM PST), Nov 2 not
+    expect(next.scheduleItems.filter(item => item.title === "Late Night Pickleball + Sauna").map(item => item.startUtc)).toEqual(["2026-11-03T06:00:00.000Z", "2026-11-04T06:00:00.000Z"]); // owner (Oct 19): Monday and Tuesday nights (10 PM PST), whatever Airtable ticks
   });
   it("parses Airtable end times without inventing missing ones", () => {
     expect(sessionEndUtc("2026-11-03T04:00:00.000Z", "10 PM")).toBe("2026-11-03T06:00:00.000Z");

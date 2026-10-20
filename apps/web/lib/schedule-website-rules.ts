@@ -38,11 +38,22 @@ export const scheduleBlockTitles: RegExp[] = [
 // Partners row on the site): ticked = on the public website, unticked = not. When a row carries that information
 // (recorded read: "checked" / ""; live API: "true" / "") it decides; the block list above is only the fallback for
 // sources without it (the Google Doc schedule).
-export type RosVisibility = { title: string; websitePublic?: string | undefined };
+export type RosVisibility = { title: string; websitePublic?: string | undefined; date?: string | undefined };
+
+// Owner (Oct 19): Late Night Pickleball runs Monday and Tuesday nights. Ricky (6:28 PM): "the website shows late
+// night pickleball on Tuesday & Wednesday, I thought it was Mon and Tuesday"; Aubrey says Mon and Tue too. Airtable
+// still has the Nov 2 row unchecked and the Nov 4 row checked, and the owner said to override the website and have
+// the team correct Airtable ("make it Monday/Tuesday. Just override whatever Airtable says"). These days win over
+// the checkbox until Airtable agrees, at which point the rule simply stops changing anything.
+export const ownerScheduleDays: Array<{ title: RegExp; days: readonly string[] }> = [
+  { title: /^late night pickleball/i, days: ["2026-11-02", "2026-11-03"] }
+];
 const checkedValues = new Set(["checked", "true", "public", "yes", "1", "x"]);
 export function isOnWebsiteSchedule(row: RosVisibility): boolean {
   const title = row.title.trim();
   if (neverOnWebsite.test(title)) return false;
+  const ownerDays = ownerScheduleDays.find(entry => entry.title.test(title));
+  if (ownerDays && row.date) return ownerDays.days.includes(row.date);
   if (row.websitePublic !== undefined) {
     const flag = row.websitePublic.trim().toLowerCase();
     if (flag === "private") return false;
@@ -73,12 +84,13 @@ export function websiteSessionTitle(title: string): string {
 }
 
 // Owner-dictated times (Oct 7) that stay put through Airtable refreshes until the owner lifts them: the Awards
-// Show is 7:30-10:00 PM with doors at 6:30 (no pre-show), Nevada Mental Health Day starts at 3:00, Founders
+// Show is 7:30-10:00 PM with doors at 6:30 (no pre-show), Nevada Mental Health Day starts at 2:30 (owner, Oct 19,
+// taking Ryan's "change to 230pm on all" for the website; the invite templates keep their own wording), Founders
 // Cocktails at 4:00, the Tuesday evening performance at 8:00. Airtable already agrees; this is the safety net.
 export const ownerPinnedTimes: Array<{ title: RegExp; date: string; start?: string; end?: string }> = [
   { title: /^not alone awards\b|^awards show$/i, date: "2026-11-02", start: "19:30", end: "10:00 PM" },
   { title: /^(?:awards show )?doors open$/i, date: "2026-11-02", start: "18:30" },
-  { title: /^nevada mental health day$/i, date: "2026-11-02", start: "15:00", end: "6:30 PM" },
+  { title: /^nevada mental health day$/i, date: "2026-11-02", start: "14:30", end: "6:30 PM" },
   { title: /^founders? cocktails$/i, date: "2026-11-02", start: "16:00" },
   { title: /^evening talk/i, date: "2026-11-03", start: "20:00" }
 ];

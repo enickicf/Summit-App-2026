@@ -7,7 +7,7 @@ import { foundersOnly, neverOnWebsite } from "./schedule-website-rules";
 // Rooms are public on this page only (owner, Oct 7). Never listed: the owner's hard exclusions (Red Carpet, Speaker
 // Reception, Pre-Show, load-in/out), founders-only events (private), Pet Partners (unticked) and the late-night
 // pickleball (Summit guests). The owner's Oct 7 times stay pinned: Wellness & Check-In 12–3 PM on this page, the
-// sessions 3–6:30 PM, doors 6:30, show 7:30–10:00 PM.
+// sessions 2:30–6:30 PM, doors 6:30, show 7:30–10:00 PM.
 export type CommunityDaySession = { id: string; time: string; title: string; room: string; attire: string; synopsis: string; kind: "block" | "segment" | "awards" };
 
 const rooms: Record<string, string> = { Margaux: "Margaux Ballroom", LaFleur: "LaFleur", "Encore Theater": "Encore Theater" };
@@ -23,7 +23,7 @@ export function communityDaySchedule2026(rows: RosRow[] = airtableRos2026): Comm
     const room = rooms[row.location] ?? row.location;
     const base = { id: row.recordId, room, attire: "", synopsis: "" };
     if (/^wellness activit/i.test(row.title)) sessions.push({ ...base, sort: "12:00", time: "12:00–3:00 PM", title: "Wellness & Check-In", kind: "block" });
-    else if (/^nevada mental health day$/i.test(row.title)) sessions.push({ ...base, sort: "15:00", time: "3:00–6:30 PM", title: "Summit Sessions", kind: "block" });
+    else if (/^nevada mental health day$/i.test(row.title)) sessions.push({ ...base, sort: "14:30", time: "2:30–6:30 PM", title: "Summit Sessions", kind: "block" });
     else if (/doors open/i.test(row.title)) sessions.push({ ...base, sort: "18:31", time: "6:30 PM", title: "Awards Show Doors Open", synopsis: "", kind: "awards" });
     else if (/^not alone awards\b/i.test(row.title)) sessions.push({ ...base, sort: "19:30", time: "7:30–10:00 PM", title: "Not Alone Awards Show", synopsis: "", kind: "awards" });
   }

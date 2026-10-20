@@ -11,10 +11,10 @@ const planFor = (guest: { attending?: RsvpAttending | undefined; communityDay: b
 export type RenderedEmail = { subject: string; text: string; html: string };
 
 // Owner (Oct 7 meeting): Nevada Mental Health Day (Nevada Mental Health Day) runs in the daytime: Wellness & Check-In 12–3 PM,
-// Summit Sessions 3–6:30 PM; the Awards Show follows at the Encore Theater: Doors 6:30 PM, Awards Show 7:30–10:00 PM.
+// Summit Sessions 2:30–6:30 PM; the Awards Show follows at the Encore Theater: Doors 6:30 PM, Awards Show 7:30–10:00 PM.
 // No Pre-Show is announced in any variant.
 const awardsEvening = "Doors 6:30 PM · Awards Show 7:30–10:00 PM";
-const dayTimes = "Wellness & Check-In 12–3 PM · Summit Sessions 3–6:30 PM"; // owner (Oct 7): sessions start at 3:00, not 3:30
+const dayTimes = "Wellness & Check-In 12–3 PM · Summit Sessions 2:30–6:30 PM"; // owner: 3:30 -> 3:00 (Oct 7) -> 2:30 (Oct 19, site only; invite templates unchanged)
 const evening = `${dayTimes} · ${awardsEvening}`;
 const showOnlyEvening = awardsEvening;
 const communityDayOnlyEvening = dayTimes;
