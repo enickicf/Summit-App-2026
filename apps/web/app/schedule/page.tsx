@@ -6,7 +6,9 @@ import styles from "./schedule.module.css";
 
 export const metadata = { title: "Summit Schedule" };
 
-export default async function SchedulePage() {
+// Oct 19 (Sophie, Sat; per-day QR codes): /schedule/<YYYY-MM-DD> renders this same page with that day selected
+// (app/schedule/[day]/page.tsx). /schedule itself is unchanged (today, or the first upcoming day).
+export default async function SchedulePage({ initialDay }: { initialDay?: string } = {}) {
   const state = await getPublicSnapshotState();
   const { snapshot } = state;
   const days = groupPublishedProgramByDay(snapshot);
@@ -19,7 +21,7 @@ export default async function SchedulePage() {
         <p className={styles.dates}>{snapshot.event.dateLabel}<span aria-hidden="true"> · </span><span className={styles.venue}>{snapshot.event.venueName}</span></p>
       </header>
       <SnapshotSourceNotice state={state} compact />
-      <ScheduleBrowser days={days} eventTimeZone={snapshot.event.timeZone} initialNowUtc={new Date().toISOString()} noticeSnapshot={state.source === "published" ? snapshot : null} />
+      <ScheduleBrowser days={days} eventTimeZone={snapshot.event.timeZone} initialNowUtc={new Date().toISOString()} noticeSnapshot={state.source === "published" ? snapshot : null} initialDay={initialDay} />
     </main>
   );
 }

@@ -26,8 +26,10 @@ import { useEventClock } from "../app/schedule/use-event-clock";
 import { usePublicationRefresh } from "../app/schedule/use-publication-refresh";
 import { publicPendingProgramBlocks } from "../app/schedule/pending-program";
 
-export function ScheduleBrowser({ days, eventTimeZone, initialNowUtc, noticeSnapshot, showRooms = false }: {
+export function ScheduleBrowser({ days, eventTimeZone, initialNowUtc, noticeSnapshot, showRooms = false, initialDay }: {
   days: ScheduleDay[];
+  // Oct 19 (Sophie, per-day QR codes): /schedule/<date> opens the browser on that day; an unknown date falls back to today.
+  initialDay?: string | undefined;
   eventTimeZone: string;
   initialNowUtc: string;
   noticeSnapshot?: EventSnapshot | null;
@@ -36,7 +38,7 @@ export function ScheduleBrowser({ days, eventTimeZone, initialNowUtc, noticeSnap
 }) {
   const id = useId();
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-  const [activeDay, setActiveDay] = useState(() => initialScheduleDay(days, eventDateKey(initialNowUtc, eventTimeZone)));
+  const [activeDay, setActiveDay] = useState(() => initialDay && days.some(day => day.date === initialDay) ? initialDay : initialScheduleDay(days, eventDateKey(initialNowUtc, eventTimeZone)));
   const nowUtc = useEventClock(initialNowUtc);
   usePublicationRefresh();
   const selected = scheduleDayForKey(days, activeDay, eventDateKey(nowUtc, eventTimeZone));

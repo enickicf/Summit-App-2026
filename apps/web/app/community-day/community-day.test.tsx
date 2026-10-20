@@ -124,7 +124,8 @@ describe("Nevada Mental Health Day page", () => {
     expect(page).not.toMatch(/Pre-Show|8:00/);
     // Owner (Oct 4): the talent lineup is on this page too; the rest of the Awards program is not.
     // Owner (Oct 6): no Awards Show information block on this page (removed the same day it was added).
-    for (const other of ["Highlights", "iHeart", "No Solicitation"]) expect(page).not.toContain(other);
+    // "iHeartRadio", not "iHeart": Bob Pittman (Founder since Oct 19) is "Chairman and CEO, iHeartMedia" in the lineup.
+    for (const other of ["Highlights", "iHeartRadio", "No Solicitation"]) expect(page).not.toContain(other);
     expect(html).not.toContain('id="awards-show"');
     for (const name of ["The 2026 Lineup", "Jewel", "Steve Wozniak", "Loni Love"]) expect(page).toContain(name);
     expect(html.indexOf("The 2026 Lineup")).toBeGreaterThan(html.indexOf('id="community-day-actions"'));

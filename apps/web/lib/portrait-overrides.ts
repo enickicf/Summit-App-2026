@@ -40,7 +40,9 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "harvey stern": { file: "/2026-headshots/portraits/harvey-stern-2-c.jpg", source: "airtable", airtableBytes: 480551 },
   "isabella wolfington": { file: "/2026-headshots/portraits/isabella-wolfington.jpg", source: "airtable", airtableBytes: 729696 },
   "jan thwaites": { file: "/2026-headshots/portraits/jan-thwaites-2.jpg", source: "airtable", airtableBytes: 116788 },
-  "janet wozniak": { file: "/2026-headshots/portraits/janet-wozniak.jpg", source: "mobile" },
+  // Oct 19 (Aphrah via owner): Janet's Founder card shows Janet alone, not the Janet & Steve couple photo. The only
+  // photo of her on file is that couple portrait (948x900), so her face is cut out of it, centered, without Steve.
+  "janet wozniak": { file: "/2026-headshots/portraits/janet-wozniak-2.jpg", source: "mobile", credit: "Janet alone, cut from the Janet & Steve Wozniak couple portrait (the only photo of her on file); Oct 19" },
   "jason kennedy": { file: "/2026-headshots/portraits/jason-kennedy-2.jpg", source: "icf-card" },
   "jeff levin": { file: "/2026-headshots/portraits/jeff-levin.jpg", source: "airtable", airtableBytes: 1141135 },
   "jen smorgon": { file: "/2026-headshots/portraits/jen-smorgon.jpg", source: "icf-card" },
@@ -103,6 +105,9 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "christiana musk": { file: "/2026-headshots/portraits/christiana-musk-2.jpg", source: "web", credit: "Her portrait in a cream hat (dark gray backdrop), the lead photo of her Aug 7, 2024 TIME op-ed as shared on her own LinkedIn post (908x974 screenshot; photo area only, no resizing); owner chose this photo Oct 11" },
   // Oct 11: Dr. George Rapier III, ICF's 2025 square headshot, face-centered.
   "george rapier": { file: "/2026-headshots/portraits/george-rapier.jpg", source: "icf-card", credit: "ICF 2025 Summit founder headshot (Dr. George Rapier III headshot 2025 sq crop)" },
+  // Oct 19 (Paige, Oct 12, relaying Ryan: "add Bob Pittman as a founder on the website"): no Airtable row or photo; a freely
+  // licensed Wikimedia Commons photo (Interbrand 2018 Global Brands Summit, CC BY-SA 4.0), cut to a face-centered square.
+  "bob pittman": { file: "/2026-headshots/portraits/bob-pittman.jpg", source: "commons", credit: "Itsthegirl, Pittman Interbrand 2018 Global Brands Summit, CC BY-SA 4.0 (cropped), https://commons.wikimedia.org/wiki/File:Pittman_Interbrand_2018_Global_Brands_Summit.jpg", attribution: { label: "Itsthegirl / Wikimedia Commons, CC BY-SA 4.0 (cropped)", href: "https://commons.wikimedia.org/wiki/File:Pittman_Interbrand_2018_Global_Brands_Summit.jpg" } },
   "kimbal musk": { file: "/2026-headshots/portraits/kimbal-musk.jpg", source: "commons", credit: "1000x2020, KIMBAL_MUSK_OFFICIAL_HEADSHOT.jpg, CC BY-SA 4.0 (cropped), https://commons.wikimedia.org/wiki/File:KIMBAL_MUSK_OFFICIAL_HEADSHOT.jpg", attribution: { label: "1000x2020 / Wikimedia Commons, CC BY-SA 4.0 (cropped)", href: "https://commons.wikimedia.org/wiki/File:KIMBAL_MUSK_OFFICIAL_HEADSHOT.jpg" } },
   // Oct 12 (owner: "you can combine bob and mike bryan"): one card, a photo of the two of them together (2025 International
   // Tennis Hall of Fame press conference, Vbrunophotog, CC BY-SA 4.0, cropped to a square).

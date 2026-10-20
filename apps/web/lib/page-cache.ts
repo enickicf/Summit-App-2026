@@ -18,6 +18,12 @@ export const cachedPublicPaths = [
   "/partners",
   "/partners/2025",
   "/schedule",
+  // Oct 19: per-day schedule pages for the printed QR codes (one literal route per Summit day).
+  "/schedule/2026-11-01",
+  "/schedule/2026-11-02",
+  "/schedule/2026-11-03",
+  "/schedule/2026-11-04",
+  "/schedule/2026-11-05",
   "/summit",
   "/summit/2025",
   "/summit/schedule",

@@ -49,7 +49,7 @@ export const airtableHeadshotCrops: Record<string, { bytes: number | null; file:
   recUODHCLbJTR7fd7: { bytes: null, file: "/2026-headshots/portraits/cherrial-odell-20261015.jpg" },
   rec2VyMC3lhRGOdJQ: { bytes: null, file: "/2026-headshots/portraits/darryl-mcdaniels-2-c.jpg" },
   recvspdVLJQposUyX: { bytes: null, file: "/2026-headshots/portraits/ellie-kanner-2-c.jpg" },
-  receZ4AeROyhMMnjY: { bytes: null, file: "/2026-headshots/portraits/janet-wozniak.jpg" },
+  receZ4AeROyhMMnjY: { bytes: null, file: "/2026-headshots/portraits/janet-wozniak-2.jpg" },
   rec1M288OYcpaWTDb: { bytes: null, file: "/2026-headshots/portraits/jason-kennedy-2.jpg" },
   recY07YSwblGLztgq: { bytes: null, file: "/2026-headshots/portraits/jen-smorgon.jpg" },
   reczg9h6dJ3Uzc2o4: { bytes: null, file: "/2026-headshots/portraits/jewel-2-c.jpg" },

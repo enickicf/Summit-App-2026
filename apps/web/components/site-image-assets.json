@@ -2778,5 +2778,25 @@
     "width": 900,
     "height": 900,
     "bytes": 63684
+  },
+  "/2026-headshots/portraits/bob-pittman.jpg": {
+    "width": 900,
+    "height": 900,
+    "bytes": 129345
+  },
+  "/2026-headshots/portraits/janet-wozniak-2.jpg": {
+    "width": 900,
+    "height": 900,
+    "bytes": 81843
+  },
+  "/2026-headshots/portraits/kate-doerge-20261016.jpg": {
+    "width": 610,
+    "height": 640,
+    "bytes": 266240
+  },
+  "/images/social-summit-2026.jpg": {
+    "width": 2134,
+    "height": 1200,
+    "bytes": 253276
   }
 }
