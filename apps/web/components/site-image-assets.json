@@ -964,7 +964,11 @@
     "height": 1021,
     "bytes": 61277
   },
-  "/2026-partners/romero-britto.png": { "width": 1200, "height": 219, "bytes": 22404 },
+  "/2026-partners/romero-britto.png": {
+    "width": 1200,
+    "height": 219,
+    "bytes": 22404
+  },
   "/2026-partners/sena-rituals.png": {
     "width": 406,
     "height": 200,
@@ -2799,5 +2803,10 @@
     "width": 2134,
     "height": 1200,
     "bytes": 253276
+  },
+  "/2026-headshots/portraits/janet-wozniak-3.jpg": {
+    "width": 900,
+    "height": 900,
+    "bytes": 94247
   }
 }

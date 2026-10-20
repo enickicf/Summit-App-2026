@@ -42,7 +42,10 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "jan thwaites": { file: "/2026-headshots/portraits/jan-thwaites-2.jpg", source: "airtable", airtableBytes: 116788 },
   // Oct 19 (Aphrah via owner): Janet's Founder card shows Janet alone, not the Janet & Steve couple photo. The only
   // photo of her on file is that couple portrait (948x900), so her face is cut out of it, centered, without Steve.
-  "janet wozniak": { file: "/2026-headshots/portraits/janet-wozniak-2.jpg", source: "mobile", credit: "Janet alone, cut from the Janet & Steve Wozniak couple portrait (the only photo of her on file); Oct 19" },
+  // Oct 20 (owner: "recrop Janet Wozniak's headshot ... better"): no solo photo of her may be used online (only Getty stock), so
+  // she is re-cut from ICF's full-resolution original of the couple portrait (712 px, sharper than the 948 px upscale used
+  // before), more of her face and hair in frame, and the sliver of Steve's beard beside her jaw filled with the photo's own dark tone.
+  "janet wozniak": { file: "/2026-headshots/portraits/janet-wozniak-3.jpg", source: "mobile", credit: "Janet alone, re-cut from ICF's Janet & Steve Wozniak portrait at full resolution; Oct 20" },
   "jason kennedy": { file: "/2026-headshots/portraits/jason-kennedy-2.jpg", source: "icf-card" },
   "jeff levin": { file: "/2026-headshots/portraits/jeff-levin.jpg", source: "airtable", airtableBytes: 1141135 },
   "jen smorgon": { file: "/2026-headshots/portraits/jen-smorgon.jpg", source: "icf-card" },
