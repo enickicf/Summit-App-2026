@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type React from "react";
 import { initials, linkLabels, type PodcastEntry, type PodcastLinks } from "../../../lib/podcasts-2026";
 import styles from "./podcasts.module.css";
 
@@ -16,13 +17,13 @@ export function PodcastCard({ entry }: { entry: PodcastEntry }) {
     : <span className={styles.monogram} aria-hidden="true">{initials(entry.show)}</span>;
   return <>
     <button type="button" className={styles.card} onClick={() => setOpen(true)} aria-haspopup="dialog">
-      <span className={styles.cardMedia}>{media}</span>
+      <span className={styles.cardMedia}>{media}{entry.accolade && <span className={styles.accolade}>{entry.accolade.short}</span>}</span>
       <span className={styles.cardBody}>
         <span className={styles.cardKicker}>{entry.kind === "interviewer" ? "Interviewer" : "Podcast"}</span>
         <span className={styles.cardTitle}>{entry.show}</span>
         <span className={styles.hosts}>{hostLine}</span>
         {entry.topic && <span className={styles.topic}>{entry.topic}</span>}
-        {entry.stats && entry.stats.length > 0 && <span className={styles.stats}>{entry.stats.slice(0, 3).map(stat => <span key={stat.label} className={styles.stat}><strong>{stat.value}</strong>{stat.label}</span>)}</span>}
+        {entry.stats && entry.stats.length > 0 && <span className={styles.stats} style={{ "--stat-count": Math.min(entry.stats.length, 3) } as React.CSSProperties}>{entry.stats.slice(0, 3).map(stat => <span key={stat.label} className={styles.stat}><strong>{stat.value}</strong>{stat.label}</span>)}</span>}
         <span className={styles.roles}>{entry.formats.map(format => <span key={format} className={styles.role}>{format}</span>)}</span>
         <span className={styles.more}>View bio and links →</span>
       </span>
@@ -40,6 +41,7 @@ export function PodcastCard({ entry }: { entry: PodcastEntry }) {
           </div>
         </div>
         {entry.topic && <p className={styles.dialogTopic}>{entry.topic}</p>}
+        {entry.accolade && <p className={styles.dialogAccolade}>{entry.accolade.full}</p>}
         {entry.stats && entry.stats.length > 0 && <div className={styles.stats}>{entry.stats.map(stat => <span key={stat.label} className={styles.stat}><strong>{stat.value}</strong>{stat.label}</span>)}</div>}
         {entry.hosts.filter(host => host.bio).map(host => <div key={host.name} className={styles.bio}><h3>{host.name}</h3><p>{host.bio}</p></div>)}
         {links.length > 0 && <div className={styles.links}>{links.map(([kind, url]) => <a key={kind} href={url} target="_blank" rel="noopener noreferrer">{linkLabels[kind]} ↗</a>)}</div>}
