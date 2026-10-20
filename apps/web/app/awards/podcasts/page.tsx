@@ -20,10 +20,10 @@ export default function PodcastsPage() {
   return <main id="main-content" tabIndex={-1} className={styles.page}>
     {/* Owner (Oct 20): no hero or intro; the page opens straight on the podcasts. */}
     <section className={`${styles.section} ${styles.first}`} aria-labelledby="podcasts-title">
-      {/* Owner (Oct 20): no "Not Alone Awards 2026" line; the page starts right at the top with "Podcast Interviewers". */}
-      <div className={styles.sectionHead}><h1 id="podcasts-title">Podcast Interviewers</h1></div>
+      {/* Owner (Oct 20): no "Not Alone Awards 2026" line; the page starts right at the top with "Podcast Interviewers", and the
+          "to be announced" line sits under it in the Awards lineup style (18px bold lavender, centered). */}
+      <div className={styles.sectionHead}><h1 id="podcasts-title">Podcast Interviewers</h1><p className={styles.announcement}>More podcasts and interviewers to be announced.</p></div>
       <div className={styles.grid}>{entries.map(entry => <PodcastCard key={entry.show} entry={entry} />)}</div>
-      <p className={styles.moreNote}>More podcasts and interviewers to be announced.</p>
     </section>
 
     <section className={styles.cta} aria-labelledby="cta-title">
