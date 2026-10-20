@@ -86,3 +86,27 @@
 .links a { border: 1px solid rgb(210 180 123 / 60%); border-radius: 999px; color: #f1dfbb; font-size: 14px; font-weight: 600; padding: 8px 14px; text-decoration: none; }
 .links a:hover { background: #d2b47b; color: #111; }
 @media (max-width: 600px) { .dialogPanel { padding: 22px 18px; } .dialogHead { grid-template-columns: 96px 1fr; gap: 14px; } .dialogMedia { width: 96px; height: 96px; } .dialog h2 { font-size: 22px; } .topic { display: none; } .more { padding-top: 8px; } }
+
+/* Oct 20 (owner: "make the podcasts page symmetrical with the numbers and boxes"): equal-height cards, every block in
+   the same place on every card — title 2 lines, hosts 2 lines, topic 4 lines, stats in three equal columns, formats and
+   the bio link pinned to the bottom. */
+.grid { align-items: stretch; grid-auto-rows: 1fr; }
+.card { height: 100%; }
+.cardBody { display: flex; flex-direction: column; }
+.cardTitle { min-height: calc(2 * 1.2 * 22px); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.hosts { min-height: calc(2 * 1.45 * 15px); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.topic { min-height: calc(4 * 1.5 * 14px); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; align-items: start; min-height: 58px; padding: 12px 0; margin-top: 12px; border-top: 1px solid #2a2a2a; border-bottom: 1px solid #2a2a2a; }
+.stat { text-align: center; align-items: center; }
+.stat strong { font-size: 19px; line-height: 1.15; }
+.roles { min-height: 30px; align-content: flex-start; }
+.more { margin-top: auto; }
+.roles { margin-bottom: 4px; }
+.dialog .stats { border: 0; padding: 0; min-height: 0; }
+@media (max-width: 600px) {
+  .grid { grid-auto-rows: auto; }
+  .cardBody { display: flex; }
+  .cardTitle, .hosts, .topic { min-height: 0; }
+  .stats { min-height: 0; padding: 8px 0; }
+  .stat strong { font-size: 16px; }
+}
