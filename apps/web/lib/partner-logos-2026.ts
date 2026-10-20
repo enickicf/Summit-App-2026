@@ -72,6 +72,9 @@ const partnerLogoFiles: Record<string, string> = {
   // Oct 12 (owner: "invent them logos at least for now that are not alone summit themed"): placeholder in the Summit's own
   // style (Poppins ExtraBold, Summit blues, the Not Alone heart) for a partner with no logo online or in Airtable; replace with the real file.
   "fight for lives": "/2026-partners/fight-for-lives.png",
+  // Oct 19 (Aubrey Wickenheiser, via the owner): official BRITTO wordmark from britto.com
+  // (wp-content/uploads/2026/07/britto.svg), recoloured from white to near-black for the light Partners page.
+  "romero britto": "/2026-partners/romero-britto.png",
   "bryan brothers foundation": "/2026-partners/bryan-bros-foundation.png", // Oct 12: from bryanbros.com/foundation (background made transparent) until Nick's files arrive
   "wise friend": "/2026-partners/wise-friend-wordmark.png", // owner, Oct 5: the mark with the name "Wise Friend" under it (their symbol alone reads as nothing)
   "big league wiffleball": "/2026-partners/big-league-wiffleball.png",

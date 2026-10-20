@@ -17,7 +17,11 @@ export const ownerPartners2026: readonly AirtablePartner[] = [
   { recordId: "owner-bryan-brothers-foundation", name: "Bryan Brothers Foundation", item: "", group: "Partners", status: "Confirmed" },
   // Oct 12 (owner: "yes"): Fight For Lives (Miguel Tyson's organization in Airtable). No website or logo could be found
   // (fightforlives.com / fightforlivesfoundation.org are parked), so it shows as a name card until a logo is supplied.
-  { recordId: "owner-fight-for-lives", name: "Fight For Lives", item: "", group: "Partners", status: "Confirmed" }
+  { recordId: "owner-fight-for-lives", name: "Fight For Lives", item: "", group: "Partners", status: "Confirmed" },
+  // Oct 19 (Aubrey Wickenheiser in the Aphrah & Aubrey WhatsApp group, 9:17 AM: "can you make sure Romero Britto
+  // shows up as a vendor, I just added them in airtable"); owner: "Ok". Listed by hand until the next Airtable
+  // Partners re-read carries her row, which then wins.
+  { recordId: "owner-romero-britto", name: "Romero Britto", item: "", group: "Vendors", status: "Confirmed" }
 ];
 export function withOwnerPartners<T extends { name: string }>(partners: readonly T[], extra: readonly T[]): T[] {
   const present = new Set(partners.map(partner => partnerLogoKey(partner.name)));

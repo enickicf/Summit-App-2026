@@ -14,8 +14,8 @@ describe("Oct 12 founder and partner changes", () => {
     expect(ownerApprovedFounders2026).toEqual([]);
   });
   it("adds Bryan Brothers Foundation once, with its logo", () => {
-    expect(withOwnerPartners([{ recordId: "recGlow", name: "Glow", item: "", group: "Gifting Suite", status: "Confirmed" }], ownerPartners2026).map(partner => partner.name)).toEqual(["Glow", "Bryan Brothers Foundation", "Fight For Lives"]);
-    expect(withOwnerPartners(ownerPartners2026, ownerPartners2026)).toHaveLength(2);
+    expect(withOwnerPartners([{ recordId: "recGlow", name: "Glow", item: "", group: "Gifting Suite", status: "Confirmed" }], ownerPartners2026).map(partner => partner.name)).toEqual(["Glow", "Bryan Brothers Foundation", "Fight For Lives", "Romero Britto"]);
+    expect(withOwnerPartners(ownerPartners2026, ownerPartners2026)).toHaveLength(ownerPartners2026.length);
     expect(partnerLogo("Bryan Brothers Foundation")).toBe("/2026-partners/bryan-bros-foundation.png");
   });
 });
