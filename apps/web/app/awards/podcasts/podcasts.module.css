@@ -121,3 +121,5 @@
 .card .stats { height: 100px; }
 .card .roles { height: 72px; align-content: flex-start; }
 @media (max-width: 600px) { .card .stats, .card .roles { height: auto; } }
+.stat, .stat > :not(strong) { overflow-wrap: normal; word-break: normal; hyphens: none; }
+@media (max-width: 600px) { .card .stat { font-size: 9.5px; letter-spacing: .02em; } }
