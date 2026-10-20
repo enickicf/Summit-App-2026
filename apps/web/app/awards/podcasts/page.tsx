@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { SiteImage } from "../../../components/site-image";
 import { awards2026Editorial } from "../../../lib/awards-editorial";
-import { initials, podcasts2026, type PodcastEntry } from "../../../lib/podcasts-2026";
+import { bySize, podcasts2026 } from "../../../lib/podcasts-2026";
+import { PodcastCard } from "./podcast-card";
 import styles from "./podcasts.module.css";
 
 // Owner (Oct 20, 2026): "create a new website page today, for podcasts ... on a separate branch incorporating all u
@@ -14,32 +14,15 @@ export const metadata: Metadata = {
   icons: { icon: [{ url: "/icons/awards-48.png", sizes: "48x48", type: "image/png" }], apple: [{ url: "/icons/awards-180.png", sizes: "180x180", type: "image/png" }] }
 };
 
-function Card({ entry }: { entry: PodcastEntry }) {
-  return <article className={styles.card}>
-    <div className={styles.cardMedia}>
-      {entry.image
-        ? <SiteImage src={entry.image} alt={entry.hosts.join(" and ")} sizes="(max-width: 700px) 100vw, 360px" className={styles.cardImage} />
-        : <span className={styles.monogram} aria-hidden="true">{initials(entry.show)}</span>}
-    </div>
-    <div className={styles.cardBody}>
-      <p className={styles.cardKicker}>{entry.kind === "creator" ? "Creator" : "Podcast"}</p>
-      <h3>{entry.show}</h3>
-      {entry.kind === "podcast" && <p className={styles.hosts}>with {entry.hosts.join(" and ")}</p>}
-      {entry.kind === "creator" && <p className={styles.hosts}>Social media creator and interviewer</p>}
-      <ul className={styles.roles} aria-label="At the event">{entry.roles.map(role => <li key={role}>{role}</li>)}</ul>
-    </div>
-  </article>;
-}
-
 export default function PodcastsPage() {
-  const shows = podcasts2026.filter(entry => entry.kind === "podcast");
-  const creators = podcasts2026.filter(entry => entry.kind === "creator");
+  // Owner (Oct 20): biggest to smallest (sourced audience figures in lib/podcasts-2026.ts).
+  const entries = bySize(podcasts2026);
   return <main id="main-content" tabIndex={-1} className={styles.page}>
     {/* Owner (Oct 20): no hero or intro; the page opens straight on the podcasts, titled "Podcasts and Interviewers". */}
     <section className={`${styles.section} ${styles.first}`} aria-labelledby="podcasts-title">
       <div className={styles.sectionHead}><p className={styles.kicker}>Not Alone Awards 2026</p><h1 id="podcasts-title">Podcasts and Interviewers</h1></div>
-      <div className={styles.grid}>{[...shows, ...creators].map(entry => <Card key={entry.show} entry={entry} />)}</div>
-      <p className={styles.more}>More podcasts and interviewers to be announced.</p>
+      <div className={styles.grid}>{entries.map(entry => <PodcastCard key={entry.show} entry={entry} />)}</div>
+      <p className={styles.moreNote}>More podcasts and interviewers to be announced.</p>
     </section>
 
     <section className={styles.cta} aria-labelledby="cta-title">
