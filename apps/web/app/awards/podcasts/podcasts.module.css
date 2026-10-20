@@ -26,7 +26,8 @@
 .section { max-width: 1200px; margin: 0 auto; padding: 72px 24px 24px; }
 .sectionHead { text-align: center; margin-bottom: 36px; }
 .kicker { margin: 0 0 8px; color: #d2b47b; font-size: 13px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
-.section h2 { font-size: clamp(30px, 4vw, 46px); }
+.section h2, .section h1 { font-size: clamp(30px, 4vw, 46px); }
+.first { padding-top: clamp(48px, 7vw, 88px); }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr)); gap: 22px; }
 .card { display: flex; flex-direction: column; background: #141414; border: 1px solid #2a2a2a; border-radius: 6px; overflow: hidden; transition: border-color .2s ease, transform .2s ease; }
 .card:hover { border-color: rgb(210 180 123 / 60%); transform: translateY(-2px); }
