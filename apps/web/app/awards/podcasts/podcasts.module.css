@@ -1,0 +1,62 @@
+/* Podcasts & Media (Oct 20 draft): the 2026 Awards look — black, champagne gold (#d2b47b / #f1dfbb), white type,
+   Poppins ExtraBold headings (self-hosted, as on the Awards page). */
+@font-face { font-family: "Podcast Poppins ExtraBold"; src: url("/fonts/poppins-extrabold.woff2") format("woff2"); font-weight: 800; font-display: swap; }
+
+.page { background: #000; color: #fff; font-family: "Original Poppins", Arial, Helvetica, sans-serif; overflow-x: hidden; }
+.page h1, .page h2, .page h3 { font-family: "Podcast Poppins ExtraBold", "Original Poppins", Arial, sans-serif; font-weight: 800; margin: 0; overflow-wrap: anywhere; }
+.visuallyHidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.hero { position: relative; padding: clamp(56px, 9vw, 120px) 24px clamp(48px, 7vw, 88px); text-align: center; background: radial-gradient(120% 90% at 50% 0%, #2a2217 0%, #0d0b08 55%, #000 100%); border-bottom: 1px solid rgb(210 180 123 / 28%); }
+.eyebrow { margin: 0 0 22px; color: #f1dfbb; font-size: 13px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
+.logo { width: clamp(130px, 16vw, 190px); height: auto; margin: 0 auto 22px; display: block; }
+.hero h1 { font-size: clamp(44px, 8vw, 96px); line-height: 1.02; letter-spacing: -.01em; }
+.hero h1 span { color: #d2b47b; }
+.lede { max-width: 720px; margin: 22px auto 0; color: #e8e2d6; font-size: clamp(16px, 1.6vw, 20px); line-height: 1.6; }
+.credits { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 28px 56px; margin-top: 40px; }
+.poweredBy { margin: 0; color: rgb(255 255 255 / 78%); font-size: 12px; letter-spacing: .22em; text-transform: uppercase; text-align: center; }
+.poweredBy strong { display: block; margin-top: 8px; color: #fff; font-family: "Podcast Poppins ExtraBold", "Original Poppins", sans-serif; font-size: clamp(20px, 2.2vw, 28px); letter-spacing: 0; line-height: 1.15; text-transform: none; }
+
+.how { padding: 56px 24px; background: #121212; border-bottom: 1px solid rgb(210 180 123 / 18%); }
+.howGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; max-width: 1160px; margin: 0 auto; }
+.howGrid > div { border-top: 2px solid #d2b47b; padding-top: 18px; }
+.howNumber { display: block; color: #d2b47b; font-size: 13px; font-weight: 800; letter-spacing: .2em; margin-bottom: 10px; }
+.howGrid h3 { font-size: 22px; margin-bottom: 10px; }
+.howGrid p { margin: 0; color: #cfc8bb; font-size: 15px; line-height: 1.6; }
+
+.section { max-width: 1200px; margin: 0 auto; padding: 72px 24px 24px; }
+.sectionHead { text-align: center; margin-bottom: 36px; }
+.kicker { margin: 0 0 8px; color: #d2b47b; font-size: 13px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
+.section h2 { font-size: clamp(30px, 4vw, 46px); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr)); gap: 22px; }
+.card { display: flex; flex-direction: column; background: #141414; border: 1px solid #2a2a2a; border-radius: 6px; overflow: hidden; transition: border-color .2s ease, transform .2s ease; }
+.card:hover { border-color: rgb(210 180 123 / 60%); transform: translateY(-2px); }
+.cardMedia { position: relative; aspect-ratio: 1 / 1; background: linear-gradient(145deg, #2b2418, #0f0d0a); display: grid; place-items: center; }
+.cardImage { width: 100%; height: 100%; object-fit: cover; display: block; }
+.monogram { color: #f1dfbb; font-family: "Podcast Poppins ExtraBold", "Original Poppins", sans-serif; font-size: clamp(56px, 7vw, 84px); font-weight: 800; letter-spacing: .02em; }
+.cardBody { padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.cardKicker { margin: 0; color: #d2b47b; font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+.cardBody h3 { font-size: 22px; line-height: 1.2; }
+.hosts { margin: 0; color: #cfc8bb; font-size: 15px; line-height: 1.45; }
+.roles { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 12px 0 0; padding: 0; }
+.roles li { border: 1px solid rgb(210 180 123 / 55%); border-radius: 999px; color: #f1dfbb; font-size: 12px; font-weight: 600; padding: 5px 11px; }
+.more { margin: 32px 0 0; color: #bdbdbd; text-align: center; font-size: 15px; }
+
+.cta { margin-top: 72px; padding: 72px 24px 88px; background: #121212; text-align: center; border-top: 1px solid rgb(210 180 123 / 18%); }
+.cta h2 { font-size: clamp(28px, 4vw, 42px); }
+.cta p { margin: 12px 0 28px; color: #cfc8bb; }
+.button { display: inline-block; background: #d2b47b; color: #111; font-weight: 800; border-radius: 999px; padding: 15px 30px; text-decoration: none; }
+.button:hover { background: #f1dfbb; }
+
+@media (max-width: 860px) { .howGrid { grid-template-columns: 1fr; gap: 26px; } }
+@media (max-width: 600px) {
+  .section { padding-top: 56px; } .credits { gap: 22px; }
+  .grid { gap: 14px; }
+  .card { flex-direction: row; align-items: stretch; }
+  .cardMedia { flex: 0 0 108px; aspect-ratio: auto; min-height: 108px; }
+  .monogram { font-size: 34px; }
+  .cardBody { padding: 14px 14px 16px; }
+  .cardBody h3 { font-size: 18px; }
+  .hosts { font-size: 14px; }
+  .roles { margin-top: 8px; gap: 6px; }
+  .roles li { font-size: 11px; padding: 4px 9px; }
+}
