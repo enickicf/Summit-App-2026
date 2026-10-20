@@ -118,3 +118,6 @@
 .card .roles { margin-top: auto; padding-top: 14px; }
 .card .more { margin-top: 0; }
 @media (max-width: 600px) { .card .stats { height: auto; } .card .roles { margin-top: 8px; padding-top: 0; } }
+.card .stats { height: 100px; }
+.card .roles { height: 72px; align-content: flex-start; }
+@media (max-width: 600px) { .card .stats, .card .roles { height: auto; } }
