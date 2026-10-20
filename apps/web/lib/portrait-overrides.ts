@@ -8,6 +8,30 @@
 // attribution: the credit a freely licensed photo must show; it appears under the bio on the person's profile.
 export type PortraitOverride = { file: string; source: string; airtableBytes?: number; credit?: string; attribution?: { label: string; href: string } };
 export const portraitOverrides2026: Record<string, PortraitOverride> = {
+  // Oct 20, 2026: Airtable headshots of confirmed people who had none on the site (Airtable Talent re-read; face-centred crops).
+  "alex accetta": { file: "/2026-headshots/portraits/alex-accetta.jpg", source: "airtable" },
+  "basak kizilisik": { file: "/2026-headshots/portraits/basak-kizilisik.jpg", source: "airtable" },
+  "blake bonner": { file: "/2026-headshots/portraits/blake-bonner.jpg", source: "airtable" },
+  "blu eyes": { file: "/2026-headshots/portraits/blu-eyes.jpg", source: "airtable" },
+  "brian hill": { file: "/2026-headshots/portraits/brian-hill.jpg", source: "airtable" },
+  "caitlin bonner": { file: "/2026-headshots/portraits/caitlin-bonner.jpg", source: "airtable" },
+  "corey j nigro": { file: "/2026-headshots/portraits/dr-corey-j-nigro.jpg", source: "airtable" },
+  "shashita inamdar": { file: "/2026-headshots/portraits/dr-shashita-inamdar.jpg", source: "airtable" },
+  "franco pascali": { file: "/2026-headshots/portraits/franco-pascali.jpg", source: "airtable" },
+  "geoff ralston": { file: "/2026-headshots/portraits/geoff-ralston.jpg", source: "airtable" },
+  "heather engellis": { file: "/2026-headshots/portraits/heather-engellis.jpg", source: "airtable" },
+  "jen whalen": { file: "/2026-headshots/portraits/jen-whalen.jpg", source: "airtable" },
+  "julie catineau": { file: "/2026-headshots/portraits/julie-catineau.jpg", source: "airtable" },
+  "laura brady": { file: "/2026-headshots/portraits/laura-brady.jpg", source: "airtable" },
+  "lauren ann": { file: "/2026-headshots/portraits/lauren-ann.jpg", source: "airtable" },
+  "megan haley": { file: "/2026-headshots/portraits/megan-haley.jpg", source: "airtable" },
+  "miguel tyson": { file: "/2026-headshots/portraits/miguel-tyson.jpg", source: "airtable" },
+  "remington rhodes": { file: "/2026-headshots/portraits/remington-rhodes.jpg", source: "airtable" },
+  "robert goldstein": { file: "/2026-headshots/portraits/robert-goldstein.jpg", source: "airtable" },
+  "ryan chen": { file: "/2026-headshots/portraits/ryan-chen.jpg", source: "airtable" },
+  "tasha rasolkhani kalhorn": { file: "/2026-headshots/portraits/tasha-rasolkhani-kalhorn.jpg", source: "airtable" },
+  "theresa magnus": { file: "/2026-headshots/portraits/theresa-magnus.jpg", source: "airtable" },
+  "valerie sizemore": { file: "/2026-headshots/portraits/valerie-sizemore.jpg", source: "airtable" },
   // Sept 21 late additions (sources in work/new-headshots-20260921/manifest.json).
   // Owner (Sept 21, late): a photo beats a name card. Hal Fisher and Sarah Steil use their own Airtable photos
   // (small originals, enlarged) until a sharper headshot is supplied.

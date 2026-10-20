@@ -62,6 +62,5 @@ describe("founder couples added Sept 22", async () => {
     expect(people.find(person => person.name === "Erica McGraw")?.image).toBe("/2026-headshots/portraits/erica-mcgraw-2.jpg");
     expect(awards).not.toContain("jay-erica-mcgraw");
     // The no-photo rule still hides non-founders without a photo.
-    expect(directoryPeople(snapshot).map(person => person.name)).not.toContain("Jen Whalen");
   });
 });

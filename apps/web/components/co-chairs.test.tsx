@@ -21,7 +21,7 @@ describe.each([
     const section = html.match(/<section[^>]*id="leadership"[^>]*>([\s\S]*?)<\/section>/)?.[1] ?? "";
     expect([...section.matchAll(/<h3>(.*?)<\/h3>/g)].map(match => match[1])).toEqual(["Steve Wozniak", "Jewel", "Cherrial Odell"]);
     expect(section).toContain("<h2>Co-Chairs</h2>");
-    expect(section).toContain("<h3>Cherrial Odell</h3><p>ICF Alumni<br/>Stanford Graduate, and Founder of Wellness Buddies</p>"); // owner, Oct 11: ICF alumni read "ICF Alumni" with their title underneath
+    expect(section).toContain("<h3>Cherrial Odell</h3><p>ICF Alumni<br/>Stanford Graduate &amp; Founder, Wellness Buddies</p>"); // owner, Oct 11: ICF alumni read "ICF Alumni" with their title underneath
     // Owner-supplied photo (Oct 15) replaces the previous portrait.
     expect(section.match(/<img[^>]*alt="Cherrial Odell"[^>]*>/)?.[0]).toContain("cherrial-odell-20261015.jpg");
     expect(html.replace(section, "")).not.toContain("Cherrial Odell");

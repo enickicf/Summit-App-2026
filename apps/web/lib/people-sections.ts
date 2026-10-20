@@ -38,6 +38,7 @@ const inSummitLineup = (person: SummitPerson) => summitLineup2026.has(personName
 // keeps him there if the chip ever changes. Awards page only; the Summit follows Airtable alone.
 export const awardsLineupAdditions2026 = new Set(["Ben Maxwell", "Kate Doerge"].map(personNameKey));
 const inAwardsLineup = (person: SummitPerson) => awardsLineupAdditions2026.has(personNameKey(person.name));
+const untieredTalentCategories: PersonCategory[] = ["Talent", "Musicians", "Experts", "Comedians", "Athletes", "Podcasters"] as PersonCategory[];
 const founderCategories: PersonCategory[] = ["Founders", "Founders & Entrepreneurs", "Business Leaders", "Business Leaders & Philanthropists"];
 
 export type SectionEntry = { person: SummitPerson; role: string };
@@ -61,6 +62,28 @@ function roleFor(person: SummitPerson, categories: PersonCategory[]) {
 const byAirtable = (a: SummitPerson, b: SummitPerson) => (a.order ?? Number.MAX_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER);
 const tierIndex = (person: SummitPerson) => person.tier ? talentTierOrder.indexOf(person.tier) : talentTierOrder.length;
 const byTier = (a: SummitPerson, b: SummitPerson) => tierIndex(a) - tierIndex(b) || byAirtable(a, b);
+// Owner (Oct 20, 2026): "make sure that all of the listed attendees/guests/whatever are power ranked". After the Top 12
+// (Airtable rank chips), the lineup and the attendees follow this ranking: the most widely known names first, then
+// experts and leaders, then guests. Anyone not named here keeps the tier / Airtable order after the ranked names.
+export const powerRank2026 = [
+  // headline talent and the biggest audiences
+  "Mike Posner", "Lia Shelesh", "Bishop Briggs", "JP Saxe", "Josh Wolf", "Gavin Magnus", "Harry Hudson", "Lexi Hensler",
+  "Alana Springsteen", "Forest Blakk", "Atz Kilcher", "King Trot", "Miguel Tyson",
+  // best-known experts, authors and leaders
+  "Marc Brackett", "David Eagleman", "Paul Dalio", "Geoff Ralston", "Kevin Hines", "Karena Dawn", "Alex Banayan", "Sarah Gilman",
+  "Wendy Oliver-Pyatt", "Kate Doerge", "Jon Hershfield", "Blaise Aguirre", "Caroline Silby", "Rahil Briggs", "Ben Maxwell",
+  "Brandon Saho", "Cathy Olson", "Alex Accetta", "Brian Hill", "Dr. Shashita Inamdar", "Tasha Rasolkhani-Kalhorn", "Ryan Chen",
+  "Dr. Corey J. Nigro", "Beth Kojima", "Laura Brady", "Megan Haley", "Alyson Niemann", "Jennifer Karson-Strauss",
+  // artists and community voices
+  "Sarah Steil", "Silas Luke Jones", "Cherrial Odell", "Nicole Kalhorn", "Clayton Alenik", "Sanem (Sam) Alkan", "Margaret Hines", "Jeff Levin",
+  "Michael Townsend", "Leah Smith", "Raquelle Stevens", "Jessica Edwards",
+  // attendees
+  "Mario Martinez", "Valerie Sizemore", "Jen Whalen", "Erik Blamoville", "Remington Rhodes", "Theresa Magnus", "Robert Goldstein",
+  "Alexa Price", "Dr. Dan Burkhead", "Blake Bonner", "Caitlin Bonner", "Basak Kizilisik", "Lauren Ann", "Julie Catineau",
+  "Heather Engellis", "Rohan Thakkar", "Ann Morris", "Taylor Perry", "Allison Elbl"
+].map(personNameKey);
+const powerIndex = (person: SummitPerson) => { const index = powerRank2026.indexOf(personNameKey(person.name)); return index === -1 ? Number.MAX_SAFE_INTEGER : index; };
+const byPower = (a: SummitPerson, b: SummitPerson) => powerIndex(a) - powerIndex(b) || byTier(a, b);
 
 export function isKeynote(person: SummitPerson) {
   return person.rank !== undefined && person.rank <= keynoteCount;
@@ -111,9 +134,12 @@ export function peopleSections(people: SummitPerson[], variant: SectionVariant =
   const unique = people.filter(person => { const key = personNameKey(person.name); if (seen.has(key)) return false; seen.add(key); return true; });
   const cards = unique.filter(person => (!creditOnly(person) || isKeynote(person)) && isCompleteCard(person));
   const top = cards.filter(isKeynote).sort((a, b) => a.rank! - b.rank!);
-  const tiered = cards.filter(person => !isKeynote(person) && (person.tier || (variant === "summit" && inSummitLineup(person)) || (variant === "awards" && inAwardsLineup(person))) && (!isFounder(person) || isHeadline(person))).sort(byTier);
+  // Oct 20: talent the team tags without an A-F tier (Airtable "Musician", "Talent", "Expert" ...) is listed after the tiers on
+  // the Summit only (the Awards lineup stays headline talent); it used to be hidden until a tier was set; the Oct 20 Airtable read had several confirmed people tagged that way).
+  const untieredTalent = (person: SummitPerson) => !person.tier && person.categories.some(category => untieredTalentCategories.includes(category));
+  const tiered = cards.filter(person => !isKeynote(person) && (person.tier || (variant === "summit" && untieredTalent(person)) || (variant === "summit" && inSummitLineup(person)) || (variant === "awards" && inAwardsLineup(person))) && (!isFounder(person) || isHeadline(person))).sort(byPower);
   const founders = founderOrder2026(cards.filter(isFounder).sort(byAirtable));
-  const attendees = cards.filter(person => person.categories.includes("Attendees") && !isKeynote(person) && !person.tier && !isFounder(person) && !inSummitLineup(person)).sort(byAirtable);
+  const attendees = cards.filter(person => person.categories.includes("Attendees") && !isKeynote(person) && !person.tier && !person.categories.some(category => untieredTalentCategories.includes(category)) && !isFounder(person) && !inSummitLineup(person)).sort(byPower);
   const entry = (person: SummitPerson) => ({ person, role: publicRole(person) });
   const founderSection: PeopleSection = { title: "Founders", people: founders.map(person => ({ person, role: roleFor(person, founderCategories) })) };
   if (variant === "awards") {

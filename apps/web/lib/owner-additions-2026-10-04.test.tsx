@@ -39,11 +39,11 @@ describe("owner additions, Oct 4: Logan Paul (Founder); Aloe Blacc withdrawn Oct
   // status is still Pending, so the ordinary rule keeps him off both sites until Airtable confirms him.
   it("no longer lists Aloe Blacc anywhere: the owner exception is empty and his Airtable status is Pending", () => {
     const record = airtableTalent2026.find(person => person.name === "Aloe Blacc")!;
-    expect(record.status).toBe("Pending");
-    expect(record.groups).toEqual(["A-Talent"]);
+    expect(record.status).not.toMatch(/confirmed|hold space/i); // Pending until Oct 19, "Withdrew" on the Oct 20 Airtable read
+    expect(record.groups).not.toContain("Founder"); // A-Talent until Oct 19; no grouping on the Oct 20 Airtable read
     expect(ownerListedRegardless.size).toBe(0);
     expect(isPublicAirtablePerson(record)).toBe(false);
-    expect(isPublicAirtablePerson({ ...record, status: "Confirmed Attendance" })).toBe(true); // a confirmation in Airtable brings him back
+    expect(isPublicAirtablePerson({ ...record, groups: ["A-Talent"], status: "Confirmed Attendance" })).toBe(true); // a confirmation in Airtable brings him back
     for (const variant of ["summit", "awards"] as const) expect(everywhere(variant).filter(entry => entry.endsWith(":Aloe Blacc")), variant).toEqual([]);
     expect(summitPeople.find(person => person.name === "Aloe Blacc")).toBeUndefined();
     expect(awardsPeople.find(person => person.name === "Aloe Blacc")).toBeUndefined();

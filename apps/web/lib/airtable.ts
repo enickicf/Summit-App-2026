@@ -220,12 +220,16 @@ export function withOwnerGroups<T extends AirtablePerson>(person: T): T {
   // changing the read-only source record or unrelated television/film production credits.
   const corrected = ["Sally Dewhurst", "Sophie Novak"].includes(person.name)
     ? { ...person,
-        title: person.title.replace(/Executive Producer of the Not Alone Summit/g, "Producer of the Not Alone Summit"),
+        title: person.title.replace(/Executive Producer of the Not Alone Summit/g, "Producer of the Not Alone Summit").replace(/^Executive Producer, Not Alone Summit/, "Producer, Not Alone Summit"),
         bio: person.bio.replace(/an Executive Producer of the Not Alone Summit/g, "a producer of the Not Alone Summit")
           .replace(/Executive Producer of the Not Alone Summit/g, "producer of the Not Alone Summit") }
     : person;
-  return ownerFounders2026.has(corrected.name.trim().toLowerCase()) && !corrected.groups.includes("Founder")
+  const withFounder = ownerFounders2026.has(corrected.name.trim().toLowerCase()) && !corrected.groups.includes("Founder")
     ? { ...corrected, groups: [...corrected.groups, "Founder"] } : corrected;
+  // Oct 20: a founder who withdrew (e.g. Bob and Mike Bryan, "Withdrew" in Airtable on the Oct 20 read) stays credited
+  // as a Founder (founders are listed whatever their status) but no longer appears as talent (no keynote rank or tier).
+  return withFounder.groups.includes("Founder") && !isListableStatus(withFounder.status)
+    ? { ...withFounder, groups: withFounder.groups.filter(group => group === "Founder" || group === "Philanthropist") } : withFounder;
 }
 // Owner (Oct 4, 2026): listed on the websites by the owner's direction while Airtable's status is not yet
 // "Confirmed". Remove a name once Airtable confirms it. Aloe Blacc (A-Talent, status "Pending") was the only entry

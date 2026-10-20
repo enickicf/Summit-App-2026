@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { event2026Snapshot } from "@not-alone/test-fixtures/event-2026";
-import { publicLocation, roomsPublic, venueGuidePath } from "./room-privacy";
+import { privateSchedulePath, publicLocation, roomsPublic, venueGuidePath } from "./room-privacy";
 import { ScheduleBrowser } from "../components/schedule-browser";
 import { groupPublishedProgramByDay } from "@not-alone/domain";
 
@@ -27,6 +27,8 @@ describe("rooms inside Wynn are private (owner / Ryan, Sept 29, 2026)", () => {
   it("never links the private guide from any page, menu or component", () => {
     const sources = [...files(join(__dirname, "../app")), ...files(join(__dirname, "../components"))].filter(p => /\.(tsx?|css)$/.test(p) && !p.includes("/venue/guide-") && !p.endsWith(".test.tsx") && !p.endsWith(".test.ts"));
     for (const p of sources) expect(readFileSync(p, "utf8"), p).not.toContain(venueGuidePath);
+    expect(privateSchedulePath).toMatch(/^\/privateschedule-[a-z0-9]{8,}$/);
+    for (const p of sources) if (!p.includes("room-privacy.ts")) expect(readFileSync(p, "utf8"), p).not.toContain(privateSchedulePath);
     expect(readFileSync(join(__dirname, "../app/sitemap.ts"), "utf8")).not.toContain("guide-");
   });
 });

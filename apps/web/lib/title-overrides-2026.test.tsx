@@ -26,7 +26,7 @@ describe("owner title override (Ryan, Oct 8)", () => {
 
   it("wins over Airtable's Title column wherever his title shows (Summit and Awards cards, Partners, profile, overlay)", async () => {
     const record = airtableTalent2026.find(person => person.name === "Ryan Wolfington")!;
-    expect(record.title).toContain("Co Founder, Not Alone Challenge"); // Airtable still reads the old title
+    expect(record.title).not.toBe(ryanTitle); // Airtable carries its own wording; the override wins on the site
     const snapshot = await withAirtable(event2026Snapshot);
     expect(snapshot.speakers.find(speaker => speaker.name === "Ryan Wolfington")?.role).toBe(ryanTitle);
     expect(airtableOverlay(snapshot)?.people?.get("ryan wolfington")?.title).toBe(ryanTitle);

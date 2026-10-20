@@ -23,7 +23,7 @@ const people = [
   person("Nick Kislinger", ["Founders", "Talent"], { tier: "D", order: 19 }),
   person("Cherrial Odell", ["Co-Chairs"]),
   person("Only Producer", ["Producers"]),
-  person("Untiered Expert", ["Experts"], { order: 8 }), // no tier chip: not in any section until the team assigns one
+  person("Untiered Expert", ["Experts"], { order: 8 }), // no tier chip: listed after the tiers since Oct 20
   person("Jewel", ["Musicians"]) // duplicate record: shown once
 ];
 const names = (sections: ReturnType<typeof peopleSections>, title: string) => sections.find(section => section.title === title)?.people.map(entry => entry.person.name) ?? [];
@@ -33,14 +33,13 @@ describe("2026 people sections (Airtable-driven, Sept 22 meeting)", () => {
     const sections = peopleSections(people);
     expect(sections.map(section => section.title)).toEqual(["Keynotes", "Speakers", "Founders", "Attendees"]);
     expect(names(sections, "Keynotes")).toEqual(["Jewel", "Steve Wozniak", "Ray Lewis", "Mike Majlak"]);
-    expect(names(sections, "Speakers")).toEqual(["A Musician", "B Host", "F Musician"]); // A, B, F; founders with mid tiers are not here
+    expect(names(sections, "Speakers")).toEqual(["A Musician", "B Host", "F Musician", "Untiered Expert"]); // A, B, F, then untiered talent (Oct 20); founders with mid tiers are not here
     expect(names(sections, "Founders")).toEqual(["Jewel", "Steve Wozniak", "Nick Kislinger", "Expert Founder", "Only Founder"]); // Ryan's order (Oct 9), then Airtable order
     expect(names(sections, "Founders")).not.toContain("Ray Lewis"); // owner (Sept 22): not a founder, whatever Airtable says
     expect(names(sections, "Attendees")).toEqual(["Guest Person"]);
     for (const title of ["Keynotes", "Speakers", "Attendees"]) {
       expect(names(sections, title)).not.toContain("Cherrial Odell");
       expect(names(sections, title)).not.toContain("Only Producer");
-      expect(names(sections, title)).not.toContain("Untiered Expert");
     }
     expect(sections.find(section => section.title === "Speakers")?.heading).toBe("2026 Lineup");
   });
@@ -60,7 +59,7 @@ describe("2026 people sections (Airtable-driven, Sept 22 meeting)", () => {
     const sections = peopleSections(people, "awards");
     expect(sections.map(section => section.title)).toEqual(["Lineup", "Founders"]);
     expect(sections[0]!.heading).toBeNull();
-    expect(names(sections, "Lineup")).toEqual(["Jewel", "Steve Wozniak", "Ray Lewis", "Mike Majlak", "A Musician", "B Host", "F Musician"]);
+    expect(names(sections, "Lineup")).toEqual(["Jewel", "Steve Wozniak", "Ray Lewis", "Mike Majlak", "A Musician", "B Host", "F Musician"]); // untiered talent: Summit only
     expect(names(sections, "Founders")).toEqual(["Jewel", "Steve Wozniak", "Nick Kislinger", "Expert Founder", "Only Founder"]);
   });
 
@@ -101,9 +100,9 @@ describe("owner exception (Sept 24 / Oct 8): the Tape Art artists, Raquelle Stev
     person("Jessica Edwards", ["Attendees"], { order: 6, role: "CDO, NAMI" }),
     person("Raquelle Stevens", ["Attendees"], { order: 7, role: "Author/ Producer" })
   ];
-  it("lists them at the end of the Summit lineup (after the tiers, Airtable order) and not under Attendees", () => {
+  it("lists them in the Summit lineup (power-ranked, Oct 20) and not under Attendees", () => {
     const sections = peopleSections(roster, "summit");
-    expect(names(sections, "Speakers")).toEqual(["Some Speaker", "Michael Townsend", "Leah Smith", "Jessica Edwards", "Raquelle Stevens"]);
+    expect(names(sections, "Speakers")).toEqual(["Michael Townsend", "Leah Smith", "Raquelle Stevens", "Jessica Edwards", "Some Speaker"]); // power-ranked names first (Oct 20), then the rest
     expect(names(sections, "Attendees")).toEqual(["Nick Dana"]);
     expect(summitLineup2026).toEqual(new Set(["michael townsend", "leah smith", "raquelle stevens", "jessica edwards", "kate doerge"]));
   });
@@ -130,20 +129,20 @@ describe("owner exceptions: Ben Maxwell and Kate Doerge are in the Awards lineup
   ];
   it("lists him at the end of the Awards lineup even without a tier chip, with his photo", () => {
     expect(awardsLineupAdditions2026).toEqual(new Set(["ben maxwell", "kate doerge"]));
-    expect(names(peopleSections(roster, "awards"), "Lineup")).toEqual(["Jewel", "Some Speaker", "Ben Maxwell", "Kate Doerge"]);
+    expect(names(peopleSections(roster, "awards"), "Lineup")).toEqual(["Jewel", "Kate Doerge", "Ben Maxwell", "Some Speaker"]); // power-ranked (Oct 20)
   });
   it("keeps his tier order when Airtable gives him one (D-talent today)", () => {
     const tiered = roster.map(p => p.name === "Ben Maxwell" ? person("Ben Maxwell", ["Talent"], { tier: "D", order: 3 }) : p);
-    expect(names(peopleSections([...tiered, person("F Talent", ["Talent"], { tier: "F", order: 5 })], "awards"), "Lineup")).toEqual(["Jewel", "Some Speaker", "Ben Maxwell", "F Talent", "Kate Doerge"]);
-    expect(names(peopleSections(tiered, "summit"), "Speakers")).toEqual(["Some Speaker", "Ben Maxwell", "Kate Doerge"]);
+    expect(names(peopleSections([...tiered, person("F Talent", ["Talent"], { tier: "F", order: 5 })], "awards"), "Lineup")).toEqual(["Jewel", "Kate Doerge", "Ben Maxwell", "Some Speaker", "F Talent"]);
+    expect(names(peopleSections(tiered, "summit"), "Speakers")).toEqual(["Kate Doerge", "Ben Maxwell", "Some Speaker"]);
   });
   it("waits for a photo: the completeness gate still applies", () => {
     const noPhoto = roster.map(p => p.name === "Ben Maxwell" ? person("Ben Maxwell", ["Experts"], { order: 3, image: "" }) : p);
-    expect(names(peopleSections(noPhoto, "awards"), "Lineup")).toEqual(["Jewel", "Some Speaker", "Kate Doerge"]);
+    expect(names(peopleSections(noPhoto, "awards"), "Lineup")).toEqual(["Jewel", "Kate Doerge", "Some Speaker"]);
   });
   it("keeps the explicit Summit exceptions independent of Awards placement", () => {
-    expect(names(peopleSections(roster, "summit"), "Speakers")).toEqual(["Some Speaker", "Kate Doerge"]);
-    expect(peopleSections(roster, "summit").flatMap(section => section.people.map(entry => entry.person.name))).not.toContain("Ben Maxwell");
+    // Oct 20: untiered experts (Ben Maxwell here) are listed on the Summit too.
+    expect(names(peopleSections(roster, "summit"), "Speakers")).toEqual(["Kate Doerge", "Ben Maxwell", "Some Speaker"]);
   });
 });
 

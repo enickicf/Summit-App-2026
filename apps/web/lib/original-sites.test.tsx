@@ -223,7 +223,7 @@ describe("source-faithful, year-separated event pages", () => {
         for (const person of group.people) {
           if (person.name === "Ryan Wolfington") continue; // Ryan (Oct 8): off the 2026 producer credits
           // Owner (Oct 11): on the 2026 pages Cherrial's co-chair credit reads "ICF Alumni" with her title underneath.
-          const role = group.title === "Co-Chairs" && person.name === "Cherrial Odell" ? "ICF Alumni<br/>Stanford Graduate, and Founder of Wellness Buddies" : escape(person.role);
+          const role = group.title === "Co-Chairs" && person.name === "Cherrial Odell" ? "ICF Alumni<br/>Stanford Graduate &amp; Founder, Wellness Buddies" : escape(person.role);
           const credit = `<h3>${escape(person.name)}</h3><p>${role}</p>`;
           // Sept 21 meeting: Jewel is credited as a 2026 Producer as well as co-chair.
           if (group.title === "Executive Producers" && person.name === "Jewel") expect(html).toContain(credit);

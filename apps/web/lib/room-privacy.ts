@@ -6,6 +6,8 @@ export const roomsPublic = false;
 
 // The private venue guide's path. Change the suffix to rotate the link (the old one then 404s).
 export const venueGuidePath = "/venue/guide-y7pkm22tc4dp";
+// Owner (Oct 20): the private full schedule with rooms, for confirmed guests (app/privateschedule-49rrieyh/page.tsx). Same rules as the guide.
+export const privateSchedulePath = "/privateschedule-49rrieyh";
 
 /** A session's room for public display: nothing while rooms are private. */
 export function publicLocation(locationName: string): string {

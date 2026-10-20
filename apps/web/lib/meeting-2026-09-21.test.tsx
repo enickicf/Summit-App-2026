@@ -59,7 +59,7 @@ describe("Sept 21 meeting website direction", () => {
     // Sept 22 meeting: Airtable's grouping decides. Cathy Olson is D talent (both lineups); Nick Dana is an
     // attendee (Summit Attendees section only); Bianca (associate producer) and Harvey (no grouping) are not cards.
     expect(awards).toContain("Cathy Olson");
-    expect(awards).not.toContain("Nick Dana");
+    expect(awards).not.toContain("Nick Dana"); // untiered talent is listed on the Summit only (Oct 20)
     expect(summit).toContain("Nick Dana");
     // Bianca (Associate Producer in Airtable) is a name in the producer credits only, never a people card.
     expect(summit.split('id="producers"')[0]).not.toContain("Bianca Mok");
