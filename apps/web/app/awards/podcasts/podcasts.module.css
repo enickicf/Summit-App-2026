@@ -142,4 +142,4 @@
    labels had no gap (numbers have no descenders, so only Vogue showed it). Every value now has the same small gap below. */
 .card .stat strong, .dialog .stat strong { line-height: 1.05; margin-bottom: 6px; }
 .card .stat { line-height: 1.35; }
-.card .stats { gap: 14px; }
+.card .stats { gap: 10px; }
