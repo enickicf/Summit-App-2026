@@ -124,5 +124,26 @@ export function privateEventScope(title: string): typeof foundersOnlyScope | typ
 }
 
 // Attire rides on the schedule item; the shared schema has no field for it, so it travels as an extra property.
+// Owner (Oct 21): attire on the website follows the "What to Wear at the Not Alone Summit" guest email (Google Doc
+// 1XG3Q1CaAbYYrn5-gE2BKNeQLqxtJmGeWMKi01ifCavA), not Airtable's Attire column, until the team updates Airtable to match:
+// daytime (wellness, sessions, lunch) Athleisure; Nevada Mental Health Day Smart casual; Awards Show Formal or
+// semi-formal, with flair; Tuesday dinner and performance Smart casual; Closing Dinner Cocktail attire; Poker Night Smart
+// casual; the Nov 5 ICF program visit (Tennis, High Tea) Athletic attire and ready for tennis. "The River" is not on the schedule.
+export const ownerAttire2026: Array<{ title: RegExp; date?: string; attire: string }> = [
+  { title: /^poker night$/i, attire: "Smart casual" },
+  { title: /^wellness activit(y|ies & check-in)$/i, attire: "Athleisure" },
+  { title: /^nevada mental health day$/i, attire: "Smart casual" },
+  { title: /^not alone awards\b|^awards show$/i, attire: "Formal or semi-formal, with flair" },
+  { title: /^summit sessions$/i, attire: "Athleisure" },
+  { title: /^lunch$/i, attire: "Athleisure" },
+  { title: /^dinner\b/i, date: "2026-11-03", attire: "Smart casual" },
+  { title: /^evening performance\b/i, date: "2026-11-03", attire: "Smart casual" },
+  { title: /^closing dinner\b/i, attire: "Cocktail attire" },
+  { title: /^(tennis|high tea)$/i, attire: "Athletic attire and ready for tennis" }
+];
+export function websiteAttire(title: string, date: string, airtableAttire: string | undefined): string {
+  const own = ownerAttire2026.find(entry => entry.title.test(title.trim()) && (!entry.date || entry.date === date));
+  return own ? own.attire : (airtableAttire ?? "").trim();
+}
 export type ScheduleItemWithAttire = ScheduleItem & { attire?: string };
 export const sessionAttire = (item: ScheduleItem): string | null => (item as ScheduleItemWithAttire).attire?.trim() || null;

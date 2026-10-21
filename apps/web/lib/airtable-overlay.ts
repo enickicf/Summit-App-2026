@@ -6,7 +6,7 @@ import {
   isPublicAirtablePerson, type AirtableSession
 } from "./airtable";
 import { airtableRos2026, type RosRow } from "./airtable-ros-2026";
-import { isOnWebsiteSchedule, pinnedTime, privateEventScope, websiteSessionSynopsis, websiteSessionTitle, type ScheduleItemWithAttire } from "./schedule-website-rules";
+import { isOnWebsiteSchedule, pinnedTime, privateEventScope, websiteAttire, websiteSessionSynopsis, websiteSessionTitle, type ScheduleItemWithAttire } from "./schedule-website-rules";
 import { scheduleDoc2026 } from "./schedule-doc-2026";
 import { airtableTalent2026, type RecordedAirtablePerson } from "./airtable-talent-2026";
 import { withOwnerGroups } from "./airtable";
@@ -103,7 +103,9 @@ function scheduleFromAirtable(sessions: AirtableSession[], snapshot: EventSnapsh
       revision: template?.revision ?? 1, updatedAt: now
     } as ScheduleItemWithAttire;
     // Owner (Oct 7): Airtable's Attire column rides along with every event that is on the schedule.
-    if (session.attire?.trim()) item.attire = session.attire.trim();
+    // Oct 21: the owner's "What to Wear" email wins over Airtable's Attire column (websiteAttire) until Airtable matches it.
+    const attire = websiteAttire(session.title, session.date ?? "", session.attire);
+    if (attire) item.attire = attire;
     return item;
   });
 }

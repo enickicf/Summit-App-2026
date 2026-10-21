@@ -86,9 +86,9 @@ describe("withAirtable", () => {
     // segments "Public" in Airtable; attire rides along; the talent dinner reads "Dinner".
     // Owner (Oct 16): founders events are no longer published on the Summit website schedule.
     expect(next.scheduleItems.some(item => /ray lewis|fitness 1|song break|hobbies panel/i.test(item.title))).toBe(false);
-    expect((one("Awards Show") as { attire?: string }).attire).toBe("Semi-Formal with Flair");
-    expect((one("Tennis") as { attire?: string }).attire).toBe("Athleisure");
-    expect(next.scheduleItems.filter(item => item.title === "Summit Sessions").map(item => (item as { attire?: string }).attire)).toEqual(Array(4).fill("Chic Business Casual"));
+    expect((one("Awards Show") as { attire?: string }).attire).toBe("Formal or semi-formal, with flair"); // Oct 21: the What to Wear email wins over Airtable
+    expect((one("Tennis") as { attire?: string }).attire).toBe("Athletic attire and ready for tennis");
+    expect(next.scheduleItems.filter(item => item.title === "Summit Sessions").map(item => (item as { attire?: string }).attire)).toEqual(Array(4).fill("Athleisure"));
     expect((one("Lunch") as { attire?: string }).attire).toBeUndefined();
     expect(next.scheduleItems.filter(item => item.eligibilityScope.id === "founders")).toEqual([]);
     expect(next.scheduleItems.filter(item => item.eligibilityScope.id === "invite-only")).toEqual([]); // no non-founder private row today
