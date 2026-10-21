@@ -89,7 +89,8 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "jon hershfield": { file: "/2026-headshots/portraits/jon-hershfield-2.jpg", source: "airtable", airtableBytes: 0 }, // recut from Airtable, smeared band removed (Sept 21 late)
   "josh wolf": { file: "/2026-headshots/portraits/josh-wolf-3-c.jpg", source: "web", credit: "Jimmy Kimmel's Comedy Club residency page press photo (2023); the only sharp, centered, eyes-visible photo of him; he wears his cap in every current photo" },
   "kevin hines": { file: "/2026-headshots/portraits/kevin-hines.jpg", source: "airtable", airtableBytes: 49041 },
-  "leah smith": { file: "/2026-headshots/portraits/leah-smith-hd-20261015.jpg", source: "web", credit: "Tape Art official team photograph, tapeart.com/who-we-are (cropped to Leah)" },
+  // Oct 21 (owner: "Leah Smith's photo needs to be recropped"): re-cut from the 3000x2000 original of Tape Art's "Leah and Michael" photo (Wix original behind tapeart.com/who-we-are), face-centred.
+  "leah smith": { file: "/2026-headshots/portraits/leah-smith-4.jpg", source: "web", credit: "Tape Art, tapeart.com/who-we-are (Leah and Michael photograph, cropped to Leah)" },
   "lexi hensler": { file: "/2026-headshots/portraits/lexi-hensler-4-c.jpg", source: "airtable", airtableBytes: 1367302 },
   "loni love": { file: "/2026-headshots/portraits/loni-love-2.jpg", source: "icf-card" },
   "marc brackett": { file: "/2026-headshots/portraits/marc-brackett-2.jpg", source: "icf-card" },
@@ -161,7 +162,8 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "ricky sypert": { file: "/2026-headshots/portraits/ricky-sypert-c.jpg", source: "airtable", airtableBytes: 384139 },
   "deb cullen": { file: "/2026-headshots/portraits/deb-cullen-c.jpg", source: "airtable", airtableBytes: 324267 },
   "max novak": { file: "/2026-headshots/portraits/max-novak-c.jpg", source: "airtable", airtableBytes: 657099 },
-  "nicole kalhorn": { file: "/2026-headshots/portraits/nicole-kalhorn-c.jpg", source: "airtable", airtableBytes: 134401 },
+  // Oct 21 (owner: "find the high resolution photo for Nicole Kalhorn"): her Princeton Athletics roster portrait (1500x2000, 2018), face-centred; no upscaling.
+  "nicole kalhorn": { file: "/2026-headshots/portraits/nicole-kalhorn-2.jpg", source: "web", credit: "Princeton University Athletics roster portrait, goprincetontigers.com (2018)" },
   "jp saxe": { file: "/2026-headshots/portraits/jp-saxe-c.jpg", source: "airtable", airtableBytes: 574606 },
   "atz kilcher": { file: "/2026-headshots/portraits/atz-kilcher-c.jpg", source: "airtable", airtableBytes: 536096 },
   "jennifer karson-strauss": { file: "/2026-headshots/portraits/jennifer-karson-strauss-2-c.jpg", source: "airtable", airtableBytes: 209410 },
