@@ -89,7 +89,7 @@ describe("withAirtable", () => {
     expect((one("Awards Show") as { attire?: string }).attire).toBe("Formal or semi-formal, with flair"); // Oct 21: the What to Wear email wins over Airtable
     expect((one("Tennis") as { attire?: string }).attire).toBe("Athletic attire and ready for tennis");
     expect(next.scheduleItems.filter(item => item.title === "Summit Sessions").map(item => (item as { attire?: string }).attire)).toEqual(Array(4).fill("Athleisure"));
-    expect((one("Lunch") as { attire?: string }).attire).toBeUndefined();
+    expect((one("Lunch") as { attire?: string }).attire).toBe("Athleisure") /* Oct 21: daytime rows take Athleisure from the What to Wear email */;
     expect(next.scheduleItems.filter(item => item.eligibilityScope.id === "founders")).toEqual([]);
     expect(next.scheduleItems.filter(item => item.eligibilityScope.id === "invite-only")).toEqual([]); // no non-founder private row today
     expect(at("Dinner with Tape Art")).toEqual(["2026-11-04T02:30:00.000Z"]); // Oct 20 read (was "Dinner - talent"), Nov 3 6:30 PM
