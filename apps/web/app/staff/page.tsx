@@ -10,7 +10,9 @@ import { listFailedSubmissions, unresolvedFailures } from "../../lib/staff/submi
 
 export const dynamic = "force-dynamic";
 
-export default async function StaffPage() {
+export default async function StaffPage({ searchParams }: { searchParams?: Promise<Record<string, string | string[] | undefined>> }) {
+  const query = (await searchParams) ?? {};
+  const one = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value)?.slice(0, 300);
   const jar = await cookies();
   if (!isStaffSession(jar.get(staffCookieName)?.value)) redirect("/staff/login");
   const store = await getSubmissionStore();
@@ -27,5 +29,5 @@ export default async function StaffPage() {
     title: section.heading === null ? "Lineup" : section.title,
     people: section.people.map(({ person, role }) => ({ name: person.name, role, rank: person.rank ?? null, tier: person.tier ?? null, photo: Boolean(person.image) }))
   }));
-  return <StaffPortal rsvps={rsvps} nominations={nominations} poker={poker} workshops={workshops} textPreferences={textPreferences} closingDinner={closingDinner} needsAttention={needsAttention} anonymousFailures={anonymousFailures} lineup={lineup} generatedAt={new Date().toISOString()} />;
+  return <StaffPortal addGuest={{ added: one(query.added), to: one(query.to), error: one(query.addGuestError) }} rsvps={rsvps} nominations={nominations} poker={poker} workshops={workshops} textPreferences={textPreferences} closingDinner={closingDinner} needsAttention={needsAttention} anonymousFailures={anonymousFailures} lineup={lineup} generatedAt={new Date().toISOString()} />;
 }

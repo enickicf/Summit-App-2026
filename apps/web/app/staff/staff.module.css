@@ -124,3 +124,14 @@
 .inlineForm { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 12px 0 18px; padding: 12px; border: 1px solid #e2e5ef; border-radius: 10px; background: #fafbfe; }
 .inlineForm input, .inlineForm select { font: inherit; font-size: 14px; padding: 8px 10px; border: 1px solid #ccd3e6; border-radius: 6px; min-width: 0; }
 .inlineForm input[name="note"] { flex: 1 1 180px; }
+/* Oct 20: "Add a guest" (staff-added RSVPs). */
+.guestForm { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px 16px; align-items: end; margin: 12px 0 6px; padding: 16px; border: 1px solid #e2e5ef; border-radius: 10px; background: #fafbfe; }
+.guestForm label { display: grid; gap: 4px; font-size: 13px; font-weight: 600; color: #333; }
+.guestForm input, .guestForm select { font: inherit; font-size: 14px; font-weight: 400; padding: 8px 10px; border: 1px solid #ccd3e6; border-radius: 6px; min-width: 0; background: #fff; }
+.guestForm .checkLabel { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+.guestForm .checkLabel input { width: 18px; height: 18px; padding: 0; }
+.guestForm .wide { grid-column: span 2; }
+.guestForm button { justify-self: start; }
+.notice { margin: 8px 0; padding: 10px 14px; border-radius: 8px; background: #eef6ee; border: 1px solid #b9dcc0; font-size: 14px; }
+.noticeError { margin: 8px 0; padding: 10px 14px; border-radius: 8px; background: #fff4f4; border: 1px solid #e3a7a7; color: #8a1c1c; font-size: 14px; }
+@media (max-width: 560px) { .guestForm .wide { grid-column: auto; } }

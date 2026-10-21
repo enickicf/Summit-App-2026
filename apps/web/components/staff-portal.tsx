@@ -7,6 +7,7 @@ import { activeOf, activeRsvps, comingTo, isPokerSponsor, pokerInterestLabels, p
 import styles from "../app/staff/staff.module.css";
 import type { InboxEntry } from "../lib/staff/submission-inbox";
 import { wellnessSessions } from "../lib/wellness-signups-2026";
+import { staffGuestEvents, staffGuestLists } from "../lib/staff/staff-guest";
 import { textConsentLabels, textConsentProtocolNote, textConsentShortLabels, textConsentStatus, textContactRows, textOptOutFooter } from "../lib/staff/text-consent";
 
 export type LineupGroup = { title: string; people: { name: string; role: string; rank: number | null; tier: string | null; photo: boolean }[] };
@@ -44,7 +45,7 @@ function RsvpTable({ rows, action = "remove", prefs = [] }: { rows: RsvpSubmissi
     <thead><tr><th>Submitted</th><th>Form</th><th>Name</th><th>Coming to</th><th>Email</th><th>Phone</th><th>Texts</th><th>Organization</th><th>Role / title</th><th>Invited by</th><th>Heard from</th><th>Party</th><th>Notes</th><th>Source</th>{action === "restore" && <th>Removed</th>}<th></th></tr></thead>
     <tbody>{rows.map(row => <tr key={row.id}>
       <td className={styles.nowrap}>{when(row.submittedAt)}</td><td className={styles.nowrap}>{rsvpForm(row)}</td><td className={styles.strong}>{row.name}<br/><small>{waiverSummary(row.eventWaiver)}</small>{/* Owner (Oct 5): the other people in the party, with their own email and phone. */}{row.guests?.length ? <ul className={styles.partyGuests}>{row.guests.map((guest, index) => <li key={index}><span>{guest.name}</span> · <a href={`mailto:${guest.email}`}>{guest.email}</a> · {guest.phone}<br/><small>{waiverSummary(guest.eventWaiver)}</small></li>)}</ul> : null}</td><td><ComingTo record={row} /></td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td className={styles.nowrap}>{row.phone}</td><td className={styles.nowrap}><TextConsent record={row} prefs={prefs} /></td><td>{row.organization}</td><td>{row.professionalRole}</td><td>{row.invitedBy}</td><td>{row.heardFrom ? rsvpHeardFromLabels[row.heardFrom] : ""}</td>
-      <td className={styles.center}>{row.guestCount}</td><td className={styles.notes}>{row.notes}</td><td className={styles.muted}>{row.source === "import" ? "Previous portal" : "Form"}</td>{action === "restore" && <td className={styles.notes}>{row.removedAt ? when(row.removedAt) : ""}{row.removedReason ? ` · ${row.removedReason}` : ""}</td>}<td><span className={styles.badges}><RowAction row={row} action={action} />{action === "restore" && <RowAction row={row} action="delete" />}</span></td>
+      <td className={styles.center}>{row.guestCount}</td><td className={styles.notes}>{row.notes}</td><td className={styles.muted}>{row.source === "import" ? "Previous portal" : row.source === "staff" ? `Added by ${row.addedBy || "staff"}` : "Form"}</td>{action === "restore" && <td className={styles.notes}>{row.removedAt ? when(row.removedAt) : ""}{row.removedReason ? ` · ${row.removedReason}` : ""}</td>}<td><span className={styles.badges}><RowAction row={row} action={action} />{action === "restore" && <RowAction row={row} action="delete" />}</span></td>
     </tr>)}</tbody>
   </table></div>;
 }
@@ -119,7 +120,7 @@ export function groupSiteVisit(rows: WorkshopSubmission[]) {
 
 // Owner (Sept 23): one clean, Not Alone-themed staff portal: ticket requests (with running totals at
 // the top), nominations in their own section, and the current Awards lineup for reference.
-export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPreferences = [], closingDinner = [], needsAttention = [], anonymousFailures = 0, lineup, generatedAt }: { rsvps: RsvpSubmission[]; nominations: NominationSubmission[]; poker: PokerSubmission[]; workshops?: WorkshopSubmission[]; textPreferences?: TextPreferenceRecord[]; closingDinner?: ClosingDinnerSubmission[]; needsAttention?: InboxEntry[] | null; anonymousFailures?: number; lineup: LineupGroup[]; generatedAt: string }) {
+export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPreferences = [], closingDinner = [], needsAttention = [], anonymousFailures = 0, lineup, generatedAt, addGuest = {} }: { addGuest?: { added?: string | undefined; to?: string | undefined; error?: string | undefined }; rsvps: RsvpSubmission[]; nominations: NominationSubmission[]; poker: PokerSubmission[]; workshops?: WorkshopSubmission[]; textPreferences?: TextPreferenceRecord[]; closingDinner?: ClosingDinnerSubmission[]; needsAttention?: InboxEntry[] | null; anonymousFailures?: number; lineup: LineupGroup[]; generatedAt: string }) {
   // Removed requests (test entries) leave every list and total but stay stored under "Removed".
   const active = activeRsvps(rsvps);
   const removed = removedRsvps(rsvps);
@@ -185,7 +186,31 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
     </section>
 
     <div data-view="awards" id="awards">
-      <nav className={styles.sectionNav} aria-label="Awards sections"><a href="#vip">VIP</a><a href="#lake-las-vegas">Lake Las Vegas</a><a href="#nami">NAMI</a><a href="#usta">USTA</a><a href="#tickets">Tickets</a><a href="#community-day">Community Day</a><a href="#nominations">Nominations</a><a href="#removed">Removed</a><a href="#lineup">Lineup</a></nav>
+      <nav className={styles.sectionNav} aria-label="Awards sections"><a href="#add-guest">Add a guest</a><a href="#vip">VIP</a><a href="#lake-las-vegas">Lake Las Vegas</a><a href="#nami">NAMI</a><a href="#usta">USTA</a><a href="#tickets">Tickets</a><a href="#community-day">Community Day</a><a href="#nominations">Nominations</a><a href="#removed">Removed</a><a href="#lineup">Lineup</a></nav>
+      {/* Oct 20 (Cherrial, owner approved): add a guest Trent sends by WhatsApp / text. Stored like an RSVP, tagged "Added by
+          staff"; no confirmation email (they get one only when they RSVP themselves). */}
+      <section className={styles.section} id="add-guest" aria-labelledby="add-guest-title">
+        <div className={styles.sectionHead}><h2 id="add-guest-title">Add a guest</h2></div>
+        <p className={styles.help}>For guests Trent (or anyone on the team) sends by WhatsApp or text. They appear in every list and spreadsheet as &ldquo;Added by&rdquo; you. No confirmation email is sent; if they later fill out an RSVP form themselves, they get the normal confirmation then. Their waiver is not signed until they do.</p>
+        {addGuest.added && <p className={styles.notice} role="status">Added {addGuest.added}{addGuest.to ? ` (${addGuest.to})` : ""}.</p>}
+        {addGuest.error && <p className={styles.noticeError} role="alert">{addGuest.error}</p>}
+        <form method="post" action="/api/staff/guests" className={styles.guestForm}>
+          <label>Full name *<input name="name" required minLength={2} maxLength={180} /></label>
+          <label>Email *<input name="email" type="email" required maxLength={254} /></label>
+          <label>Phone<input name="phone" type="tel" maxLength={80} /></label>
+          <label>Organization<input name="organization" maxLength={240} /></label>
+          <label>Title<input name="professionalRole" maxLength={180} /></label>
+          <label>Invited by<input name="invitedBy" maxLength={180} placeholder="e.g. Trent" /></label>
+          <label>List<select name="list" defaultValue="standard">{Object.entries(staffGuestLists).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+          <label>Coming to<select name="events" defaultValue="awards">{Object.entries(staffGuestEvents).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+          <label>Party size<select name="guestCount" defaultValue="1">{Array.from({ length: 10 }, (_, i) => <option key={i + 1} value={i + 1}>{i + 1}</option>)}</select></label>
+          <label className={styles.checkLabel}><input type="checkbox" name="closingDinner" /> Also the Closing Dinner (Nov 4)</label>
+          <label className={styles.wide}>Notes<input name="notes" maxLength={900} placeholder="e.g. names of the other people in the party" /></label>
+          <label>Added by (your name) *<input name="addedBy" required minLength={2} maxLength={120} /></label>
+          <label className={styles.checkLabel}><input type="checkbox" name="allowDuplicate" /> Add anyway if already on file</label>
+          <button type="submit" className={styles.button}>Add guest</button>
+        </form>
+      </section>
       <section className={styles.stats} aria-label="Ticket totals">
         <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{totals.ticketsRequested}</span><span className={styles.statLabel}>Awards Show tickets</span><span className={styles.statNote}>Party sizes of every Awards Show request, one per guest email (Community Day-only requests are counted below)</span></div>
         <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{totals.formsSubmitted}</span><span className={styles.statLabel}>Forms submitted</span><span className={styles.statNote}>Every RSVP submission received</span></div>

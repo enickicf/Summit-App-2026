@@ -133,6 +133,7 @@ export async function backfillRsvpConfirmations(store: SubmissionStore, sender: 
   const latestByEmail = new Map<string, RsvpSubmission>();
   for (const record of await store.list("rsvp")) { // newest first
     if (!wantsConfirmation(record)) continue;
+    if (record.source === "staff") continue; // Oct 20 (owner): staff-added guests get no email until they RSVP themselves
     const key = record.email.toLowerCase();
     if (!latestByEmail.has(key)) latestByEmail.set(key, record);
   }

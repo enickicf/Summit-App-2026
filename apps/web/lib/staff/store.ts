@@ -209,7 +209,7 @@ export function siteVisitWaiverProblem(payload: Pick<WorkshopPayload, "name" | "
   return null;
 }
 
-export type Submission<T> = T & { id: string; submittedAt: string; source: "form" | "import"; legacyId?: string; invitationLevel?: "vip" | "uber-vip"; invitationRequestId?: string; requesterName?: string; requesterEmail?: string; requesterPhone?: string; requesterOrganization?: string; requesterProfessionalRole?: string };
+export type Submission<T> = T & { id: string; submittedAt: string; source: "form" | "import" | "staff"; addedBy?: string; legacyId?: string; invitationLevel?: "vip" | "uber-vip"; invitationRequestId?: string; requesterName?: string; requesterEmail?: string; requesterPhone?: string; requesterOrganization?: string; requesterProfessionalRole?: string };
 // Owner (Sept 28): a request can be removed from the working lists (test entries) without being deleted; it
 // stays in the store with removedAt/removedReason and is shown under "Removed guests" in the portal.
 // invitedBy / vip arrived Sept 30; records stored before then have neither (read as "" / false).
@@ -521,7 +521,7 @@ function csvCell(value: unknown): string {
 export function toCsv(rows: Record<string, unknown>[], columns: string[]): string {
   return [columns.join(","), ...rows.map(row => columns.map(column => csvCell(row[column])).join(","))].join("\r\n") + "\r\n";
 }
-export const rsvpCsvColumns = ["submittedAt", "form", "name", "email", "phone", "organization", "professionalRole", "invitedBy", "heardFromLabel", "vip", "partner", "tier", "attendanceStatus", "attendingLabel", "communityDay", "guestCount", "guestDetails", "groupWaiverAttestation", "waiverStatus", "guestWaiverStatus", "waiverRecord", ...textConsentCsvColumns, "notes", "invitationLevel", "invitationRequestId", "requesterName", "requesterEmail", "requesterPhone", "requesterOrganization", "requesterProfessionalRole", "source", "id", "removedAt", "removedReason"];
+export const rsvpCsvColumns = ["submittedAt", "form", "name", "email", "phone", "organization", "professionalRole", "invitedBy", "heardFromLabel", "vip", "partner", "tier", "attendanceStatus", "attendingLabel", "communityDay", "guestCount", "guestDetails", "groupWaiverAttestation", "waiverStatus", "guestWaiverStatus", "waiverRecord", ...textConsentCsvColumns, "notes", "invitationLevel", "invitationRequestId", "requesterName", "requesterEmail", "requesterPhone", "requesterOrganization", "requesterProfessionalRole", "source", "addedBy", "id", "removedAt", "removedReason"];
 
 // Which part(s) of the evening a request covers: the Awards Show (their response) and/or Community Day (the toggle).
 export function comingTo(record: Pick<RsvpSubmission, "attendanceStatus" | "communityDay"> & { attending?: RsvpAttending | undefined }): ("awards" | "communityDay")[] {

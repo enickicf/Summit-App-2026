@@ -58,7 +58,8 @@ async function earlierSubmissions(endpoint: string, scope: Scope): Promise<Seen>
   for (const kind of scope.kinds) {
     const records = await store.list(kind as "rsvp") as unknown as AnyRecord[];
     for (const record of records) {
-      if (record.removedAt || (scope.keep && !scope.keep(record))) continue;
+      // Oct 20: a guest staff added by hand may still send their own RSVP (and gets the normal confirmation then).
+      if (record.removedAt || record.source === "staff" || (scope.keep && !scope.keep(record))) continue;
       remember(seen, scope.contact ? scope.contact(record) : { email: str(record.email), phone: str(record.phone) }, record);
     }
   }
