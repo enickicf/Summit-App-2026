@@ -199,8 +199,9 @@ export function portrait2026(name: string): string | null | undefined {
 
 // Owner (Sept 21, late): anyone without a photo is left off the site for now, and Hal Fisher is left off
 // until a proper headshot is supplied. Their Airtable records are untouched; they return when this changes.
-// Oct 21 (owner): Hayden Harveston stays off the site.
-export const hiddenFromSite2026 = new Set(["hal fisher", "hayden harveston"].map(personNameKey));
+// Oct 21 (owner): Hayden Harveston stays off the site; Zak Levitt and Jayson Ainsworth off "for now" (identities not
+// confirmed yet; their photos, titles and bios stay ready below and return when they are removed from this set).
+export const hiddenFromSite2026 = new Set(["hal fisher", "hayden harveston", "zak levitt", "jayson ainsworth"].map(personNameKey));
 // Owner (Sept 22): Jay & Erica McGraw were credited as founders before a photo existed (name cards).
 // Owner (Oct 7): the owner supplied a headshot of each (work/new-headshots-20261007/owner-upload-*.jpg), so both are
 // photo cards now (entries above) and nobody is listed without a photo. The set stays for the next such case.
