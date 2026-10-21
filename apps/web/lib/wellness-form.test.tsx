@@ -71,10 +71,10 @@ describe("staff portal Wellness view", () => {
 });
 
 describe("wellness link on the schedule", () => {
-  it("sits on the Nov 3 and Nov 4 Wellness Activity entries only", async () => {
+  it("sits on the Nov 2, Nov 3 and Nov 4 wellness entries", async () => {
     const { isWellnessSignupEntry } = await import("./wellness-signups-2026");
     expect(isWellnessSignupEntry("Wellness Activity")).toBe(true);
-    expect(isWellnessSignupEntry("Wellness Activities & Check-In")).toBe(false);
+    expect(isWellnessSignupEntry("Wellness Activities & Check-In")).toBe(true); // Oct 21: the Monday wellness afternoon is on the form too
     expect(isWellnessSignupEntry("Tennis (ICF Site Visit)")).toBe(false);
     expect(readFileSync(join(__dirname, "..", "components", "schedule-browser.tsx"), "utf8")).toContain("Sign up for wellness classes");
   });

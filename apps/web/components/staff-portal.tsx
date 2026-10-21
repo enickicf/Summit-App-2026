@@ -84,7 +84,7 @@ export function groupWorkshops(rows: WorkshopSubmission[]) {
 }
 
 // Oct 12: wellness sign-ups grouped by class, in the order of the morning (day, start time), oldest sign-up first.
-const wellnessDays = ["Tuesday, November 3", "Wednesday, November 4"];
+const wellnessDays = ["Monday, November 2", "Tuesday, November 3", "Wednesday, November 4"];
 export function groupWellness(rows: WorkshopSubmission[]) {
   const order = new Map(wellnessSessions.map((session, index) => [session.id, index]));
   const groups = new Map<string, { key: string; day: string; time: string; title: string; people: WorkshopSubmission[] }>();
