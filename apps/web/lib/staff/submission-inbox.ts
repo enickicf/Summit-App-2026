@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { withRetry } from "./store";
-import { checkSubmissionLimit, rememberAccepted } from "./submission-limit";
+import { checkSubmissionLimit, rememberAccepted, replaceEarlierSubmissions } from "./submission-limit";
 
 // Owner (Oct 19, 2026): "we should not have any missing submissions ... this entire event is riding on me".
 // Every form request is written, word for word, to its own append-only Blobs store (`submission-inbox`)
@@ -120,7 +120,11 @@ export function withSubmissionInbox(endpoint: string, handler: (request: Request
       console.error(`[submission-inbox] ${endpoint}: handler crashed`, error instanceof Error ? error.message : error);
       response = Response.json({ ok: false, error: "We could not save your request. Please try again." }, { status: 500, headers: { "Cache-Control": "no-store" } });
     }
-    if (response.status < 300) rememberAccepted(endpoint, body, entry);
+    if (response.status < 300) {
+      rememberAccepted(endpoint, body, entry);
+      // Oct 20 (owner): a resubmitted RSVP replaces the guest's earlier one (no duplicates; nothing deleted).
+      await replaceEarlierSubmissions(endpoint, entry.receivedAt, entry, body);
+    }
     if (response.status >= 300) {
       let error = "";
       try { const answer = await response.clone().json() as { error?: unknown }; error = typeof answer?.error === "string" ? answer.error : ""; } catch { /* non-JSON answer */ }

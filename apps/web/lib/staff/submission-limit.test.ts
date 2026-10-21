@@ -3,6 +3,8 @@ import { randomUUID } from "node:crypto";
 import { memoryInboxStore, setInboxForTests, unresolvedFailures, withSubmissionInbox } from "./submission-inbox";
 import { isUnlimitedSubmitter, setLimitStoreForTests } from "./submission-limit";
 import { memorySubmissionStore, newSubmission } from "./store";
+import { handleRsvpPost } from "../../app/api/rsvp/route";
+import { eventWaiverVersion } from "../event-waiver";
 
 // Owner (Oct 20, 2026): one submission per person per form; ambassador@, music@, the owner's and Cherrial's phone
 // numbers may submit as many tests as they want.
@@ -25,19 +27,42 @@ function setup(kind: "rsvp" | "closingDinner" = "rsvp") {
 afterEach(() => { setLimitStoreForTests(null); setInboxForTests(null); delete process.env.SUBMISSION_TEST_ALLOWLIST; });
 
 describe("one submission per person per form (owner, Oct 20)", () => {
-  it("saves the first RSVP, refuses a second one by the same email or phone with a clear message, and keeps the refused copy", async () => {
+  it("lets a person send an RSVP three times, each new one replacing the last, and refuses a fourth (owner, Oct 20)", async () => {
     const { store, inbox, handler } = setup();
     const POST = withSubmissionInbox("rsvp", handler);
-    expect((await POST(post("rsvp", guest()))).status).toBe(200);
-    const sameEmail = await POST(post("rsvp", guest({ phone: "7025559999", name: "Pat Again" })));
-    expect(sameEmail.status).toBe(409);
-    expect((await sameEmail.json()).error).toMatch(/already have your RSVP .*music@inspiringchildren\.org/);
-    expect((await POST(post("rsvp", guest({ email: "other@example.com", phone: "702-555-0101" })))).status).toBe(409);
-    expect(await store.list("rsvp")).toHaveLength(1);
+    for (let i = 0; i < 3; i++) expect((await POST(post("rsvp", guest({ notes: `try ${i + 1}` })))).status).toBe(200);
+    const rows = await store.list("rsvp");
+    expect(rows).toHaveLength(3);
+    const active = rows.filter(row => !row.removedAt);
+    expect(active).toHaveLength(1); // one up-to-date RSVP per person
+    expect(active[0]).toMatchObject({ notes: "try 3" });
+    expect((active[0] as unknown as { replaces: string[] }).replaces).toHaveLength(2);
+    const ids = new Set(rows.map(row => row.id));
+    expect(rows.filter(row => row.removedAt).every(row => /^Replaced by an updated submission/.test(String(row.removedReason)) && ids.has((row as unknown as { replacedBy: string }).replacedBy))).toBe(true);
+    const fourth = await POST(post("rsvp", guest({ phone: "7025559999", name: "Pat Again" })));
+    expect(fourth.status).toBe(409);
+    expect((await fourth.json()).error).toMatch(/already have your RSVP .*music@inspiringchildren\.org/);
+    expect((await POST(post("rsvp", guest({ email: "other@example.com", phone: "702-555-0101" })))).status).toBe(409); // same phone
+    expect(await store.list("rsvp")).toHaveLength(3);
     const failed = await inbox.list("failed/");
-    expect(failed).toHaveLength(2);
     expect(failed.every(entry => entry.reason === "already-submitted")).toBe(true);
-    expect(unresolvedFailures(failed, [])).toHaveLength(0); // not listed under Needs attention
+    expect(unresolvedFailures(failed, [])).toHaveLength(0);
+  });
+
+  it("replaces the earlier RSVP with the real RSVP handler (browser-clock dates), keeping the original first date", async () => {
+    const store = memorySubmissionStore(); setLimitStoreForTests(store); setInboxForTests(memoryInboxStore());
+    const POST = withSubmissionInbox("rsvp", (request: Request) => handleRsvpPost(request, store, async () => {}, null));
+    const accepted = (name: string) => ({ status: "accepted" as const, version: eventWaiverVersion, signature: name, adultSelf: true as const, liabilityAccepted: true as const, mediaAccepted: true as const, ticketTextConsent: true as const, electronicConsent: true as const });
+    const rsvp = (requestedAt: string, guestCount: number, guests: unknown[]) => ({ requestId: randomUUID(), requestedAt, name: "Old Link Guest", email: "oldlink@example.com", phone: "7025550177", organization: "Example", professionalRole: "Guest", invitedBy: "Host", attendanceStatus: "attending", attending: "awards", guestCount, guests, eventWaiver: accepted("Old Link Guest") });
+    await store.add("rsvp", { ...newSubmission({ name: "Old Link Guest", email: "oldlink@example.com", phone: "7025550177", organization: "", professionalRole: "", invitedBy: "", vip: false, partner: "", heardFrom: "", tier: "", attendanceStatus: "attending", communityDay: false, guestCount: 3, notes: "old link, no guest details" }), submittedAt: "2026-10-10T18:00:00.000Z" } as never);
+    const answer = await POST(post("rsvp", rsvp(new Date(Date.now() - 60_000).toISOString(), 1, [])));
+    expect(answer.status).toBe(200);
+    const rows = await store.list("rsvp");
+    const active = rows.filter(row => !row.removedAt);
+    expect(active).toHaveLength(1);
+    expect(active[0]!.guestCount).toBe(1);
+    expect((active[0] as unknown as { firstSubmittedAt: string }).firstSubmittedAt).toBe("2026-10-10T18:00:00.000Z");
+    expect(rows.find(row => row.removedAt)?.notes).toBe("old link, no guest details");
   });
 
   it("lets a retry of the same request through (same requestId) and stores it once", async () => {
@@ -49,9 +74,9 @@ describe("one submission per person per form (owner, Oct 20)", () => {
     expect(await store.list("rsvp")).toHaveLength(1);
   });
 
-  it("refuses a second request that was saved earlier on another server instance", async () => {
+  it("counts submissions saved earlier on another server instance", async () => {
     const { store, handler } = setup();
-    await store.add("rsvp", { ...newSubmission({ name: "Earlier Guest", email: "Earlier@Example.com", phone: "7025550111" }), submittedAt: "2026-10-12T18:00:00.000Z" } as never);
+    for (const day of ["10", "11", "12"]) await store.add("rsvp", { ...newSubmission({ name: "Earlier Guest", email: "Earlier@Example.com", phone: "7025550111" }), submittedAt: `2026-10-${day}T18:00:00.000Z`, ...(day === "12" ? {} : { removedAt: "2026-10-12T18:00:00.000Z", replacedBy: "x" }) } as never);
     const answer = await withSubmissionInbox("rsvp", handler)(post("rsvp", guest({ email: "earlier@example.com" })));
     expect(answer.status).toBe(409);
     expect((await answer.json()).error).toContain("October 12");
@@ -80,7 +105,7 @@ describe("one submission per person per form (owner, Oct 20)", () => {
     expect((await withSubmissionInbox("rsvp", handler)(post("rsvp", guest()))).status).toBe(200);
     const dinner = setup("closingDinner");
     await dinner.store.add("rsvp", { ...newSubmission({ name: "Pat Guest", email: "pat@example.com", phone: "" }) } as never);
-    expect((await withSubmissionInbox("closing-dinner", dinner.handler)(post("closing-dinner", guest()))).status).toBe(200);
+    for (let i = 0; i < 3; i++) expect((await withSubmissionInbox("closing-dinner", dinner.handler)(post("closing-dinner", guest()))).status).toBe(200);
     expect((await withSubmissionInbox("closing-dinner", dinner.handler)(post("closing-dinner", guest()))).status).toBe(409);
   });
 
