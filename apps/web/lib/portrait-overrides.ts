@@ -9,6 +9,7 @@
 export type PortraitOverride = { file: string; source: string; airtableBytes?: number; credit?: string; attribution?: { label: string; href: string } };
 export const portraitOverrides2026: Record<string, PortraitOverride> = {
   // Oct 20, 2026: Airtable headshots of confirmed people who had none on the site (Airtable Talent re-read; face-centred crops).
+  "abraham kaoud": { file: "/2026-headshots/portraits/abraham-kaoud.jpg", source: "airtable" }, // Oct 21: his Airtable headshot (1205x1306), face-centred
   "alex accetta": { file: "/2026-headshots/portraits/alex-accetta.jpg", source: "airtable" },
   "basak kizilisik": { file: "/2026-headshots/portraits/basak-kizilisik-2.jpg", source: "web" }, // Oct 20: sharper copy of their photo from their own organization / press page (hires agent)
   "blake bonner": { file: "/2026-headshots/portraits/blake-bonner.jpg", source: "airtable" },
