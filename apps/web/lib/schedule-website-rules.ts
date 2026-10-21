@@ -66,8 +66,15 @@ export function isOnWebsiteSchedule(row: RosVisibility): boolean {
 // not "talent"; Bianca took the note out of the title but the synopsis still says it). Until Airtable is corrected the
 // website shows the title alone.
 const suppressedSynopses = [/^dinner for summit talent\.?$/i];
+// Owner (Oct 21): "take who's doing the writers round on Tuesday off of the website for now": the Nov 3 evening
+// performance shows no performer names (title and synopsis) until the owner lifts this. Airtable keeps the names.
+const replacedSynopses: Array<[RegExp, string]> = [
+  [/^grammy-nominated singer-songwriter jp saxe opens an evening/i, "An evening of stories and songs. Performers to be announced."]
+];
 export function websiteSessionSynopsis(synopsis: string): string {
   const text = synopsis.trim();
+  const replaced = replacedSynopses.find(([pattern]) => pattern.test(text));
+  if (replaced) return replaced[1];
   return suppressedSynopses.some(pattern => pattern.test(text)) ? "" : text;
 }
 
@@ -76,7 +83,9 @@ export function websiteSessionSynopsis(synopsis: string): string {
 // and Ask AI all key on the title "Awards Show". The iHeartRadio credit has its own band on the Awards page.
 const displayTitles: Array<[RegExp, string]> = [
   [/^dinner\s*-\s*talent$/i, "Dinner"],
-  [/^not alone awards\b/i, "Awards Show"]
+  [/^not alone awards\b/i, "Awards Show"],
+  // Owner (Oct 21): no performer names on the Tuesday writers' round for now.
+  [/^evening performance:.*writers'? round$/i, "Evening Performance: Writers' Round"]
 ];
 export function websiteSessionTitle(title: string): string {
   const match = displayTitles.find(([pattern]) => pattern.test(title.trim()));

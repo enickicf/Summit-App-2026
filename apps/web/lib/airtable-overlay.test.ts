@@ -79,7 +79,7 @@ describe("withAirtable", () => {
     expect(at("Closing Dinner and Performance")).toEqual(["2026-11-05T03:00:00.000Z"]); // Nov 4, 7:00 PM
     // Oct 20 read: Airtable replaced "Evening Talk + Performance" (pinned to 8:00 PM) with the writers' round at 9:05 PM and a
     // "Dinner with Tape Art" 6:30-8:00 PM; the owner asked for the website to match Airtable, so the old 8:00 pin no longer applies.
-    expect(at("Evening Performance: JP Saxe, Anthony Ramos & Bishop Briggs Writers' Round")).toEqual(["2026-11-04T05:05:00.000Z"]); // Nov 3, 9:05 PM
+    expect(at("Evening Performance: Writers' Round")).toEqual(["2026-11-04T05:05:00.000Z"]); // Nov 3, 9:05 PM
     expect(at("High Tea")).toEqual(["2026-11-05T20:00:00.000Z"]);
     expect(next.scheduleItems.some(item => /load (in|out)|eagleman|red carpet|pre-show|speaker reception/i.test(item.title))).toBe(false);
     // Owner (Oct 7): the public schedule lists the day's blocks, not every Run of Show segment, until the team marks
