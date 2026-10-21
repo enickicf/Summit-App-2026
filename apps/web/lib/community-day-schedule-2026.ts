@@ -24,7 +24,9 @@ export function communityDaySchedule2026(rows: RosRow[] = airtableRos2026): Comm
     const base = { id: row.recordId, room, attire: "", synopsis: "" };
     if (/^wellness activit/i.test(row.title)) sessions.push({ ...base, sort: "12:00", time: "12:00–3:00 PM", title: "Wellness & Check-In", kind: "block" });
     else if (/^nevada mental health day$/i.test(row.title)) sessions.push({ ...base, sort: "14:30", time: "2:30–6:30 PM", title: "Summit Sessions", kind: "block" });
-    else if (/doors open/i.test(row.title)) sessions.push({ ...base, sort: "18:31", time: "6:30 PM", title: "Awards Show Doors Open", synopsis: "", kind: "awards" });
+    // Oct 20: Airtable also has a 2:30 PM "Doors Open" for the Nevada Day sessions in the Margaux; only the Awards Show
+    // doors (the evening row) belong here.
+    else if (/doors open/i.test(row.title) && (/awards/i.test(row.title) || row.start >= "18:00")) sessions.push({ ...base, sort: "18:31", time: "6:30 PM", title: "Awards Show Doors Open", synopsis: "", kind: "awards" });
     else if (/^not alone awards\b/i.test(row.title)) sessions.push({ ...base, sort: "19:30", time: "7:30–10:00 PM", title: "Not Alone Awards Show", synopsis: "", kind: "awards" });
   }
   return sessions.sort((a, b) => a.sort.localeCompare(b.sort) || (a.kind === "block" ? -1 : b.kind === "block" ? 1 : 0)).map(({ sort: _sort, ...session }) => session);

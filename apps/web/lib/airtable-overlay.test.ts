@@ -77,7 +77,9 @@ describe("withAirtable", () => {
     expect(at("Founders Cocktails")).toEqual([]);
     expect(at("Founder's Dinner")).toEqual([]);
     expect(at("Closing Dinner and Performance")).toEqual(["2026-11-05T03:00:00.000Z"]); // Nov 4, 7:00 PM
-    expect(at("Evening Talk + Performance/Writer's Round")).toEqual(["2026-11-04T04:00:00.000Z"]); // Nov 3, 8:00 PM
+    // Oct 20 read: Airtable replaced "Evening Talk + Performance" (pinned to 8:00 PM) with the writers' round at 9:05 PM and a
+    // "Dinner with Tape Art" 6:30-8:00 PM; the owner asked for the website to match Airtable, so the old 8:00 pin no longer applies.
+    expect(at("Evening Performance: JP Saxe, Anthony Ramos & Bishop Briggs Writers' Round")).toEqual(["2026-11-04T05:05:00.000Z"]); // Nov 3, 9:05 PM
     expect(at("High Tea")).toEqual(["2026-11-05T20:00:00.000Z"]);
     expect(next.scheduleItems.some(item => /load (in|out)|eagleman|red carpet|pre-show|speaker reception/i.test(item.title))).toBe(false);
     // Owner (Oct 7): the public schedule lists the day's blocks, not every Run of Show segment, until the team marks
@@ -90,10 +92,10 @@ describe("withAirtable", () => {
     expect((one("Lunch") as { attire?: string }).attire).toBeUndefined();
     expect(next.scheduleItems.filter(item => item.eligibilityScope.id === "founders")).toEqual([]);
     expect(next.scheduleItems.filter(item => item.eligibilityScope.id === "invite-only")).toEqual([]); // no non-founder private row today
-    expect(at("Dinner")).toEqual(["2026-11-04T02:30:00.000Z"]); // "Dinner - talent" in Airtable, Nov 3 6:30 PM
+    expect(at("Dinner with Tape Art")).toEqual(["2026-11-04T02:30:00.000Z"]); // Oct 20 read (was "Dinner - talent"), Nov 3 6:30 PM
     // Oct 8 (Payton/Jan): the Nov 3 dinner is for every Summit guest; Airtable's leftover "talent" synopsis is not shown.
-    expect(one("Dinner").eligibilityScope.label).not.toMatch(/invite only|founders/i);
-    expect(one("Dinner").summary).not.toMatch(/talent/i);
+    expect(one("Dinner with Tape Art").eligibilityScope.label).not.toMatch(/invite only|founders/i);
+    expect(one("Dinner with Tape Art").summary).not.toMatch(/talent/i);
     // Oct 8: Airtable's "Website Public/Private" checkbox decides; Pet Partners is unticked, so it is off the schedule.
     expect(next.scheduleItems.filter(item => item.title === "Pet Partners Therapy")).toHaveLength(0);
     expect(next.scheduleItems.filter(item => item.title === "Late Night Pickleball + Sauna").map(item => item.startUtc)).toEqual(["2026-11-03T06:00:00.000Z", "2026-11-04T06:00:00.000Z"]); // owner (Oct 19): Monday and Tuesday nights (10 PM PST), whatever Airtable ticks

@@ -52,6 +52,7 @@ describe("schedule website rules", () => {
     const attire = Object.fromEntries(listed.filter(row => row.attire).map(row => [`${row.date} ${row.title}`, row.attire]));
     expect(attire).toEqual({
       "2026-11-01 Poker Night": "Casual - Smart Casual",
+      "2026-11-02 Nevada Mental Health Day": "Chic Business Casual",
       "2026-11-02 Wellness Activities & Check-In": "Chic Business Casual",
       "2026-11-02 Not Alone Awards with iHeartRadio": "Semi-Formal with Flair",
       "2026-11-03 Summit Sessions": "Chic Business Casual",
@@ -60,7 +61,7 @@ describe("schedule website rules", () => {
       "2026-11-05 High Tea": "Athleisure"
     });
     expect(airtableRos2026.find(row => row.title === "Red Carpet")?.attire).toBe("Semi-Formal with Flair"); // recorded, never listed
-    expect(airtableRos2026.filter(row => row.websitePublic === "checked")).toHaveLength(24); // the team's checkbox, Oct 8 read
+    expect(airtableRos2026.filter(row => row.websitePublic === "checked")).toHaveLength(21); // the team's checkbox, Oct 20 read
     expect(airtableRos2026.filter(row => row.title === "Pet Partners Therapy").every(row => row.websitePublic === "")).toBe(true);
   });
 });
