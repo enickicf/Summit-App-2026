@@ -35,7 +35,7 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "julie catineau": { file: "/2026-headshots/portraits/julie-catineau.jpg", source: "airtable" },
   "laura brady": { file: "/2026-headshots/portraits/laura-brady.jpg", source: "airtable" },
   // Oct 21 (owner: "Updated photo of Lauren (Jennifer Donnelly party)", sent by Paige): captured from the Messages thread at screen density (~350px; macOS blocks reading the attachment file), face-centred. The original file would be sharper if the team sends it.
-  "lauren ann": { file: "/2026-headshots/portraits/lauren-ann-2.jpg", source: "owner" },
+  "lauren ann": { file: "/2026-headshots/portraits/lauren-ann-3.jpg", source: "owner" }, // Oct 21, later: re-captured from Messages' Quick Look window (603x833), sharper than the thread thumbnail
   "megan haley": { file: "/2026-headshots/portraits/megan-haley.jpg", source: "airtable" },
   "miguel tyson": { file: "/2026-headshots/portraits/miguel-tyson.jpg", source: "airtable" },
   "remington rhodes": { file: "/2026-headshots/portraits/remington-rhodes.jpg", source: "airtable" },
