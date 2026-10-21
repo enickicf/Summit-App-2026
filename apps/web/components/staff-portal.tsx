@@ -3,7 +3,7 @@ import { SiteImage } from "./site-image";
 import { PortalViewSwitch } from "./portal-views";
 import { PortalAutoRefresh } from "./portal-auto-refresh";
 import { RsvpEmailTools } from "./rsvp-email-tools";
-import { activeOf, activeRsvps, comingTo, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, ustaRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels, siteVisitTransportLabels, type SiteVisitTransport, type TextPreferenceRecord, type ClosingDinnerSubmission, closingDinnerSeats, closingDinnerTotals } from "../lib/staff/store";
+import { activeOf, activeRsvps, comingTo, currentRequests, guestDetailsMissing, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, ustaRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels, siteVisitTransportLabels, type SiteVisitTransport, type TextPreferenceRecord, type ClosingDinnerSubmission, closingDinnerSeats, closingDinnerTotals } from "../lib/staff/store";
 import styles from "../app/staff/staff.module.css";
 import type { InboxEntry } from "../lib/staff/submission-inbox";
 import { wellnessSessions } from "../lib/wellness-signups-2026";
@@ -44,7 +44,7 @@ function RsvpTable({ rows, action = "remove", prefs = [] }: { rows: RsvpSubmissi
   return <div className={styles.tableWrap}><table className={styles.table}>
     <thead><tr><th>Submitted</th><th>Form</th><th>Name</th><th>Coming to</th><th>Email</th><th>Phone</th><th>Texts</th><th>Organization</th><th>Role / title</th><th>Invited by</th><th>Heard from</th><th>Party</th><th>Notes</th><th>Source</th>{action === "restore" && <th>Removed</th>}<th></th></tr></thead>
     <tbody>{rows.map(row => <tr key={row.id}>
-      <td className={styles.nowrap}>{when(row.submittedAt)}</td><td className={styles.nowrap}>{rsvpForm(row)}</td><td className={styles.strong}>{row.name}<br/><small>{waiverSummary(row.eventWaiver)}</small>{/* Owner (Oct 5): the other people in the party, with their own email and phone. */}{row.guests?.length ? <ul className={styles.partyGuests}>{row.guests.map((guest, index) => <li key={index}><span>{guest.name}</span> · <a href={`mailto:${guest.email}`}>{guest.email}</a> · {guest.phone}<br/><small>{waiverSummary(guest.eventWaiver)}</small></li>)}</ul> : null}</td><td><ComingTo record={row} /></td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td className={styles.nowrap}>{row.phone}</td><td className={styles.nowrap}><TextConsent record={row} prefs={prefs} /></td><td>{row.organization}</td><td>{row.professionalRole}</td><td>{row.invitedBy}</td><td>{row.heardFrom ? rsvpHeardFromLabels[row.heardFrom] : ""}</td>
+      <td className={styles.nowrap}>{when(row.submittedAt)}</td><td className={styles.nowrap}>{rsvpForm(row)}</td><td className={styles.strong}>{row.name}<br/><small>{waiverSummary(row.eventWaiver)}</small>{guestDetailsMissing(row) && <><br/><span className={`${styles.badge} ${styles.badgeFollowUp}`}>Guest details missing</span></>}{/* Owner (Oct 5): the other people in the party, with their own email and phone. */}{row.guests?.length ? <ul className={styles.partyGuests}>{row.guests.map((guest, index) => <li key={index}><span>{guest.name}</span> · <a href={`mailto:${guest.email}`}>{guest.email}</a> · {guest.phone}<br/><small>{waiverSummary(guest.eventWaiver)}</small></li>)}</ul> : null}</td><td><ComingTo record={row} /></td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td className={styles.nowrap}>{row.phone}</td><td className={styles.nowrap}><TextConsent record={row} prefs={prefs} /></td><td>{row.organization}</td><td>{row.professionalRole}</td><td>{row.invitedBy}</td><td>{row.heardFrom ? rsvpHeardFromLabels[row.heardFrom] : ""}</td>
       <td className={styles.center}>{row.guestCount}</td><td className={styles.notes}>{row.notes}</td><td className={styles.muted}>{row.source === "import" ? "Previous portal" : row.source === "staff" ? `Added by ${row.addedBy || "staff"}` : "Form"}</td>{action === "restore" && <td className={styles.notes}>{row.removedAt ? when(row.removedAt) : ""}{row.removedReason ? ` · ${row.removedReason}` : ""}</td>}<td><span className={styles.badges}><RowAction row={row} action={action} />{action === "restore" && <RowAction row={row} action="delete" />}</span></td>
     </tr>)}</tbody>
   </table></div>;
@@ -125,6 +125,8 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
   const active = activeRsvps(rsvps);
   const removed = removedRsvps(rsvps);
   const totals = rsvpTotals(active);
+  const current = currentRequests(active);
+  const missingDetails = [...new Map([...current.awards, ...current.communityDay].filter(guestDetailsMissing).map(row => [row.id, row])).values()].sort((a, b) => b.submittedAt.localeCompare(a.submittedAt));
   const communityDay = active.filter(row => comingTo(row).includes("communityDay"));
   const vip = vipRsvps(active);
   const nami = namiRsvps(active);
@@ -212,7 +214,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
         </form>
       </section>
       <section className={styles.stats} aria-label="Ticket totals">
-        <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{totals.ticketsRequested}</span><span className={styles.statLabel}>Awards Show tickets</span><span className={styles.statNote}>Party sizes of every Awards Show request, one per guest email (Community Day-only requests are counted below)</span></div>
+        <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{totals.ticketsRequested}</span><span className={styles.statLabel}>Awards Show tickets</span><span className={styles.statNote}>Each guest’s newest Awards Show request, counted once per email. A later Nevada Mental Health Day-only form never removes it (each event is counted on its own)</span></div>
         <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{totals.formsSubmitted}</span><span className={styles.statLabel}>Forms submitted</span><span className={styles.statNote}>Every RSVP submission received</span></div>
         {totals.moreInformation > 0 && <div className={styles.stat}><span className={styles.statValue}>{totals.moreInformation}</span><span className={styles.statLabel}>Asked for more information</span></div>}
         <div className={`${styles.stat} ${styles.statVip}`}><span className={styles.statValue}>{totals.vipTickets}</span><span className={styles.statLabel}>VIP tickets</span><span className={styles.statNote}>{totals.vipGuests} VIP {totals.vipGuests === 1 ? "guest" : "guests"} through the VIP link</span></div>
@@ -220,6 +222,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
         <div className={`${styles.stat} ${styles.statNami}`}><span className={styles.statValue}>{totals.namiTickets}</span><span className={styles.statLabel}>NAMI tickets</span><span className={styles.statNote}>{totals.namiGuests} NAMI {totals.namiGuests === 1 ? "guest" : "guests"} through the NAMI form</span></div>
         <div className={`${styles.stat} ${styles.statUsta}`}><span className={styles.statValue}>{totals.ustaTickets}</span><span className={styles.statLabel}>USTA tickets</span><span className={styles.statNote}>{totals.ustaGuests} USTA {totals.ustaGuests === 1 ? "guest" : "guests"} through the USTA form</span></div>
         <div className={`${styles.stat} ${styles.statCommunity}`}><span className={styles.statValue}>{totals.communityDayTickets}</span><span className={styles.statLabel}>Community Day tickets</span><span className={styles.statNote}>{totals.communityDayGuests} {totals.communityDayGuests === 1 ? "guest" : "guests"} said yes to Community Day{totals.communityDayOnlyGuests > 0 ? ` · ${totals.communityDayOnlyGuests} Community Day only (${totals.communityDayOnlyTickets} ${totals.communityDayOnlyTickets === 1 ? "ticket" : "tickets"})` : ""}</span></div>
+        {totals.guestDetailsMissingRequests > 0 && <a className={`${styles.stat} ${styles.statFollowUp}`} href="#guest-details-missing"><span className={styles.statValue}>{totals.guestDetailsMissingRequests}</span><span className={styles.statLabel}>Guest details missing</span><span className={styles.statNote}>Parties of 2+ sent without the other guests’ details ({totals.guestDetailsMissingTickets} seats). Still counted: a follow-up, not a cancellation</span></a>}
         <div className={styles.stat}><span className={styles.statValue}>{nominations.length}</span><span className={styles.statLabel}>Nominations</span></div>
       </section>
 
@@ -262,6 +265,13 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
         <div className={styles.sectionHead}><h2 id="community-day-title">Community Day RSVPs</h2><span className={`${styles.badge} ${styles.badgeCommunity}`}>{totals.communityDayGuests} guests · {totals.communityDayTickets} tickets</span></div>
         <p className={styles.help}>Guests who chose Nevada Mental Health Day (Community Day) on an RSVP form: Wellness & Check-In 12–3 PM, Summit Sessions 2:30–6:30 PM. Those also attending the Awards Show carry both badges.</p>
         {communityDay.length === 0 ? <p className={styles.empty}>No Community Day RSVPs yet.</p> : <RsvpTable prefs={textPreferences} rows={communityDay} />}
+      </section>
+
+      {/* Oct 21 (Cherrial, owner approved): parties sent without every guest's details stay active and counted; this list is the follow-up. */}
+      <section className={styles.section} id="guest-details-missing" aria-labelledby="guest-details-missing-title">
+        <div className={styles.sectionHead}><h2 id="guest-details-missing-title">Guest details missing</h2><span className={`${styles.badge} ${styles.badgeFollowUp}`}>{missingDetails.length} requests · {totals.guestDetailsMissingTickets} seats</span></div>
+        <p className={styles.help}>Current requests for a party of two or more that did not include the other guests' name, email and phone (the older form did not ask). They stay on file and are counted in the totals above; ask the guest to send the form again with their guests (it updates their request instead of adding a second one).</p>
+        {missingDetails.length === 0 ? <p className={styles.empty}>Every current party request has its guests' details.</p> : <RsvpTable prefs={textPreferences} rows={missingDetails} />}
       </section>
 
       <section className={styles.section} id="nominations" aria-labelledby="nominations-title">

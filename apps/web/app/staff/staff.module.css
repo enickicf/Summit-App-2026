@@ -59,6 +59,7 @@
 .rowAction .linkButton { padding: 4px 10px; font-size: 12px; }
 .badgeAwards { background: #d9202a; color: #ffffff; }       /* Awards Show = red (owner, Sept 23) */
 .badgeCommunity { background: #2f5bd6; color: #ffffff; }    /* Community Day = blue (owner, Sept 23) */
+.badgeFollowUp { background: #fff1d6; color: #7a4a00; }     /* Oct 21: guest details missing = follow-up, not a cancellation */
 .badgeTennis { background: #2e8b57; color: #ffffff; }    /* Tennis (Thu Nov 5 site visit) */
 .badgeTea { background: #8a5cf6; color: #ffffff; }       /* High Tea (Thu Nov 5 site visit) */
 .statCommunity { background: #2f5bd6; border-color: #2f5bd6; color: #ffffff; }
@@ -135,3 +136,6 @@
 .notice { margin: 8px 0; padding: 10px 14px; border-radius: 8px; background: #eef6ee; border: 1px solid #b9dcc0; font-size: 14px; }
 .noticeError { margin: 8px 0; padding: 10px 14px; border-radius: 8px; background: #fff4f4; border: 1px solid #e3a7a7; color: #8a1c1c; font-size: 14px; }
 @media (max-width: 560px) { .guestForm .wide { grid-column: auto; } }
+
+/* Oct 21: the "Guest details missing" tile links to its follow-up list. */
+.statFollowUp { text-decoration: none; color: inherit; border-color: #e7b75f; }

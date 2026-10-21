@@ -1,4 +1,4 @@
-import { getSubmissionStore, type SubmissionStore } from "./store";
+import { getSubmissionStore, rsvpAttending, rsvpEvents, type RsvpAttending, type SubmissionStore } from "./store";
 
 // Owner (Oct 20, 2026): "No other numbers should be able to submit more than one application or RSVP ... However,
 // ambassador@inspiringchildren.org, music@inspiringchildren.org, my phone number ... and Cherrial Odell's phone number
@@ -93,6 +93,13 @@ function submissionsOf(seen: Seen, contact: Contact): AnyRecord[] {
 }
 
 const requestIdOf = (body: string) => { try { const parsed = JSON.parse(body) as Record<string, unknown>; return str(parsed.requestId) || str((parsed.requester as Record<string, unknown> | undefined)?.requestId); } catch { return ""; } };
+// Oct 21 (Cherrial, owner approved): the RSVP forms cover two events (Awards Show, Nevada Mental Health Day = Community
+// Day). The three-submission limit and the replacement both work per event: using the Nevada Mental Health Day form does
+// not use up a guest's Awards tries, and a new request only retires an older one that it fully covers.
+const bodyFields = (body: string): Record<string, unknown> => { try { const parsed = JSON.parse(body); return parsed && typeof parsed === "object" ? parsed as Record<string, unknown> : {}; } catch { return {}; } };
+const attendingOf = (value: unknown): RsvpAttending | undefined => (rsvpAttending as readonly string[]).includes(str(value)) ? str(value) as RsvpAttending : undefined;
+const rsvpEventsOf = (record: AnyRecord) => rsvpEvents({ attending: attendingOf(record.attending), communityDay: record.communityDay === true || record.communityDay === "on" || record.communityDay === "true" });
+const sharesEvent = (a: AnyRecord, b: AnyRecord) => { const events = new Set(rsvpEventsOf(a)); return rsvpEventsOf(b).some(event => events.has(event)); };
 const shortDate = (iso?: string) => { const date = iso ? new Date(iso) : null; return date && !Number.isNaN(date.getTime()) ? date.toLocaleDateString("en-US", { month: "long", day: "numeric", timeZone: "America/Los_Angeles" }) : ""; };
 
 /** Returns the 409 answer for a fourth submission, or null when the request may go ahead. Fails open on any error. */
@@ -102,7 +109,8 @@ export async function checkSubmissionLimit(endpoint: string, body: string, conta
   const email = normalEmail(contact.email), phone = normalPhone(contact.phone);
   if (!email && !phone) return null; // the handler refuses it for the missing details
   try {
-    const earlier = submissionsOf(await earlierSubmissions(endpoint, scope), contact);
+    const incoming = bodyFields(body);
+    const earlier = submissionsOf(await earlierSubmissions(endpoint, scope), contact).filter(record => endpoint !== "rsvp" || sharesEvent(record, incoming));
     const requestId = requestIdOf(body);
     if (requestId && earlier.some(record => record.id === requestId || str(record.invitationRequestId) === requestId)) return null; // a retry of the same request
     if (earlier.length < submissionsPerPerson) return null;
@@ -122,7 +130,8 @@ export async function checkSubmissionLimit(endpoint: string, body: string, conta
 export function rememberAccepted(endpoint: string, body: string, contact: Contact) {
   const seen = cache.get(endpoint);
   if (!seen || !limitedEndpoints[endpoint]) return;
-  remember(seen, contact, { id: requestIdOf(body) || `accepted-${Date.now()}`, submittedAt: new Date().toISOString() });
+  const fields = bodyFields(body);
+  remember(seen, contact, { id: requestIdOf(body) || `accepted-${Date.now()}`, submittedAt: new Date().toISOString(), attending: fields.attending, communityDay: fields.communityDay });
 }
 
 /**
@@ -153,16 +162,24 @@ export async function replaceEarlierSubmissions(endpoint: string, startedAt: str
     const fresh = lists.flatMap(({ kind, records }) => records.filter(record => mine(record) && isFresh(record)).map(record => ({ kind, record })));
     const older = lists.flatMap(({ kind, records }) => records.filter(record => mine(record) && !isFresh(record)).map(record => ({ kind, record })));
     if (!fresh.length || !older.length) return 0;
-    const newest = fresh.map(({ record }) => record).sort((a, b) => str(b.submittedAt).localeCompare(str(a.submittedAt)))[0]!;
-    const replacedBy = str(newest.invitationRequestId) || str(newest.id);
     const now = new Date().toISOString();
-    for (const { kind, record } of older) {
-      await store.add(kind as "rsvp", { ...record, removedAt: now, removedReason: `${replacedReason} (${shortDate(now) || now.slice(0, 10)})`, replacedBy } as never);
+    // A record is replaced only by a new record of the same kind that covers every event it asked about (an Awards-only
+    // or Nevada Mental Health Day-only update leaves the guest's request for the other event in place).
+    const newestOfKind = (kind: string) => fresh.filter(entry => entry.kind === kind).map(({ record }) => record).sort((a, b) => str(b.submittedAt).localeCompare(str(a.submittedAt)))[0];
+    const covers = (kind: string, newer: AnyRecord, record: AnyRecord) => kind !== "rsvp" || rsvpEventsOf(record).every(event => rsvpEventsOf(newer).includes(event));
+    const superseded = older.filter(({ kind, record }) => { const newer = newestOfKind(kind); return Boolean(newer) && covers(kind, newer!, record); });
+    for (const { kind, record } of superseded) {
+      const newer = newestOfKind(kind)!;
+      await store.add(kind as "rsvp", { ...record, removedAt: now, removedReason: `${replacedReason} (${shortDate(now) || now.slice(0, 10)})`, replacedBy: str(newer.invitationRequestId) || str(newer.id) } as never);
       replaced++;
     }
-    const first = [...older, ...fresh].map(({ record }) => str(record.firstSubmittedAt) || str(record.submittedAt)).sort()[0];
-    const replaces = older.flatMap(({ record }) => [str(record.id), ...(Array.isArray(record.replaces) ? record.replaces as string[] : [])]); // the whole chain of earlier versions
-    for (const { kind, record } of fresh) await store.add(kind as "rsvp", { ...record, firstSubmittedAt: first, replaces: [...new Set([...(Array.isArray(record.replaces) ? record.replaces as string[] : []), ...replaces])] } as never);
+    for (const { kind, record } of fresh) {
+      const mineOlder = superseded.filter(entry => entry.kind === kind);
+      if (!mineOlder.length) continue;
+      const first = [...mineOlder.map(({ record: earlier }) => earlier), record].map(entry => str(entry.firstSubmittedAt) || str(entry.submittedAt)).sort()[0];
+      const replaces = mineOlder.flatMap(({ record: earlier }) => [str(earlier.id), ...(Array.isArray(earlier.replaces) ? earlier.replaces as string[] : [])]); // the whole chain of earlier versions
+      await store.add(kind as "rsvp", { ...record, firstSubmittedAt: first, replaces: [...new Set([...(Array.isArray(record.replaces) ? record.replaces as string[] : []), ...replaces])] } as never);
+    }
     cache.delete(endpoint);
     return replaced;
   } catch (error) {

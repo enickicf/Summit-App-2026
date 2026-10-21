@@ -431,38 +431,72 @@ export function newRetrySafeSubmission<T extends object & { requestId?: string |
 // counting each email once (its latest request) so a repeat submission does not double count.
 // Oct 6: Awards Show tickets only; a "Community Day only" request counts under Community Day, not here.
 export const requestsTickets = (record: Pick<RsvpSubmission, "attendanceStatus"> & { attending?: RsvpAttending | undefined }) => record.attendanceStatus !== "declined" && wantsAwardsShow(record);
+// Oct 21 (Cherrial, owner approved): each event is counted on its own. A guest's Awards Show seats come from their newest
+// request that includes the Awards Show, and their Nevada Mental Health Day (Community Day) seats from their newest
+// request that includes that day, so sending the Nevada Mental Health Day-only form later never drops an earlier Awards
+// request (and an Awards-only form never drops an earlier Community Day request). Repeat requests for the same event
+// still count once (the newest wins). Before Oct 21 the portal kept only each guest's newest form of any kind.
+export type RsvpEvent = "awards" | "communityDay";
+export const rsvpEvents = (record: Pick<RsvpSubmission, "communityDay"> & { attending?: RsvpAttending | undefined }): RsvpEvent[] =>
+  [...(wantsAwardsShow(record) ? ["awards" as const] : []), ...(wantsCommunityDay(record) ? ["communityDay" as const] : [])];
+/** True when `newer` asks about every event `older` asked about (so `older` is fully superseded). */
+export const coversEvents = (newer: Parameters<typeof rsvpEvents>[0], older: Parameters<typeof rsvpEvents>[0]) => {
+  const covered = new Set(rsvpEvents(newer));
+  return rsvpEvents(older).every(event => covered.has(event));
+};
+// Oct 21 (Cherrial): a party of two or more sent without the other guests' details (the old form did not ask) is a
+// follow-up item, never a cancellation: the request stays active and counted.
+export const guestDetailsMissing = (record: Pick<RsvpSubmission, "guestCount" | "guests"> & { attendanceStatus?: AttendanceStatus }) => (record.attendanceStatus ?? "attending") === "attending" && record.guestCount > 1 && (record.guests?.length ?? 0) < record.guestCount - 1;
+function newestPerEmail(records: RsvpSubmission[], include: (record: RsvpSubmission) => boolean) {
+  const byEmail = new Map<string, RsvpSubmission>();
+  for (const record of byNewest(records)) {
+    const key = record.email.trim().toLowerCase();
+    if (include(record) && !byEmail.has(key)) byEmail.set(key, record);
+  }
+  return [...byEmail.values()];
+}
+/** The request that decides each guest's Awards Show seats and the one that decides their Community Day seats. */
+export function currentRequests(records: RsvpSubmission[]) {
+  return { awards: newestPerEmail(records, wantsAwardsShow), communityDay: newestPerEmail(records, wantsCommunityDay), latest: newestPerEmail(records, () => true) };
+}
 export function rsvpTotals(records: RsvpSubmission[]) {
-  const latestByEmail = new Map<string, RsvpSubmission>();
-  for (const record of byNewest(records)) if (!latestByEmail.has(record.email)) latestByEmail.set(record.email, record);
-  const latest = [...latestByEmail.values()];
+  const { awards, communityDay, latest } = currentRequests(records);
+  const awardsTickets = awards.filter(requestsTickets);
+  const awardsEmails = new Set(awardsTickets.map(record => record.email.trim().toLowerCase()));
   const count = (status: AttendanceStatus) => latest.filter(record => record.attendanceStatus === status).length;
-  const communityDay = latest.filter(wantsCommunityDay);
-  const communityDayOnly = communityDay.filter(record => !wantsAwardsShow(record));
-  const vip = latest.filter(record => record.vip);
-  const nami = latest.filter(record => record.partner === "nami");
-  const usta = latest.filter(record => record.partner === "usta");
-  const lakeLasVegas = latest.filter(record => record.tier === "lake-las-vegas");
+  const communityDayOnly = communityDay.filter(record => !awardsEmails.has(record.email.trim().toLowerCase()));
+  const seats = (rows: RsvpSubmission[]) => rows.reduce((total, record) => total + record.guestCount, 0);
+  // A group's guests: everyone with a current request through that group's form; its tickets: their Awards seats.
+  const group = (match: (record: RsvpSubmission) => boolean) => {
+    const people = new Set([...awards, ...communityDay].filter(match).map(record => record.email.trim().toLowerCase()));
+    return { guests: people.size, tickets: seats(awardsTickets.filter(match)) };
+  };
+  const vip = group(record => Boolean(record.vip)), nami = group(record => record.partner === "nami"), usta = group(record => record.partner === "usta"), lakeLasVegas = group(record => record.tier === "lake-las-vegas");
+  const missing = [...new Map([...awards, ...communityDay].filter(guestDetailsMissing).map(record => [record.id, record])).values()];
   return {
-    lakeLasVegasGuests: lakeLasVegas.length,
-    lakeLasVegasTickets: lakeLasVegas.filter(requestsTickets).reduce((total, record) => total + record.guestCount, 0),
-    namiGuests: nami.length,
-    namiTickets: nami.filter(requestsTickets).reduce((total, record) => total + record.guestCount, 0),
-    ustaGuests: usta.length,
-    ustaTickets: usta.filter(requestsTickets).reduce((total, record) => total + record.guestCount, 0),
-    vipGuests: vip.length,
-    vipTickets: vip.filter(requestsTickets).reduce((total, record) => total + record.guestCount, 0),
+    lakeLasVegasGuests: lakeLasVegas.guests,
+    lakeLasVegasTickets: lakeLasVegas.tickets,
+    namiGuests: nami.guests,
+    namiTickets: nami.tickets,
+    ustaGuests: usta.guests,
+    ustaTickets: usta.tickets,
+    vipGuests: vip.guests,
+    vipTickets: vip.tickets,
     formsSubmitted: records.length,
     uniqueGuests: latest.length,
-    ticketsRequested: latest.filter(requestsTickets).reduce((total, record) => total + record.guestCount, 0),
+    ticketsRequested: seats(awardsTickets),
     attending: count("attending"),
     moreInformation: count("needs_follow_up"),
     unable: count("declined"),
     // Community Day is asked separately (from Sept 23); requests before that have no answer and count as "no".
     communityDayGuests: communityDay.length,
-    communityDayTickets: communityDay.reduce((total, record) => total + record.guestCount, 0),
+    communityDayTickets: seats(communityDay),
     // Oct 6: guests coming to Community Day but not the Awards Show.
     communityDayOnlyGuests: communityDayOnly.length,
-    communityDayOnlyTickets: communityDayOnly.reduce((total, record) => total + record.guestCount, 0)
+    communityDayOnlyTickets: seats(communityDayOnly),
+    // Oct 21: current requests for a party of 2+ without the other guests' details (follow-up, still counted).
+    guestDetailsMissingRequests: missing.length,
+    guestDetailsMissingTickets: seats(missing)
   };
 }
 
@@ -486,7 +520,7 @@ export function rsvpForm(record: Pick<RsvpSubmission, "vip" | "partner" | "tier"
 export const rsvpExportForms = { "uber-vip": "Uber VIP", vip: "VIP", "nami-vip": "NAMI VIP", "lake-las-vegas-vip": "Lake Las Vegas VIP", "lake-las-vegas": "Lake Las Vegas", nami: "NAMI", usta: "USTA", standard: "Standard" } as const;
 export type RsvpExportForm = keyof typeof rsvpExportForms;
 export const rsvpsOfForm = (records: RsvpSubmission[], form: RsvpExportForm) => records.filter(record => rsvpForm(record) === rsvpExportForms[form]);
-export const withRsvpForm = (records: RsvpSubmission[], textPreferences: readonly TextPreferenceRecord[] = []) => records.map(record => ({ ...record, form: rsvpForm(record), attendingLabel: record.attending ? rsvpAttendingLabels[record.attending] : (record.communityDay ? rsvpAttendingLabels.both : ""), heardFromLabel: record.heardFrom ? rsvpHeardFromLabels[record.heardFrom] : "", guestDetails: (record.guests ?? []).map(partyGuestLine).join("; "), waiverRecord: JSON.stringify(record.eventWaiver ?? null), waiverStatus: waiverSummary(record.eventWaiver), guestWaiverStatus: (record.guests ?? []).map(g=>`${g.name}: ${waiverSummary(g.eventWaiver)}`).join("; "), ...textConsentColumns(record, textPreferences) }));
+export const withRsvpForm = (records: RsvpSubmission[], textPreferences: readonly TextPreferenceRecord[] = []) => records.map(record => ({ ...record, form: rsvpForm(record), attendingLabel: record.attending ? rsvpAttendingLabels[record.attending] : (record.communityDay ? rsvpAttendingLabels.both : ""), heardFromLabel: record.heardFrom ? rsvpHeardFromLabels[record.heardFrom] : "", guestDetails: (record.guests ?? []).map(partyGuestLine).join("; "), guestDetailsMissing: guestDetailsMissing(record) ? "yes" : "", waiverRecord: JSON.stringify(record.eventWaiver ?? null), waiverStatus: waiverSummary(record.eventWaiver), guestWaiverStatus: (record.guests ?? []).map(g=>`${g.name}: ${waiverSummary(g.eventWaiver)}`).join("; "), ...textConsentColumns(record, textPreferences) }));
 // Owner (Sept 30): the mass RSVP lists never include a VIP request, and the VIP portal reads only VIP requests.
 // Owner (Oct 1, 2026, superseding the Sept 30 split): "make the backend of the VIP RSVP the same now since
 // we are upping security, but make the forms still different". All RSVPs, VIP or not, live under "rsvp" and
@@ -495,7 +529,31 @@ export const withRsvpForm = (records: RsvpSubmission[], textPreferences: readonl
 export async function listAllRsvps(store: SubmissionStore): Promise<RsvpSubmission[]> {
   const parked = await store.list("vipRsvp");
   for (const record of parked) { await store.add("rsvp", { ...record, vip: true }); await store.delete("vipRsvp", record); }
-  return store.list("rsvp");
+  return restoreOverReplaced(store, await store.list("rsvp"));
+}
+// Oct 21 (Cherrial, owner approved): between the Oct 21 morning release and this fix a guest's new RSVP retired their
+// earlier one even when it was for a different event (e.g. an Awards request retired by a later Nevada Mental Health
+// Day-only form, or a both-events request by an Awards-only update). Any record retired that way comes back here,
+// marked restoredAt / restoredReason; a replacement that covered every event of the older request stands.
+const replacedReasonPrefix = "Replaced by an updated submission";
+export async function restoreOverReplaced(store: SubmissionStore, records: RsvpSubmission[]): Promise<RsvpSubmission[]> {
+  try {
+    const out = [...records];
+    for (let index = 0; index < out.length; index++) {
+      const record = out[index]! as RsvpSubmission & { replacedBy?: string };
+      if (!record.removedAt || !record.replacedBy || !(record.removedReason ?? "").startsWith(replacedReasonPrefix)) continue;
+      const newer = out.find(other => other.id === record.replacedBy || other.invitationRequestId === record.replacedBy);
+      if (!newer || coversEvents(newer, record)) continue;
+      const restored = { ...record, restoredAt: new Date().toISOString(), restoredReason: `Kept: the newer request (${newer.id}) was for a different event` } as RsvpSubmission & Record<string, unknown>;
+      delete restored.removedAt; delete restored.removedReason; delete restored.replacedBy;
+      await store.add("rsvp", restored as RsvpSubmission);
+      out[index] = restored as RsvpSubmission;
+    }
+    return out;
+  } catch (error) {
+    console.error("[staff-store] could not restore requests replaced by a different event", error instanceof Error ? error.message : error);
+    return records;
+  }
 }
 export const listMassRsvps = listAllRsvps; // kept name for older imports
 // VIP requests live under their own kind. A VIP request stored with the mass RSVPs (the few hours on
@@ -521,7 +579,7 @@ function csvCell(value: unknown): string {
 export function toCsv(rows: Record<string, unknown>[], columns: string[]): string {
   return [columns.join(","), ...rows.map(row => columns.map(column => csvCell(row[column])).join(","))].join("\r\n") + "\r\n";
 }
-export const rsvpCsvColumns = ["submittedAt", "form", "name", "email", "phone", "organization", "professionalRole", "invitedBy", "heardFromLabel", "vip", "partner", "tier", "attendanceStatus", "attendingLabel", "communityDay", "guestCount", "guestDetails", "groupWaiverAttestation", "waiverStatus", "guestWaiverStatus", "waiverRecord", ...textConsentCsvColumns, "notes", "invitationLevel", "invitationRequestId", "requesterName", "requesterEmail", "requesterPhone", "requesterOrganization", "requesterProfessionalRole", "source", "addedBy", "id", "removedAt", "removedReason"];
+export const rsvpCsvColumns = ["submittedAt", "form", "name", "email", "phone", "organization", "professionalRole", "invitedBy", "heardFromLabel", "vip", "partner", "tier", "attendanceStatus", "attendingLabel", "communityDay", "guestCount", "guestDetails", "guestDetailsMissing", "groupWaiverAttestation", "waiverStatus", "guestWaiverStatus", "waiverRecord", ...textConsentCsvColumns, "notes", "invitationLevel", "invitationRequestId", "requesterName", "requesterEmail", "requesterPhone", "requesterOrganization", "requesterProfessionalRole", "source", "addedBy", "id", "removedAt", "removedReason"];
 
 // Which part(s) of the evening a request covers: the Awards Show (their response) and/or Community Day (the toggle).
 export function comingTo(record: Pick<RsvpSubmission, "attendanceStatus" | "communityDay"> & { attending?: RsvpAttending | undefined }): ("awards" | "communityDay")[] {

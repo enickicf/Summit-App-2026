@@ -32,7 +32,7 @@ describe("staff portal store and totals", () => {
       rsvp({ id: "r4", submittedAt: "2026-09-19T10:00:00.000Z", email: "seth@example.com", attendanceStatus: "needs_follow_up", guestCount: 2 }),
       rsvp({ id: "r5", submittedAt: "2026-09-18T10:00:00.000Z", email: "al@example.com", attendanceStatus: "declined" })
     ]);
-    expect(totals).toEqual({ lakeLasVegasGuests: 0, lakeLasVegasTickets: 0, namiGuests: 0, namiTickets: 0, ustaGuests: 0, ustaTickets: 0, vipGuests: 0, vipTickets: 0, formsSubmitted: 5, uniqueGuests: 4, ticketsRequested: 9, attending: 2, moreInformation: 1, unable: 1, communityDayGuests: 0, communityDayTickets: 0, communityDayOnlyGuests: 0, communityDayOnlyTickets: 0 });
+    expect(totals).toEqual({ lakeLasVegasGuests: 0, lakeLasVegasTickets: 0, namiGuests: 0, namiTickets: 0, ustaGuests: 0, ustaTickets: 0, vipGuests: 0, vipTickets: 0, formsSubmitted: 5, uniqueGuests: 4, ticketsRequested: 9, attending: 2, moreInformation: 1, unable: 1, communityDayGuests: 0, communityDayTickets: 0, communityDayOnlyGuests: 0, communityDayOnlyTickets: 0, guestDetailsMissingRequests: 2, guestDetailsMissingTickets: 7 }); // Oct 21: Lisa (3) and Brian (4) sent no guest details
     // Community Day is its own count: party sizes of the latest request per email that switched it on.
     const withCommunity = rsvpTotals([rsvp({ communityDay: true }), rsvp({ id: "c2", email: "brian@example.com", attendanceStatus: "declined", communityDay: true, guestCount: 2 })]);
     expect(withCommunity).toMatchObject({ ticketsRequested: 3, communityDayGuests: 2, communityDayTickets: 5 });
@@ -142,7 +142,7 @@ describe("staff portal page", () => {
     const brianRow = html.slice(html.indexOf("Brian Goldfus"), html.indexOf('id="community-day"'));
     expect(brianRow).toMatch(/badgeAwards[^>]*>Awards</);
     expect(brianRow).not.toMatch(/badgeCommunity[^>]*>Community Day</);
-    const community = html.slice(html.indexOf('id="community-day"'), html.indexOf('id="nominations"'));
+    const community = html.slice(html.indexOf('id="community-day"'), html.indexOf('id="guest-details-missing"')); // Oct 21: the follow-up list now sits between Community Day and Nominations
     expect(community).toContain("Lisa Lundt");
     expect(community).not.toContain("Brian Goldfus");
     expect(stats).toMatch(/>3<[\s\S]*?Community Day tickets/);
