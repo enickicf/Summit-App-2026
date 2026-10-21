@@ -2963,5 +2963,40 @@
     "width": 900,
     "height": 900,
     "bytes": 69127
+  },
+  "/2026-partners/farmhouse-fresh.png": {
+    "width": 1600,
+    "height": 430,
+    "bytes": 83739
+  },
+  "/2026-partners/ghostbed.png": {
+    "width": 1600,
+    "height": 217,
+    "bytes": 47786
+  },
+  "/2026-partners/kendra-scott.png": {
+    "width": 1600,
+    "height": 121,
+    "bytes": 31408
+  },
+  "/2026-partners/lasting-smiles.png": {
+    "width": 1600,
+    "height": 288,
+    "bytes": 35273
+  },
+  "/2026-partners/minky-couture.png": {
+    "width": 1600,
+    "height": 325,
+    "bytes": 78350
+  },
+  "/2026-partners/reimagining-grief.png": {
+    "width": 1100,
+    "height": 1700,
+    "bytes": 2235017
+  },
+  "/2026-partners/vielight.png": {
+    "width": 1600,
+    "height": 362,
+    "bytes": 39536
   }
 }

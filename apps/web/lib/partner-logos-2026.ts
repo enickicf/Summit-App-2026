@@ -93,7 +93,17 @@ const partnerLogoFiles: Record<string, string> = {
   "moon valley plants": "/2026-partners/moon-valley-nurseries.png",
   "moon valley nurseries": "/2026-partners/moon-valley-nurseries.png",
   // One card for the two By Dzign records; lib/partner-display-2026.ts names it "By Dzign".
-  "by dzign": "/2026-partners/by-dzign.png"
+  "by dzign": "/2026-partners/by-dzign.png",
+  // Oct 20 Airtable re-read: new Confirmed partners. Official logos from each brand's own site (Minky Couture =
+  // softminkyblankets.com; Lasting Smiles = lastingsmiles.org, the lip balm brand); Reimagining Grief is Kate Doerge's book,
+  // shown by its cover (Hay House, via Penguin Random House). Sources in /private/tmp/claude-501/partner-logos-oct20/manifest.json.
+  "farmhouse fresh": "/2026-partners/farmhouse-fresh.png",
+  "minky couture": "/2026-partners/minky-couture.png",
+  "lasting smiles": "/2026-partners/lasting-smiles.png",
+  "ghostbed": "/2026-partners/ghostbed.png",
+  "kendra scott": "/2026-partners/kendra-scott.png",
+  "reimagining grief": "/2026-partners/reimagining-grief.png",
+  "vielight": "/2026-partners/vielight.png"
 };
 
 export function partnerLogoKey(name: string): string {
