@@ -10,6 +10,14 @@ export type PortraitOverride = { file: string; source: string; airtableBytes?: n
 export const portraitOverrides2026: Record<string, PortraitOverride> = {
   // Oct 20, 2026: Airtable headshots of confirmed people who had none on the site (Airtable Talent re-read; face-centred crops).
   "abraham kaoud": { file: "/2026-headshots/portraits/abraham-kaoud.jpg", source: "airtable" }, // Oct 21: his Airtable headshot (1205x1306), face-centred
+  // Oct 21, 2026 (owner: "get online and ... figure out who they are their bios and headshots"; the guests agreed by email):
+  // photos from each person's own organization / press page, face-centred. Christina Steil = Sarah Steil's mother
+  // (Airtable occupation), Jill Hawley = Colorado youth-outcomes leader (sent by Nick Kislinger, who works on Colorado's
+  // mental health field); Zak Levitt and Jayson Ainsworth are the best public match for the Airtable details (owner to confirm).
+  "christina steil": { file: "/2026-headshots/portraits/christina-steil.jpg", source: "web", credit: "Hinsdale Magazine Group, https://hinsdalemag.com/dr-christina-steil/" },
+  "jill hawley": { file: "/2026-headshots/portraits/jill-hawley.jpg", source: "web", credit: "Gary Community Ventures team page, https://garycommunity.org/team/jill-hawley/" },
+  "zak levitt": { file: "/2026-headshots/portraits/zak-levitt.jpg", source: "web", credit: "Ballen Studios press release via Podnews, https://podnews.net/press-release/ballen-zak-levitt" },
+  "jayson ainsworth": { file: "/2026-headshots/portraits/jayson-ainsworth.jpg", source: "web", credit: "Momentum Recovery employee spotlight, https://www.momentumrecovery.com/blog/employee-spotlight-jayson-ainsworth" },
   "alex accetta": { file: "/2026-headshots/portraits/alex-accetta.jpg", source: "airtable" },
   "basak kizilisik": { file: "/2026-headshots/portraits/basak-kizilisik-2.jpg", source: "web" }, // Oct 20: sharper copy of their photo from their own organization / press page (hires agent)
   "blake bonner": { file: "/2026-headshots/portraits/blake-bonner.jpg", source: "airtable" },
@@ -191,7 +199,8 @@ export function portrait2026(name: string): string | null | undefined {
 
 // Owner (Sept 21, late): anyone without a photo is left off the site for now, and Hal Fisher is left off
 // until a proper headshot is supplied. Their Airtable records are untouched; they return when this changes.
-export const hiddenFromSite2026 = new Set(["hal fisher"].map(personNameKey));
+// Oct 21 (owner): Hayden Harveston stays off the site.
+export const hiddenFromSite2026 = new Set(["hal fisher", "hayden harveston"].map(personNameKey));
 // Owner (Sept 22): Jay & Erica McGraw were credited as founders before a photo existed (name cards).
 // Owner (Oct 7): the owner supplied a headshot of each (work/new-headshots-20261007/owner-upload-*.jpg), so both are
 // photo cards now (entries above) and nobody is listed without a photo. The set stays for the next such case.

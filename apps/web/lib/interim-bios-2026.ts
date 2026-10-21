@@ -7,10 +7,10 @@ const interimBios: Record<string, string> = {
   // Oct 20, 2026: Julie Scelfo has no Airtable bio yet; this line is taken from her organization's own about page
   // (https://wearemama.org/about/). Her Airtable bio replaces it as soon as one is entered.
   // Oct 20, 2026 Airtable re-read: role-only lines (only what Airtable records) for listed people without a bio yet.
-  "Christina Steil": "Christina Steil is a confirmed guest of the 2026 Not Alone Summit.",
+  "Christina Steil": "Dr. Christina Steil is a board-certified dermatologist who leads CSC Steil Dermatology, with offices in Hinsdale and Downers Grove, Illinois. A graduate of Washington University in St. Louis and the University of Chicago Pritzker School of Medicine, she completed her dermatology residency at Cook County Hospital in Chicago, where she served as chief resident. Her practice centers on prevention and patient education.", // Oct 21: from cscdermatology.com and Hinsdale Magazine
   "Dana Moskowitz": "Dana Moskowitz is a Founder of the 2026 Not Alone Summit, attending as a guest of Jeneva Bell.",
-  "Zak Levitt": "Zak Levitt is part of the 2026 Not Alone Summit lineup.",
-  "Jill Hawley": "Jill Hawley is part of the 2026 Not Alone Summit lineup.",
+  "Zak Levitt": "Zak Levitt is an award-winning documentary filmmaker and audio producer. He made films for ESPN's 30 for 30, including The Dream Team and The Doctor, founded C13 Originals as Executive Vice President of Production at Cadence13, and created chart-topping podcasts including Root of Evil and The Sunshine Place before becoming Head of Production at Ballen Studios. His films have won two Emmy Awards and a Peabody Award.", // Oct 21: from the Ballen Studios press release (Podnews) and his IMDb credits
+  "Jill Hawley": "Jill Hawley is Chief Impact Officer at Gary Community Ventures, where she leads the philanthropy team's work to improve outcomes for Colorado children and families. She was previously a Senior Program Officer on the K-12 team at the Bill & Melinda Gates Foundation, Associate Chief of Academics at Denver Public Schools and Associate Commissioner of Achievement and Strategy at the Colorado Department of Education. She holds an MBA from Harvard Business School and a bachelor's degree in public policy from Stanford University.", // Oct 21: from garycommunity.org/team/jill-hawley
   "Julie Scelfo": "Julie Scelfo is an award-winning journalist, former New York Times staff writer and media ecologist who founded Mothers Against Media Addiction (MAMA). Under her leadership MAMA has grown to nearly 50 chapters in 23 states and helped pass first-of-its-kind child online-safety laws in New York and California.",
   // Oct 3, 2026 Airtable re-read: role-only lines for the new listable records that have no Airtable bio yet.
   "Laura Brady": "Laura Brady is a confirmed guest of the 2026 Not Alone Summit with Boxing Bullies.",
@@ -18,7 +18,7 @@ const interimBios: Record<string, string> = {
   "Lia Shelesh": "Lia Shelesh is a confirmed guest of the 2026 Not Alone Summit.",
   "Theresa Magnus": "Theresa Magnus is a confirmed guest of the 2026 Not Alone Summit.",
   "Lauren Ann": "Lauren Ann is a confirmed guest of the 2026 Not Alone Summit.",
-  "Donnelly - Expert": "Donnelly - Expert is a confirmed guest of the 2026 Not Alone Summit.",
+  "Jayson Ainsworth": "Jayson Ainsworth is a licensed clinical social worker and licensed clinical addictions specialist. He is Associate Clinical Director of the Creek program at Momentum Recovery in Wilmington, North Carolina, and joins the Not Alone Summit with The Ultimate Matchmaker team.", // Oct 21: from momentumrecovery.com; Airtable renamed the "Donnelly - Expert" row
   "Julie Catineau": "Julie Catineau is a confirmed guest of the 2026 Not Alone Summit.",
   "Blake Bonner": "Blake Bonner is a confirmed guest of the 2026 Not Alone Summit.",
   "Caitlin Bonner": "Caitlin Bonner is a confirmed guest of the 2026 Not Alone Summit.",

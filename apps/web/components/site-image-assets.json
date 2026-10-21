@@ -3003,5 +3003,25 @@
     "width": 948,
     "height": 900,
     "bytes": 113715
+  },
+  "/2026-headshots/portraits/jill-hawley.jpg": {
+    "width": 948,
+    "height": 900,
+    "bytes": 95527
+  },
+  "/2026-headshots/portraits/christina-steil.jpg": {
+    "width": 948,
+    "height": 900,
+    "bytes": 89520
+  },
+  "/2026-headshots/portraits/jayson-ainsworth.jpg": {
+    "width": 948,
+    "height": 900,
+    "bytes": 113665
+  },
+  "/2026-headshots/portraits/zak-levitt.jpg": {
+    "width": 948,
+    "height": 900,
+    "bytes": 76619
   }
 }

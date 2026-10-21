@@ -18,7 +18,7 @@ const ryanTitle = "Founder, Inspiring Children Foundation and Not Alone";
 // Foundation and Not Alone'."
 describe("owner title override (Ryan, Oct 8)", () => {
   it("is keyed by the normalized name and covers Ryan and Paige", () => {
-    expect(titleOverrides2026).toEqual(new Map([["ryan wolfington", ryanTitle], ["paige neuenschwander", "ICF Partnerships Manager"], ["julie scelfo", "Founder & Executive Director, Mothers Against Media Addiction (MAMA)"], ["christopher moore", "Finance Executive & Fractional CFO"]]));
+    expect(titleOverrides2026).toEqual(new Map([["ryan wolfington", ryanTitle], ["paige neuenschwander", "ICF Partnerships Manager"], ["julie scelfo", "Founder & Executive Director, Mothers Against Media Addiction (MAMA)"], ["christina steil", "Board-Certified Dermatologist, CSC Steil Dermatology"], ["jill hawley", "Chief Impact Officer, Gary Community Ventures"], ["zak levitt", "Documentary Filmmaker & Podcast Producer"], ["jayson ainsworth", "Licensed Clinical Social Worker (LCSW, LCAS)"], ["christopher moore", "Finance Executive & Fractional CFO"]]));
     expect(titleOverride2026("Ryan Wolfington")).toBe(ryanTitle);
     expect(titleOverride2026("  RYAN  Wolfington ")).toBe(ryanTitle);
     expect(titleOverride2026("Isabella Wolfington")).toBeUndefined();
