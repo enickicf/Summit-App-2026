@@ -99,3 +99,14 @@
   .communityDayHeader .communityDayNavigation { gap:11px; padding-left:8px; padding-right:8px; }
   .communityDayHeader .communityDayNavigation a { font-size:12px; }
 }
+/* Oct 21, 2026 (Nick: "the menu nav links at the top appear small on Mobile"; owner: "moving the donate button down to
+   top right corner of video and then spreading the other tabs more apart and bigger across with the excess room"):
+   on phones the Donate sticker leaves the menu row and sits just under the bar at the top right, over the corner of
+   the hero film (or whatever the page opens with); the five links spread across the whole row in larger type.
+   The row no longer scrolls sideways (it always fits now), so nothing clips the sticker. */
+@media(max-width:600px) {
+  .summitHeader .navigation { flex-wrap:nowrap; justify-content:space-between; gap:0 4px; padding:8px 14px; overflow:visible; }
+  .summitHeader .navigation a { font-size:clamp(12.5px,3.9vw,16px); padding:10px 0; letter-spacing:0; }
+  .summitHeader .navigation .donateButton { position:absolute; top:calc(100% + 12px); right:12px; transform:none; z-index:30; gap:6px; padding:8px 14px; font-size:14px; letter-spacing:0; box-shadow:0 6px 18px rgb(0 0 0 / 28%); }
+  .summitHeader .navigation .donateButton svg { display:inline-block; width:14px; height:14px; }
+}

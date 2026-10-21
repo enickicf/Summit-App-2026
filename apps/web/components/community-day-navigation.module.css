@@ -42,3 +42,11 @@
   .header .nav.nav { gap:0 3px; padding:8px 2px; }
   .header .nav.nav .donate { padding:4px 6px; }
 }
+/* Oct 21, 2026 (Nick + owner): phones: Donate moves to the top-right corner just under the bar (over the hero's corner);
+   the four links spread across the row in larger type; the row no longer scrolls sideways. */
+@media (max-width:600px) {
+  .header .nav.nav { position:relative; flex-wrap:nowrap; justify-content:space-between; gap:0 6px; padding:8px 14px; overflow:visible; }
+  .header .nav.nav .link { font-size:clamp(11.5px,3.6vw,15px); padding:10px 0; letter-spacing:0; }
+  .header .nav.nav .donate { position:absolute; top:calc(100% + 12px); right:12px; transform:none; z-index:30; margin-left:0; gap:6px; padding:8px 14px; font-size:14px; box-shadow:0 6px 18px rgb(0 0 0 / 28%); }
+  .header .nav.nav .donate svg { display:inline-block; width:14px; height:14px; }
+}
