@@ -40,8 +40,8 @@ export async function handleRsvpPost(request: Request, store?: SubmissionStore, 
   if (payload.phone.replace(/\D/g, "").length < 7 || partyGuestsIncomplete(payload)) return NextResponse.json({ ok: false, error: partyGuestsMessage }, { status: 400, headers });
   if(!payload.organization.trim()||!payload.professionalRole.trim()||!payload.invitedBy.trim())return NextResponse.json({ok:false,error:"Please complete your organization, title and who invited you."},{status:400,headers});
   if((payload.guests??[]).some(guest=>!guest.organization?.trim()||!guest.professionalRole?.trim()))return NextResponse.json({ok:false,error:partyGuestsMessage},{status:400,headers});
-  const partyEmails=[payload.email,...(payload.guests??[]).map(guest=>guest.email)];
-  if(new Set(partyEmails).size!==partyEmails.length)return NextResponse.json({ok:false,error:"Please use a different email address for every person in your party."},{status:400,headers});
+  // Oct 21 (owner: "loosen any guardrails that cause errors like that"): a family sharing one email address is accepted;
+  // the request is stored as sent (Angela Luna and Hanadi Nadeem were refused once for this on Oct 20-21).
   const partyLimit=payload.attending==="community-day"?2:10;
   if(payload.guestCount>partyLimit)return NextResponse.json({ok:false,error:`This RSVP allows up to ${partyLimit} people total.`},{status:400,headers});
   if(payload.guestCount>1&&!payload.groupWaiverAttestation)return NextResponse.json({ok:false,error:"Please complete the required group agreement for every guest in your request."},{status:400,headers});
