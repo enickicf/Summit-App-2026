@@ -492,3 +492,13 @@
 .summit.summit .hero.heroWithCorner .heroCopy > :last-child { margin-bottom:0; }
 /* (Oct 11) The hero date and venue in the warm ExtraBold weight, like the rest of the hero (2026 hero only). */
 .summit.summit .hero.heroWithCorner .heroCorner .heroEyebrowDate, .summit.summit .hero.heroWithCorner .heroCorner .heroDateVenue { font-weight:800; }
+
+/* Owner (Oct 22): the closing statement under the producer credits (#site-statement, original-event-page.module.css)
+   keeps its own type size on the Summit band, which otherwise sets every paragraph there to 14px; the opening
+   sentence reads in the page's dark ink. */
+.summit.summit > section:global(#producers) :global(#site-statement) p { font-size: 16px; line-height: 1.7; }
+.summit.summit > section:global(#producers) :global(#site-statement) p:first-child { font-size: 19px; line-height: 1.55; color: #1a1e38; }
+@media (max-width: 600px) {
+  .summit.summit > section:global(#producers) :global(#site-statement) p { font-size: 15px; }
+  .summit.summit > section:global(#producers) :global(#site-statement) p:first-child { font-size: 17px; }
+}
