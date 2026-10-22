@@ -1,4 +1,4 @@
-import { eventWaiverSchema, waiverMatchesAttendee, waiverReadyForSubmission } from "../event-waiver";
+import { eventWaiverSchema, waiverMatchesAttendee, waiverProblemMessage, waiverReadyForSubmission } from "../event-waiver";
 import { createHash } from "node:crypto";
 import { z } from "zod";
 import { rsvpPayloadSchema, closingDinnerPayloadSchema, type SubmissionStore } from "./store";
@@ -18,7 +18,7 @@ export const invitationSchema = z.object({
   groupWaiverAttestation: z.boolean().default(false), groupEventTextConsent: z.boolean().optional(), notes: z.string().trim().max(600).default(""), textConsent: z.boolean().default(false), website: z.string().max(200).default("")
 }).superRefine((p, ctx) => {
   if (!p.day.length && !p.awards.length && !p.dinner.length) ctx.addIssue({ code: "custom", message: "Choose at least one event." });
-  if (!waiverReadyForSubmission(p.requester.eventWaiver,p.requester.name)) ctx.addIssue({ code: "custom", message: "Please personally accept every agreement and sign the waiver before submitting." });
+  if (!waiverReadyForSubmission(p.requester.eventWaiver,p.requester.name)) ctx.addIssue({ code: "custom", message: waiverProblemMessage(p.requester.eventWaiver,p.requester.name) });
   if (p.level === "vip" && p.dinner.length) ctx.addIssue({ code: "custom", message: "Closing dinner is available only on the Uber VIP invitation." });
   const known = new Map<string, string>();
   for (const event of ["day", "awards", "dinner"] as const) {

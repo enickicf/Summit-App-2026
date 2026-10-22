@@ -1,5 +1,5 @@
 import { withSubmissionInbox } from "../../../lib/staff/submission-inbox";
-import { waiverMatchesAttendee, waiverReadyForSubmission } from "../../../lib/event-waiver";
+import { waiverMatchesAttendee, waiverProblemMessage, waiverReadyForSubmission } from "../../../lib/event-waiver";
 import { NextResponse } from "next/server";
 import { getSubmissionStore, missingVipFields, newRetrySafeSubmission, partyGuestsIncomplete, rsvpPayloadSchema, type SubmissionStore } from "../../../lib/staff/store";
 import { sendRsvpConfirmation, type Sender } from "../../../lib/staff/rsvp-email";
@@ -45,7 +45,7 @@ export async function handleRsvpPost(request: Request, store?: SubmissionStore, 
   const partyLimit=payload.attending==="community-day"?2:10;
   if(payload.guestCount>partyLimit)return NextResponse.json({ok:false,error:`This RSVP allows up to ${partyLimit} people total.`},{status:400,headers});
   if(payload.guestCount>1&&!payload.groupWaiverAttestation)return NextResponse.json({ok:false,error:"Please complete the required group agreement for every guest in your request."},{status:400,headers});
-  if(!waiverReadyForSubmission(payload.eventWaiver,payload.name))return NextResponse.json({ok:false,error:"Please personally accept every agreement and sign the waiver before submitting."},{status:400,headers});
+  if(!waiverReadyForSubmission(payload.eventWaiver,payload.name))return NextResponse.json({ok:false,error:waiverProblemMessage(payload.eventWaiver,payload.name)},{status:400,headers});
   const missing = missingVipFields(payload);
   if (missing.length) return NextResponse.json({ ok: false, error: `Please add ${missing.join(", ")} so the team can seat you.` }, { status: 400, headers });
   const target = store ?? await getSubmissionStore();

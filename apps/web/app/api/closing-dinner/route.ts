@@ -1,6 +1,6 @@
 import { withSubmissionInbox } from "../../../lib/staff/submission-inbox";
 import {dinnerWaiverLinks,sendWaiverLinks} from "../../../lib/staff/attendee-waiver";
-import { waiverMatchesAttendee, waiverReadyForSubmission } from "../../../lib/event-waiver";
+import { waiverMatchesAttendee, waiverProblemMessage, waiverReadyForSubmission } from "../../../lib/event-waiver";
 import { sendRequestReceipt } from "../../../lib/staff/request-receipt";
 import type { Sender } from "../../../lib/staff/rsvp-email";
 import { NextResponse } from "next/server";
@@ -39,7 +39,7 @@ export async function handleClosingDinnerPost(request: Request, store?: Submissi
   const { website, ...payload } = parsed.data;
   if (!waiverMatchesAttendee(payload.eventWaiver,payload.name)) return NextResponse.json({ok:false,error:"The waiver must be signed personally by the named attendee."},{status:400,headers});
   if (website) return NextResponse.json({ ok: true }, { status: 201, headers }); // honeypot: pretend success, store nothing
-  if (!waiverReadyForSubmission(payload.eventWaiver,payload.name)) return NextResponse.json({ok:false,error:"Please personally accept every agreement and sign the waiver before submitting."},{status:400,headers});
+  if (!waiverReadyForSubmission(payload.eventWaiver,payload.name)) return NextResponse.json({ok:false,error:waiverProblemMessage(payload.eventWaiver,payload.name)},{status:400,headers});
   if (payload.bringingGuest && !waiverMatchesAttendee(payload.guestEventWaiver,payload.guestName)) return NextResponse.json({ok:false,error:"The guest waiver must be signed personally by the named guest."},{status:400,headers});
   if (payload.bringingGuest && !payload.groupWaiverAttestation) return NextResponse.json({ok:false,error:"Please complete the required group agreement for your guest."},{status:400,headers});
   const problem = closingDinnerGuestProblem(payload);
