@@ -6,9 +6,9 @@
 // - the Jewel quote stays on the Summit page.
 // The text is used exactly as written. The 2025 archive, the Nevada Mental Health Day page, the schedule, the
 // people sections and the RSVP forms are not touched by it.
-// Owner (Oct 22): Ryan's statement is off the Summit page for now; it goes back on Oct 23 at 4:45 PM PT.
-// To put it back, set this to true and deploy.
-export const summitStatementShown = false;
+// Oct 22: briefly switched off by mistake (the owner's "Ryan's statement" meant the nonpartisan notice, not this
+// paragraph); back on the same evening. Set to false to hide the paragraph.
+export const summitStatementShown = true;
 
 export const summitNarrative2026 = {
   intro: [

@@ -1,5 +1,5 @@
 import { InvitationBadge } from "./invitation-badge";
-import { siteStatement2026 } from "../lib/site-statement-2026";
+import { siteStatement2026, siteStatementShown } from "../lib/site-statement-2026";
 import Link from "next/link";
 import { displayTitle2026, icfAlumni2026 } from "../lib/title-overrides-2026";
 import { airtableTalent2026 } from "../lib/airtable-talent-2026";
@@ -241,7 +241,7 @@ function ProducerCredits2026({ confirmedNames, profiles, awardsContext = false, 
       })}
     </div></div>)}
     {/* Owner (Oct 22): a closing statement under the credits that reads as part of the page (lib/site-statement-2026.ts). */}
-    {siteStatement2026.shown && <div className={styles.siteStatement} id="site-statement">
+    {siteStatementShown() && <div className={styles.siteStatement} id="site-statement">
       {siteStatement2026.paragraphs.map((paragraph, index) => <p key={paragraph} className={index === 0 ? styles.siteStatementLead : undefined}>{paragraph}</p>)}
     </div>}
   </section>;
