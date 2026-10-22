@@ -1,0 +1,18 @@
+/* Oct 20 (Aphrah): podcast logos + about on the Awards page, in the Awards look (black, champagne gold, white type) and
+   the lineup's steps: 4 a row on computers, 3 on tablets, 2 on phones. */
+.section { background: #000; color: #fff; padding: 72px 24px 64px; border-top: 1px solid rgb(210 180 123 / 18%); }
+.section h2 { max-width: 1180px; margin: 0 auto; text-align: center; font-family: "Original Poppins", Arial, sans-serif; font-weight: 800; font-size: 38px; line-height: 1.15; }
+.section .announcement { max-width: 800px; margin: 16px auto 36px; text-align: center; color: #e6d5fb; font-size: 18px; font-weight: 700; }
+.grid { list-style: none; margin: 0 auto; padding: 0; max-width: 1180px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; }
+.tile { display: flex; flex-direction: column; background: #141414; border: 1px solid #2a2a2a; border-radius: 6px; overflow: hidden; }
+.cover { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; background: #1d1a16; }
+.body { display: flex; flex-direction: column; gap: 6px; padding: 16px 18px 18px; flex: 1; }
+.body h3 { margin: 0; font-size: 19px; line-height: 1.25; font-weight: 800; }
+.hosts { margin: 0; color: #d2b47b; font-size: 13px; font-weight: 700; line-height: 1.4; }
+.about { margin: 4px 0 0; color: #cfc8bb; font-size: 14px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.listen { margin-top: auto; padding-top: 12px; color: #f1dfbb; font-size: 13px; font-weight: 700; text-decoration: none; }
+.listen:hover, .listen:focus-visible { text-decoration: underline; }
+.listen:focus-visible { outline: 3px solid #d2b47b; outline-offset: 3px; }
+@media (max-width: 1023px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; } }
+@media (max-width: 767px) { .section { padding: 56px 20px 48px; } .section h2 { font-size: 28px; } .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } .section .announcement { font-size: 16px; margin: 10px auto 24px; } }
+@media (max-width: 600px) { .body { padding: 12px 12px 14px; } .body h3 { font-size: 16px; } .hosts { font-size: 12px; } .about { font-size: 13px; -webkit-line-clamp: 3; } .listen { font-size: 12px; } }

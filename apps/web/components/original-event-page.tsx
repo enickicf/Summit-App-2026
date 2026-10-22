@@ -24,6 +24,7 @@ import { AwardsGuestDirectory } from "./awards-guest-directory";
 import { getSiteImageMetadata, SiteImage } from "./site-image";
 import { CurrentEventUpdates } from "./current-event-updates";
 import { ScheduleBrowser } from "./schedule-browser";
+import { PodcastShowcase } from "./podcast-showcase";
 import { groupPublishedProgramByDay } from "@not-alone/domain";
 import styles from "./original-event-page.module.css";
 import { HeroRecap, SummitVideo } from "./summit-video";
@@ -448,6 +449,8 @@ function CurrentAwardsPage({ program, snapshot = null, rsvpUrl = awardsRsvpUrl, 
       </div>
     </section>
     <AwardsGuestDirectory people={displayPeople} available={available} />
+    {/* Oct 20 (Aphrah, review branch claude/podcast-logos): podcast logos + about right after the lineup. */}
+    <PodcastShowcase />
     {/* Owner (Sept 21): last year's mission statement (ICF's Awards page) stays here. Owner (Oct 7 meeting): its
         opening sentence now credits the presenters, in the owner's exact words. */}
     <section className={`${styles.band} ${styles.awardsIntroduction} ${styles.awardsMission}`} id="mission" aria-label="About the Not Alone Awards">
