@@ -6,6 +6,10 @@
 // - the Jewel quote stays on the Summit page.
 // The text is used exactly as written. The 2025 archive, the Nevada Mental Health Day page, the schedule, the
 // people sections and the RSVP forms are not touched by it.
+// Owner (Oct 22): Ryan's statement is off the Summit page for now; it goes back on Oct 23 at 4:45 PM PT.
+// To put it back, set this to true and deploy.
+export const summitStatementShown = false;
+
 export const summitNarrative2026 = {
   intro: [
     "Bringing together the people shaping the future of mental health—clinical experts, lived-experience leaders, nonprofit organizations, artists, philanthropists, funders, innovators, policymakers, and young people—to share what works, spark collaboration, and build a more connected national mental-health system."

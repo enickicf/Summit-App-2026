@@ -1,7 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import { OriginalAwardsPage, OriginalSummitPage } from "../components/original-event-page";
-import { summitNarrative2026 } from "./summit-narrative-2026";
+import { summitNarrative2026, summitStatementShown } from "./summit-narrative-2026";
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn() }), usePathname: () => "/", useSearchParams: () => new URLSearchParams() }));
 
@@ -20,11 +20,17 @@ describe("Summit 2026 narrative (Ryan, Oct 7)", () => {
     expect(intro).not.toContain("Powered by<strong>"); // the repeated credit and the logo are gone
     expect(intro).not.toContain("<p>");
     expect(summit2026).not.toContain("Building on the success of");
-    const about = summit2026.slice(summit2026.indexOf('id="about-summit"'), summit2026.indexOf('id="goals"'));
-    expect(summit2026.indexOf('id="about-summit"')).toBeGreaterThan(summit2026.indexOf("-attendees"));
-    // Owner (Oct 8): the opening phrase is bold blue; the words themselves stay exactly Ryan's.
-    for (const paragraph of summitNarrative2026.intro) expect(about.replace(/<\/?strong[^>]*>/g, "")).toContain(`<p>${esc(paragraph)}</p>`);
-    expect(about).toMatch(/<p><strong class="[^"]*narrativeLede[^"]*">Bringing together the people shaping the future of mental health<\/strong>—clinical experts/);
+    // Owner (Oct 22): the statement is switched off until Oct 23, 4:45 PM PT; while off it must not appear at all.
+    if (summitStatementShown) {
+      const about = summit2026.slice(summit2026.indexOf('id="about-summit"'), summit2026.indexOf('id="goals"'));
+      expect(summit2026.indexOf('id="about-summit"')).toBeGreaterThan(summit2026.indexOf("-attendees"));
+      // Owner (Oct 8): the opening phrase is bold blue; the words themselves stay exactly Ryan's.
+      for (const paragraph of summitNarrative2026.intro) expect(about.replace(/<\/?strong[^>]*>/g, "")).toContain(`<p>${esc(paragraph)}</p>`);
+      expect(about).toMatch(/<p><strong class="[^"]*narrativeLede[^"]*">Bringing together the people shaping the future of mental health<\/strong>—clinical experts/);
+    } else {
+      expect(summit2026).not.toContain('id="about-summit"');
+      expect(summit2026).not.toContain("Bringing together the people shaping the future of mental health");
+    }
     const goals = summit2026.slice(summit2026.indexOf('id="goals"'), summit2026.indexOf('id="jewel-quote"'));
     expect(text(goals)).toContain("Goals " + summitNarrative2026.goals.map((goal, i) => `0${i + 1} ${goal}`).join(" ")); // Oct 8: numbered columns
     expect(goals.match(/<li>/g)?.length).toBe(5);

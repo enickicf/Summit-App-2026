@@ -35,7 +35,7 @@ import { PoweredBy } from "./powered-by";
 import { awardsDoorsOpen2026, awardsShowStart2026 } from "../lib/event-partners-2026";
 import summitStyles from "./summit-theme.module.css";
 import { EventPartners } from "./event-partners";
-import { summitNarrative2026 } from "../lib/summit-narrative-2026";
+import { summitNarrative2026, summitStatementShown } from "../lib/summit-narrative-2026";
 import { applyProducerCreditRules } from "../lib/producer-credits-2026";
 
 type SourceSection = (typeof source.summit.sections)[number];
@@ -316,7 +316,7 @@ export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 202
     </>}</div>
     {/* Ryan (Oct 8): the narrative paragraph and the Goals come after Who's Coming (Founders, then Attendees): the
         paragraph on its own, the Goals in a blue band with large white type, then Jewel's quote, then Our Partners. */}
-    {!archive && <section className={`${styles.band} ${summitStyles.narrativeBand}`} id="about-summit" aria-label="About the Not Alone Summit">
+    {!archive && summitStatementShown && <section className={`${styles.band} ${summitStyles.narrativeBand}`} id="about-summit" aria-label="About the Not Alone Summit">
       {/* Owner (Oct 8): the paragraph reads as an opening statement — left-aligned on a narrow measure, its opening phrase
           (up to the first dash) in bold Summit blue; the words are Ryan's, unchanged. */}
       {summitNarrative2026.intro.map(paragraph => { const cut = paragraph.indexOf("—"); return <p key={paragraph.slice(0, 24)}>{cut > 0 ? <><strong className={summitStyles.narrativeLede}>{paragraph.slice(0, cut)}</strong>{paragraph.slice(cut)}</> : paragraph}</p>; })}

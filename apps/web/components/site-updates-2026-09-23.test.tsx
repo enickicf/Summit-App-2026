@@ -68,8 +68,8 @@ describe("Sept 23 site updates", () => {
     expect(foundersAt).toBeGreaterThan(-1);
     // Ryan (Oct 8): Attendees follow Founders; the partner block comes after the narrative, the Goals band and Jewel's quote.
     expect(attendeesAt).toBeGreaterThan(foundersAt);
-    expect(s.indexOf('id="about-summit"')).toBeGreaterThan(attendeesAt);
-    expect(s.indexOf('id="goals"')).toBeGreaterThan(s.indexOf('id="about-summit"'));
+    // Owner (Oct 22): Ryan's statement (#about-summit) is switched off for now; the Goals still follow Attendees.
+    expect(s.indexOf('id="goals"')).toBeGreaterThan(attendeesAt);
     expect(s.indexOf('id="jewel-quote"')).toBeGreaterThan(s.indexOf('id="goals"'));
     expect(partnersAt).toBeGreaterThan(s.indexOf('id="jewel-quote"'));
     expect(s).toContain("cohen-foundation-give.png");
