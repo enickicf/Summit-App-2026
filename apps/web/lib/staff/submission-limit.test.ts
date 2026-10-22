@@ -46,7 +46,8 @@ describe("one submission per person per form (owner, Oct 20)", () => {
     expect(await store.list("rsvp")).toHaveLength(3);
     const failed = await inbox.list("failed/");
     expect(failed.every(entry => entry.reason === "already-submitted")).toBe(true);
-    expect(unresolvedFailures(failed, [])).toHaveLength(0);
+    // Oct 21: a refused resubmission is a lost update, so it stays in "Needs attention" until a record for that person is saved after it.
+    expect(unresolvedFailures(failed, rows)).toHaveLength(2);
   });
 
   it("replaces the earlier RSVP with the real RSVP handler (browser-clock dates), keeping the original first date", async () => {

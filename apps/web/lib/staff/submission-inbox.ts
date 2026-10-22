@@ -149,12 +149,16 @@ export async function listReceivedSubmissions(): Promise<InboxEntry[]> {
 export function unresolvedFailures(failed: InboxEntry[], saved: { email?: string; phone?: string; submittedAt: string; requesterEmail?: string }[]): InboxEntry[] {
   const digits = (value?: string) => (value ?? "").replace(/\D/g, "").slice(-10);
   return failed.filter(entry => {
-    if (entry.reason === "already-submitted") return false; // they already have a saved record
     const email = entry.email.toLowerCase(), phone = digits(entry.phone);
+    // Oct 21 (Cherrial's guest "resubmitted but it didn't update"): a request refused as "already submitted" is a lost
+    // update (the Oct 20 one-per-person rule turned four guests away). It stays here until a record for the same
+    // person is saved AFTER the refusal (a staff replay or their own resubmission); their older record never resolves it.
+    const refusedResubmission = entry.reason === "already-submitted";
     return !saved.some(record => {
       const sameEmail = Boolean(email) && [record.email, record.requesterEmail].some(value => (value ?? "").toLowerCase() === email);
       const samePhone = phone.length >= 7 && digits(record.phone) === phone;
-      return (sameEmail || samePhone) && record.submittedAt >= entry.receivedAt.slice(0, 10);
+      const later = refusedResubmission ? record.submittedAt > entry.receivedAt : record.submittedAt >= entry.receivedAt.slice(0, 10);
+      return (sameEmail || samePhone) && later;
     });
   });
 }
