@@ -1,5 +1,4 @@
 import { InvitationBadge } from "./invitation-badge";
-import { speakerViewsNotice2026 } from "../lib/speaker-views-notice-2026";
 import Link from "next/link";
 import { displayTitle2026, icfAlumni2026 } from "../lib/title-overrides-2026";
 import { airtableTalent2026 } from "../lib/airtable-talent-2026";
@@ -239,11 +238,6 @@ function ProducerCredits2026({ confirmedNames, profiles, awardsContext = false, 
         return <article key={person.name}>{profile ? <Link href={`/directory/${encodeURIComponent(profile.slug)}${awardsContext ? "?from=awards" : ""}`} prefetch={false} aria-label={`Meet ${person.name}`}>{card}</Link> : card}</article>;
       })}
     </div></div>)}
-    {/* Ryan (Oct 22): the nonpartisan notice sits "Underneath associate producers", in his own words. */}
-    <aside className={styles.speakerNotice} aria-labelledby="speaker-views-notice">
-      <p className={styles.speakerNoticeLabel} id="speaker-views-notice"><span aria-hidden="true">!</span>{speakerViewsNotice2026.label}</p>
-      {speakerViewsNotice2026.paragraphs.map((paragraph, index) => <p key={paragraph} className={index === 1 ? styles.speakerNoticeLead : undefined}>{paragraph}</p>)}
-    </aside>
   </section>;
 }
 
