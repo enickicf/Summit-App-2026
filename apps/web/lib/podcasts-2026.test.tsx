@@ -9,7 +9,8 @@ describe("Podcasts page", () => {
   it("lists every confirmed show and Mackenzie Sol as a creator", () => {
     for (const entry of podcasts2026) expect(html).toContain(entry.show.replace("&", "&amp;"));
     expect(html).toContain("Social media creator and interviewer");
-    expect(podcasts2026.filter(entry => entry.kind === "podcast")).toHaveLength(8);
+    expect(podcasts2026.filter(entry => entry.kind === "podcast")).toHaveLength(7); // owner (Oct 22): Inner Cosmos off
+    expect(podcasts2026.map(entry => entry.show)).not.toContain("Inner Cosmos");
   });
   it("uses only the two formats and orders biggest first", () => {
     for (const entry of podcasts2026) for (const format of entry.formats) expect(podcastFormats).toContain(format);
