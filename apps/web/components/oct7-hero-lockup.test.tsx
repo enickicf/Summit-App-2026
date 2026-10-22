@@ -103,8 +103,8 @@ describe("Oct 7 meeting: Presented-by lockup, hero order, mission and Awards tim
     const both = rsvpConfirmationEmail({ ...guest, communityDay: true });
     const dayOnly = rsvpConfirmationEmail({ ...guest, attending: "community-day" });
     expect(showOnly.text).toContain("Doors 6:30 PM · Awards Show 7:30–10:00 PM");
-    expect(both.text).toContain("Wellness & Check-In 12–3 PM · Summit Sessions 3–6:30 PM · Doors 6:30 PM · Awards Show 7:30–10:00 PM");
-    expect(dayOnly.text).toContain("Wellness & Check-In 12–3 PM · Summit Sessions 3–6:30 PM");
+    expect(both.text).toContain("Wellness & Check-In 12–2:30 PM · Summit Sessions 3–6:30 PM · Doors 6:30 PM · Awards Show 7:30–10:00 PM");
+    expect(dayOnly.text).toContain("Wellness & Check-In 12–2:30 PM · Summit Sessions 3–6:30 PM");
     expect(dayOnly.text).not.toContain("Awards Show 7:30");
     for (const email of [showOnly, both, dayOnly]) expect(`${email.text}\n${email.html}`).not.toMatch(/Pre-Show|8:00/);
   });

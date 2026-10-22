@@ -38,7 +38,7 @@ export const communityDay2026 = {
   // Owner (Oct 7): the date sits under the heading, each row names its room; rooms are public on this page only.
   // The Awards Show row's label links to that copy's Awards page (the view adds the link).
   details: [
-    { label: "Wellness & Check-In", value: "12–3 PM", note: "LaFleur, Wynn Las Vegas", link: null },
+    { label: "Wellness & Check-In", value: "12–2:30 PM", note: "LaFleur, Wynn Las Vegas", link: null },
     { label: "Summit Sessions", value: "2:30–6:30 PM", note: "Margaux Ballroom, Wynn Las Vegas", link: null },
     { label: "Not Alone Awards Show", value: "Doors open 6:30 PM · Show 7:30 PM", note: "Encore Theater", link: "awards" }
   ] satisfies readonly CommunityDayScheduleRow[],

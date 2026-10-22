@@ -18,6 +18,7 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "jill hawley": { file: "/2026-headshots/portraits/jill-hawley.jpg", source: "web", credit: "Gary Community Ventures team page, https://garycommunity.org/team/jill-hawley/" },
   "zak levitt": { file: "/2026-headshots/portraits/zak-levitt.jpg", source: "web", credit: "Ballen Studios press release via Podnews, https://podnews.net/press-release/ballen-zak-levitt" },
   "jayson ainsworth": { file: "/2026-headshots/portraits/jayson-ainsworth.jpg", source: "web", credit: "Momentum Recovery employee spotlight, https://www.momentumrecovery.com/blog/employee-spotlight-jayson-ainsworth" },
+  "hayden harveston": { file: "/2026-headshots/portraits/hayden-harveston.jpg", source: "airtable" }, // Oct 22: his Airtable headshot (1179x1165), face-centred
   "alex accetta": { file: "/2026-headshots/portraits/alex-accetta.jpg", source: "airtable" },
   "basak kizilisik": { file: "/2026-headshots/portraits/basak-kizilisik-2.jpg", source: "web" }, // Oct 20: sharper copy of their photo from their own organization / press page (hires agent)
   "blake bonner": { file: "/2026-headshots/portraits/blake-bonner.jpg", source: "airtable" },
@@ -204,7 +205,8 @@ export function portrait2026(name: string): string | null | undefined {
 // until a proper headshot is supplied. Their Airtable records are untouched; they return when this changes.
 // Oct 21 (owner): Hayden Harveston stays off the site; Zak Levitt and Jayson Ainsworth off "for now" (identities not
 // confirmed yet; their photos, titles and bios stay ready below and return when they are removed from this set).
-export const hiddenFromSite2026 = new Set(["hal fisher", "hayden harveston", "zak levitt", "jayson ainsworth"].map(personNameKey));
+// Oct 22 (owner, via Nick/Jan: "add Hayden Harveston's photo"): Hayden is back on now that Airtable holds his photo.
+export const hiddenFromSite2026 = new Set(["hal fisher", "zak levitt", "jayson ainsworth"].map(personNameKey));
 // Owner (Sept 22): Jay & Erica McGraw were credited as founders before a photo existed (name cards).
 // Owner (Oct 7): the owner supplied a headshot of each (work/new-headshots-20261007/owner-upload-*.jpg), so both are
 // photo cards now (entries above) and nobody is listed without a photo. The set stays for the next such case.

@@ -22,7 +22,7 @@ export function communityDaySchedule2026(rows: RosRow[] = airtableRos2026): Comm
   for (const row of day) {
     const room = rooms[row.location] ?? row.location;
     const base = { id: row.recordId, room, attire: "", synopsis: "" };
-    if (/^wellness activit/i.test(row.title)) sessions.push({ ...base, sort: "12:00", time: "12:00–3:00 PM", title: "Wellness & Check-In", kind: "block" });
+    if (/^wellness activit/i.test(row.title)) sessions.push({ ...base, sort: "12:00", time: "12:00–2:30 PM", title: "Wellness & Check-In", kind: "block" });
     else if (/^nevada mental health day$/i.test(row.title)) sessions.push({ ...base, sort: "14:30", time: "2:30–6:30 PM", title: "Summit Sessions", kind: "block" });
     // Oct 20: Airtable also has a 2:30 PM "Doors Open" for the Nevada Day sessions in the Margaux; only the Awards Show
     // doors (the evening row) belong here.

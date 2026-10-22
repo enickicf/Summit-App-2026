@@ -93,7 +93,7 @@ describe("Nevada Mental Health Day page", () => {
     const scheduleHtml = section(html, "schedule-title");
     const schedule = text(scheduleHtml);
     // Owner (Oct 8): the most basic version — the general events and their locations only.
-    expect(schedule).toContain("Schedule Monday, November 2, 2026 12:00–3:00 PM Wellness & Check-In LaFleur 2:30–6:30 PM Summit Sessions Margaux Ballroom 6:30 PM Awards Show Doors Open Encore Theater 7:30–10:00 PM Not Alone Awards Show Encore Theater");
+    expect(schedule).toContain("Schedule Monday, November 2, 2026 12:00–2:30 PM Wellness & Check-In LaFleur 2:30–6:30 PM Summit Sessions Margaux Ballroom 6:30 PM Awards Show Doors Open Encore Theater 7:30–10:00 PM Not Alone Awards Show Encore Theater");
     expect(schedule).not.toMatch(/Attire|Opening Ceremony|Panel|Break|Red Carpet|Pre-Show|Founders|Pet Partners|Pickleball|Speaker Reception/);
     expect(scheduleHtml).toContain('<h2 id="schedule-title">Schedule</h2>');
     expect(scheduleHtml).toContain('<time dateTime="2026-11-02T12:00:00-08:00">Monday, November 2, 2026</time>');
@@ -164,7 +164,7 @@ describe("Nevada Mental Health Day page", () => {
     expect(communityDay2026.date).toBe(awards2026Editorial.date);
     expect(communityDay2026.dateTime).toBe("2026-11-02T12:00:00-08:00");
     expect(communityDay2026.details.map(item => [item.label, item.value])).toEqual([
-      ["Wellness & Check-In", "12–3 PM"],
+      ["Wellness & Check-In", "12–2:30 PM"],
       ["Summit Sessions", "2:30–6:30 PM"],
       ["Not Alone Awards Show", "Doors open 6:30 PM · Show 7:30 PM"]
     ]);

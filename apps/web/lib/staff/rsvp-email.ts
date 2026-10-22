@@ -14,7 +14,7 @@ export type RenderedEmail = { subject: string; text: string; html: string };
 // Summit Sessions 2:30–6:30 PM; the Awards Show follows at the Encore Theater: Doors 6:30 PM, Awards Show 7:30–10:00 PM.
 // No Pre-Show is announced in any variant.
 const awardsEvening = "Doors 6:30 PM · Awards Show 7:30–10:00 PM";
-const dayTimes = "Wellness & Check-In 12–3 PM · Summit Sessions 2:30–6:30 PM"; // owner: 3:30 -> 3:00 (Oct 7) -> 2:30 (Oct 19, site only; invite templates unchanged)
+const dayTimes = "Wellness & Check-In 12–2:30 PM · Summit Sessions 2:30–6:30 PM"; // Oct 22 (owner: times must agree everywhere): wellness ends when sessions start // owner: 3:30 -> 3:00 (Oct 7) -> 2:30 (Oct 19, site only; invite templates unchanged)
 const evening = `${dayTimes} · ${awardsEvening}`;
 const showOnlyEvening = awardsEvening;
 const communityDayOnlyEvening = dayTimes;
