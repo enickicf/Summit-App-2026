@@ -69,6 +69,7 @@ describe("source-faithful, year-separated event pages", () => {
     expect(html).toContain("Loni Love");
     expect(html).toContain("Co-Chairs");
     expect(html).toContain("Executive Producers");
+    expect(html).not.toContain("Mike Tyson");
     const archive = renderToStaticMarkup(<OriginalSummitPage year={2025} />);
     expect(archive).toContain("Summit Host");
     expect(archive).toContain("Awards Host");

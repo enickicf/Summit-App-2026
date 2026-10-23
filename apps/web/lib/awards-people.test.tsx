@@ -12,7 +12,7 @@ describe("curated Awards people", () => {
     const snapshot = structuredClone(event2026Snapshot);
     const before = structuredClone(snapshot);
     const selected = awardsPeople(snapshot);
-    expect(selected).toHaveLength(60);
+    expect(selected).toHaveLength(59);
     expect(new Set(selected.map(person => person.name)).size).toBe(selected.length);
     expect(selected.every(person => person.categories.length >= 1 && person.bio.trim())).toBe(true);
     // Owner (Sept 21): people are listed in every category they hold, primary credit first.
@@ -24,7 +24,7 @@ describe("curated Awards people", () => {
     expect(selected.find(person => person.name === "Loni Love")?.categories).toEqual(["Hosts", "Entertainers & Athletes"]);
     expect(selected.find(person => person.name === "Jen Smorgen")?.categories[0]).toBe("Philanthropists");
     expect(selected.find(person => person.name === "Ellie Kanner")?.categories[0]).toBe("Founders & Entrepreneurs");
-    expect(selected.filter(person => awardsGuestCategories.some(category => person.categories.includes(category)))).toHaveLength(55); // now includes Jewel, Loni Love and Ryan Wolfington via their other categories
+    expect(selected.filter(person => awardsGuestCategories.some(category => person.categories.includes(category)))).toHaveLength(54); // now includes Jewel, Loni Love and Ryan Wolfington via their other categories
     expect(selected.find(person => person.name === "Sarah Gilman")?.categories[0]).toBe("Entertainers & Athletes");
     // Sept 21 meeting: confirmed talent appears; staff, press and plus-ones never do.
     expect(selected.find(person => person.name === "Sarah Steil")?.categories[0]).toBe("Musicians");
@@ -35,7 +35,8 @@ describe("curated Awards people", () => {
     expect(selected.find(person => person.name === "Steven & Alexandra Cohen")?.categories[0]).toBe("Philanthropists");
     expect(selected.find(person => person.name === "Pam & Duncan Goldie-Morrison")?.categories[0]).toBe("Philanthropists");
     for (const name of ["Nick Dana", "Bianca Mok", "Cathy Olson", "Morgan Marler", "Isabella Wolfington", "Sophie Novak", "Steven Cohen", "Alexandra Cohen"]) expect(selected.map(person => person.name)).not.toContain(name);
-    expect(directoryPeople(snapshot)).toHaveLength(47);
+    expect(directoryPeople(snapshot)).toHaveLength(46);
+    expect(selected.map(person => person.name)).not.toContain("Mike Tyson");
     expect(snapshot).toEqual(before);
   });
 
@@ -49,6 +50,7 @@ describe("curated Awards people", () => {
     expect(html.split(`href="/directory/${joint.slug}?from=awards"`)).toHaveLength(2);
     expect(html).not.toContain("<h3>Sean Wolfington</h3>");
     expect(html).not.toContain("<h3>Ana Wolfington</h3>");
+    expect(html).not.toContain("Mike Tyson");
     expect(awardsPeople(event2026Snapshot).map(person => person.name)).toContain("Sean Wolfington");
     expect(awardsPeople(event2026Snapshot).map(person => person.name)).toContain("Ana Wolfington");
   });
@@ -85,9 +87,9 @@ describe("curated Awards people", () => {
 
   it("preserves staff-published biographies while filling missing Awards bios locally", () => {
     const snapshot = structuredClone(event2026Snapshot);
-    snapshot.speakers.find(person => person.name === "Mike Tyson")!.bio = "Published biography reviewed by staff.";
-    expect(awardsPeople(snapshot).find(person => person.name === "Mike Tyson")?.bio).toBe("Published biography reviewed by staff.");
-    expect(directoryPeople(snapshot).find(person => person.name === "Jason Kennedy")?.bio).toBe("");
-    expect(awardsPeople(snapshot).find(person => person.name === "Jason Kennedy")?.bio).toBeTruthy();
+    snapshot.speakers.find(person => person.name === "Jason Kennedy")!.bio = "Published biography reviewed by staff.";
+    expect(awardsPeople(snapshot).find(person => person.name === "Jason Kennedy")?.bio).toBe("Published biography reviewed by staff.");
+    expect(directoryPeople(snapshot).find(person => person.name === "Sarah Gilman")?.bio).toBe("");
+    expect(awardsPeople(snapshot).find(person => person.name === "Sarah Gilman")?.bio).toBeTruthy();
   });
 });

@@ -20,6 +20,11 @@ export type SummitPerson = { name: string; slug: string; categories: PersonCateg
 export const categories: PersonCategory[] = ["Co-Chairs", "Hosts", "Founders", "Founders & Entrepreneurs", "Philanthropists", "Mental Health Nonprofit Founding Partners", "Musicians", "Comedians", "Athletes", "Entertainers & Athletes", "Experts", "Podcasters", "Talent", "Business Leaders & Philanthropists", "Business Leaders", "Sponsors", "Executive Producers", "Co-Producers", "Associate Producers", "Producers", "Attendees"];
 const slug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const airtableConfirmedNames = new Set(confirmedSummitGuests2026.map(personNameKey));
+// Explicit owner removals from every current public website surface. Keep the underlying
+// Airtable/staff records intact; this boundary also protects profiles and Ask AI because
+// they consume directoryPeople rather than the operational event record directly.
+const excludedFromCurrentWebsites2026 = new Set(["mike tyson"]);
+const isCurrentWebsitePerson2026 = (name: string) => !excludedFromCurrentWebsites2026.has(personNameKey(name));
 
 // Attendance is not approval of a speaking, sponsor, host or production role.
 export const people2026: SummitPerson[] = confirmedSummitGuests2026.map(name => {
@@ -45,6 +50,7 @@ export function directoryPeople(snapshot: EventSnapshot | null): SummitPerson[] 
   // Airtable connected: its confirmed list and Website Grouping rubric decide who is listed and where.
   const live = airtableOverlay(snapshot)?.people;
   if (live) return reviewed.flatMap(person => {
+    if (!isCurrentWebsitePerson2026(person.name)) return [];
     const entry = live.get(personNameKey(person.name));
     if (!entry) return [];
     const reviewed = portrait2026(person.name);
@@ -55,7 +61,7 @@ export function directoryPeople(snapshot: EventSnapshot | null): SummitPerson[] 
       categories: entry.categories as PersonCategory[], source: "airtable" as const, featured: entry.featured, order: entry.rank,
       ...(entry.topRank !== undefined ? { rank: entry.topRank } : {}), ...(entry.tier ? { tier: entry.tier } : {}), ...(image ? { image } : {}) }];
   });
-  const published = reviewed.filter(person => airtableConfirmedNames.has(personNameKey(person.name)) && isPublicGuest2026(canonicalName(person.name))).map(person => {
+  const published = reviewed.filter(person => isCurrentWebsitePerson2026(person.name) && airtableConfirmedNames.has(personNameKey(person.name)) && isPublicGuest2026(canonicalName(person.name))).map(person => {
     const image = person.headshotUrl || personPortrait(person.name);
     return {
     name: person.name, slug: person.id, role: person.role, bio: person.bio, year: 2026 as const,

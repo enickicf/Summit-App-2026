@@ -13,6 +13,9 @@ const section = (html: string, id: string) => html.slice(html.indexOf(`aria-labe
 const beforeEvent = () => { vi.useFakeTimers(); vi.setSystemTime(new Date("2026-09-28T18:00:00Z")); };
 
 describe("Nevada Mental Health Day page", () => {
+  it("keeps owner-removed people off the shared public lineup", async () => {
+    expect(await render()).not.toContain("Mike Tyson");
+  });
   afterEach(() => vi.useRealTimers());
 
   it("has one focusable main landmark, its own title and a description built from the day's facts", async () => {
