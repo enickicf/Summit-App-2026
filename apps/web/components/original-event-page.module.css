@@ -798,16 +798,17 @@
 .awards2026.awards2026 .awardsCorner .heroEyebrow .heroEyebrowDate, .awards2026.awards2026 .awardsCorner .heroEyebrow .heroEyebrowDate *, .awards2026.awards2026 .awardsCorner .heroEyebrow .heroDateVenue, .awards2026.awards2026 .awardsCorner .heroEyebrow .heroDateVenue * { font-weight: 800; }
 
 /* Owner (Oct 22, 2026): the closing statement under the producer credits reads as part of the page, not a notice:
-   no card, badge or label; a short rule in the page's own colour, the first sentence a little stronger, the rest in
-   body type at a comfortable measure. It inherits the band's colours, so it suits the light Summit band and the dark
+   no card, badge or label. Oct 23 (owner: "make this look more professional"): a hairline above, a narrow measure,
+   the opening sentence in semibold page type and the rest smaller and lighter, lines balanced. It inherits the band's colours, so it suits the light Summit band and the dark
    Awards band alike. */
-.siteStatement { max-width: 760px; margin: 64px auto 0; text-align: center; }
-.siteStatement::before { content: ""; display: block; width: 56px; height: 2px; margin: 0 auto 28px; background: currentColor; opacity: 0.35; }
-.siteStatement.siteStatement p { margin: 0 0 14px; font-size: 16px; line-height: 1.7; opacity: 0.82; }
+.siteStatement { max-width: 640px; margin: 72px auto 0; padding-top: 36px; border-top: 1px solid rgb(127 127 127 / 22%); text-align: center; }
+.siteStatement.siteStatement p { margin: 0 0 12px; font-size: 15px; line-height: 1.75; opacity: 0.72; text-wrap: balance; }
 .siteStatement p:last-child { margin-bottom: 0; }
-.siteStatement.siteStatement .siteStatementLead { font-family: "Original Poppins", Poppins, sans-serif; font-size: 19px; line-height: 1.55; font-weight: 800; opacity: 1; }
+.siteStatement.siteStatement .siteStatementLead { margin-bottom: 18px; font-size: 17px; line-height: 1.6; font-weight: 600; letter-spacing: -0.005em; opacity: 1; }
+/* Awards pages: the opening line takes the Awards gold, like the "Through the Not Alone Awards" lede. */
+.currentAwards .siteStatement.siteStatement .siteStatementLead { color: #f1dfbb; font-weight: 700; }
 @media (max-width: 600px) {
-  .siteStatement { margin-top: 44px; padding: 0 4px; }
-  .siteStatement.siteStatement p { font-size: 15px; }
-  .siteStatement.siteStatement .siteStatementLead { font-size: 17px; }
+  .siteStatement { margin-top: 48px; padding-top: 28px; }
+  .siteStatement.siteStatement p { font-size: 14px; }
+  .siteStatement.siteStatement .siteStatementLead { font-size: 16px; }
 }
