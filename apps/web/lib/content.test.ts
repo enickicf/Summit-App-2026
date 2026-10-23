@@ -23,7 +23,8 @@ describe("year-specific public content", () => {
 
     expect(archivedNames).toContain("Janet & Steve Wozniak");
     expect(archivedNames).toContain("Jewel");
-    expect(archivedNames).toContain("Mike Tyson");
+    // Owner (Oct 23): Mike Tyson is off every page, the 2025 archive included.
+    expect(archivedNames).not.toContain("Mike Tyson");
     expect(summit2025Leadership.flatMap((group) => group.people).map((person) => person.name)).toContain("Cherrial Odell");
     expect(confirmed2026People).toEqual([]);
   });

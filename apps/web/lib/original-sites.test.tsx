@@ -136,7 +136,9 @@ describe("source-faithful, year-separated event pages", () => {
   it("preserves every original Summit and Awards portrait, name and affiliation", () => {
     for (const [kind, html] of [["summit", renderToStaticMarkup(<OriginalSummitPage year={2025} />)], ["awards", renderToStaticMarkup(<OriginalAwardsPage year={2025} />)]] as const) {
       const people = source[kind].sections.flatMap(section => section.people);
-      expect(people.length).toBe(kind === "summit" ? 66 : 75);
+      // Owner (Oct 23): Mike Tyson removed from both 2025 pages (was 66 / 75).
+      expect(people.length).toBe(kind === "summit" ? 65 : 74);
+      expect(html).not.toContain("Mike Tyson");
       for (const person of people) {
         expect(html).toContain(escape(person.name));
         expect(html).toContain(escape(person.role));
