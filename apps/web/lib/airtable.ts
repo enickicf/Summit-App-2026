@@ -26,6 +26,12 @@ export type AirtableSession = { recordId: string; title: string; date: string; s
 const attireColumn = /^\s*attire\s*$/i;
 const websitePublicColumn = /website\s*public/i;
 export type AirtablePartner = { recordId: string; name: string; item: string; group: string; status: string };
+export type AirtableTravelWindow = { arrivalUtc: string | null; arrivalDate: string | null; exact: boolean };
+
+const travelFields = {
+  name: "fldBEcxaNMOMy7QJY", stageName: "fldBxJDJkiToWVp8f", arrivalDate: "fldowxbELY22wwGr8",
+  arrivalTime: "fldbbA7BgzM9eOTNs", arrivalRollup: "fldfrVQ0bNgBOCiFe"
+} as const;
 
 type AirtableRecord = { id: string; fields: Record<string, unknown> };
 type Attachment = { url: string; type?: string; thumbnails?: { large?: { url: string }; full?: { url: string } } };
@@ -81,6 +87,24 @@ const text = (value: unknown): string => Array.isArray(value) ? value.map(text).
   : typeof value === "object" && value && "name" in value ? String((value as { name: unknown }).name)
   : value == null ? "" : String(value).trim();
 const list = (value: unknown): string[] => Array.isArray(value) ? value.map(text).filter(Boolean) : text(value) ? [text(value)] : [];
+
+// Private podcast booking uses travel only to remove impossible interview slots. The browser never receives the
+// flight, date or arrival time itself. A name must match Airtable exactly; incomplete travel remains unverified.
+export async function getAirtableTravelWindow(guestName: string): Promise<AirtableTravelWindow | null> {
+  const name = guestName.trim().toLowerCase();
+  if (!name || name.length > 180) return null;
+  const records = await listRecords(travelFields.name, Object.values(travelFields));
+  const record = records?.find(row => [text(row.fields[travelFields.name]), text(row.fields[travelFields.stageName])]
+    .some(value => value.trim().toLowerCase() === name));
+  if (!record) return null;
+  const rolled = text(record.fields[travelFields.arrivalRollup]);
+  if (/^\d{4}-\d{2}-\d{2}T/.test(rolled)) return { arrivalUtc: new Date(rolled).toISOString(), arrivalDate: rolled.slice(0, 10), exact: true };
+  const dateLabel = text(record.fields[travelFields.arrivalDate]);
+  const match = /(oct|nov)\w*\s+(\d{1,2})/i.exec(dateLabel);
+  if (!match) return { arrivalUtc: null, arrivalDate: null, exact: false };
+  const month = match[1]!.toLowerCase().startsWith("oct") ? "10" : "11";
+  return { arrivalUtc: null, arrivalDate: `2026-${month}-${match[2]!.padStart(2, "0")}`, exact: false };
+}
 
 export async function getAirtableTalent(): Promise<AirtablePerson[] | null> {
   const f = airtableFields.talent;

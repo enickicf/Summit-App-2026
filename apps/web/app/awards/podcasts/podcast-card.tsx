@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { initials, linkLabels, type PodcastEntry, type PodcastLinks } from "../../../lib/podcasts-2026";
 import styles from "./podcasts.module.css";
+import { InterviewBooking } from "./interview-booking";
 
 // Owner (Oct 20): click a card for the hosts' bios and the show's links (Spotify, YouTube, socials).
 export function PodcastCard({ entry }: { entry: PodcastEntry }) {
@@ -43,6 +44,7 @@ export function PodcastCard({ entry }: { entry: PodcastEntry }) {
         {entry.stats && entry.stats.length > 0 && <div className={styles.stats}>{entry.stats.map(stat => <span key={stat.label} className={styles.stat}><strong>{stat.value}</strong>{stat.label}</span>)}</div>}
         {entry.hosts.filter(host => host.bio).map(host => <div key={host.name} className={styles.bio}><h3>{host.name}</h3><p>{host.bio}</p></div>)}
         {links.length > 0 && <div className={styles.links}>{links.map(([kind, url]) => <a key={kind} href={url} target="_blank" rel="noopener noreferrer">{linkLabels[kind]} ↗</a>)}</div>}
+        <InterviewBooking entry={entry} />
       </div>
     </dialog>
   </>;

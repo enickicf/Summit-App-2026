@@ -19,11 +19,11 @@ export async function GET(request: Request) {
   const stamp = new Date().toISOString().slice(0, 10);
   // Owner (Sept 28): one JSON file with everything (incl. removed requests and the confirmation-email log) for backups.
   if (kind === "all") {
-    const [rsvp, nomination, poker, rsvpEmail, workshop, closingDinner] = await Promise.all([listAllRsvps(store), store.list("nomination"), store.list("poker"), store.list("rsvpEmail"), store.list("workshop"), store.list("closingDinner")]);
+    const [rsvp, nomination, poker, rsvpEmail, workshop, closingDinner, podcastBooking] = await Promise.all([listAllRsvps(store), store.list("nomination"), store.list("poker"), store.list("rsvpEmail"), store.list("workshop"), store.list("closingDinner"), store.list("podcastBooking")]);
     const textPreference = textPreferences;
     // Oct 19: the submission inbox (every request as sent, and every request that was not saved).
     const [submissionInboxFailed, submissionInboxReceived] = await Promise.all([listFailedSubmissions().catch(() => null), listReceivedSubmissions().catch(() => null)]);
-    const body = JSON.stringify({ exportedAt: new Date().toISOString(), site: "notalonesummit.org/staff", rsvp, nomination, poker, rsvpEmail, workshop, textPreference, closingDinner, submissionInboxFailed, submissionInboxReceived }, null, 2);
+    const body = JSON.stringify({ exportedAt: new Date().toISOString(), site: "notalonesummit.org/staff", rsvp, nomination, poker, rsvpEmail, workshop, textPreference, closingDinner, podcastBooking, submissionInboxFailed, submissionInboxReceived }, null, 2);
     return new Response(body, { headers: { "Content-Type": "application/json; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-staff-portal-backup-${stamp}.json"`, "Cache-Control": "no-store" } });
   }
   // Oct 19: submission inbox spreadsheets: kind=inbox = requests that were NOT saved; kind=inbox-all = every request received.
@@ -49,6 +49,10 @@ export async function GET(request: Request) {
   if (kind === "closing-dinner") {
     const rows = (await store.list("closingDinner")).map(row => ({ ...row, seats: closingDinnerSeats(row), waiverStatus:waiverSummary(row.eventWaiver), guestWaiverStatus:row.bringingGuest?waiverSummary(row.guestEventWaiver):"", waiverRecord:JSON.stringify(row.eventWaiver??null), guestWaiverRecord:JSON.stringify(row.guestEventWaiver??null), ...textConsentColumns(row, textPreferences) }));
     return new Response(toCsv(rows, closingDinnerCsvColumns), { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-closing-dinner-requests-${stamp}.csv"`, "Cache-Control": "no-store" } });
+  }
+  if (kind === "podcast-bookings") {
+    const rows = await store.list("podcastBooking");
+    return new Response(toCsv(rows, ["submittedAt", "podcast", "guestName", "email", "format", "startUtc", "endUtc", "room", "travelVerified", "arrivalLocal", "source", "id"]), { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-podcast-bookings-${stamp}.csv"`, "Cache-Control": "no-store" } });
   }
   if (kind === "nominations") {
     const csv = toCsv((await store.list("nomination")).map(row => ({ ...row, ...textConsentColumns({ phone: row.nominatorPhone, email: row.nominatorEmail, submittedAt: row.submittedAt, textConsent: row.textConsent }, textPreferences) })), [...nominationCsvColumns, ...textConsentCsvColumns]);

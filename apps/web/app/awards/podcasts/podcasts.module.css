@@ -87,6 +87,35 @@
 .links a:hover { background: #d2b47b; color: #111; }
 @media (max-width: 600px) { .dialogPanel { padding: 22px 18px; } .dialogHead { grid-template-columns: 96px 1fr; gap: 14px; } .dialogMedia { width: 96px; height: 96px; } .dialog h2 { font-size: 22px; } .topic { display: none; } .more { padding-top: 8px; } }
 
+/* Oct 24: private, arrival-aware interview scheduling lives inside each podcast profile. */
+.booking { margin-top: 8px; padding-top: 24px; border-top: 1px solid #39352d; display: grid; gap: 18px; }
+.bookingTitle h3 { margin: 0; font-size: 24px; }
+.bookingGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.booking label, .booking legend { color: #f5f0e6; font-size: 13px; font-weight: 700; }
+.booking input[type="text"], .booking input[type="email"], .booking input:not([type]), .booking select { box-sizing: border-box; display: block; width: 100%; margin-top: 7px; border: 1px solid #4a463e; border-radius: 7px; background: #090909; color: white; font: inherit; padding: 11px 12px; }
+.booking fieldset { margin: 0; padding: 0; border: 0; }
+.formatChoices, .roomChoices { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 9px; }
+.formatChoice, .roomChoices label { display: flex; align-items: flex-start; gap: 9px; padding: 12px; border: 1px solid #3f3a31; border-radius: 8px; background: #0a0a0a; cursor: pointer; }
+.formatChoice input, .roomChoices input { width: auto !important; margin: 3px 0 0 !important; accent-color: #d2b47b; }
+.formatChoice span, .roomChoices span { display: block; }
+.formatChoice strong, .formatChoice small, .roomChoices small { display: block; }
+.formatChoice small, .roomChoices small { margin-top: 3px; color: #a9a397; font-weight: 400; line-height: 1.35; }
+.findTimes, .confirmBooking { border: 0; border-radius: 999px; background: #d2b47b; color: #111; cursor: pointer; font: inherit; font-weight: 800; padding: 13px 20px; }
+.bookInterview { width: 100%; margin-top: 10px; border: 0; border-radius: 999px; background: #d2b47b; color: #111; cursor: pointer; font: inherit; font-weight: 800; padding: 14px 20px; }
+.bookInterview:hover { background: #f1dfbb; }
+.findTimes:disabled, .confirmBooking:disabled { cursor: wait; opacity: .55; }
+.travelNote { padding: 11px 13px; border-left: 3px solid #d2b47b; background: #211d16; color: #e4d8c1; font-size: 12px; line-height: 1.5; }
+.roomChoices { grid-template-columns: repeat(3, 1fr); }
+.bookingMessage { margin: 0; color: #f1dfbb; font-size: 13px; font-weight: 700; }
+.arrivalHelp { display: block; margin-top: 6px; color: #aaa397; font-weight: 400; line-height: 1.45; }
+.bookingSuccess { margin-top: 10px; padding: 24px; border: 1px solid #665638; border-radius: 9px; background: #1d1913; }
+.bookingSuccess > span { color: #d2b47b; font-size: 11px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+.bookingSuccess h3 { margin: 8px 0; font-size: 24px; }
+.bookingSuccess p { color: #eee7da; line-height: 1.55; }
+.bookingSuccess strong, .bookingSuccess small { display: block; margin-top: 12px; }
+.bookingSuccess small { color: #aaa397; line-height: 1.5; }
+@media (max-width: 600px) { .bookingGrid, .formatChoices, .roomChoices { grid-template-columns: 1fr; } }
+
 /* Oct 20 (owner: "make the podcasts page symmetrical with the numbers and boxes"): equal-height cards, every block in
    the same place on every card — title 2 lines, hosts 2 lines, topic 4 lines, stats in three equal columns, formats and
    the bio link pinned to the bottom. */
