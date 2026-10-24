@@ -5,7 +5,7 @@ import { isOnWebsiteSchedule, pinnedTime, privateEventScope, websiteSessionSynop
 // Owner (Oct 7, 2026): the schedule pulls from Airtable's Run of Show; these are the website's standing rules on top.
 describe("schedule website rules", () => {
   it("never lists private founder events, Red Carpet, the Speaker Reception, a Pre-Show or operational rows, whatever Airtable says", () => {
-    for (const title of ["Founders Cocktails", "Founder's Dinner", "Founder’s Dinner", "Red Carpet", "Speaker Reception", "Awards Show Pre-Show", "Pre-Show", "Load In, Summit Rehearsals", "Load Out", "27 Heavens - Potentially cut this"]) {
+    for (const title of ["Founders Cocktails", "Founder's Dinner", "Founder’s Dinner", "Red Carpet", "Speaker Reception", "Awards Show Pre-Show", "Pre-Show", "Psychedelic Breakthroughs: Gov. Rick Perry & Bryan Hubbard", "Governor Rick Perry Conversation", "Load In, Summit Rehearsals", "Load Out", "27 Heavens - Potentially cut this"]) {
       expect(isOnWebsiteSchedule({ title }), title).toBe(false);
       expect(isOnWebsiteSchedule({ title, websitePublic: "Public" }), `${title} even when marked Public`).toBe(false);
     }

@@ -273,3 +273,20 @@ VERIFIED: focused public-directory, Summit, Awards, Community Day, profile, and 
 
 ## LIVE — October 23 (~1:20 PM PT): Mike Tyson off the 2025 archive pages too
 Owner: "TAKE MIKE TYSON OFF NOW". His 2025 Summit and Awards cards removed from lib/original-sites.json (commit after 887f83a); 0 mentions on all 11 Summit/Awards/NAMI/LLV/Nevada pages incl. /2025 and /awards/2025; /directory/mike-tyson = Profile not found; live-site 33/33. Miguel Tyson (his son, Fight For Lives) still listed. Draft claude/schedule-refresh (schedule-review--not-alone-summit) merged with this; awaiting "ship it".
+
+## LIVE — October 23: Governor Rick Perry public-site safeguard
+Production deploy `6adbcdd05ab19a8e1ba5c6be` keeps Governor Rick Perry off every current public website surface. The recorded Airtable run-of-show row remains private and unchanged; a standing exclusion now blocks any person record or schedule title naming him even if a future Airtable checkbox or staff publication marks it public. Summit, Awards, Community Day, Schedule, public profiles, and Ask AI all consume the protected public projection. Focused tests, typecheck, and production build passed. The verified draft was promoted only after confirming production still matched deploy `6adbc15828dc9827cc20cd51`; all four live custom-domain pages returned 200 with no Rick Perry or Gov. Rick Perry text after promotion.
+
+## LIVE — October 23: Bob's Repair RSVP referral source
+Added `Bob's Repair` to every current RSVP form that asks “How did you hear about us?”: general Awards, Nevada Mental Health Day, Lake Las Vegas, and NAMI. Backend validation, staff portal labels, and CSV export now recognize and preserve the source as `bobs-repair`. Main/API deploy `6adbda4f9147d79d961dc502`; static RSVP deploy `6adbda8be104d9758ecd0273`. Focused tests (3/3), typecheck, and production build passed. All four custom-domain forms returned 200 and contained the option exactly once; a representative VIP form remained unchanged because it does not ask the referral question. API CORS preflight returned 204. No RSVP submissions or stored data were created, edited, or removed during verification.
+
+## LIVE — October 23: Project Wellbeing RSVP referral source
+Added `Project Wellbeing` to the general Awards, Nevada Mental Health Day, Lake Las Vegas, and NAMI forms, which are the four current forms that ask “How did you hear about us?” Backend validation, staff portal labels, and CSV exports preserve it as `project-wellbeing`. Main/API deploy `6adbe84d93823ae27a0e4698`; static RSVP deploy `6adbe88047c3a03d9c59dd86`. Focused tests (3/3), typecheck, production build, draft checks, and live custom-domain checks passed. Each applicable live form returned 200 with the option exactly once. VIP remains unchanged because it does not contain the referral question. API preflight returned 204. No production RSVP submission or stored data was created, changed, or removed during verification.
+
+## LIVE — October 23: Sarah Herstich / The Complex Trauma Podcast
+
+- Added Sarah Herstich and **The Complex Trauma Podcast** to the shared podcast collection used by the public Not Alone Awards podcast section and `/awards/podcasts`.
+- Ranked the show from its published 42K+ combined social community, placing it after Parenting With Psychology and before Coping with Ghosting. The card also includes the show's published 40K+ monthly downloads and 150+ episodes.
+- Added official host photography, official podcast artwork, public bio, topic summary, and official website, Apple Podcasts, and Spotify links.
+- Focused podcast tests passed (3/3), web typecheck passed, and the production build passed. Verified the new entry, ordering, links, and both images on the draft before promoting the exact deploy.
+- Main website production deploy: `6adbfb57fb8d8b6543515e70`. Verified live on `notaloneawards.org/awards/2026`, `notaloneawards.org/awards/podcasts`, and the shared Summit domain routes.

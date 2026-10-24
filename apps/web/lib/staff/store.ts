@@ -36,9 +36,9 @@ export const rsvpTiers = ["", "lake-las-vegas", "community-day"] as const;
 export type RsvpTier = (typeof rsvpTiers)[number];
 // Owner (Oct 3, 2026): "How did you hear about us?" on the main RSVP form (required there; older or cached
 // forms that do not send it still work and store "").
-export const rsvpHeardFrom = ["", "inspiring-children", "nami", "lake-las-vegas", "usta", "other"] as const;
+export const rsvpHeardFrom = ["", "inspiring-children", "nami", "lake-las-vegas", "bobs-repair", "project-wellbeing", "usta", "other"] as const;
 export type RsvpHeardFrom = (typeof rsvpHeardFrom)[number];
-export const rsvpHeardFromLabels: Record<Exclude<RsvpHeardFrom, "">, string> = { "inspiring-children": "Inspiring Children", nami: "NAMI", "lake-las-vegas": "Lake Las Vegas", usta: "USTA", other: "Other" };
+export const rsvpHeardFromLabels: Record<Exclude<RsvpHeardFrom, "">, string> = { "inspiring-children": "Inspiring Children", nami: "NAMI", "lake-las-vegas": "Lake Las Vegas", "bobs-repair": "Bob's Repair", "project-wellbeing": "Project Wellbeing", usta: "USTA", other: "Other" };
 // Owner (Oct 5, 2026): a request can cover up to ten people, and the form collects the name, email and phone of
 // every additional person in the party (the person filling in the form is the first). "guests" holds those
 // additional people. Forms from before Oct 5 sent no list, so the field is optional and older records have none.

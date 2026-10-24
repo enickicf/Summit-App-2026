@@ -3084,6 +3084,11 @@
     "height": 600,
     "bytes": 78375
   },
+  "/2026-podcasts/covers/the-complex-trauma-podcast.jpg": {
+    "width": 1080,
+    "height": 1080,
+    "bytes": 199827
+  },
   "/2026-podcasts/covers/the-mental-game.jpg": {
     "width": 600,
     "height": 600,
@@ -3118,5 +3123,10 @@
     "width": 900,
     "height": 900,
     "bytes": 75878
+  },
+  "/2026-podcasts/sarah-herstich.webp": {
+    "width": 665,
+    "height": 1000,
+    "bytes": 67438
   }
 }

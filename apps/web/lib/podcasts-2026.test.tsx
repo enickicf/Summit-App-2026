@@ -9,12 +9,17 @@ describe("Podcasts page", () => {
   it("lists every confirmed show and Mackenzie Sol as a creator", () => {
     for (const entry of podcasts2026) expect(html).toContain(entry.show.replace("&", "&amp;"));
     expect(html).toContain("Social media creator and interviewer");
-    expect(podcasts2026.filter(entry => entry.kind === "podcast")).toHaveLength(7); // owner (Oct 22): Inner Cosmos off
+    expect(podcasts2026.filter(entry => entry.kind === "podcast")).toHaveLength(7); // Inner Cosmos and Jst Us withdrawn; The Complex Trauma Podcast added
     expect(podcasts2026.map(entry => entry.show)).not.toContain("Inner Cosmos");
+    expect(podcasts2026.find(entry => entry.show === "The Complex Trauma Podcast")?.hosts[0]?.name).toBe("Sarah Herstich");
+    expect(podcasts2026.some(entry => entry.show === "Jst Us")).toBe(false);
   });
   it("uses only the two formats and orders biggest first", () => {
     for (const entry of podcasts2026) for (const format of entry.formats) expect(podcastFormats).toContain(format);
     expect(bySize([{ show: "a", hosts: [], kind: "podcast", formats: [], audience: 5 }, { show: "b", hosts: [], kind: "podcast", formats: [], audience: 50 }, { show: "c", hosts: [], kind: "podcast", formats: [] }]).map(e => e.show)).toEqual(["b", "a", "c"]);
+    const ranked = bySize(podcasts2026).map(entry => entry.show);
+    expect(ranked.indexOf("Parenting With Psychology")).toBeLessThan(ranked.indexOf("The Complex Trauma Podcast"));
+    expect(ranked.indexOf("The Complex Trauma Podcast")).toBeLessThan(ranked.indexOf("Coping with Ghosting"));
   });
   it("never shows the owner's internal notes and is not indexed", () => {
     for (const entry of podcasts2026) if (entry.internalNote) expect(html).not.toContain(entry.internalNote);

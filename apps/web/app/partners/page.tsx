@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import { podcastPartners2026 } from "../../lib/podcast-partners-2026";
 import { RoleLines } from "../../components/role-lines";
 import { isFounder } from "../../lib/people-sections";
 import { SiteImage } from "../../components/site-image";
@@ -106,6 +107,10 @@ export default async function PartnersPage() {
       </section>)}
       </div>
       {!groups.length && <p className={styles.archiveLink}>More 2026 partners will be announced.</p>}
+      <section className={styles.tier} id="podcast-partners" aria-labelledby="tier-podcasts">
+        <h2 id="tier-podcasts">Podcast Partners</h2>
+        <div className={styles.grid}>{podcastPartners2026.map(podcast => <div key={podcast.name} className={`${styles.card} ${styles.coverCard}`}><SiteImage src={podcast.cover} alt={`${podcast.name} podcast`} sizes="(max-width: 600px) 44vw, 260px" /></div>)}</div>
+      </section>
       <section className={styles.tier} id="philanthropists" tabIndex={-1} aria-labelledby="tier-philanthropists">
         <h2 id="tier-philanthropists">Philanthropists</h2>
         {philanthropists.length

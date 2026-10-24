@@ -18,19 +18,20 @@ function publicUrl(value: string | null): string | null {
   }
 }
 
-// Owner direction (Sept 21, 2026): Mike's Bikes (Community Ride, Sponsor and Talent Dinner) is off the
-// website schedule, matching the app. Published data is unchanged; staff should unpublish it there too.
-const cancelledProgram = /mike'?s bikes/i;
+// Standing owner removals from every current public website surface. Published/staff data stays intact.
+// Mike's Bikes: Sept 21. Any Governor Rick Perry segment: Oct 23.
+const excludedCurrentWebsiteProgram = /mike'?s bikes|\bgov(?:ernor)?\.?\s+rick perry\b/i;
+const excludedCurrentWebsitePerson = /^(?:gov(?:ernor)?\.?\s+)?rick perry$/i;
 
 function publicProjection(snapshot: EventSnapshot): EventSnapshot {
   const eventId = snapshot.event.id;
-  const scheduleItems = snapshot.scheduleItems.filter(item => item.eventId === eventId && item.published && item.visibilityScope.id === "public" && !cancelledProgram.test(item.title));
+  const scheduleItems = snapshot.scheduleItems.filter(item => item.eventId === eventId && item.published && item.visibilityScope.id === "public" && !excludedCurrentWebsiteProgram.test(item.title));
   // The shared schema accepts strings, but rendering requires valid time zones.
   for (const timeZone of new Set([snapshot.event.timeZone, ...scheduleItems.map(item => item.eventTimeZone)])) {
     new Intl.DateTimeFormat("en-US", { timeZone });
   }
   const speakers = snapshot.event.directoryEnabled ? snapshot.speakers
-    .filter(person => person.published && person.eventId === eventId && confirmedNames.has(personNameKey(person.name)))
+    .filter(person => person.published && person.eventId === eventId && confirmedNames.has(personNameKey(person.name)) && !excludedCurrentWebsitePerson.test(person.name.trim()))
     .map(({ roleSource: _roleSource, ...person }) => ({ ...person, headshotUrl: publicUrl(person.headshotUrl) })) : [];
   const publishedNames = new Set(speakers.map(person => personNameKey(person.name)));
   const speakerIds = new Set(speakers.map(person => person.id));
@@ -46,7 +47,7 @@ function publicProjection(snapshot: EventSnapshot): EventSnapshot {
       .map(sponsor => ({ ...sponsor, websiteUrl: publicUrl(sponsor.websiteUrl), logoUrl: publicUrl(sponsor.logoUrl) })),
     media: snapshot.media.filter(item => item.published && publicUrl(item.url)),
     contentPages: snapshot.contentPages.filter(page => page.published).map(page => /^schedule-pending-/.test(page.slug)
-      ? { ...page, body: page.body.split(/\r?\n\s*\r?\n/).filter(block => !cancelledProgram.test(block)).join("\n\n") }
+      ? { ...page, body: page.body.split(/\r?\n\s*\r?\n/).filter(block => !excludedCurrentWebsiteProgram.test(block)).join("\n\n") }
       : page)
   };
 }

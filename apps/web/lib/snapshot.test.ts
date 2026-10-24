@@ -69,7 +69,7 @@ describe("public snapshot boundary", () => {
     const snapshot = structuredClone(event2026Snapshot);
     const session = snapshot.scheduleItems[keptIndex]!;
     const person = snapshot.speakers[0]!;
-    snapshot.scheduleItems = [session, { ...session, title: "private-session", visibilityScope: { id: "staff", label: "Staff" } },
+    snapshot.scheduleItems = [session, { ...session, title: "Psychedelic Breakthroughs: Gov. Rick Perry & Bryan Hubbard" }, { ...session, title: "private-session", visibilityScope: { id: "staff", label: "Staff" } },
       { ...session, title: "draft-session", published: false }, { ...session, title: "foreign-session", eventId: "other" }];
     snapshot.speakers = [person, { ...person, name: "draft-person", published: false },
       { ...person, name: "foreign-person", eventId: "other" }, { ...person, name: "unconfirmed-person" }];
@@ -94,7 +94,7 @@ describe("public snapshot boundary", () => {
     expect(result?.speakers).toHaveLength(1);
     expect(result?.event.featuredPeople).toHaveLength(1);
     expect(result?.notices).toEqual([notice]);
-    expect(JSON.stringify(result)).not.toMatch(/private-session|draft-|foreign-|unconfirmed-person|roleSource/);
+    expect(JSON.stringify(result)).not.toMatch(/Rick Perry|private-session|draft-|foreign-|unconfirmed-person|roleSource/);
     expect(snapshot).toEqual(original);
   });
 
