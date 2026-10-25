@@ -53,12 +53,13 @@ export async function POST(request: Request) {
     && /\b(attendees?|guests?|someone|somebody|other people|participants?|each other|another person)\b/.test(question)) {
     return respond("Attendee-to-attendee messaging is not available. Use the Contact page to reach the event team.");
   }
-  if (/\b(?:room number|room\b.*\b(?:staying|stay|hotel)|where (?:is|does|will).*(?:staying|sleep)|(?:phone|email|contact)\b.*\b(?:speaker|guest|attendee|person)|talent fees?|speaker fees?|staff war room|private contacts?|who (?:is|will be) attending|founders dinner)\b/i.test(question)) {
+  if (/\b(?:room number|room\b.*\b(?:staying|stay|hotel)|where (?:is|does|will).*(?:staying|sleep)|(?:phone|email|contact)\b.*\b(?:speaker|guest|attendee|person)|(?:speaker|guest|attendee|person)\b.*\b(?:phone|email|contact)|talent fees?|speaker fees?|staff war room|private contacts?|who (?:is|will be) attending|founders dinner)\b/i.test(question)) {
     return respond("That information is not covered by the public event sources. Please contact concierge@inspiringchildren.org or (702) 421-6351 by phone, text, or WhatsApp.");
   }
   try {
     const snapshot = await getSiteSnapshot();
     if (!snapshot) return respond("Published event information is temporarily unavailable. Please try again or use the Contact page to reach the event team.", 503);
+    const faqIntent = /\b(?:park|parking|hotel|room block|airport|arriv|depart|pack|bring|badge|registration desk|concierge|weather|accessibility|dietary|allerg|solicitation|photograph|filming|updates?)\b/i.test(question);
     const searchableQuestion = ` ${personNameKey(question)} `;
     const publicPeople = awardsDisplayPeople(snapshot);
     const person = (/\bbryan brothers\b/.test(question) ? publicPeople.find(candidate => candidate.slug === "2026-bob-mike-bryan") : undefined)
@@ -94,7 +95,7 @@ export async function POST(request: Request) {
     if (sharedTicketAnswer) return respond(sharedTicketAnswer.answer, 200, sharedTicketAnswer.sources);
     const dayAnswer = communityDayAnswer(question);
     if (dayAnswer) return respond(dayAnswer, 200, [{ title: "Nevada Mental Health Day", url: "https://notaloneawards.org/community-day" }]);
-    if ((/\b(dates?|when)\b/.test(question) && /\b(summit|event)\b/.test(question)) || /^(?:what (?:is|are) (?:the )?)?dates?\??$/.test(question)) {
+    if (!faqIntent && ((/\b(dates?|when)\b/.test(question) && /\b(summit|event)\b/.test(question)) || /^(?:what (?:is|are) (?:the )?)?dates?\??$/.test(question))) {
       return respond(`${snapshot.event.name}: ${snapshot.event.dateLabel}.`);
     }
     if (/\b(venue|map)\b/.test(question) || /^(?:where is|what is the (?:location|venue) (?:for|of)) (?:the )?(?:not alone )?(?:summit|event)\??$/.test(question)) {
@@ -104,7 +105,6 @@ export async function POST(request: Request) {
       const answer = awardsFactAnswer(question);
       if (answer) return respond(answer, 200, [{ title: "Not Alone Awards 2026", url: "https://notaloneawards.org/awards/2026" }]);
     }
-    const faqIntent = /\b(?:park|parking|hotel|room block|airport|arriv|depart|pack|bring|badge|registration desk|concierge|weather|accessibility|dietary|allerg|solicitation|photograph|filming|updates?)\b/i.test(question);
     const programAnswer = faqIntent ? null : publishedProgramAnswer(question, snapshot, new Date().toISOString());
     if (programAnswer) return respond(programAnswer, 200, [{ title: "Published Summit schedule", url: "https://notalonesummit.org/schedule" }]);
     const awardsAnswer = awardsFactAnswer(question);
