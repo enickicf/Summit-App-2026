@@ -12,6 +12,8 @@ describe("Podcasts page", () => {
     expect(podcasts2026.filter(entry => entry.kind === "podcast")).toHaveLength(7); // Inner Cosmos and Jst Us withdrawn; The Complex Trauma Podcast added
     expect(podcasts2026.map(entry => entry.show)).not.toContain("Inner Cosmos");
     expect(podcasts2026.find(entry => entry.show === "The Complex Trauma Podcast")?.hosts[0]?.name).toBe("Sarah Herstich");
+    expect(podcasts2026.find(entry => entry.show === "The Complex Trauma Podcast")?.imagePosition).toBe("50% 24%");
+    expect(html).toContain('object-position:50% 24%');
     expect(podcasts2026.some(entry => entry.show === "Jst Us")).toBe(false);
   });
   it("uses only the two formats and orders biggest first", () => {

@@ -13,7 +13,7 @@ export function PodcastCard({ entry }: { entry: PodcastEntry }) {
   const hostLine = entry.kind === "interviewer" ? "Social media creator and interviewer" : `with ${entry.hosts.map(host => host.name).join(" and ")}`;
   const links = Object.entries(entry.links ?? {}).filter(([, url]) => url) as [keyof PodcastLinks, string][];
   const media = entry.image
-    ? <img src={entry.image} alt={entry.imageKind === "logo" ? `${entry.show} logo` : entry.hosts.map(host => host.name).join(" and ")} className={entry.imageKind === "logo" ? styles.cardLogo : entry.imageFit === "contain" ? `${styles.cardImage} ${styles.cardImageContain}` : styles.cardImage} loading="lazy" />
+    ? <img src={entry.image} alt={entry.imageKind === "logo" ? `${entry.show} logo` : entry.hosts.map(host => host.name).join(" and ")} className={entry.imageKind === "logo" ? styles.cardLogo : styles.cardImage} style={entry.imagePosition ? { objectPosition: entry.imagePosition } : undefined} loading="lazy" />
     : <span className={styles.monogram} aria-hidden="true">{initials(entry.show)}</span>;
   return <>
     <button type="button" className={styles.card} onClick={() => setOpen(true)} aria-haspopup="dialog">
