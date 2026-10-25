@@ -37,6 +37,27 @@ export function isStaffSession(token: string | undefined, env: StaffEnv = proces
   return a.length === b.length && timingSafeEqual(a, b);
 }
 
+// Oct 24: podcast partners may review interview bookings without receiving access to RSVPs,
+// nominations, guest contact lists, waivers, or any other staff data.
+export const podcastStaffCookieName = "na_podcast_staff";
+type PodcastStaffEnv = { PODCAST_PORTAL_PASSWORD?: string | undefined };
+const podcastStaffEnv = () => process.env as PodcastStaffEnv;
+export function podcastStaffPassword(env: PodcastStaffEnv = podcastStaffEnv()): string | null {
+  const value = env.PODCAST_PORTAL_PASSWORD?.trim();
+  return value ? value : null;
+}
+export function podcastStaffSessionToken(password: string): string {
+  return `v1.${createHmac("sha256", `not-alone-podcast-staff:${password}`).update("signed-in").digest("hex")}`;
+}
+export function podcastStaffPasswordMatches(candidate: string, env: PodcastStaffEnv = podcastStaffEnv()): boolean {
+  const expected = podcastStaffPassword(env);
+  return expected ? sameBytes(Buffer.from(candidate.normalize()), Buffer.from(expected.normalize())) : false;
+}
+export function isPodcastStaffSession(token: string | undefined, env: PodcastStaffEnv = podcastStaffEnv()): boolean {
+  const expected = podcastStaffPassword(env);
+  return expected && token ? sameBytes(Buffer.from(token), Buffer.from(podcastStaffSessionToken(expected))) : false;
+}
+
 // Owner (Sept 30, 2026): VIP data has its own portal and its own password, so only the staff who are
 // given it can see VIP guests. The regular staff password never opens it, and vice versa. Unset = locked.
 export const vipCookieName = "na_vip";
@@ -49,7 +70,7 @@ export function vipPassword(env: VipEnv = vipEnv()): string | null {
 export function vipSessionToken(password: string): string {
   return `v1.${createHmac("sha256", `not-alone-vip-portal:${password}`).update("signed-in").digest("hex")}`;
 }
-const sameBytes = (a: Buffer, b: Buffer) => a.length === b.length && timingSafeEqual(a, b);
+function sameBytes(a: Buffer, b: Buffer) { return a.length === b.length && timingSafeEqual(a, b); }
 export function vipPasswordMatches(candidate: string, env: VipEnv = vipEnv()): boolean {
   const expected = vipPassword(env);
   return expected ? sameBytes(Buffer.from(candidate.normalize()), Buffer.from(expected.normalize())) : false;

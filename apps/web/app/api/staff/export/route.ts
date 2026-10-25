@@ -2,7 +2,7 @@ import { waiverSummary } from "../../../../lib/event-waiver";
 import { cookies } from "next/headers";
 import { inboxCsvColumns, listFailedSubmissions, listReceivedSubmissions } from "../../../../lib/staff/submission-inbox";
 import { textConsentColumns, textConsentCsvColumns, textContactCsvColumns, textContactRows, type TextContact } from "../../../../lib/staff/text-consent";
-import { isStaffSession, staffCookieName } from "../../../../lib/staff/auth";
+import { isPodcastStaffSession, isStaffSession, podcastStaffCookieName, staffCookieName } from "../../../../lib/staff/auth";
 import { activeOf, activeRsvps, closingDinnerCsvColumns, closingDinnerSeats, getSubmissionStore, listAllRsvps, rsvpExportForms, rsvpsOfForm, type RsvpExportForm, withRsvpForm, nominationCsvColumns, pokerCsvColumns, rsvpCsvColumns, siteVisitCsvColumns, toCsv, wellnessCsvColumns, workshopCsvColumns } from "../../../../lib/staff/store";
 
 export const runtime = "nodejs";
@@ -11,8 +11,10 @@ export const dynamic = "force-dynamic";
 // CSV export for the staff portal (signed-in staff only).
 export async function GET(request: Request) {
   const jar = await cookies();
-  if (!isStaffSession(jar.get(staffCookieName)?.value)) return new Response("Sign in required.", { status: 401, headers: { "Cache-Control": "no-store" } });
   const kind = new URL(request.url).searchParams.get("kind");
+  const fullAccess = isStaffSession(jar.get(staffCookieName)?.value);
+  const podcastAccess = isPodcastStaffSession(jar.get(podcastStaffCookieName)?.value);
+  if (!fullAccess && !(podcastAccess && kind === "podcast-bookings")) return new Response("Sign in required.", { status: 401, headers: { "Cache-Control": "no-store" } });
   const store = await getSubmissionStore();
   // Oct 12: text message opt-outs and consents override what the forms recorded (lib/staff/text-consent.ts).
   const textPreferences = await store.list("textPreference");

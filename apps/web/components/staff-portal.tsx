@@ -3,7 +3,7 @@ import { SiteImage } from "./site-image";
 import { PortalViewSwitch } from "./portal-views";
 import { PortalAutoRefresh } from "./portal-auto-refresh";
 import { RsvpEmailTools } from "./rsvp-email-tools";
-import { activeOf, activeRsvps, comingTo, currentRequests, guestDetailsMissing, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, ustaRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels, siteVisitTransportLabels, type SiteVisitTransport, type TextPreferenceRecord, type ClosingDinnerSubmission, closingDinnerSeats, closingDinnerTotals } from "../lib/staff/store";
+import { activeOf, activeRsvps, comingTo, currentRequests, guestDetailsMissing, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, ustaRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels, siteVisitTransportLabels, type SiteVisitTransport, type TextPreferenceRecord, type ClosingDinnerSubmission, type PodcastBookingSubmission, closingDinnerSeats, closingDinnerTotals } from "../lib/staff/store";
 import styles from "../app/staff/staff.module.css";
 import type { InboxEntry } from "../lib/staff/submission-inbox";
 import { wellnessSessions } from "../lib/wellness-signups-2026";
@@ -13,6 +13,39 @@ import { textConsentLabels, textConsentProtocolNote, textConsentShortLabels, tex
 export type LineupGroup = { title: string; people: { name: string; role: string; rank: number | null; tier: string | null; photo: boolean }[] };
 
 const when = (iso: string) => new Date(iso).toLocaleString("en-US", { timeZone: "America/Los_Angeles", month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" }) + " PT";
+
+function PodcastBookings({ bookings }: { bookings: PodcastBookingSubmission[] }) {
+  const rows = [...bookings].sort((a, b) => a.startUtc.localeCompare(b.startUtc) || a.podcast.localeCompare(b.podcast));
+  const short = rows.filter(row => row.format === "short").length;
+  const long = rows.filter(row => row.format === "long").length;
+  return <>
+    <section className={styles.stats} aria-label="Podcast booking totals">
+      <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{rows.length}</span><span className={styles.statLabel}>Interviews booked</span></div>
+      <div className={styles.stat}><span className={styles.statValue}>{short}</span><span className={styles.statLabel}>Short form</span><span className={styles.statNote}>After the red carpet walk</span></div>
+      <div className={styles.stat}><span className={styles.statValue}>{long}</span><span className={styles.statLabel}>Long form</span><span className={styles.statNote}>75-minute recordings</span></div>
+    </section>
+    <section className={styles.section} id="podcast-bookings" aria-labelledby="podcast-bookings-title">
+      <div className={styles.sectionHead}><h2 id="podcast-bookings-title">Podcast interview bookings</h2><a className={styles.button} href="/api/staff/export?kind=podcast-bookings">Download CSV</a></div>
+      <p className={styles.help}>Confirmed interview times from the private podcast page. Exact room locations will be announced closer to the event.</p>
+      {rows.length === 0 ? <p className={styles.empty}>No podcast interviews have been booked yet.</p> : <div className={styles.tableWrap}><table className={styles.table}>
+        <thead><tr><th>Interview time</th><th>Podcast</th><th>Guest</th><th>Email</th><th>Format</th><th>Room</th><th>Travel</th><th>Booked</th></tr></thead>
+        <tbody>{rows.map(row => <tr key={row.id}><td className={styles.nowrap}>{when(row.startUtc)}<br/><small>to {when(row.endUtc)}</small></td><td className={styles.strong}>{row.podcast}</td><td>{row.guestName}</td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td>{row.format === "short" ? "Short form" : "Long form"}</td><td className={styles.nowrap}>{row.room}</td><td>{row.travelVerified ? "Verified flight" : row.arrivalLocal ? `Guest entered ${row.arrivalLocal.replace("T", " ")}` : "Pending verification"}</td><td className={styles.nowrap}>{when(row.submittedAt)}</td></tr>)}</tbody>
+      </table></div>}
+    </section>
+  </>;
+}
+
+export function PodcastStaffPortal({ bookings, generatedAt }: { bookings: PodcastBookingSubmission[]; generatedAt: string }) {
+  return <main id="main-content" tabIndex={-1} className={styles.page}>
+    <PortalAutoRefresh />
+    <header className={styles.top}>
+      <div className={styles.brand}><SiteImage src="/images/na-summit-logo-black-2.png" alt="Not Alone Summit" sizes="72px" className={styles.brandLogo} /><div><p className={styles.eyebrow}>Not Alone 2026</p><h1>Podcast Bookings</h1></div></div>
+      <nav className={styles.viewTabs} aria-label="Podcast staff actions"><a href="/awards/podcasts">Podcast page</a><form method="post" action="/api/staff/logout"><button type="submit" className={styles.linkButton}>Sign out</button></form></nav>
+    </header>
+    <PodcastBookings bookings={bookings} />
+    <p className={styles.footer}>Generated {when(generatedAt)} · Refreshes automatically every minute · Podcast booking access only</p>
+  </main>;
+}
 
 // Owner (Sept 23): red = Awards Show, blue = Community Day; both when a guest is coming to both.
 function ComingTo({ record }: { record: RsvpSubmission }) {
@@ -120,7 +153,7 @@ export function groupSiteVisit(rows: WorkshopSubmission[]) {
 
 // Owner (Sept 23): one clean, Not Alone-themed staff portal: ticket requests (with running totals at
 // the top), nominations in their own section, and the current Awards lineup for reference.
-export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPreferences = [], closingDinner = [], needsAttention = [], anonymousFailures = 0, lineup, generatedAt, addGuest = {} }: { addGuest?: { added?: string | undefined; to?: string | undefined; error?: string | undefined }; rsvps: RsvpSubmission[]; nominations: NominationSubmission[]; poker: PokerSubmission[]; workshops?: WorkshopSubmission[]; textPreferences?: TextPreferenceRecord[]; closingDinner?: ClosingDinnerSubmission[]; needsAttention?: InboxEntry[] | null; anonymousFailures?: number; lineup: LineupGroup[]; generatedAt: string }) {
+export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPreferences = [], closingDinner = [], podcastBookings = [], needsAttention = [], anonymousFailures = 0, lineup, generatedAt, addGuest = {} }: { addGuest?: { added?: string | undefined; to?: string | undefined; error?: string | undefined }; rsvps: RsvpSubmission[]; nominations: NominationSubmission[]; poker: PokerSubmission[]; workshops?: WorkshopSubmission[]; textPreferences?: TextPreferenceRecord[]; closingDinner?: ClosingDinnerSubmission[]; podcastBookings?: PodcastBookingSubmission[]; needsAttention?: InboxEntry[] | null; anonymousFailures?: number; lineup: LineupGroup[]; generatedAt: string }) {
   // Removed requests (test entries) leave every list and total but stay stored under "Removed".
   const active = activeRsvps(rsvps);
   const removed = removedRsvps(rsvps);
@@ -169,6 +202,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
         <a href="#site-visit" data-view-tab="site-visit" aria-selected="false">Tennis &amp; High Tea</a>
         <a href="#wellness" data-view-tab="wellness" aria-selected="false">Wellness</a>
         <a href="#closing-dinner" data-view-tab="closing-dinner" aria-selected="false">Closing Dinner</a>
+        <a href="#podcasts" data-view-tab="podcasts" aria-selected="false">Podcasts</a>
         <a href="#texts" data-view-tab="texts" aria-selected="false">Texts</a>
         <a href="#poker" data-view-tab="poker" aria-selected="false">Sponsorship</a>
         {/* Owner (Sept 30): a complete copy of everything, downloadable from any device at any time. */}
@@ -370,6 +404,10 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
           <tbody>{[...dinnerActive].sort((a, b) => a.submittedAt.localeCompare(b.submittedAt)).map((row, index) => <tr key={row.id}><td>{index + 1}</td><td className={styles.nowrap}>{when(row.submittedAt)}</td><td className={styles.strong}>{row.name}<br/><small>{waiverSummary(row.eventWaiver)}</small>{row.bringingGuest && <><br/><small>{row.guestName}: {waiverSummary(row.guestEventWaiver)}</small></>}</td><td>{[row.organization, row.professionalRole].filter(Boolean).join(" · ")}</td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td className={styles.nowrap}>{row.phone}</td><td>{closingDinnerSeats(row)}</td><td>{row.bringingGuest ? `${row.guestName} <${row.guestEmail}> ${row.guestPhone} ${[row.guestOrganization, row.guestProfessionalRole].filter(Boolean).join(" · ")}` : "—"}</td><td className={styles.nowrap}>{textConsentShortLabels[textConsentStatus(row, textPreferences)]}</td><td className={styles.notes}>{row.notes}</td></tr>)}</tbody>
         </table></div>}
       </section>
+    </div>
+
+    <div data-view="podcasts" id="podcasts" hidden>
+      <PodcastBookings bookings={podcastBookings} />
     </div>
 
     {/* Oct 12 (owner): who may be texted. Never text an opted-out number; news only to "Yes"; every text ends "Reply STOP to opt out." */}

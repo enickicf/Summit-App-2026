@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { comingTo, fileSubmissionStore, memorySubmissionStore, newSubmission, nominationCsvColumns, rsvpCsvColumns, rsvpTotals, toCsv, type NominationSubmission, type RsvpSubmission } from "./store";
-import { isStaffSession, passwordMatches, staffPassword, staffSessionToken } from "./auth";
+import { isPodcastStaffSession, isStaffSession, passwordMatches, podcastStaffPassword, podcastStaffPasswordMatches, podcastStaffSessionToken, staffPassword, staffSessionToken } from "./auth";
 import { handleRsvpPost } from "../../app/api/rsvp/route";
 import { handleNominationPost } from "../../app/api/nominations/route";
 import { StaffPortal } from "../../components/staff-portal";
@@ -71,6 +71,17 @@ describe("password-only staff sign-in", () => {
     expect(isStaffSession(token, { STAFF_PORTAL_PASSWORD: "changed" })).toBe(false); // changing the password signs everyone out
     expect(isStaffSession(undefined, env)).toBe(false);
     expect(isStaffSession("v1.garbage", env)).toBe(false);
+  });
+
+  it("keeps the podcast password in a separate podcast-only session", () => {
+    const env = { PODCAST_PORTAL_PASSWORD: "podcast-password" };
+    expect(podcastStaffPassword({})).toBeNull();
+    expect(podcastStaffPasswordMatches("podcast-password", env)).toBe(true);
+    expect(podcastStaffPasswordMatches("Podcast-password", env)).toBe(false);
+    const token = podcastStaffSessionToken("podcast-password");
+    expect(isPodcastStaffSession(token, env)).toBe(true);
+    expect(isPodcastStaffSession(token, { PODCAST_PORTAL_PASSWORD: "changed" })).toBe(false);
+    expect(isStaffSession(token, { STAFF_PORTAL_PASSWORD: "podcast-password" })).toBe(false);
   });
 });
 
