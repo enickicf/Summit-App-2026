@@ -25,7 +25,7 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "kristin hatcher": { file: "/2026-headshots/portraits/kristin-hatcher-sq-20261024.jpg", source: "airtable" },
   "logan rose": { file: "/2026-headshots/portraits/logan-rose-sq-20261024.jpg", source: "airtable" },
   "sara steinweiss": { file: "/2026-headshots/portraits/sara-steinweiss-sq-20261024.jpg", source: "airtable" },
-  "dmc dj": { file: "/2026-headshots/portraits/dmc-dj-sq-20261024.jpg", source: "airtable" },
+  "dj": { file: "/2026-headshots/portraits/dmc-dj-sq-20261024.jpg", source: "airtable" },
   "melony lewis": { file: "/2026-headshots/portraits/melony-lewis-sq-20261024.jpg", source: "airtable" },
   "winston kelly": { file: "/2026-headshots/portraits/winston-kelly-sq-20261024.jpg", source: "airtable" },
   "cameron kelly": { file: "/2026-headshots/portraits/cameron-kelly-sq-20261024.jpg", source: "airtable" },
