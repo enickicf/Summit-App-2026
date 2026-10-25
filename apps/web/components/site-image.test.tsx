@@ -1,5 +1,5 @@
 import { readFile, readdir } from "node:fs/promises";
-import { getSharp, optimizeImage } from "next/dist/server/image-optimizer";
+import { getSharp, optimizeImage } from "next/dist/server/image-optimizer/transform";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import assets from "./site-image-assets.json";
