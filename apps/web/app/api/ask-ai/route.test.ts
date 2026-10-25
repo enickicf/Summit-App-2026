@@ -56,19 +56,16 @@ describe("Ask AI ticketing and site context", () => {
     expect((await (await askOnAwards("Does Nevada Mental Health Day admission include the Awards Show?")).json()).answer).toContain("does not include an Awards Show ticket");
   });
 
-  it("keeps detailed Summit inquiries on the Awards site at the private-event boundary", async () => {
-    for (const question of ["Who is speaking at the Summit?", "What is the Summit schedule?", "How do I get Summit tickets?"]) {
-      const { answer } = await (await askOnAwards(question)).json();
-      expect(answer).toContain("private, invitation-only event");
-      expect(answer).toContain("Summit website");
-      expect(answer).not.toContain("Molly's Game Poker Night");
-    }
+  it("answers published Summit questions on the Awards site while preserving invitation rules", async () => {
+    const { answer } = await (await askOnAwards("What is the Summit schedule?")).json();
+    expect(answer).toContain("published schedule");
+    expect(answer).toContain("Molly's Game Poker Night");
+    expect((await (await askOnAwards("How do I get Summit tickets?")).json()).answer).toContain("invitation-only");
     expect((await (await askOnAwards("When is the Summit?")).json()).answer).toContain(event2026Snapshot.event.dateLabel);
     expect((await (await ask("What happens Monday at the summit?")).json()).answer).toContain("Awards Show");
     const awardsKnowledge = buildAskAiKnowledge(event2026Snapshot, "What is the Summit schedule?", "awards");
-    expect(awardsKnowledge.schedule).toEqual([]);
-    expect(awardsKnowledge.guests).toEqual([]);
-    expect(awardsKnowledge.pendingNotes).toEqual([]);
+    expect(awardsKnowledge.schedule.length).toBeGreaterThan(0);
+    expect(awardsKnowledge.guests.length).toBeGreaterThan(0);
   });
 
   it("uses the browser's Awards context when Netlify forwards to a shared internal host", async () => {
@@ -76,12 +73,12 @@ describe("Ask AI ticketing and site context", () => {
       method: "POST", body: JSON.stringify({ question: "What is the Summit schedule?" }),
       headers: { "Content-Type": "application/json", "X-Ask-AI-Site": "awards" }
     }));
-    expect((await response.json()).answer).toContain("private, invitation-only event");
+    expect((await response.json()).answer).toContain("published schedule");
     const forwarded = await POST(new Request("https://not-alone-summit.netlify.app/api/ask-ai", {
       method: "POST", body: JSON.stringify({ question: "What is the Summit schedule?" }),
       headers: { "Content-Type": "application/json", "X-Forwarded-Host": "notaloneawards.org" }
     }));
-    expect((await forwarded.json()).answer).toContain("private, invitation-only event");
+    expect((await forwarded.json()).answer).toContain("published schedule");
   });
 });
 
@@ -173,7 +170,7 @@ describe("public concierge published facts and failures", () => {
     expect(monday).toContain("Awards Show");
     expect(monday).toContain("Monday, November 2, 2026");
     expect(monday).toContain("PST");
-    expect(monday).toContain("Access:");
+    expect(monday).toContain("Location:");
     expect((await (await ask("When is tennis?")).json()).answer).toContain("10:00 AM; end time to be confirmed");
     expect((await (await ask("Where is the registration desk?")).json()).answer).toContain("have not been published");
   });
@@ -187,7 +184,7 @@ describe("public concierge published facts and failures", () => {
     const { answer } = await response.json();
     expect(answer).toContain(title);
     expect(answer).toContain(time);
-    expect(answer).not.toContain("Margaux"); // Owner / Ryan (Sept 29): rooms are private (lib/room-privacy.ts)
+    expect(answer).toContain("Location: Margaux");
     expect(answer).not.toContain("Mike's Bikes Community Ride");
     expect(answer).not.toContain("Powered by:");
   });
@@ -208,8 +205,8 @@ describe("public concierge published facts and failures", () => {
     const { answer } = await response.json();
     expect(answer).toContain("Published linked conversation");
     expect(answer).toContain("Monday, November 2, 2026");
-    expect(answer).toContain("8:00 PM PST - 10:00 PM PST");
-    expect(answer).toContain(`Access: ${item.eligibilityScope.label}`);
+    expect(answer).toContain("8:00 PM PST – 10:00 PM PST");
+    expect(answer).toContain("Location:");
     expect(answer).not.toContain("Jewel is listed for 2026");
   });
 
@@ -378,17 +375,17 @@ describe("Ask AI awards facts", () => {
     expect((await (await ask("Where are the awards held?")).json()).answer).toContain("Encore Theater at Wynn Las Vegas");
   });
 
-  // Owner (Oct 7 meeting): publicly the evening is Doors Open 6:30 PM and the Awards Show 7:30–10:00 PM; no Pre-Show.
-  // Answered before the published program because the staff app's revision 9 still carries the old times.
-  it("answers Awards Show time questions with the owner's Oct 7 evening and feeds the model no Pre-Show", async () => {
+  it("answers Awards Show time questions from the published schedule and avoids conflicting duplicate times", async () => {
     for (const question of ["What time do the Awards start?", "When is the Not Alone Awards Show?", "What time do doors open for the awards?"]) {
-      const { answer } = await (await ask(question)).json();
-      expect(answer).toBe("The 2026 Not Alone Awards Show is on Monday, November 2, 2026 at the Encore Theater at Wynn Las Vegas. Doors open 6:30 PM; the Awards Show runs 7:30 PM-10:00 PM.");
+      const { answer, sources } = await (await ask(question)).json();
+      expect(answer).toContain("Awards Show");
+      expect(answer).toContain("PST");
+      expect(answer).toContain("Timings and program subject to change.");
+      expect(sources[0].title).toBe("Published Summit schedule");
     }
     const knowledge = JSON.stringify(buildAskAiKnowledge(structuredClone(event2026Snapshot)));
-    expect(knowledge).toContain('"doorsOpen":"6:30 PM"');
-    expect(knowledge).toContain('"awardsShow":"7:30 PM-10:00 PM"');
-    expect(knowledge).toContain('"evening":"Doors Open 6:30 PM · Awards Show 7:30 PM-10:00 PM"');
+    expect(knowledge).toContain('"scheduleSource":"Use the published schedule records below for current doors and show times."');
+    expect(knowledge).not.toContain('"awardsShow":"7:30 PM-10:00 PM"');
     expect(knowledge).not.toContain("Pre-Show");
     // The other pending notes still reach the model untouched.
     expect(knowledge).toContain("Doors Open: 6:30 PM; end time to be confirmed.");

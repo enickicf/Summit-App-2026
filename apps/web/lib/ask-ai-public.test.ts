@@ -30,19 +30,22 @@ describe("Ask AI public boundary", () => {
       .toContain("helped create and run much of the #NotAloneChallenge");
   });
 
-  it("does not offer Summit web search or Summit citations to the Awards-site model", async () => {
+  it("uses the same approved public sources on the Awards and Summit domains", async () => {
     vi.stubEnv("ENABLE_AI", "true");
     vi.stubEnv("OPENAI_API_KEY", "test-key");
     const fetchMock = vi.fn(async (_url: string, init?: RequestInit) => {
       const body = JSON.parse(String(init?.body));
-      expect(body.tools[0].filters.allowed_domains).toEqual(["inspiringchildren.org", "notaloneawards.org"]);
-      expect(JSON.parse(body.input).facts.schedule).toEqual([]);
+      expect(body.tools[0].filters.allowed_domains).toEqual(["inspiringchildren.org", "notalonesummit.org", "notaloneawards.org"]);
+      expect(JSON.parse(body.input).facts.schedule.length).toBeGreaterThan(0);
       return Response.json({ output_text: JSON.stringify({ relevant: true, answer: "Public Awards information.", sources: [
         { title: "Awards", url: "https://notaloneawards.org/awards/2026" },
         { title: "Summit", url: "https://notalonesummit.org/schedule" }
       ] }) });
     });
     const result = await createAskAiModelAnswer("What is the Awards Show?", buildAskAiKnowledge(event2026Snapshot, "", "awards"), fetchMock as typeof fetch, "awards");
-    expect(result.sources).toEqual([{ title: "Awards", url: "https://notaloneawards.org/awards/2026" }]);
+    expect(result.sources).toEqual([
+      { title: "Awards", url: "https://notaloneawards.org/awards/2026" },
+      { title: "Summit", url: "https://notalonesummit.org/schedule" }
+    ]);
   });
 });

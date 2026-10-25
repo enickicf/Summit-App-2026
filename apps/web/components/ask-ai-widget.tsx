@@ -3,7 +3,7 @@
 import { useEffect, useId, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Sparkles, X } from "lucide-react";
-import { AskAiForm } from "../app/ask-ai/ask-ai-form";
+import { AskAiForm, askAiSuggestions } from "../app/ask-ai/ask-ai-form";
 import styles from "./ask-ai-widget.module.css";
 
 // Owner (Sept 23): Ask AI leaves the Summit menu and becomes a floating button in the bottom-right
@@ -14,11 +14,7 @@ export function AskAiWidget() {
   const [open, setOpen] = useState(false);
   const [actionsVisibleOnPhone, setActionsVisibleOnPhone] = useState(false);
   const panelId = useId();
-  const suggestions = pathname.startsWith("/awards")
-    ? ["When will I get ticket confirmation?", "What time do Awards doors open?", "Does Nevada Mental Health Day include the Awards Show?"]
-    : pathname === "/community-day"
-      ? ["When will I get ticket confirmation?", "What happens on Nevada Mental Health Day?", "Does Nevada Mental Health Day include an Awards ticket?"]
-      : ["Where can I find the Summit schedule?", "Is the Summit private?", "When will I get ticket confirmation?"];
+  const suggestions = askAiSuggestions;
 
   useEffect(() => {
     if (pathname !== "/community-day") return;
@@ -45,7 +41,7 @@ export function AskAiWidget() {
     return () => window.removeEventListener("keydown", close);
   }, [open]);
 
-  if (pathname === "/ask-ai" || pathname.startsWith("/staff")) return null;
+  if (pathname === "/ask-ai" || pathname === "/ask" || pathname.startsWith("/staff")) return null;
 
   return <div className={`${styles.widget}${actionsVisibleOnPhone && !open ? ` ${styles.hiddenByActions}` : ""}`}>
     {open && <section className={styles.panel} id={panelId} role="dialog" aria-label="Ask AI">

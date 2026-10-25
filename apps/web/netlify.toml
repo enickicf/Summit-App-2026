@@ -1,6 +1,6 @@
 # Netlify build for the public Summit/Awards website (owner-approved new Netlify site, Sept 18 2026).
 # Netlify's Next.js runtime is detected automatically. No secrets live here: optional Ask AI
-# settings (ENABLE_AI, OPENAI_API_KEY, OPENAI_MODEL) and SITE_URL are set in the Netlify UI.
+# settings (ENABLE_AI, OPENAI_API_KEY, OPENAI_MODEL, ASK_AI_FAQ_URL, ASK_AI_LOG_KEY) and SITE_URL are set in the Netlify UI.
 [build]
   command = "pnpm --filter @not-alone/web run build"
   publish = "apps/web/.next"

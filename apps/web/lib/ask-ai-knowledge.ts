@@ -1,5 +1,4 @@
 import type { EventSnapshot } from "@not-alone/validation";
-import { publicLocation } from "./room-privacy";
 import source from "./original-sites.json";
 import { awards2026Editorial, awards2026Evening } from "./awards-editorial";
 import { awardsDoorsOpen2026 } from "./event-partners-2026";
@@ -109,7 +108,7 @@ export function isMentalHealthQuestion(question: string) {
 export const mentalHealthAnswer = `I can't give mental health advice here, but you're not alone. The Not Alone Mental Fitness Tools, created by youth and reviewed by experts, are free at ${notAloneToolsUrl}. If this is an emergency, call 911. For crisis support, call or text 988 (Suicide & Crisis Lifeline).`;
 
 /** Compact, public-only knowledge pack for the model. Drafts, staff data and private contacts never enter it. */
-export function buildAskAiKnowledge(snapshot: EventSnapshot, question = "", audience: "summit" | "awards" = "summit") {
+export function buildAskAiKnowledge(snapshot: EventSnapshot, question = "", audience: "summit" | "awards" = "summit", officialFaq: string | null = null) {
   const publicItems = snapshot.scheduleItems.filter(item => item.published && item.visibilityScope.id === "public" && item.eventId === snapshot.event.id);
   const normalized = ` ${personNameKey(question)} `;
   const matchingProfiles = awardsDisplayPeople(snapshot).filter(person => normalized.includes(` ${personNameKey(person.name)} `)).slice(0, 2);
@@ -120,7 +119,7 @@ export function buildAskAiKnowledge(snapshot: EventSnapshot, question = "", audi
       dates: snapshot.event.dateLabel,
       venue: `${snapshot.event.venueName}, ${snapshot.event.city}`,
       timeZone: snapshot.event.timeZone,
-      purpose: audience === "summit" ? summitPurpose : "A private, invitation-only event. Refer detailed Summit questions to the Summit website.",
+      purpose: summitPurpose,
       poweredBy: "Steven & Alexandra Cohen Foundation"
     },
     awards2026: {
@@ -129,10 +128,7 @@ export function buildAskAiKnowledge(snapshot: EventSnapshot, question = "", audi
       host: awards2026Editorial.host,
       poweredBy: awards2026Editorial.foundation,
       presentedBy: "Inspiring Children Foundation + NAMI",
-      // Owner (Oct 7 meeting): the public evening; no Pre-Show is announced.
-      doorsOpen: awardsDoorsOpen2026,
-      awardsShow: awardsShowTime2026,
-      evening: awards2026Evening.map(entry => `${entry.label} ${entry.time}`).join(" · "),
+      scheduleSource: "Use the published schedule records below for current doors and show times.",
       rsvp: awards2026Editorial.rsvpUrl
     },
     communityDay2026: {
@@ -150,19 +146,22 @@ export function buildAskAiKnowledge(snapshot: EventSnapshot, question = "", audi
     inspiringChildrenFoundation: { overview: icfOverview, taxStatus: icfTaxStatus, program: programCopy,
       youthContribution: { fact: "ICF youth and alumni helped create and run much of the #NotAloneChallenge and helped develop its free mental fitness tools with Mental Health Advisory Committee oversight.", source: "https://www.inspiringchildren.org/tools" },
       donate: "https://www.inspiringchildren.org/donate", mailingAddress: contactAddress },
-    schedule: (audience === "summit" ? publicItems : []).map(item => ({
+    schedule: publicItems.map(item => ({
       title: item.title,
       status: item.status,
       startUtc: item.startUtc,
       endUtc: item.endUtc,
-      location: publicLocation(item.locationName),
+      eventTimeZone: item.eventTimeZone,
+      locationName: item.locationName,
+      attire: (item as typeof item & { attire?: string }).attire || undefined,
       publicSummary: item.summary,
       foundersOnly: isFoundersOnly(item)
     })),
-    pendingNotes: audience === "summit" ? snapshot.contentPages.filter(page => page.published && page.slug.startsWith("schedule-pending")).map(page => withoutPreShow(page.body)) : [],
-    guests: audience === "summit" ? directoryPeople(snapshot).map(person => ({ name: person.name, role: person.role })) : [],
-    matchingPublishedProfiles: audience === "summit" ? matchingProfiles.map(person => ({ name: person.name, role: person.role, bio: person.bio.slice(0, 1200), profile: `https://notalonesummit.org/directory/${encodeURIComponent(person.slug)}` })) : [],
-    partners: audience === "summit" ? snapshot.sponsors.filter(sponsor => sponsor.published).map(sponsor => ({ name: sponsor.name, tier: sponsor.tier, website: sponsor.websiteUrl })) : [],
-    faqs: audience === "summit" ? snapshot.faqs.filter(faq => faq.published).map(faq => ({ question: faq.question, answer: faq.answer })) : []
+    officialSummitFaq: officialFaq ? { label: "OFFICIAL SUMMIT FAQ (maintained by staff; treat as authoritative for logistics).", content: officialFaq } : null,
+    pendingNotes: snapshot.contentPages.filter(page => page.published && page.slug.startsWith("schedule-pending")).map(page => withoutPreShow(page.body)),
+    guests: directoryPeople(snapshot).map(person => ({ name: person.name, role: person.role })),
+    matchingPublishedProfiles: matchingProfiles.map(person => ({ name: person.name, role: person.role, bio: person.bio.slice(0, 1200), profile: `https://notalonesummit.org/directory/${encodeURIComponent(person.slug)}` })),
+    partners: snapshot.sponsors.filter(sponsor => sponsor.published).map(sponsor => ({ name: sponsor.name, tier: sponsor.tier, website: sponsor.websiteUrl })),
+    faqs: snapshot.faqs.filter(faq => faq.published).map(faq => ({ question: faq.question, answer: faq.answer }))
   };
 }

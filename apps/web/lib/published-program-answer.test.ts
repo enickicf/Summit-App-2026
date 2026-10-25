@@ -22,7 +22,7 @@ describe("published website program answers", () => {
     expect(publishedProgramAnswer("Is jewelry allowed?", event2026Snapshot, now)).toBeNull();
   });
 
-  it("includes cancellation, event dates, access, and overnight end dates", () => {
+  it("includes cancellation, event dates, published locations, and overnight end dates", () => {
     const snapshot = structuredClone(event2026Snapshot);
     const show = snapshot.scheduleItems.find(item => item.title === "Awards Show")!;
     show.status = "canceled";
@@ -30,7 +30,18 @@ describe("published website program answers", () => {
     const poker = publishedProgramAnswer("When is poker?", snapshot, now);
     expect(poker).toContain("Sunday, November 1, 2026");
     expect(poker).toContain("Nov 2, 2026, 12:00 AM PST");
-    expect(poker).toContain("Access:");
+    expect(poker).toContain("Location: Margaux");
+    expect(poker).toContain("Timings and program subject to change.");
+  });
+
+  it("includes attire after location when the published item provides it", () => {
+    const snapshot = structuredClone(event2026Snapshot);
+    const show = snapshot.scheduleItems.find(item => item.title === "Awards Show")! as typeof snapshot.scheduleItems[number] & { attire?: string };
+    show.attire = "Formal or semi-formal, with flair";
+    const answer = publishedProgramAnswer("What is the dress code for the Awards Show, and what time does it start?", snapshot, now)!;
+    expect(answer).toContain("Location:");
+    expect(answer).toContain("Attire: Formal or semi-formal, with flair");
+    expect(answer.indexOf("Location:")).toBeLessThan(answer.indexOf("Attire:"));
   });
 
   it("does not present hidden or unpublished activities or past activities as next", () => {
