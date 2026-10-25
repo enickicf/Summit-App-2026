@@ -271,7 +271,7 @@ export const isNoLongerAttendingStatus = (status: string) => /declined|withdrew|
 // whatever Airtable says. "Take Seth Porter Winterton off the website. I'm making that executive decision."
 // Ryan (Oct 9): "Take Ratcliff out of the Founders" (Airtable groups him Founder; he has no other role on the site).
 // Owner (Oct 21): "Take Steven and Alexandra Cohen off founders board on website" (their foundation credit stays).
-export const excludedFromSite2026 = new Set(["seth porter winterton", "john ratcliff", "steven cohen", "alexandra cohen"]);
+export const excludedFromSite2026 = new Set(["seth porter winterton", "john ratcliff", "steven cohen", "alexandra cohen", "bryan hubbard", "brian hubbard"]);
 export function isPublicAirtablePerson(person: AirtablePerson): boolean {
   if (excludedFromSite2026.has(person.name.trim().toLowerCase())) return false;
   // The current attendance status wins over an older standing Founder credit.

@@ -32,12 +32,13 @@ describe("website reviewed directory", () => {
     const snapshot = { ...demoSnapshot, event: { ...demoSnapshot.event, directoryEnabled: true }, speakers: [
       { ...base, name: "Steven Cohen" }, { ...base, name: "Alexandra Cohen" },
       { ...base, name: "Unconfirmed famous guest" }, { ...base, name: "Jewel", published: false },
-      { ...base, name: "Daniel Gillison" }, { ...base, name: "Mike Tyson" }
+      { ...base, name: "Daniel Gillison" }, { ...base, name: "Mike Tyson" }, { ...base, name: "Bryan Hubbard" }
     ] };
     // Only people confirmed in the latest Airtable review with no staff record are added;
     // the owner's website-only exclusions stay off every public directory.
     expect(directoryPeople(snapshot).map(person => person.name)).toEqual(["Daniel Gillison", "Ray Lewis", "Sarah Gilman", "Rahil Briggs", "Miriam Isa", "Silas Luke Jones", "Bishop Briggs"]);
     expect(directoryPeople(snapshot).map(person => person.name)).not.toContain("Mike Tyson");
+    expect(directoryPeople(snapshot).map(person => person.name)).not.toContain("Bryan Hubbard");
     expect(directoryPeople({ ...snapshot, speakers: [...snapshot.speakers, { ...base, name: "Bishop Briggs", published: false }] }).map(person => person.name)).not.toContain("Bishop Briggs");
   });
   it("reuses matching source portraits without changing reviewed roles, and prefers published headshots", () => {

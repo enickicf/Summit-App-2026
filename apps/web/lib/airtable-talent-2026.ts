@@ -2552,21 +2552,6 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "headshotFile": "/2026-headshots/airtable-current/rec040hHVZDKMRSPa.jpg"
   },
   {
-    "recordId": "rec1TPp41XjRA1UF1",
-    "name": "Bryan Hubbard",
-    "status": "Confirmed Attendance",
-    "groups": [
-      "F - talent"
-    ],
-    "occupation": "",
-    "organization": "",
-    "title": "CEO, Americans for Ibogaine",
-    "bio": "W. Bryan Hubbard is a transformative leader and policy expert with a strong background in law, public service, and community engagement, focused on reforming human systems to drive social progress. His career spans leadership of complex government systems which address disability, substance dependency, generational poverty, healthcare, child support, mental health treatment, and broad based governmental reform. Bryan worked alongside former Texas Governor Rick Perry to secure Texas’ $50 million appropriation for ibogaine development and then partnered with Mr. Joe Rogan to seek, negotiate, and secure Presidential Executive Order 14401 which makes the medicalization of ibogaine and other psychedelics a national priority. He was raised in the Virginia coalfields and is the proud grandson of two grade school-educated U.M.W.A. coal miners on whose shoulders he stands.",
-    "hasHeadshot": true,
-    "headshotBytes": 51741,
-    "headshotFile": "/2026-headshots/airtable-current/rec1TPp41XjRA1UF1.jpg"
-  },
-  {
     "recordId": "rec2JzProBxYFw7sx",
     "name": "Sheila Escovedo",
     "status": "Confirmed Attendance",
@@ -2888,21 +2873,6 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "hasHeadshot": true,
     "headshotBytes": 580886,
     "headshotFile": "/2026-headshots/airtable-current/recY0iuBozPDNmZOH.jpg"
-  },
-  {
-    "recordId": "recYBY03bmq32V2Xi",
-    "name": "Rick Perry",
-    "status": "Confirmed Attendance",
-    "groups": [
-      "C - talent"
-    ],
-    "occupation": "",
-    "organization": "",
-    "title": "Former U.S. Secretary of Energy & Governor of Texas",
-    "bio": "Rick Perry is a former U.S. Secretary of Energy and governor of Texas whose career spans state and federal leadership. He now serves as chairman of Americans for Ibogaine, advocating for research into ibogaine’s potential therapeutic applications, including for veterans and people affected by substance use disorders.",
-    "hasHeadshot": true,
-    "headshotBytes": 219330,
-    "headshotFile": "/2026-headshots/airtable-current/recYBY03bmq32V2Xi.jpg"
   },
   {
     "recordId": "recaDgDHh2C4tMmNq",

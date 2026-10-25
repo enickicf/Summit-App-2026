@@ -23,7 +23,7 @@ const airtableConfirmedNames = new Set(confirmedSummitGuests2026.map(personNameK
 // Explicit owner removals from every current public website surface. Keep the underlying
 // Airtable/staff records intact; this boundary also protects profiles and Ask AI because
 // they consume directoryPeople rather than the operational event record directly.
-const excludedFromCurrentWebsites2026 = new Set(["mike tyson", "rick perry", "gov rick perry", "governor rick perry"]);
+const excludedFromCurrentWebsites2026 = new Set(["mike tyson", "rick perry", "gov rick perry", "governor rick perry", "bryan hubbard", "brian hubbard"]);
 const isCurrentWebsitePerson2026 = (name: string) => !excludedFromCurrentWebsites2026.has(personNameKey(name));
 
 // Attendance is not approval of a speaking, sponsor, host or production role.
