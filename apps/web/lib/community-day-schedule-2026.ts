@@ -7,7 +7,7 @@ import { foundersOnly, neverOnWebsite } from "./schedule-website-rules";
 // Rooms are public on this page only (owner, Oct 7). Never listed: the owner's hard exclusions (Red Carpet, Speaker
 // Reception, Pre-Show, load-in/out), founders-only events (private), Pet Partners (unticked) and the late-night
 // pickleball (Summit guests). The owner's Oct 7 times stay pinned: Wellness & Check-In 12–3 PM on this page, the
-// sessions 2:30–6:30 PM, doors 6:30, show 7:30–10:00 PM.
+// sessions 2:30–6:30 PM, doors 6:30, show 8:00–10:00 PM.
 export type CommunityDaySession = { id: string; time: string; title: string; room: string; attire: string; synopsis: string; kind: "block" | "segment" | "awards" };
 
 const rooms: Record<string, string> = { Margaux: "Margaux Ballroom", LaFleur: "LaFleur", "Encore Theater": "Encore Theater" };
@@ -27,7 +27,7 @@ export function communityDaySchedule2026(rows: RosRow[] = airtableRos2026): Comm
     // Oct 20: Airtable also has a 2:30 PM "Doors Open" for the Nevada Day sessions in the Margaux; only the Awards Show
     // doors (the evening row) belong here.
     else if (/doors open/i.test(row.title) && (/awards/i.test(row.title) || row.start >= "18:00")) sessions.push({ ...base, sort: "18:31", time: "6:30 PM", title: "Awards Show Doors Open", synopsis: "", kind: "awards" });
-    else if (/^not alone awards\b/i.test(row.title)) sessions.push({ ...base, sort: "19:30", time: "7:30–10:00 PM", title: "Not Alone Awards Show", synopsis: "", kind: "awards" });
+    else if (/^not alone awards\b/i.test(row.title)) sessions.push({ ...base, sort: "20:00", time: "8:00–10:00 PM", title: "Not Alone Awards Show", synopsis: "", kind: "awards" });
   }
   return sessions.sort((a, b) => a.sort.localeCompare(b.sort) || (a.kind === "block" ? -1 : b.kind === "block" ? 1 : 0)).map(({ sort: _sort, ...session }) => session);
 }

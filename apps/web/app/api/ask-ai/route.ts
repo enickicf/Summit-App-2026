@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     && /\b(attendees?|guests?|someone|somebody|other people|participants?|each other|another person)\b/.test(question)) {
     return respond("Attendee-to-attendee messaging is not available. Use the Contact page to reach the event team.");
   }
-  if (/\b(?:room number|where (?:is|does|will).*(?:staying|sleep)|travel details?|flight|talent fees?|speaker fees?|staff war room|private contacts?|who (?:is|will be) attending|founders dinner)\b/i.test(question)) {
+  if (/\b(?:room number|room\b.*\b(?:staying|stay|hotel)|where (?:is|does|will).*(?:staying|sleep)|(?:phone|email|contact)\b.*\b(?:speaker|guest|attendee|person)|talent fees?|speaker fees?|staff war room|private contacts?|who (?:is|will be) attending|founders dinner)\b/i.test(question)) {
     return respond("That information is not covered by the public event sources. Please contact concierge@inspiringchildren.org or (702) 421-6351 by phone, text, or WhatsApp.");
   }
   try {
@@ -104,7 +104,8 @@ export async function POST(request: Request) {
       const answer = awardsFactAnswer(question);
       if (answer) return respond(answer, 200, [{ title: "Not Alone Awards 2026", url: "https://notaloneawards.org/awards/2026" }]);
     }
-    const programAnswer = publishedProgramAnswer(question, snapshot, new Date().toISOString());
+    const faqIntent = /\b(?:park|parking|hotel|room block|airport|arriv|depart|pack|bring|badge|registration desk|concierge|weather|accessibility|dietary|allerg|solicitation|photograph|filming|updates?)\b/i.test(question);
+    const programAnswer = faqIntent ? null : publishedProgramAnswer(question, snapshot, new Date().toISOString());
     if (programAnswer) return respond(programAnswer, 200, [{ title: "Published Summit schedule", url: "https://notalonesummit.org/schedule" }]);
     const awardsAnswer = awardsFactAnswer(question);
     if (awardsAnswer) return respond(awardsAnswer, 200, [{ title: "Not Alone Awards 2026", url: "https://notaloneawards.org/awards/2026" }]);
@@ -127,9 +128,8 @@ export async function POST(request: Request) {
         responseModel = askAiModelName();
         const result = await createAskAiModelAnswer(question, buildAskAiKnowledge(snapshot, question, audience, faq?.text ?? null), fetch, audience);
         const answer = result.relevant && result.answer ? result.answer : offTopicAnswer;
-        const faqQuestion = /\b(?:park|parking|hotel|room block|airport|arriv|depart|pack|bring|badge|registration desk|concierge|weather|accessibility|dietary|allerg|solicitation|photograph|filming|updates?)\b/i.test(question);
         const faqSource = { title: "Summit FAQ", url: "https://notalonesummit.org/schedule" };
-        const sources = result.relevant ? [...result.sources, ...(faq && faqQuestion && !result.sources.some(source => source.title === faqSource.title) ? [faqSource] : [])].slice(0, 3) : [];
+        const sources = result.relevant ? [...result.sources, ...(faq && faqIntent && !result.sources.some(source => source.title === faqSource.title) ? [faqSource] : [])].slice(0, 3) : [];
         rememberAnswer(cacheKey, { answer, sources });
         return respond(answer, 200, sources);
       } catch {

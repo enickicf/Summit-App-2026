@@ -172,7 +172,7 @@ describe("public concierge published facts and failures", () => {
     expect(monday).toContain("PST");
     expect(monday).toContain("Location:");
     expect((await (await ask("When is tennis?")).json()).answer).toContain("10:00 AM; end time to be confirmed");
-    expect((await (await ask("Where is the registration desk?")).json()).answer).toContain("have not been published");
+    expect((await (await ask("Where is the registration desk?")).json()).answer).toContain("confirmed answer");
   });
 
   it.each([

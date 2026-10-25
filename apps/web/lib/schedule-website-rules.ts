@@ -93,12 +93,12 @@ export function websiteSessionTitle(title: string): string {
   return match ? match[1] : title.trim();
 }
 
-// Owner-dictated times (Oct 7) that stay put through Airtable refreshes until the owner lifts them: the Awards
-// Show is 7:30-10:00 PM with doors at 6:30 (no pre-show), Nevada Mental Health Day starts at 2:30 (owner, Oct 19,
+// Published event corrections that stay put through Airtable refreshes: the Awards Show is 8:00-10:00 PM with
+// doors at 6:30 (Nick's Oct 24 guest FAQ/spec), Nevada Mental Health Day starts at 2:30 (owner, Oct 19,
 // taking Ryan's "change to 230pm on all" for the website; the invite templates keep their own wording), Founders
 // Cocktails at 4:00, the Tuesday evening performance at 8:00. Airtable already agrees; this is the safety net.
 export const ownerPinnedTimes: Array<{ title: RegExp; date: string; start?: string; end?: string }> = [
-  { title: /^not alone awards\b|^awards show$/i, date: "2026-11-02", start: "19:30", end: "10:00 PM" },
+  { title: /^not alone awards\b|^awards show$/i, date: "2026-11-02", start: "20:00", end: "10:00 PM" },
   { title: /^(?:awards show )?doors open$/i, date: "2026-11-02", start: "18:30" },
   { title: /^nevada mental health day$/i, date: "2026-11-02", start: "14:30", end: "6:30 PM" },
   { title: /^founders? cocktails$/i, date: "2026-11-02", start: "16:00" },

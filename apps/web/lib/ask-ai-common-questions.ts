@@ -46,7 +46,7 @@ export const commonQuestions2026: readonly CommonQuestion[] = [
   { question: "Who hosts the Awards Show?", match: /\bwho\b.*\b(?:hosts?|hosting|emcee)\b.*\bawards?\b/i,
     answer: () => result(`${awards2026Editorial.host} hosts the 2026 Not Alone Awards Show.`, awards) },
   { question: "What time do Awards doors open?", match: /\b(?:what time|when)\b.*\bawards?\b.*\b(?:doors?|show)\b|\b(?:what time|when)\b.*\b(?:doors?|show)\b.*\bawards?\b/i,
-    answer: () => result(`Awards doors open at ${awardsDoorsOpen2026}; the show runs 7:30–10:00 PM on ${awards2026Editorial.date}.`, awards) },
+    answer: () => result(`Awards doors open at ${awardsDoorsOpen2026}; the show runs 8:00–10:00 PM on ${awards2026Editorial.date}.`, awards) },
   { question: "How do I request Awards tickets?", match: /\b(?:how|where)\b.*\b(?:rsvp|request|tickets?)\b.*\bawards?\b/i,
     answer: () => result(`Use the Awards Show RSVP form: ${awards2026Editorial.rsvpUrl}. A request joins the waiting list and is not a confirmed ticket.`, awardsRsvp) },
   { question: "Does an RSVP guarantee an Awards ticket?", match: /\b(?:does|will|is)\b.*\b(?:rsvp|request)\b.*\b(?:guarantee|confirmed|ticket)\b/i,

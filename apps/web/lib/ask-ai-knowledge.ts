@@ -44,7 +44,7 @@ export function awardsFactAnswer(question: string): string | null {
   const { host, venue, date } = awards2026Editorial;
   if (/\bhost(s|ed|ing)?\b|\bemcee|\bmc\b/.test(normalized)) return `The 2026 Not Alone Awards are hosted by ${host}, at the ${venue} on ${date}.`;
   if (/\bwhere\b|\bvenue\b|\blocation\b|\bheld\b/.test(normalized)) return `The 2026 Not Alone Awards take place at the ${venue} on ${date}.`;
-  // Owner (Oct 7 meeting): the public evening is Doors Open 6:30 PM and the Awards Show 7:30–10:00 PM; no Pre-Show is
+  // Public evening: Doors Open 6:30 PM and the Awards Show 8:00–10:00 PM; no Pre-Show is
   // announced. Answered here, before the published program, because the staff app's revision 9 still carries the
   // old times until a new revision is published.
   if (/\b(when|what time|time|times|doors?|starts?|starting|begins?|ends?|how long|how late|o'?clock)\b/.test(normalized)) return `The 2026 Not Alone Awards Show is on ${date} at the ${venue}. Doors open ${awardsDoorsOpen2026}; the Awards Show runs ${awardsShowTime2026}.`;
@@ -96,7 +96,7 @@ export const offTopicAnswer = "This AI only answers questions about the Not Alon
 export const notAloneToolsUrl = "https://www.inspiringchildren.org/notalonetools";
 
 // Personal mental-health and crisis questions never reach the model and never receive tips.
-const mentalHealthHelp = /\b(suicid\w*|kill (myself|me)|end my life|want to die|self[- ]?harm\w*|hurt(ing)? myself|depress\w*|anxiety|anxious|panic attacks?|mental health (tips?|advice|help|support)|therap(y|ist)|coping|cope|grie(f|ving)|eating disorders?|addiction|overdose|insomnia|can'?t sleep|lonely|loneliness|hopeless|overwhelmed)\b|\bi(?: am|'m)? (feel(?:ing)? )?(so |really |very )?(sad|down|alone|stressed|scared|worthless|empty)\b|\bhow (do|can|should) i (deal|cope|calm|stop feeling|feel better|get over|handle)\b/i;
+const mentalHealthHelp = /\b(crisis|suicid\w*|kill (myself|me)|end my life|want to die|self[- ]?harm\w*|hurt(ing)? myself|depress\w*|anxiety|anxious|panic attacks?|mental health (tips?|advice|help|support)|therap(y|ist)|coping|cope|grie(f|ving)|eating disorders?|addiction|overdose|insomnia|can'?t sleep|lonely|loneliness|hopeless|overwhelmed)\b|\bi(?: am|'m)? (feel(?:ing)? )?(so |really |very )?(sad|down|alone|stressed|scared|worthless|empty)\b|\bhow (do|can|should) i (deal|cope|calm|stop feeling|feel better|get over|handle)\b/i;
 
 export function isMentalHealthQuestion(question: string) {
   if (/\b(?:icf|inspiring children|not alone|foundation|program)\b/i.test(question)
