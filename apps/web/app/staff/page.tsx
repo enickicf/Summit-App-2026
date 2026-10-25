@@ -20,7 +20,7 @@ export default async function StaffPage({ searchParams }: { searchParams?: Promi
   const store = await getSubmissionStore();
   const podcastBookings = await store.list("podcastBooking");
   if (!fullAccess) return <PodcastStaffPortal bookings={podcastBookings} generatedAt={new Date().toISOString()} />;
-  const [rsvps, nominations, poker, workshops, textPreferences, closingDinner, snapshot] = await Promise.all([listAllRsvps(store), store.list("nomination"), store.list("poker"), store.list("workshop"), store.list("textPreference"), store.list("closingDinner"), getSiteSnapshot().catch(() => null)]);
+  const [rsvps, nominations, poker, workshops, textPreferences, closingDinner, ticketOffers, ticketConfirmations, snapshot] = await Promise.all([listAllRsvps(store), store.list("nomination"), store.list("poker"), store.list("workshop"), store.list("textPreference"), store.list("closingDinner"), store.list("ticketOffer"), store.list("ticketConfirmation"), getSiteSnapshot().catch(() => null)]);
   // Oct 19: requests the API did not save (submission inbox), minus those the same guest later completed.
   const failed = await listFailedSubmissions().catch(error => { console.error("[staff] submission inbox unavailable", error instanceof Error ? error.message : error); return null; });
   const saved = [...rsvps, ...closingDinner, ...workshops.map(row => ({ ...row, email: row.email ?? "", phone: row.phone ?? "" })), ...nominations.map(row => ({ email: row.nominatorEmail, phone: row.nominatorPhone, submittedAt: row.submittedAt }))];
@@ -33,5 +33,5 @@ export default async function StaffPage({ searchParams }: { searchParams?: Promi
     title: section.heading === null ? "Lineup" : section.title,
     people: section.people.map(({ person, role }) => ({ name: person.name, role, rank: person.rank ?? null, tier: person.tier ?? null, photo: Boolean(person.image) }))
   }));
-  return <StaffPortal addGuest={{ added: one(query.added), to: one(query.to), error: one(query.addGuestError) }} rsvps={rsvps} nominations={nominations} poker={poker} workshops={workshops} textPreferences={textPreferences} closingDinner={closingDinner} podcastBookings={podcastBookings} needsAttention={needsAttention} anonymousFailures={anonymousFailures} lineup={lineup} generatedAt={new Date().toISOString()} />;
+  return <StaffPortal addGuest={{ added: one(query.added), to: one(query.to), error: one(query.addGuestError) }} rsvps={rsvps} nominations={nominations} poker={poker} workshops={workshops} textPreferences={textPreferences} closingDinner={closingDinner} podcastBookings={podcastBookings} ticketOffers={ticketOffers} ticketConfirmations={ticketConfirmations} needsAttention={needsAttention} anonymousFailures={anonymousFailures} lineup={lineup} generatedAt={new Date().toISOString()} />;
 }
