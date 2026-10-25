@@ -20,7 +20,7 @@ export const summitGuestCategories = ["Founders", "Founders & Entrepreneurs", "P
 // Placement by each person's public ICF/Airtable affiliation: foundations, trusts, family giving and
 // nonprofit advocacy are philanthropy; companies and ventures are entrepreneurship/business.
 const philanthropists = new Set([
-  "steven and alexandra cohen", "alex cohen", "pam and duncan goldie morrison", "winston and cameron kelly",
+  "steven and alexandra cohen", "alex cohen", "pam and duncan goldie morrison", "winston and cameron kelly", "winston kelly", "cameron kelly",
   "jennifer smorgon", "jen smorgen", "nick kislinger", "miriam isa", "sanem sam alkan", "ray lewis", "jessica edwards",
   "kevin hines", "margaret hines", "david hirsch", "sophie gregoire", "sophie gregoire trudeau", "jaymes black"
 ]);
@@ -229,7 +229,7 @@ export function awardsDisplayPeople(snapshot: EventSnapshot | null): SummitPerso
     // may publish, and a card must never be two photos side by side. They are two individual Founder cards (name
     // cards until each has a usable headshot; see lib/portrait-overrides.ts).
     { first: "Melony Lewis", second: "Adam Lewis", name: "Melony and Adam Lewis", slug: "2026-melony-adam-lewis", bio: "Melony and Adam Lewis are founders of the Not Alone Summit." },
-    { first: "Winston Kelly", second: "Cameron Kelly", name: "Winston and Cameron Kelly", slug: "2026-winston-cameron-kelly", bio: "Winston and Cameron Kelly are founders of the Not Alone Summit." },
+    // Oct 24 (owner): Winston and Cameron Kelly each have their own headshot in Airtable, so they are two individual cards.
     // Oct 12 (owner: "Ryan wants Christiana and Kimbal Musk shown together"; "find one online that is recent"): one card with a
     // photo of the two of them (their own Instagram post, Nov 2024, as published by Lifestyle Asia; 1080x1080).
     { first: "Christiana Musk", second: "Kimbal Musk", name: "Christiana and Kimbal Musk", slug: "2026-christiana-kimbal-musk", bio: "Christiana and Kimbal Musk are founders of the Not Alone Summit.", image: "/2026-headshots/portraits/christiana-kimbal-musk.jpg" },

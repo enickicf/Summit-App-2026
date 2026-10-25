@@ -8,6 +8,29 @@
 // attribution: the credit a freely licensed photo must show; it appears under the bio on the person's profile.
 export type PortraitOverride = { file: string; source: string; airtableBytes?: number; credit?: string; attribution?: { label: string; href: string } };
 export const portraitOverrides2026: Record<string, PortraitOverride> = {
+  // Oct 24 (owner: headshots "not centered", heads cut off, "zoom in"): face-centred square crops of the SAME photos
+  // (no photo replaced), made from each current file with face detection; Kristin Hatcher cropped inside her round frame.
+  "sheila escovedo": { file: "/2026-headshots/portraits/sheila-escovedo-sq-20261024.jpg", source: "airtable" },
+  "dylan aguilar": { file: "/2026-headshots/portraits/dylan-aguilar-sq-20261024.jpg", source: "airtable" },
+  "princess love": { file: "/2026-headshots/portraits/princess-love-sq-20261024.jpg", source: "airtable" },
+  "jessica ladd": { file: "/2026-headshots/portraits/jessica-ladd-sq-20261024.jpg", source: "airtable" },
+  "kelly richardson": { file: "/2026-headshots/portraits/kelly-richardson-sq-20261024.jpg", source: "airtable" },
+  "yvette baker": { file: "/2026-headshots/portraits/yvette-baker-sq-20261024.jpg", source: "airtable" },
+  "elisa sednaoui": { file: "/2026-headshots/portraits/elisa-sednaoui-sq-20261024.jpg", source: "airtable" },
+  "jordan rose": { file: "/2026-headshots/portraits/jordan-rose-sq-20261024.jpg", source: "airtable" },
+  "alexander roque": { file: "/2026-headshots/portraits/alexander-roque-sq-20261024.jpg", source: "airtable" },
+  "anna muller": { file: "/2026-headshots/portraits/anna-muller-sq-20261024.jpg", source: "airtable" },
+  "ross rocketto": { file: "/2026-headshots/portraits/ross-rocketto-sq-20261024.jpg", source: "airtable" },
+  "carson rose": { file: "/2026-headshots/portraits/carson-rose-sq-20261024.jpg", source: "airtable" },
+  "kristin hatcher": { file: "/2026-headshots/portraits/kristin-hatcher-sq-20261024.jpg", source: "airtable" },
+  "logan rose": { file: "/2026-headshots/portraits/logan-rose-sq-20261024.jpg", source: "airtable" },
+  "sara steinweiss": { file: "/2026-headshots/portraits/sara-steinweiss-sq-20261024.jpg", source: "airtable" },
+  "dmc dj": { file: "/2026-headshots/portraits/dmc-dj-sq-20261024.jpg", source: "airtable" },
+  "melony lewis": { file: "/2026-headshots/portraits/melony-lewis-sq-20261024.jpg", source: "airtable" },
+  "winston kelly": { file: "/2026-headshots/portraits/winston-kelly-sq-20261024.jpg", source: "airtable" },
+  "cameron kelly": { file: "/2026-headshots/portraits/cameron-kelly-sq-20261024.jpg", source: "airtable" },
+  "janet wozniak": { file: "/2026-headshots/portraits/janet-wozniak-sq-20261024.jpg", source: "mobile", credit: "Owner-provided Janet Wozniak headshot; Oct 24" },
+  "miriam isa": { file: "/2026-headshots/portraits/miriam-isa-sq-20261024.jpg", source: "web", credit: "Miriam Isa official website, miriamisa.com" },
   // Oct 20, 2026: Airtable headshots of confirmed people who had none on the site (Airtable Talent re-read; face-centred crops).
   "abraham kaoud": { file: "/2026-headshots/portraits/abraham-kaoud.jpg", source: "airtable" }, // Oct 21: his Airtable headshot (1205x1306), face-centred
   // Oct 21, 2026 (owner: "get online and ... figure out who they are their bios and headshots"; the guests agreed by email):
@@ -82,7 +105,6 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   // Oct 20 (owner: "recrop Janet Wozniak's headshot ... better"): no solo photo of her may be used online (only Getty stock), so
   // she is re-cut from ICF's full-resolution original of the couple portrait (712 px, sharper than the 948 px upscale used
   // before), more of her face and hair in frame, and the sliver of Steve's beard beside her jaw filled with the photo's own dark tone.
-  "janet wozniak": { file: "/2026-headshots/portraits/janet-wozniak-4.png", source: "mobile", credit: "Owner-provided Janet Wozniak headshot; Oct 24" },
   "jason kennedy": { file: "/2026-headshots/portraits/jason-kennedy-2.jpg", source: "icf-card" },
   "jeff levin": { file: "/2026-headshots/portraits/jeff-levin.jpg", source: "airtable", airtableBytes: 1141135 },
   "jen smorgon": { file: "/2026-headshots/portraits/jen-smorgon.jpg", source: "icf-card" },
@@ -102,7 +124,6 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "mike bryan": { file: "/2026-headshots/portraits/mike-bryan-2.jpg", source: "airtable", airtableBytes: 24030 },
   "mike majlak": { file: "/2026-headshots/portraits/mike-majlak-3-c.jpg", source: "airtable", airtableBytes: 217678 },
   "mike tyson": { file: "/2026-headshots/portraits/mike-tyson-3-c.jpg", source: "icf-card" },
-  "miriam isa": { file: "/2026-headshots/portraits/miriam-isa-hd-20261015.jpg", source: "web", credit: "Miriam Isa official website, miriamisa.com" },
   "morgan marler": { file: "/2026-headshots/portraits/morgan-marler.jpg", source: "airtable", airtableBytes: 16430 },
   "nick dana": { file: "/2026-headshots/portraits/nick-dana-hd-20261015.jpg", source: "web", credit: "The Ocean Race official crew portrait, archive.theoceanrace.com/en/crew/408_Nick-Dana.html" },
   "nick kislinger": { file: "/2026-headshots/portraits/nick-kislinger-hd-20261015.jpg", source: "web", credit: "Kislinger Impact Collective official portrait, kislingerimpactcollective.com/about" },

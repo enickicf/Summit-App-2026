@@ -37,8 +37,6 @@ const portraitAliases: Record<string, string> = {
   // Sept 22: Airtable lists these founders individually; ICF's 2025 site has their couple photos.
   "melony lewis": "melony and adam lewis",
   "adam lewis": "melony and adam lewis",
-  "winston kelly": "winston and cameron kelly",
-  "cameron kelly": "winston and cameron kelly"
 };
 
 // Read-only 2026 Airtable attachments, reviewed September 16. Local copies do
