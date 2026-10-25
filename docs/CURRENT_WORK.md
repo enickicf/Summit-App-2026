@@ -1,4 +1,4 @@
-## REVIEW — October 24: Cheryl Operations integrated staff workflow
+## REVIEW — October 24: Cheryl's Approval Portal integrated staff workflow
 
 Branch `codex/cheryl-operations` adds a clearly separate `/staff/cheryl-operations` workspace backed by the existing canonical and journaled staff store. It covers Standard, VIP, Uber VIP and partner Awards/Nevada Mental Health Day requests plus Closing Dinner, wellness, Summit workshops, Tennis & High Tea and poker. Staff can approve/reduce/hold/decline, explicitly place approved guests into a ready-to-contact queue, inspect responses and waiver gaps, and distinguish Awards ticket fulfillment from Nevada Mental Health Day check-in. Non-ticket decisions use the new `programApproval` record kind; full backups include it. Original request records remain unchanged. Outbound email, text and ticket sending remains disabled pending owner approval. See `docs/CHERYL_OPERATIONS_WORKFLOW.md`.
 

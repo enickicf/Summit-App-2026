@@ -1,4 +1,4 @@
-# Cheryl Operations Workflow
+# Cheryl's Approval Portal Workflow
 
 Status: **IMPLEMENTED FOR REVIEW — NOT DEPLOYED**  
 Branch: `codex/cheryl-operations`  
@@ -6,7 +6,7 @@ Route: `/staff/cheryl-operations`
 
 ## Purpose
 
-Cheryl Operations is a separate workspace inside the existing password-protected staff portal. It uses the same canonical `staff-portal` store and append-only `staff-portal-journal`; it does not create a second RSVP database or require the 15-minute spreadsheet sync to operate.
+Cheryl's Approval Portal is a separate workspace inside the existing password-protected staff portal. It uses the same canonical `staff-portal` store and append-only `staff-portal-journal`; it does not create a second RSVP database or require the 15-minute spreadsheet sync to operate.
 
 ## Workflow
 

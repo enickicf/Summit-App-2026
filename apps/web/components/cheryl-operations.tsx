@@ -114,7 +114,7 @@ export function CherylOperations({ ticketCandidates, programCandidates, initialO
   const dayCheckIn = confirmations.reduce((sum, row) => sum + row.communityDayAttendees.length, 0);
   return <>
     <section className={`${styles.section} ${styles.opsHero}`}>
-      <div className={styles.sectionHead}><div><p className={styles.eyebrow}>Protected staff workspace</p><h1>Cheryl Operations</h1></div><div className={styles.viewTabs}><a href="/staff">Staff portal</a><a href="/api/staff/export?kind=all">Full backup</a></div></div>
+      <div className={styles.sectionHead}><div><p className={styles.eyebrow}>Protected staff workspace</p><h1>Cheryl&rsquo;s Approval Portal</h1></div><div className={styles.viewTabs}><a href="/staff">Staff portal</a><a href="/api/staff/export?kind=all">Full backup</a></div></div>
       <p className={styles.opsLead}>One connected workflow for every request. Original forms remain unchanged; decisions, confirmation responses and fulfillment status are stored separately in the same journaled staff database.</p>
       <ol className={styles.workflow}><li><strong>1. Intake</strong><span>All form types</span></li><li><strong>2. Review</strong><span>Approve, hold, decline</span></li><li><strong>3. Contact queue</strong><span>Choose who receives a confirmation</span></li><li><strong>4. Guest response</strong><span>Counts, contacts and waivers</span></li><li><strong>5. Fulfillment</strong><span>Awards tickets or event check-in</span></li></ol>
     </section>
