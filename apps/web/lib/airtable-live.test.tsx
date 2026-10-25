@@ -113,15 +113,15 @@ describe("Airtable -> website, automatically", () => {
     base.tblTalent![3]!.fields[f.talent.status] = "Pending"; // Staff Only row index shifted; Founder Jones below
     base.tblTalent!.find(row => row.fields[f.talent.name] === "Founder Jones")!.fields[f.talent.status] = "Declined";
     ({ snapshot, awards } = await rendered());
-    // Sept 22 meeting: a founder stays listed whatever the invitation status, so declined Founder Jones remains.
-    expect(names(snapshot)).toEqual(["Amy Star", "Dr. Expert", "Founder Jones", "New Comedian"]);
+    // Oct 24 owner direction: an explicit decline removes anyone, including a founder.
+    expect(names(snapshot)).toEqual(["Amy Star", "Dr. Expert", "New Comedian"]);
     const amy = snapshot.speakers.find(speaker => speaker.name === "Amy Star")!;
     expect(amy.bio).toBe("Updated bio, straight from Airtable.");
     expect(amy.role).toBe("Singer-Songwriter");
     expect(airtableOverlay(snapshot)!.people!.get(personNameKey("Dr. Expert"))!.categories).toEqual(["Experts", "Podcasters"]);
     expect(awards).not.toContain("New Comedian"); // Owner (Sept 22): the Awards lineup is celebrities only (A-Talent/ranked); other talent stays on the Summit
     expect(awards).not.toMatch(/Zed Headliner|Staff Only|Pending Person|Press Person/);
-    expect(awards).toContain("Founder Jones"); // credited under Founders although declined
+    expect(awards).not.toContain("Founder Jones");
   });
 
   it("shows the clean Stage Name instead of a Name that carries notes", async () => {

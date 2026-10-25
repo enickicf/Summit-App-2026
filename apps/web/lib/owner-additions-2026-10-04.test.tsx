@@ -13,9 +13,9 @@ import { portraitAttribution2026 } from "./portrait-overrides";
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn() }), usePathname: () => "/", useSearchParams: () => new URLSearchParams() }));
 
-// Owner (Oct 4, 2026): "put Logan Paul on the websites as founder and ... Aloe Blacc as an A talent".
-// Ryan (Oct 8, 2026): Aloe Blacc is out again; Logan Paul stays.
-describe("owner additions, Oct 4: Logan Paul (Founder); Aloe Blacc withdrawn Oct 8", async () => {
+// Owner (Oct 24, 2026): current Airtable attendance status now overrides older manual additions.
+// Logan Paul is Donation - Not Attending and Aloe Blacc is withdrawn, so neither is public.
+describe("older owner additions follow current Airtable attendance", async () => {
   const snapshot = await withAirtable(event2026Snapshot);
   const summitPeople = directoryPeople(snapshot);
   const awardsPeople = awardsDisplayPeople(snapshot);
@@ -23,16 +23,12 @@ describe("owner additions, Oct 4: Logan Paul (Founder); Aloe Blacc withdrawn Oct
   const names = (variant: "summit" | "awards", title: string) => sections(variant).find(section => section.title === title)?.people.map(entry => entry.person.name) ?? [];
   const everywhere = (variant: "summit" | "awards") => sections(variant).flatMap(section => section.people.map(entry => `${section.title}:${entry.person.name}`));
 
-  it("lists Logan Paul once, under Founders, on both sites with his Airtable headshot, a title and a bio", () => {
+  it("removes Logan Paul from both sites after Airtable marks him not attending", () => {
     for (const variant of ["summit", "awards"] as const) {
-      expect(names(variant, "Founders"), variant).toContain("Logan Paul");
-      expect(everywhere(variant).filter(entry => entry.endsWith(":Logan Paul")), variant).toEqual(["Founders:Logan Paul"]);
+      expect(names(variant, "Founders"), variant).not.toContain("Logan Paul");
+      expect(everywhere(variant).filter(entry => entry.endsWith(":Logan Paul")), variant).toEqual([]);
     }
-    const logan = awardsPeople.find(person => person.name === "Logan Paul")!;
-    expect(logan.image).toBe("/2026-headshots/portraits/logan-paul-c.jpg");
-    expect(logan.role).toBe("Entertainer, WWE Superstar & Co-Founder of PRIME");
-    expect(logan.bio).toContain("co-founded the beverage company PRIME");
-    expect(logan.bio).not.toContain("is a founder of the Not Alone Summit"); // the interim line is replaced
+    expect(awardsPeople.find(person => person.name === "Logan Paul")).toBeUndefined();
   });
 
   // Ryan (Oct 8, 2026): "We gotta take Aloe Blacc out." The Oct 4 name-only exception is withdrawn; his Airtable
@@ -51,11 +47,11 @@ describe("owner additions, Oct 4: Logan Paul (Founder); Aloe Blacc withdrawn Oct
     expect(lineup.indexOf("Caroline Jones")).toBeLessThan(lineup.indexOf("Harry Hudson")); // rank 10 still precedes B - talent
   });
 
-  it("renders Logan Paul, and never Aloe Blacc, on the Summit and Awards pages", () => {
+  it("renders neither Logan Paul nor Aloe Blacc on the Summit and Awards pages", () => {
     const summit = renderToStaticMarkup(<OriginalSummitPage year={2026} snapshot={snapshot} />);
     const awards = renderToStaticMarkup(<OriginalAwardsPage year={2026} snapshot={snapshot} program={publishedAwardsProgram(snapshot)} />);
     for (const html of [summit, awards]) {
-      expect(html).toContain("Logan Paul");
+      expect(html).not.toContain("Logan Paul");
       expect(html).not.toContain("Aloe Blacc");
     }
   });

@@ -170,8 +170,10 @@ describe("Airtable Website Grouping rules", () => {
     expect(ranks.has(list[4]!)).toBe(false);
   });
 
-  it("founders are listed whatever their status; everyone else needs a confirmed status", () => {
-    expect(isPublicAirtablePerson(record("Declined Founder", ["Founder"], "Declined"))).toBe(true);
+  it("removes explicit non-attendees, including founders; everyone else needs a confirmed or hold status", () => {
+    expect(isPublicAirtablePerson(record("Declined Founder", ["Founder"], "Declined"))).toBe(false);
+    expect(isPublicAirtablePerson(record("Withdrawn Founder", ["Founder"], "Withdrew"))).toBe(false);
+    expect(isPublicAirtablePerson(record("Donation Founder", ["Founder"], "Donation - Not Attending"))).toBe(false);
     expect(isPublicAirtablePerson(record("Hold Founder", ["Founder"], "Hold Space - 75%"))).toBe(true);
     expect(isPublicAirtablePerson(record("Pending Talent", ["B - talent"], "Pending"))).toBe(false);
     expect(isPublicAirtablePerson(record("Invited Attendee", ["X - attendee"], "Invited"))).toBe(false);

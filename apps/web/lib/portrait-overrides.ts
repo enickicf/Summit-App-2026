@@ -201,8 +201,8 @@ export function portrait2026(name: string): string | null | undefined {
   return portraitOverrides2026[key]?.file;
 }
 
-// Owner (Sept 21, late): anyone without a photo is left off the site for now, and Hal Fisher is left off
-// until a proper headshot is supplied. Their Airtable records are untouched; they return when this changes.
+// Explicit temporary removals remain off until the owner clears them. Everyone else who is confirmed in
+// Airtable is listed; cards without a portrait use the site's initials treatment (owner, Oct 24).
 // Oct 21 (owner): Hayden Harveston stays off the site; Zak Levitt and Jayson Ainsworth off "for now" (identities not
 // confirmed yet; their photos, titles and bios stay ready below and return when they are removed from this set).
 // Oct 22 (owner, via Nick/Jan: "add Hayden Harveston's photo"): Hayden is back on now that Airtable holds his photo.
@@ -211,7 +211,7 @@ export const hiddenFromSite2026 = new Set(["hal fisher", "zak levitt", "jayson a
 // Owner (Oct 7): the owner supplied a headshot of each (work/new-headshots-20261007/owner-upload-*.jpg), so both are
 // photo cards now (entries above) and nobody is listed without a photo. The set stays for the next such case.
 export const listedWithoutPhoto2026 = new Set<string>([]);
-export function hiddenUntilPhoto2026(name: string, image: string | undefined): boolean {
+export function hiddenUntilPhoto2026(name: string, _image: string | undefined): boolean {
   const key = personNameKey(name);
-  return hiddenFromSite2026.has(key) || (!image && !listedWithoutPhoto2026.has(key));
+  return hiddenFromSite2026.has(key);
 }
