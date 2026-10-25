@@ -15,9 +15,8 @@ vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn() }), use
 // Owner, Oct 5: couples read with "and" ("Melony and Adam Lewis"); the McGraws are no longer a couple card but
 // two individual Founder name cards (no photo of the two of them exists).
 describe("founder couples added Sept 22", async () => {
-  // Oct 24 (owner): Winston and Cameron Kelly each have their own Airtable headshot, so they are two individual cards.
-  const couples = ["Winston Kelly", "Cameron Kelly"];
-  const currentFounders = ["Melony Lewis", ...couples];
+  // Oct 25 (owner): Winston and Cameron Kelly share one card using ICF's real joint photo.
+  const currentFounders = ["Melony Lewis", "Winston and Cameron Kelly"];
   const mcgraws = ["Jay McGraw", "Erica McGraw"];
   const snapshot = await withAirtable(event2026Snapshot);
   const summit = renderToStaticMarkup(<OriginalSummitPage year={2026} snapshot={snapshot} />);
@@ -27,7 +26,7 @@ describe("founder couples added Sept 22", async () => {
     const people = awardsDisplayPeople(snapshot);
     const names = people.map(person => person.name);
     for (const name of [...currentFounders, ...mcgraws]) expect(names).toContain(name);
-    for (const name of ["Adam Lewis", "Melony and Adam Lewis", "Jay & Erica McGraw", "Jay and Erica McGraw", "Melony & Adam Lewis", "Winston & Cameron Kelly", "Winston and Cameron Kelly"]) expect(names).not.toContain(name);
+    for (const name of ["Adam Lewis", "Melony and Adam Lewis", "Jay & Erica McGraw", "Jay and Erica McGraw", "Melony & Adam Lewis", "Winston Kelly", "Cameron Kelly"]) expect(names).not.toContain(name);
     for (const variant of ["summit", "awards"] as const) {
       const founders = peopleSections(people, variant).find(section => section.title === "Founders")!.people.map(entry => entry.person.name);
       for (const name of [...currentFounders, ...mcgraws]) expect(founders, variant).toContain(name);
@@ -55,10 +54,10 @@ describe("founder couples added Sept 22", async () => {
     for (const name of mcgraws) expect(people.find(person => person.name === name)?.bio).not.toContain("Jay and Erica McGraw are founders of the Not Alone Summit.");
   });
 
-  it("uses the current Airtable photos for Melony and the Kellys; the McGraws keep the owner's Oct 7 headshots", () => {
+  it("uses the corrected card photos for Melony and the Kellys; the McGraws keep the owner's Oct 7 headshots", () => {
     const people = awardsDisplayPeople(snapshot);
     expect(people.find(person => person.name === "Melony Lewis")?.image).toContain("/2026-headshots/");
-    for (const name of ["Winston Kelly", "Cameron Kelly"]) expect(people.find(person => person.name === name)?.image).toContain("/2026-headshots/");
+    expect(people.find(person => person.name === "Winston and Cameron Kelly")?.image).toBe("/2026-headshots/portraits/winston-cameron-kelly-joint-20261025.jpg");
     expect(people.find(person => person.name === "Jay McGraw")?.image).toBe("/2026-headshots/portraits/jay-mcgraw-2.jpg");
     expect(people.find(person => person.name === "Erica McGraw")?.image).toBe("/2026-headshots/portraits/erica-mcgraw-2.jpg");
     expect(awards).not.toContain("jay-erica-mcgraw");

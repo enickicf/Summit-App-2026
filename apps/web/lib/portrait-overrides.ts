@@ -8,8 +8,8 @@
 // attribution: the credit a freely licensed photo must show; it appears under the bio on the person's profile.
 export type PortraitOverride = { file: string; source: string; airtableBytes?: number; credit?: string; attribution?: { label: string; href: string } };
 export const portraitOverrides2026: Record<string, PortraitOverride> = {
-  // Oct 24 (owner: headshots "not centered", heads cut off, "zoom in"): face-centred square crops of the SAME photos
-  // (no photo replaced), made from each current file with face detection; Kristin Hatcher cropped inside her round frame.
+  // Oct 25 (owner): final card-ratio crops. These files are 948x900, the exact rendered card ratio, so the
+  // browser does not crop heads again. Kristin is cropped inside the circular source so the public card is rectangular.
   "sheila escovedo": { file: "/2026-headshots/portraits/sheila-escovedo-sq-20261024.jpg", source: "airtable" },
   "dylan aguilar": { file: "/2026-headshots/portraits/dylan-aguilar-sq-20261024.jpg", source: "airtable" },
   "princess love": { file: "/2026-headshots/portraits/princess-love-sq-20261024.jpg", source: "airtable" },
@@ -22,11 +22,12 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "anna muller": { file: "/2026-headshots/portraits/anna-muller-sq-20261024.jpg", source: "airtable" },
   "ross rocketto": { file: "/2026-headshots/portraits/ross-rocketto-sq-20261024.jpg", source: "airtable" },
   "carson rose": { file: "/2026-headshots/portraits/carson-rose-sq-20261024.jpg", source: "airtable" },
-  "kristin hatcher": { file: "/2026-headshots/portraits/kristin-hatcher-sq-20261024.jpg", source: "airtable" },
-  "logan rose": { file: "/2026-headshots/portraits/logan-rose-sq-20261024.jpg", source: "airtable" },
-  "sara steinweiss": { file: "/2026-headshots/portraits/sara-steinweiss-sq-20261024.jpg", source: "airtable" },
+  "kristin hatcher": { file: "/2026-headshots/portraits/kristin-hatcher-official-20261025.jpg", source: "web", credit: "Official team headshot from The Fund to Prevent Sexual Assault, preventsa.org" },
+  "logan rose": { file: "/2026-headshots/portraits/logan-rose-card-20261025.jpg", source: "airtable" },
+  "sara steinweiss": { file: "/2026-headshots/portraits/sara-steinweiss-card-20261025.jpg", source: "airtable" },
   "dj": { file: "/2026-headshots/portraits/dmc-dj-sq-20261024.jpg", source: "airtable" },
-  "melony lewis": { file: "/2026-headshots/portraits/melony-lewis-sq-20261024.jpg", source: "airtable" },
+  "melony lewis": { file: "/2026-headshots/portraits/melony-lewis-card-20261025.jpg", source: "airtable" },
+  "brad keating": { file: "/2026-headshots/portraits/brad-keating-hires-20261025.jpg", source: "web", credit: "Professional portrait by Wade Vandervort, published by Vegas Inc.", attribution: { label: "Wade Vandervort / Vegas Inc.", href: "https://vegasinc.lasvegassun.com/business/2020/mar/12/40-under-40-brad-keating-director-of-government-af/" } },
   "winston kelly": { file: "/2026-headshots/portraits/winston-kelly-sq-20261024.jpg", source: "airtable" },
   "cameron kelly": { file: "/2026-headshots/portraits/cameron-kelly-sq-20261024.jpg", source: "airtable" },
   "janet wozniak": { file: "/2026-headshots/portraits/janet-wozniak-sq-20261024.jpg", source: "mobile", credit: "Owner-provided Janet Wozniak headshot; Oct 24" },
