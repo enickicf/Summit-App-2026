@@ -306,20 +306,39 @@ export const ticketOfferPayloadSchema = z.object({
   confirmationToken: z.uuid(),
   name: personName(180), email, phone: text(80).optional().default(""),
   organization: text(240).optional().default(""), professionalRole: text(180).optional().default(""),
+  decision: z.enum(["approved", "declined"]).optional().default("approved"),
   awardsTicketsOffered: z.coerce.number().int().min(0).max(10),
   communityDayTicketsOffered: z.coerce.number().int().min(0).max(10),
+  awardsAttendees: z.array(z.object({ id: required(220), name: text(180), email: z.union([email, z.literal("")]), phone: text(80), organization: text(240).optional().default(""), professionalRole: text(180).optional().default(""), waiverComplete: z.boolean().optional().default(false) }).strip()).max(10).optional().default([]),
+  communityDayAttendees: z.array(z.object({ id: required(220), name: text(180), email: z.union([email, z.literal("")]), phone: text(80), organization: text(240).optional().default(""), professionalRole: text(180).optional().default(""), waiverComplete: z.boolean().optional().default(false) }).strip()).max(10).optional().default([]),
   approvalUpdatedAt: z.iso.datetime(),
-}).strip().refine(value => value.awardsTicketsOffered + value.communityDayTicketsOffered > 0, "At least one ticket must be offered.");
+}).strip().superRefine((value, context) => {
+  const total = value.awardsTicketsOffered + value.communityDayTicketsOffered;
+  if (value.decision === "approved" && total < 1) context.addIssue({ code: "custom", message: "An approved offer needs at least one ticket." });
+  if (value.decision === "declined" && total !== 0) context.addIssue({ code: "custom", message: "A declined request cannot include offered tickets." });
+  if (value.awardsAttendees.length > value.awardsTicketsOffered || value.communityDayAttendees.length > value.communityDayTicketsOffered) context.addIssue({ code: "custom", message: "The attendee roster cannot exceed the ticket offer." });
+});
 export type TicketOfferPayload = z.infer<typeof ticketOfferPayloadSchema>;
 export type TicketOfferSubmission = Submission<TicketOfferPayload>;
 
-export const confirmedGuestSchema = z.object({ name: personName(180), email, phone: required(80), organization: text(240).optional().default(""), professionalRole: text(180).optional().default("") }).strip();
+export const confirmedGuestSchema = z.object({ id: text(220).optional().default(""), name: personName(180), email, phone: required(80).refine(value => value.replace(/\D/g, "").length >= 7, "Please enter a phone number."), organization: text(240).optional().default(""), professionalRole: text(180).optional().default("") }).strip();
+export const confirmationWaiverSchema = z.object({ personId: required(220), version: z.literal("not-alone-events-2026-10-16"), signature: personName(180), email, acceptedAt: z.iso.datetime(), adultSelf: z.literal(true), liabilityAccepted: z.literal(true), mediaAccepted: z.literal(true), electronicConsent: z.literal(true) }).strip();
+export const confirmationSmsConsentSchema = z.object({
+  personId: required(220), phone: required(80),
+  scope: z.enum(["ticket-logistics", "event-and-icf"]), optedIn: z.literal(true),
+  recordedAt: z.iso.datetime(), disclosure: required(900),
+  version: z.enum(["confirmation-ticket-sms-2026-10-24", "confirmation-sms-2026-10-24"]),
+  source: z.literal("ticket-confirmation"),
+}).strip();
 export const ticketConfirmationPayloadSchema = z.object({
   offerId: z.uuid(), confirmationToken: z.uuid(),
   name: personName(180), email, phone: text(80).optional().default(""),
   organization: text(240).optional().default(""), professionalRole: text(180).optional().default(""),
   awardsAttendees: z.array(confirmedGuestSchema).max(10),
   communityDayAttendees: z.array(confirmedGuestSchema).max(10),
+  waivers: z.array(confirmationWaiverSchema).max(20).optional().default([]),
+  smsConsents: z.array(confirmationSmsConsentSchema).max(40).optional().default([]),
+  pendingWaiverIds: z.array(text(220)).max(20).optional().default([]),
   notes: text(900).optional().default(""),
 }).strip();
 export type TicketConfirmationPayload = z.infer<typeof ticketConfirmationPayloadSchema>;

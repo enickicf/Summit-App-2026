@@ -138,5 +138,24 @@
 .noticeError { margin: 8px 0; padding: 10px 14px; border-radius: 8px; background: #fff4f4; border: 1px solid #e3a7a7; color: #8a1c1c; font-size: 14px; }
 @media (max-width: 560px) { .guestForm .wide { grid-column: auto; } }
 
+/* Ticket decisions: one protected workspace shared by Porter and Cherrial. */
+.approvalSearch { display: grid; gap: 6px; max-width: 520px; margin-top: 18px; font-weight: 600; }
+.approvalSearch input { padding: 12px 14px; border: 1px solid #ccd3e6; border-radius: 8px; font: inherit; }
+.approvalList { display: grid; gap: 16px; margin-top: 18px; }
+.approvalCard { padding: 22px; border: 1px solid #d0d4ea; border-radius: 14px; background: #fff; }
+.approvalIdentity { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.approvalIdentity h2 { margin: 2px 0 4px; font-size: 22px; }
+.approvalIdentity p { margin: 0; }
+.approvalEvents { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 18px 0; }
+.approvalEvents label { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 14px; border: 1px solid #e2e5ef; border-radius: 10px; background: #fafbfe; }
+.approvalEvents span { font-weight: 700; }
+.approvalEvents small { color: #666; }
+.approvalEvents select { grid-column: 1 / -1; padding: 10px; border: 1px solid #ccd3e6; border-radius: 7px; background: #fff; font: inherit; }
+.approvalActions { display: flex; flex-wrap: wrap; gap: 10px; }
+.approvalLink { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 16px; padding: 14px; border: 1px solid #b9dcc0; border-radius: 10px; background: #eef6ee; overflow-wrap: anywhere; }
+.badgeApproved { background: #236c3f; color: #fff; }
+.badgeDeclined { background: #8a1c1c; color: #fff; }
+@media (max-width: 640px) { .approvalEvents { grid-template-columns: 1fr; } .approvalIdentity, .approvalLink { align-items: flex-start; flex-direction: column; } }
+
 /* Oct 21: the "Guest details missing" tile links to its follow-up list. */
 .statFollowUp { text-decoration: none; color: inherit; border-color: #e7b75f; }
