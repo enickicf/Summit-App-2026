@@ -40,7 +40,7 @@ export function InterviewBooking({ entry }: { entry: PodcastEntry }) {
     setLoading(false);
     if (!response.ok) { setMessage(data.error ?? "Times could not be loaded."); return; }
     setSlots(data.slots); setArrivalKnown(data.arrivalKnown); setTravelVerified(data.travelVerified); setNeedsArrival(Boolean(data.needsArrival));
-    setMessage(data.needsArrival ? "We do not have a verified arrival for this name. Add the arrival date and Las Vegas local time to continue." : data.slots.length ? "Choose a time and an available recording room." : "No compatible times are currently available. Production will follow up.");
+    setMessage(data.needsArrival ? "We do not have a verified arrival for this name. Add the arrival date and Las Vegas local time to continue." : data.slots.length ? format === "short" ? "Choose an available interview time after the red carpet walk." : "Choose a time and an available recording room." : "No compatible times are currently available. Production will follow up.");
   }
 
   async function submit(event: FormEvent) {
@@ -64,7 +64,7 @@ export function InterviewBooking({ entry }: { entry: PodcastEntry }) {
       <label>Interview guest’s full name<input value={guestName} onChange={event => { setGuestName(event.target.value); setSlots([]); }} required /></label>
       <label>Email<input type="email" value={email} onChange={event => setEmail(event.target.value)} required /></label>
     </div>
-    <fieldset><legend>Interview format</legend><div className={styles.formatChoices}>{formats.map(item => <label key={item} className={styles.formatChoice}><input type="radio" name={`format-${entry.show}`} checked={format === item} onChange={() => { setFormat(item); setSlots([]); setSlot(""); setRoom(""); }} /><span><strong>{item === "long" ? "Long form" : "Short form"}</strong><small>{item === "long" ? "75-minute recording (1+ hour)" : "20-minute focused interview"}</small></span></label>)}</div></fieldset>
+    <fieldset><legend>Interview format</legend><div className={styles.formatChoices}>{formats.map(item => <label key={item} className={styles.formatChoice}><input type="radio" name={`format-${entry.show}`} checked={format === item} onChange={() => { setFormat(item); setSlots([]); setSlot(""); setRoom(""); }} /><span><strong>{item === "long" ? "Long form" : "Short form"}</strong><small>{item === "long" ? "75-minute recording (1+ hour) · 10:00 AM or later" : "20-minute interview after your red carpet walk"}</small></span></label>)}</div></fieldset>
     <button type="button" className={styles.findTimes} onClick={findTimes} disabled={loading}>{loading ? "Checking travel and rooms…" : "Book a time"}</button>
     {needsArrival && <label>Arrival date and time in Las Vegas<input type="datetime-local" min="2026-10-30T00:00" max="2026-11-04T23:59" value={arrivalLocal} onChange={event => setArrivalLocal(event.target.value)} required /><small className={styles.arrivalHelp}>This is used only to remove interview times that occur before arrival.</small></label>}
     {needsArrival && arrivalLocal && <button type="button" className={styles.findTimes} onClick={findTimes} disabled={loading}>{loading ? "Checking…" : "Show compatible times"}</button>}

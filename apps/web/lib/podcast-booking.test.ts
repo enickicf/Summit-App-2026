@@ -11,8 +11,19 @@ const booking = (overrides: Partial<PodcastBookingSubmission> = {}): PodcastBook
 
 describe("podcast booking availability", () => {
   it("removes slots before an exact flight arrival plus a three-hour buffer", () => {
-    const slots = availablePodcastSlots("short", { arrivalUtc: "2026-11-03T20:00:00.000Z", arrivalDate: "2026-11-03", exact: true }, []);
+    const slots = availablePodcastSlots("long", { arrivalUtc: "2026-11-03T20:00:00.000Z", arrivalDate: "2026-11-03", exact: true }, []);
     expect(slots.every(slot => Date.parse(slot.startUtc) >= Date.parse("2026-11-03T23:00:00.000Z"))).toBe(true);
+  });
+
+  it("offers short-form interviews only after the Nov 2 red carpet walk", () => {
+    const slots = availablePodcastSlots("short", { arrivalUtc: "2026-11-02T16:00:00.000Z", arrivalDate: "2026-11-02", exact: true }, []);
+    expect(slots.map(slot => slot.startUtc)).toEqual(["2026-11-03T02:30:00.000Z", "2026-11-03T03:00:00.000Z"]);
+  });
+
+  it("starts full-length interview availability at 10 AM Las Vegas time", () => {
+    const slots = availablePodcastSlots("long", { arrivalUtc: "2026-11-02T16:00:00.000Z", arrivalDate: "2026-11-02", exact: true }, []);
+    expect(slots[0]?.startUtc).toBe("2026-11-03T18:00:00.000Z");
+    expect(slots.every(slot => new Date(slot.startUtc).getUTCHours() >= 18)).toBe(true);
   });
 
   it("moves a date-only Nov 3 arrival to Nov 4", () => {
