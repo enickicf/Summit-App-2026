@@ -23,7 +23,14 @@ export default async function StaffPage({ searchParams }: { searchParams?: Promi
   const [rsvps, nominations, poker, workshops, textPreferences, closingDinner, ticketOffers, ticketConfirmations, snapshot] = await Promise.all([listAllRsvps(store), store.list("nomination"), store.list("poker"), store.list("workshop"), store.list("textPreference"), store.list("closingDinner"), store.list("ticketOffer"), store.list("ticketConfirmation"), getSiteSnapshot().catch(() => null)]);
   // Oct 19: requests the API did not save (submission inbox), minus those the same guest later completed.
   const failed = await listFailedSubmissions().catch(error => { console.error("[staff] submission inbox unavailable", error instanceof Error ? error.message : error); return null; });
-  const saved = [...rsvps, ...closingDinner, ...workshops.map(row => ({ ...row, email: row.email ?? "", phone: row.phone ?? "" })), ...nominations.map(row => ({ email: row.nominatorEmail, phone: row.nominatorPhone, submittedAt: row.submittedAt }))];
+  const saved = [
+    ...rsvps,
+    ...rsvps.flatMap(row => (row.guests ?? []).map(guest => ({ ...guest, submittedAt: row.submittedAt }))),
+    ...closingDinner,
+    ...closingDinner.filter(row => row.bringingGuest).map(row => ({ email: row.guestEmail, phone: row.guestPhone, submittedAt: row.submittedAt })),
+    ...workshops.map(row => ({ ...row, email: row.email ?? "", phone: row.phone ?? "" })),
+    ...nominations.map(row => ({ email: row.nominatorEmail, phone: row.nominatorPhone, submittedAt: row.submittedAt }))
+  ];
   const unresolved = failed ? unresolvedFailures(failed, saved) : null;
   // Requests with no name, email or phone (bots, empty probes) have nobody to contact: counted, not listed.
   const needsAttention = unresolved ? unresolved.filter(entry => entry.name || entry.email || entry.phone) : null;
