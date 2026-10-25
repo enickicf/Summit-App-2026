@@ -1,6 +1,6 @@
 # Ticket approval and confirmation integration
 
-Status: preview implementation based on Cherrial Odell's October 24 email. Her email referenced a technical contract and code package, but Gmail shows that neither attachment arrived. This document records the implemented boundary and the remaining connection values.
+Status: live on `notalonesummit.org` in production deploy `6add543174d2ee336da5b8b2`, based on Cherrial Odell's October 24 email. Her email referenced a technical contract and code package, but Gmail shows that neither attachment arrived. The staff portal, private confirmation form, local journal and exports are active. The external approval-system mirror remains dormant until the missing connection values arrive.
 
 ## Data separation
 
