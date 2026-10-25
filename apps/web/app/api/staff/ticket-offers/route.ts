@@ -33,6 +33,7 @@ export async function POST(request: Request) {
   const store = await getSubmissionStore();
   const existing = (await store.list("ticketOffer")).find(row => row.externalApprovalId === String(raw.externalApprovalId ?? ""));
   const parsed = ticketOfferPayloadSchema.safeParse({
+    ...existing,
     ...raw,
     confirmationToken: existing?.confirmationToken ?? raw.confirmationToken ?? randomUUID(),
   });

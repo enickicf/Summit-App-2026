@@ -208,6 +208,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
         <a href="#podcasts" data-view-tab="podcasts" aria-selected="false">Podcasts</a>
         <a href="#texts" data-view-tab="texts" aria-selected="false">Texts</a>
         <a href="#poker" data-view-tab="poker" aria-selected="false">Sponsorship</a>
+        <a href="/staff/cheryl-operations" className={styles.opsLaunch}>Cheryl Operations</a>
         <a href="/staff/ticket-approvals">Ticket approvals</a>
         <a href="/staff/submissions">Submission review{needsAttention && needsAttention.length > 0 ? ` (${needsAttention.length})` : ""}</a>
         {/* Owner (Sept 30): a complete copy of everything, downloadable from any device at any time. */}
@@ -217,7 +218,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
     </header>
 
     <div data-view="awards" id="awards">
-      <nav className={styles.sectionNav} aria-label="Awards sections"><a href="#add-guest">Add a guest</a><a href="/staff/ticket-approvals">Make ticket decisions</a><a href="#ticket-confirmations">Approvals &amp; confirmations</a><a href="#vip">VIP</a><a href="#lake-las-vegas">Lake Las Vegas</a><a href="#nami">NAMI</a><a href="#usta">USTA</a><a href="#tickets">Tickets</a><a href="#community-day">Community Day</a><a href="#nominations">Nominations</a><a href="#removed">Removed</a><a href="#lineup">Lineup</a></nav>
+      <nav className={styles.sectionNav} aria-label="Awards sections"><a href="/staff/cheryl-operations"><strong>Open Cheryl Operations</strong></a><a href="#add-guest">Add a guest</a><a href="/staff/ticket-approvals">Make ticket decisions</a><a href="#ticket-confirmations">Approvals &amp; confirmations</a><a href="#vip">VIP</a><a href="#lake-las-vegas">Lake Las Vegas</a><a href="#nami">NAMI</a><a href="#usta">USTA</a><a href="#tickets">Tickets</a><a href="#community-day">Community Day</a><a href="#nominations">Nominations</a><a href="#removed">Removed</a><a href="#lineup">Lineup</a></nav>
       {/* Oct 20 (Cherrial, owner approved): add a guest Trent sends by WhatsApp / text. Stored like an RSVP, tagged "Added by
           staff"; no confirmation email (they get one only when they RSVP themselves). */}
       <section className={styles.section} id="add-guest" aria-labelledby="add-guest-title">
@@ -250,12 +251,12 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
           <thead><tr><th>Guest</th><th>Offered</th><th>Response</th><th>Attendees</th><th>Waivers</th><th>External mirror</th><th>Private confirmation link</th></tr></thead>
           <tbody>{ticketOffers.map(offer => { const confirmation = ticketConfirmations.find(row => row.offerId === offer.id); return <tr key={offer.id}>
             <td className={styles.strong}>{offer.name}<br/><a href={`mailto:${offer.email}`}>{offer.email}</a>{offer.phone ? <><br/>{offer.phone}</> : null}</td>
-            <td>{offer.decision === "declined" ? <strong>Declined</strong> : <>Awards: {offer.awardsTicketsOffered}<br/>Nevada Mental Health Day: {offer.communityDayTicketsOffered}</>}</td>
+            <td>{offer.decision === "declined" ? <strong>Declined</strong> : offer.decision === "hold" ? <strong>On hold</strong> : <>Awards: {offer.awardsTicketsOffered}<br/>Nevada Mental Health Day: {offer.communityDayTicketsOffered}<br/><small>{offer.confirmationStatus === "ready" ? "Ready to contact" : offer.confirmationStatus === "sent" ? "Confirmation sent" : "Contact hold"}</small></>}</td>
             <td>{confirmation ? when(confirmation.submittedAt) : <span className={styles.muted}>Awaiting response</span>}</td>
             <td>{confirmation ? <>Awards: {confirmation.awardsAttendees.length}<br/>Nevada Mental Health Day: {confirmation.communityDayAttendees.length}</> : "—"}</td>
             <td>{confirmation ? `${confirmation.pendingWaiverIds?.length ?? 0} pending` : "—"}</td>
             <td>{confirmation ? confirmation.mirrorStatus : "—"}{confirmation?.mirrorError ? <><br/><small>{confirmation.mirrorError}</small></> : null}</td>
-            <td>{offer.decision === "declined" ? "—" : <a href={`/tickets/confirm/${offer.confirmationToken}`}>Open form</a>}</td>
+            <td>{offer.decision === "approved" ? <a href={`/tickets/confirm/${offer.confirmationToken}`}>Open form</a> : "—"}</td>
           </tr>; })}</tbody>
         </table></div>}
       </section>

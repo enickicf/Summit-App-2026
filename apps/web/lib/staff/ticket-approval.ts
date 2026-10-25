@@ -24,6 +24,8 @@ export type TicketApprovalCandidate = {
   communityDayRequested: number;
   awardsAttendees: ApprovalAttendee[];
   communityDayAttendees: ApprovalAttendee[];
+  missingDetails: string[];
+  formVersion: "current" | "legacy";
   submittedAt: string;
 };
 
@@ -53,6 +55,17 @@ const party = (record: RsvpSubmission): ApprovalAttendee[] => [
 ];
 const unique = (rows: ApprovalAttendee[]) => [...new Map(rows.map(row => [key(row.email) || row.id, row])).values()];
 const pad = (rows: ApprovalAttendee[], count: number, prefix: string) => Array.from({ length: count }, (_, index) => rows[index] ?? ({ id: `${prefix}:missing:${index}`, name: "", email: "", phone: "", organization: "", professionalRole: "", waiverComplete: false }));
+const missingFor = (rows: ApprovalAttendee[], expected: number) => {
+  const missing: string[] = [];
+  if (rows.length < expected) missing.push(`${expected - rows.length} attendee record${expected - rows.length === 1 ? "" : "s"}`);
+  rows.slice(0, expected).forEach((row, index) => {
+    if (!row.name.trim()) missing.push(`attendee ${index + 1} name`);
+    if (!row.email.trim()) missing.push(`attendee ${index + 1} email`);
+    if (row.phone.replace(/\D/g, "").length < 7) missing.push(`attendee ${index + 1} phone`);
+    if (!row.waiverComplete) missing.push(`attendee ${index + 1} waiver`);
+  });
+  return missing;
+};
 
 /**
  * Builds one approval row per real invitation party. Combined VIP submissions are grouped by
@@ -78,6 +91,7 @@ export function ticketApprovalCandidates(records: RsvpSubmission[]): TicketAppro
     const dayRows = unique(rows.filter(wantsCommunityDay).map(attendee));
     const name = newest.requesterName || newest.name;
     const email = newest.requesterEmail || newest.email;
+    const missingDetails = [...missingFor(awardsRows, awardsRows.length), ...missingFor(dayRows, dayRows.length)];
     out.push({
       id: `invitation:${invitationId}`,
       sourceRsvpId: newest.id,
@@ -91,6 +105,8 @@ export function ticketApprovalCandidates(records: RsvpSubmission[]): TicketAppro
       communityDayRequested: dayRows.length,
       awardsAttendees: awardsRows,
       communityDayAttendees: dayRows,
+      missingDetails,
+      formVersion: missingDetails.length ? "legacy" : "current",
       submittedAt: newest.submittedAt,
     });
   }
@@ -104,6 +120,9 @@ export function ticketApprovalCandidates(records: RsvpSubmission[]): TicketAppro
     if (!newest) continue;
     const awardsCount = awardsRecord?.guestCount ?? 0;
     const dayCount = dayRecord?.guestCount ?? 0;
+    const awardsAttendees = awardsRecord ? pad(unique(party(awardsRecord)), awardsCount, `${newest.id}:awards`) : [];
+    const communityDayAttendees = dayRecord ? pad(unique(party(dayRecord)), dayCount, `${newest.id}:day`) : [];
+    const missingDetails = [...missingFor(awardsAttendees, awardsCount), ...missingFor(communityDayAttendees, dayCount)];
     out.push({
       id: `rsvp:${email}`,
       sourceRsvpId: newest.id,
@@ -115,8 +134,10 @@ export function ticketApprovalCandidates(records: RsvpSubmission[]): TicketAppro
       form: newest.vip ? "VIP" : newest.partner?.toUpperCase() || (newest.tier === "lake-las-vegas" ? "Lake Las Vegas" : "Standard"),
       awardsRequested: awardsCount,
       communityDayRequested: dayCount,
-      awardsAttendees: awardsRecord ? pad(unique(party(awardsRecord)), awardsCount, `${newest.id}:awards`) : [],
-      communityDayAttendees: dayRecord ? pad(unique(party(dayRecord)), dayCount, `${newest.id}:day`) : [],
+      awardsAttendees,
+      communityDayAttendees,
+      missingDetails,
+      formVersion: missingDetails.length ? "legacy" : "current",
       submittedAt: newest.submittedAt,
     });
   }

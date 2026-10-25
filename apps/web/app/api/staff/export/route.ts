@@ -21,11 +21,11 @@ export async function GET(request: Request) {
   const stamp = new Date().toISOString().slice(0, 10);
   // Owner (Sept 28): one JSON file with everything (incl. removed requests and the confirmation-email log) for backups.
   if (kind === "all") {
-    const [rsvp, nomination, poker, rsvpEmail, workshop, closingDinner, podcastBooking, ticketOffer, ticketConfirmation] = await Promise.all([listAllRsvps(store), store.list("nomination"), store.list("poker"), store.list("rsvpEmail"), store.list("workshop"), store.list("closingDinner"), store.list("podcastBooking"), store.list("ticketOffer"), store.list("ticketConfirmation")]);
+    const [rsvp, nomination, poker, rsvpEmail, workshop, closingDinner, podcastBooking, ticketOffer, ticketConfirmation, programApproval] = await Promise.all([listAllRsvps(store), store.list("nomination"), store.list("poker"), store.list("rsvpEmail"), store.list("workshop"), store.list("closingDinner"), store.list("podcastBooking"), store.list("ticketOffer"), store.list("ticketConfirmation"), store.list("programApproval")]);
     const textPreference = textPreferences;
     // Oct 19: the submission inbox (every request as sent, and every request that was not saved).
     const [submissionInboxFailed, submissionInboxReceived] = await Promise.all([listFailedSubmissions().catch(() => null), listReceivedSubmissions().catch(() => null)]);
-    const body = JSON.stringify({ exportedAt: new Date().toISOString(), site: "notalonesummit.org/staff", rsvp, nomination, poker, rsvpEmail, workshop, textPreference, closingDinner, podcastBooking, ticketOffer, ticketConfirmation, submissionInboxFailed, submissionInboxReceived }, null, 2);
+    const body = JSON.stringify({ exportedAt: new Date().toISOString(), site: "notalonesummit.org/staff", rsvp, nomination, poker, rsvpEmail, workshop, textPreference, closingDinner, podcastBooking, ticketOffer, ticketConfirmation, programApproval, submissionInboxFailed, submissionInboxReceived }, null, 2);
     return new Response(body, { headers: { "Content-Type": "application/json; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-staff-portal-backup-${stamp}.json"`, "Cache-Control": "no-store" } });
   }
   // Oct 19: submission inbox spreadsheets: kind=inbox = requests that were NOT saved; kind=inbox-all = every request received.
@@ -59,6 +59,10 @@ export async function GET(request: Request) {
   if (kind === "ticket-confirmations") {
     const rows = await store.list("ticketConfirmation");
     return new Response(toCsv(rows.map(row => ({ ...row, awardsAttendees: JSON.stringify(row.awardsAttendees), communityDayAttendees: JSON.stringify(row.communityDayAttendees), waivers: JSON.stringify(row.waivers ?? []), smsConsents: JSON.stringify(row.smsConsents ?? []), pendingWaiverIds: (row.pendingWaiverIds ?? []).join("; ") })), ["submittedAt", "name", "email", "phone", "organization", "professionalRole", "externalApprovalId", "offerId", "awardsAttendees", "communityDayAttendees", "waivers", "smsConsents", "pendingWaiverIds", "mirrorStatus", "mirrorError", "notes", "id"]), { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-ticket-confirmations-${stamp}.csv"`, "Cache-Control": "no-store" } });
+  }
+  if (kind === "program-approvals") {
+    const rows = await store.list("programApproval");
+    return new Response(toCsv(rows.map(row => ({ ...row, missingDetails: row.missingDetails.join("; ") })), ["reviewedAt", "name", "email", "phone", "form", "eventLabel", "requestedQuantity", "approvedQuantity", "decision", "confirmationStatus", "fulfillment", "formVersion", "missingDetails", "notes", "sourceKind", "sourceId", "eventKey", "id"]), { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-program-approvals-${stamp}.csv"`, "Cache-Control": "no-store" } });
   }
   if (kind === "nominations") {
     const csv = toCsv((await store.list("nomination")).map(row => ({ ...row, ...textConsentColumns({ phone: row.nominatorPhone, email: row.nominatorEmail, submittedAt: row.submittedAt, textConsent: row.textConsent }, textPreferences) })), [...nominationCsvColumns, ...textConsentCsvColumns]);

@@ -306,11 +306,13 @@ export const ticketOfferPayloadSchema = z.object({
   confirmationToken: z.uuid(),
   name: personName(180), email, phone: text(80).optional().default(""),
   organization: text(240).optional().default(""), professionalRole: text(180).optional().default(""),
-  decision: z.enum(["approved", "declined"]).optional().default("approved"),
+  decision: z.enum(["approved", "declined", "hold"]).optional().default("approved"),
   awardsTicketsOffered: z.coerce.number().int().min(0).max(10),
   communityDayTicketsOffered: z.coerce.number().int().min(0).max(10),
   awardsAttendees: z.array(z.object({ id: required(220), name: text(180), email: z.union([email, z.literal("")]), phone: text(80), organization: text(240).optional().default(""), professionalRole: text(180).optional().default(""), waiverComplete: z.boolean().optional().default(false) }).strip()).max(10).optional().default([]),
   communityDayAttendees: z.array(z.object({ id: required(220), name: text(180), email: z.union([email, z.literal("")]), phone: text(80), organization: text(240).optional().default(""), professionalRole: text(180).optional().default(""), waiverComplete: z.boolean().optional().default(false) }).strip()).max(10).optional().default([]),
+  confirmationStatus: z.enum(["hold", "ready", "sent"]).optional().default("hold"),
+  confirmationStatusUpdatedAt: z.union([z.literal(""), z.iso.datetime()]).optional().default(""),
   approvalUpdatedAt: z.iso.datetime(),
 }).strip().superRefine((value, context) => {
   const total = value.awardsTicketsOffered + value.communityDayTicketsOffered;
@@ -319,7 +321,42 @@ export const ticketOfferPayloadSchema = z.object({
   if (value.awardsAttendees.length > value.awardsTicketsOffered || value.communityDayAttendees.length > value.communityDayTicketsOffered) context.addIssue({ code: "custom", message: "The attendee roster cannot exceed the ticket offer." });
 });
 export type TicketOfferPayload = z.infer<typeof ticketOfferPayloadSchema>;
-export type TicketOfferSubmission = Submission<TicketOfferPayload>;
+// Queue fields were added after offers already existed in production, so stored
+// historical rows may omit them. Readers treat omission as "hold".
+export type TicketOfferSubmission = Submission<Omit<TicketOfferPayload, "confirmationStatus" | "confirmationStatusUpdatedAt"> & {
+  confirmationStatus?: TicketOfferPayload["confirmationStatus"];
+  confirmationStatusUpdatedAt?: string;
+}>;
+
+// Oct 24 (owner / Cherrial): decisions for every program outside the Awards and
+// Nevada Mental Health Day ticket offer. These records never alter the original
+// request. They give staff one durable, journaled place to review dinner,
+// wellness, site-visit, workshop and poker requests.
+export const programApprovalPayloadSchema = z.object({
+  sourceKind: z.enum(["closingDinner", "workshop", "poker"]),
+  sourceId: required(180),
+  eventKey: required(180),
+  eventLabel: required(220),
+  name: personName(180),
+  email: z.union([email, z.literal("")]),
+  phone: text(80).optional().default(""),
+  form: required(180),
+  requestedQuantity: z.coerce.number().int().min(1).max(50),
+  approvedQuantity: z.coerce.number().int().min(0).max(50),
+  decision: z.enum(["approved", "declined", "hold"]),
+  fulfillment: z.enum(["ticket", "check-in", "reservation"]),
+  confirmationStatus: z.enum(["hold", "ready", "sent"]).optional().default("hold"),
+  missingDetails: z.array(text(180)).max(20).optional().default([]),
+  formVersion: z.enum(["current", "legacy"]),
+  notes: text(900).optional().default(""),
+  reviewedAt: z.iso.datetime(),
+}).strip().superRefine((value, context) => {
+  if (value.decision === "approved" && value.approvedQuantity < 1) context.addIssue({ code: "custom", message: "An approved request needs at least one place." });
+  if (value.decision === "declined" && value.approvedQuantity !== 0) context.addIssue({ code: "custom", message: "A declined request cannot include approved places." });
+  if (value.approvedQuantity > value.requestedQuantity) context.addIssue({ code: "custom", message: "Approved places cannot exceed the request." });
+});
+export type ProgramApprovalPayload = z.infer<typeof programApprovalPayloadSchema>;
+export type ProgramApprovalSubmission = Submission<ProgramApprovalPayload>;
 
 export const confirmedGuestSchema = z.object({ id: text(220).optional().default(""), name: personName(180), email, phone: required(80).refine(value => value.replace(/\D/g, "").length >= 7, "Please enter a phone number."), organization: text(240).optional().default(""), professionalRole: text(180).optional().default("") }).strip();
 export const confirmationWaiverSchema = z.object({ personId: required(220), version: z.literal("not-alone-events-2026-10-16"), signature: personName(180), email, acceptedAt: z.iso.datetime(), adultSelf: z.literal(true), liabilityAccepted: z.literal(true), mediaAccepted: z.literal(true), electronicConsent: z.literal(true) }).strip();
@@ -347,8 +384,8 @@ export type TicketConfirmationSubmission = Submission<TicketConfirmationPayload>
 // "vipRsvp" (Sept 30): requests from the unlisted VIP link, kept apart from the mass RSVPs and shown only in the VIP portal.
 // "textPreference" (Oct 12): a guest's text message choice (yes / opt out) from the text-updates page or recorded by staff.
 // "closingDinner" (Oct 13): requests for the Nov 4 closing night dinner with Jewel.
-export type SubmissionKind = "rsvp" | "nomination" | "poker" | "rsvpEmail" | "workshop" | "vipRsvp" | "textPreference" | "closingDinner" | "podcastBooking" | "ticketOffer" | "ticketConfirmation";
-export type AnySubmission = RsvpSubmission | NominationSubmission | PokerSubmission | RsvpEmailRecord | WorkshopSubmission | TextPreferenceRecord | ClosingDinnerSubmission | PodcastBookingSubmission | TicketOfferSubmission | TicketConfirmationSubmission;
+export type SubmissionKind = "rsvp" | "nomination" | "poker" | "rsvpEmail" | "workshop" | "vipRsvp" | "textPreference" | "closingDinner" | "podcastBooking" | "ticketOffer" | "ticketConfirmation" | "programApproval";
+export type AnySubmission = RsvpSubmission | NominationSubmission | PokerSubmission | RsvpEmailRecord | WorkshopSubmission | TextPreferenceRecord | ClosingDinnerSubmission | PodcastBookingSubmission | TicketOfferSubmission | TicketConfirmationSubmission | ProgramApprovalSubmission;
 export interface SubmissionStore {
   add(kind: "rsvp", record: RsvpSubmission): Promise<void>;
   add(kind: "nomination", record: NominationSubmission): Promise<void>;
@@ -361,6 +398,7 @@ export interface SubmissionStore {
   add(kind: "podcastBooking", record: PodcastBookingSubmission): Promise<void>;
   add(kind: "ticketOffer", record: TicketOfferSubmission): Promise<void>;
   add(kind: "ticketConfirmation", record: TicketConfirmationSubmission): Promise<void>;
+  add(kind: "programApproval", record: ProgramApprovalSubmission): Promise<void>;
   list(kind: "rsvp"): Promise<RsvpSubmission[]>;
   list(kind: "nomination"): Promise<NominationSubmission[]>;
   list(kind: "poker"): Promise<PokerSubmission[]>;
@@ -372,6 +410,7 @@ export interface SubmissionStore {
   list(kind: "podcastBooking"): Promise<PodcastBookingSubmission[]>;
   list(kind: "ticketOffer"): Promise<TicketOfferSubmission[]>;
   list(kind: "ticketConfirmation"): Promise<TicketConfirmationSubmission[]>;
+  list(kind: "programApproval"): Promise<ProgramApprovalSubmission[]>;
   // Sept 28 (owner): permanent deletion of test entries; the route only allows it for records already marked removed.
   delete(kind: SubmissionKind, record: { id: string; submittedAt: string }): Promise<void>;
 }
@@ -379,8 +418,9 @@ export interface SubmissionStore {
 const keyFor = (record: { submittedAt: string; id: string }) => `${record.submittedAt}-${record.id}`;
 const byNewest = <T extends { submittedAt: string }>(records: T[]) => [...records].sort((a, b) => b.submittedAt.localeCompare(a.submittedAt));
 
-export function memorySubmissionStore(initial: { rsvp?: RsvpSubmission[]; nomination?: NominationSubmission[]; poker?: PokerSubmission[]; rsvpEmail?: RsvpEmailRecord[]; workshop?: WorkshopSubmission[]; vipRsvp?: RsvpSubmission[]; textPreference?: TextPreferenceRecord[]; closingDinner?: ClosingDinnerSubmission[]; podcastBooking?: PodcastBookingSubmission[]; ticketOffer?: TicketOfferSubmission[]; ticketConfirmation?: TicketConfirmationSubmission[] } = {}): SubmissionStore {
-  const data = { rsvp: new Map<string, RsvpSubmission>(), nomination: new Map<string, NominationSubmission>(), poker: new Map<string, PokerSubmission>(), rsvpEmail: new Map<string, RsvpEmailRecord>(), workshop: new Map<string, WorkshopSubmission>(), vipRsvp: new Map<string, RsvpSubmission>(), textPreference: new Map<string, TextPreferenceRecord>(), closingDinner: new Map<string, ClosingDinnerSubmission>(), podcastBooking: new Map<string, PodcastBookingSubmission>(), ticketOffer: new Map<string, TicketOfferSubmission>(), ticketConfirmation: new Map<string, TicketConfirmationSubmission>() };
+export function memorySubmissionStore(initial: { rsvp?: RsvpSubmission[]; nomination?: NominationSubmission[]; poker?: PokerSubmission[]; rsvpEmail?: RsvpEmailRecord[]; workshop?: WorkshopSubmission[]; vipRsvp?: RsvpSubmission[]; textPreference?: TextPreferenceRecord[]; closingDinner?: ClosingDinnerSubmission[]; podcastBooking?: PodcastBookingSubmission[]; ticketOffer?: TicketOfferSubmission[]; ticketConfirmation?: TicketConfirmationSubmission[]; programApproval?: ProgramApprovalSubmission[] } = {}): SubmissionStore {
+  const data = { rsvp: new Map<string, RsvpSubmission>(), nomination: new Map<string, NominationSubmission>(), poker: new Map<string, PokerSubmission>(), rsvpEmail: new Map<string, RsvpEmailRecord>(), workshop: new Map<string, WorkshopSubmission>(), vipRsvp: new Map<string, RsvpSubmission>(), textPreference: new Map<string, TextPreferenceRecord>(), closingDinner: new Map<string, ClosingDinnerSubmission>(), podcastBooking: new Map<string, PodcastBookingSubmission>(), ticketOffer: new Map<string, TicketOfferSubmission>(), ticketConfirmation: new Map<string, TicketConfirmationSubmission>(), programApproval: new Map<string, ProgramApprovalSubmission>() };
+  for (const record of initial.programApproval ?? []) data.programApproval.set(keyFor(record), record);
   for (const record of initial.ticketOffer ?? []) data.ticketOffer.set(keyFor(record), record);
   for (const record of initial.ticketConfirmation ?? []) data.ticketConfirmation.set(keyFor(record), record);
   for (const record of initial.podcastBooking ?? []) data.podcastBooking.set(keyFor(record), record);
@@ -401,7 +441,7 @@ export function memorySubmissionStore(initial: { rsvp?: RsvpSubmission[]; nomina
 
 // Development/test store: one JSON file, never committed (work/ is local operational data).
 export function fileSubmissionStore(file: string): SubmissionStore {
-  const empty = () => ({ rsvp: [] as RsvpSubmission[], nomination: [] as NominationSubmission[], poker: [] as PokerSubmission[], rsvpEmail: [] as RsvpEmailRecord[], workshop: [] as WorkshopSubmission[], vipRsvp: [] as RsvpSubmission[], textPreference: [] as TextPreferenceRecord[], closingDinner: [] as ClosingDinnerSubmission[], podcastBooking: [] as PodcastBookingSubmission[], ticketOffer: [] as TicketOfferSubmission[], ticketConfirmation: [] as TicketConfirmationSubmission[] });
+  const empty = () => ({ rsvp: [] as RsvpSubmission[], nomination: [] as NominationSubmission[], poker: [] as PokerSubmission[], rsvpEmail: [] as RsvpEmailRecord[], workshop: [] as WorkshopSubmission[], vipRsvp: [] as RsvpSubmission[], textPreference: [] as TextPreferenceRecord[], closingDinner: [] as ClosingDinnerSubmission[], podcastBooking: [] as PodcastBookingSubmission[], ticketOffer: [] as TicketOfferSubmission[], ticketConfirmation: [] as TicketConfirmationSubmission[], programApproval: [] as ProgramApprovalSubmission[] });
   const read = (): ReturnType<typeof empty> => {
     // A store file written before a kind existed simply has no list for it.
     try { return existsSync(file) ? { ...empty(), ...JSON.parse(readFileSync(file, "utf8")) } : empty(); } catch { return empty(); }

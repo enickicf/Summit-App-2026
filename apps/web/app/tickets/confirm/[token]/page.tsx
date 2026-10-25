@@ -11,7 +11,7 @@ export default async function TicketConfirmationPage({ params }: { params: Promi
   const { token } = await params;
   const store = await getSubmissionStore();
   const offer = (await store.list("ticketOffer")).find(row => row.confirmationToken === token);
-  if (!offer || offer.decision === "declined") notFound();
+  if (!offer || offer.decision !== "approved") notFound();
   const existing = (await store.list("ticketConfirmation")).find(row => row.offerId === offer.id);
   return <main className={styles.page} id="main-content">
     <div className={styles.shell}>
