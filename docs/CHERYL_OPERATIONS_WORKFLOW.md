@@ -1,8 +1,14 @@
 # Cheryl's Approval Portal Workflow
 
-Status: **IMPLEMENTED FOR REVIEW — NOT DEPLOYED**  
-Branch: `codex/cheryl-operations`  
-Route: `/staff/cheryl-operations`
+Status: **LIVE**
+
+Branch: `codex/cheryl-operations`
+
+Route: `https://notalonesummit.org/staff/cheryl-operations`
+
+Production deploy: `6add7a02fc8f3a605c1c5466`
+
+Rollback deploy: `6add75ed419d0326fb215642`
 
 ## Purpose
 
@@ -28,7 +34,7 @@ Cheryl's Approval Portal is a separate workspace inside the existing password-pr
 
 ## Release boundary
 
-Outbound email, text, and ticket sending remains disabled. “Ready to contact” is a reviewed queue, not a send action. Production deployment and any outbound automation require owner approval after review of this branch.
+Outbound email, text, and ticket sending remains disabled. “Ready to contact” is a reviewed queue, not a send action. Any outbound automation requires separate owner approval.
 
 ## Verification
 
@@ -37,5 +43,7 @@ Outbound email, text, and ticket sending remains disabled. “Ready to contact�
 - Focused workflow, ticket approval, and ticket confirmation tests passed.
 - Browser-tested locally against a disposable copy of the October 24 production backup.
 - Verified an Awards approval and queue transition, a Closing Dinner program approval, and unchanged source record counts.
+- Authenticated production checks passed for the staff menu, Cheryl's Approval Portal, and the program-approvals API; unauthenticated API access remains blocked.
+- The public live-site suite passed 33 checks with no failures or warnings after deployment.
 - The full web suite was also run. It retains 50 documented baseline failures in unrelated schedule, RSVP-copy and public-site assertions; none involve Cheryl Operations, its APIs or the confirmation workflow.
 
