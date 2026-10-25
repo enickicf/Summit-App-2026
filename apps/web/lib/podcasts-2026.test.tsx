@@ -28,4 +28,7 @@ describe("Podcasts page", () => {
     expect(html).not.toMatch(/not yet replied|still to be booked/i);
     expect(metadata.robots).toMatchObject({ index: false });
   });
+  it("links Dr. Cecelia's larger Instagram profile", () => {
+    expect(podcasts2026.find(entry => entry.show === "Too Late To Pretend")?.links?.instagram).toBe("https://www.instagram.com/dr.cecelia/");
+  });
 });
