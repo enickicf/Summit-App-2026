@@ -8,7 +8,6 @@ export const bookingDurationMinutes: Record<BookingFormat, number> = { short: 20
 
 const zone = "America/Los_Angeles";
 const longFormDays = ["2026-11-03", "2026-11-04"];
-const shortFormRedCarpetDay = "2026-11-02";
 
 function localUtc(day: string, hour: number, minute: number) {
   const [year, month, date] = day.split("-").map(Number) as [number, number, number];
@@ -29,17 +28,27 @@ export function selfReportedTravelWindow(value: string): AirtableTravelWindow | 
 
 const overlaps = (start: number, end: number, booking: Pick<PodcastBookingSubmission, "startUtc" | "endUtc">) => start < Date.parse(booking.endUtc) && end > Date.parse(booking.startUtc);
 
+function availabilityCutoff(travel: AirtableTravelWindow) {
+  return travel.arrivalUtc ? Date.parse(travel.arrivalUtc) + 3 * 60 * 60 * 1000
+    : travel.arrivalDate ? localUtc(travel.arrivalDate, 23, 59).getTime() : Number.NEGATIVE_INFINITY;
+}
+
+/** Uses the latest recorded arrival across the guest and podcast hosts. Missing travel defaults to 10 AM. */
+export function latestTravelWindow(windows: Array<AirtableTravelWindow | null>): AirtableTravelWindow | null {
+  return windows.filter((window): window is AirtableTravelWindow => Boolean(window))
+    .sort((a, b) => availabilityCutoff(b) - availabilityCutoff(a))[0] ?? null;
+}
+
 export function availablePodcastSlots(format: BookingFormat, travel: AirtableTravelWindow | null, bookings: PodcastBookingSubmission[]) {
   const duration = bookingDurationMinutes[format];
   const earliest = travel?.arrivalUtc ? Date.parse(travel.arrivalUtc) + 3 * 60 * 60 * 1000
     : travel?.arrivalDate ? localUtc(travel.arrivalDate, 23, 59).getTime() : null;
   const slots: { startUtc: string; endUtc: string; rooms: PodcastRoom[] }[] = [];
-  // Short-form interviews happen only after a guest completes the Awards red-carpet walk.
-  // The two booking blocks sit between the public 6:15 PM red carpet start and the 7:30 PM show.
-  // Full-length interviews are daytime recordings beginning at 10:00 AM.
-  const windows = format === "short"
-    ? [{ day: shortFormRedCarpetDay, start: 18 * 60 + 30, end: 19 * 60 + 30, step: 30 }]
-    : longFormDays.map(day => ({ day, start: 10 * 60, end: 17 * 60, step: 90 }));
+  // Short form has no scheduled time: it happens after the guest's red-carpet walk.
+  if (format === "short") return [];
+  // Full-length interviews are daytime recordings beginning at 10:00 AM, or after the
+  // latest recorded guest/podcast arrival when that is later.
+  const windows = longFormDays.map(day => ({ day, start: 10 * 60, end: 17 * 60, step: 90 }));
   for (const { day, start: windowStart, end: windowEnd, step } of windows) {
     for (let minutes = windowStart; minutes + duration <= windowEnd; minutes += step) {
       const start = localUtc(day, Math.floor(minutes / 60), minutes % 60).getTime();
@@ -50,6 +59,11 @@ export function availablePodcastSlots(format: BookingFormat, travel: AirtableTra
     }
   }
   return slots;
+}
+
+export function shortBookingConflicts(candidate: Pick<PodcastBookingSubmission, "guestName" | "podcast" | "format">, bookings: PodcastBookingSubmission[]) {
+  return candidate.format === "short" && bookings.some(booking => booking.format === "short"
+    && booking.podcast === candidate.podcast && booking.guestName.toLowerCase() === candidate.guestName.toLowerCase());
 }
 
 export function bookingConflicts(candidate: Pick<PodcastBookingSubmission, "startUtc" | "endUtc" | "room" | "guestName" | "podcast">, bookings: PodcastBookingSubmission[]) {

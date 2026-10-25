@@ -286,10 +286,14 @@ export type TextPreferenceRecord = Submission<Omit<z.infer<typeof textPreference
 export type RsvpEmailRecord = Submission<{ email: string; subject: string; rsvpId: string }>;
 export const podcastBookingPayloadSchema = z.object({
   podcast: required(180), guestName: personName(180), email,
-  format: z.enum(["short", "long"]), startUtc: z.iso.datetime(), endUtc: z.iso.datetime(),
-  room: z.enum(["Room 1", "Room 2", "Room 3"]), travelVerified: z.boolean(),
+  format: z.enum(["short", "long"]), startUtc: z.union([z.literal(""), z.iso.datetime()]), endUtc: z.union([z.literal(""), z.iso.datetime()]),
+  room: z.union([z.literal(""), z.enum(["Room 1", "Room 2", "Room 3"])]), travelVerified: z.boolean(),
   arrivalLocal: text(30).regex(/^$|^2026-(?:10|11)-\d{2}T\d{2}:\d{2}$/).optional().default(""), website: text(200).optional().default("")
-}).strip();
+}).strip().superRefine((value, context) => {
+  if (value.format === "long" && (!value.startUtc || !value.endUtc || !value.room)) {
+    context.addIssue({ code: "custom", message: "Long-form interviews require a time and room." });
+  }
+});
 export type PodcastBookingPayload = z.infer<typeof podcastBookingPayloadSchema>;
 export type PodcastBookingSubmission = Submission<Omit<PodcastBookingPayload, "website">>;
 

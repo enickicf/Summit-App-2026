@@ -27,7 +27,7 @@ export default function PodcastsPage() {
 
     <section className={styles.cta} aria-labelledby="cta-title">
       <h2 id="cta-title">Private interview scheduling</h2>
-      <p>Bookable times are filtered against recorded guest arrivals. Recording Rooms 1–3 are reserved here; exact room locations will be announced closer to the event.</p>
+      <p>Short-form interviews happen after each guest’s red carpet walk, with no time selection. Long-form times account for recorded guest and podcast arrivals; when no arrival is on file, availability begins at 10:00 AM. Recording Rooms 1–3 are reserved here, with exact locations announced closer to the event.</p>
     </section>
   </main>;
 }

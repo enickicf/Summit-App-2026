@@ -15,7 +15,7 @@ export type LineupGroup = { title: string; people: { name: string; role: string;
 const when = (iso: string) => new Date(iso).toLocaleString("en-US", { timeZone: "America/Los_Angeles", month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" }) + " PT";
 
 function PodcastBookings({ bookings }: { bookings: PodcastBookingSubmission[] }) {
-  const rows = [...bookings].sort((a, b) => a.startUtc.localeCompare(b.startUtc) || a.podcast.localeCompare(b.podcast));
+  const rows = [...bookings].sort((a, b) => (a.startUtc || "9999").localeCompare(b.startUtc || "9999") || a.podcast.localeCompare(b.podcast));
   const short = rows.filter(row => row.format === "short").length;
   const long = rows.filter(row => row.format === "long").length;
   return <>
@@ -26,10 +26,10 @@ function PodcastBookings({ bookings }: { bookings: PodcastBookingSubmission[] })
     </section>
     <section className={styles.section} id="podcast-bookings" aria-labelledby="podcast-bookings-title">
       <div className={styles.sectionHead}><h2 id="podcast-bookings-title">Podcast interview bookings</h2><a className={styles.button} href="/api/staff/export?kind=podcast-bookings">Download CSV</a></div>
-      <p className={styles.help}>Confirmed interview times from the private podcast page. Exact room locations will be announced closer to the event.</p>
+      <p className={styles.help}>Long-form interview times and short-form requests from the private podcast page. Short-form interviews take place after each guest’s red carpet walk.</p>
       {rows.length === 0 ? <p className={styles.empty}>No podcast interviews have been booked yet.</p> : <div className={styles.tableWrap}><table className={styles.table}>
         <thead><tr><th>Interview time</th><th>Podcast</th><th>Guest</th><th>Email</th><th>Format</th><th>Room</th><th>Travel</th><th>Booked</th></tr></thead>
-        <tbody>{rows.map(row => <tr key={row.id}><td className={styles.nowrap}>{when(row.startUtc)}<br/><small>to {when(row.endUtc)}</small></td><td className={styles.strong}>{row.podcast}</td><td>{row.guestName}</td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td>{row.format === "short" ? "Short form" : "Long form"}</td><td className={styles.nowrap}>{row.room}</td><td>{row.travelVerified ? "Verified flight" : row.arrivalLocal ? `Guest entered ${row.arrivalLocal.replace("T", " ")}` : "Pending verification"}</td><td className={styles.nowrap}>{when(row.submittedAt)}</td></tr>)}</tbody>
+        <tbody>{rows.map(row => <tr key={row.id}><td className={styles.nowrap}>{row.format === "short" ? "After red carpet walk" : <>{when(row.startUtc)}<br/><small>to {when(row.endUtc)}</small></>}</td><td className={styles.strong}>{row.podcast}</td><td>{row.guestName}</td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td>{row.format === "short" ? "Short form" : "Long form"}</td><td className={styles.nowrap}>{row.format === "short" ? "Assigned on-site" : row.room}</td><td>{row.format === "short" ? "Not required" : row.travelVerified ? "Verified flight" : "10:00 AM fallback used"}</td><td className={styles.nowrap}>{when(row.submittedAt)}</td></tr>)}</tbody>
       </table></div>}
     </section>
   </>;

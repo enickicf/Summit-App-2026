@@ -82,7 +82,7 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   // Oct 20 (owner: "recrop Janet Wozniak's headshot ... better"): no solo photo of her may be used online (only Getty stock), so
   // she is re-cut from ICF's full-resolution original of the couple portrait (712 px, sharper than the 948 px upscale used
   // before), more of her face and hair in frame, and the sliver of Steve's beard beside her jaw filled with the photo's own dark tone.
-  "janet wozniak": { file: "/2026-headshots/portraits/janet-wozniak-3.jpg", source: "mobile", credit: "Janet alone, re-cut from ICF's Janet & Steve Wozniak portrait at full resolution; Oct 20" },
+  "janet wozniak": { file: "/2026-headshots/portraits/janet-wozniak-4.png", source: "mobile", credit: "Owner-provided Janet Wozniak headshot; Oct 24" },
   "jason kennedy": { file: "/2026-headshots/portraits/jason-kennedy-2.jpg", source: "icf-card" },
   "jeff levin": { file: "/2026-headshots/portraits/jeff-levin.jpg", source: "airtable", airtableBytes: 1141135 },
   "jen smorgon": { file: "/2026-headshots/portraits/jen-smorgon.jpg", source: "icf-card" },

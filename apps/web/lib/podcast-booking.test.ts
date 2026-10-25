@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { availablePodcastSlots, bookingConflicts, selfReportedTravelWindow } from "./podcast-booking";
+import { availablePodcastSlots, bookingConflicts, latestTravelWindow, selfReportedTravelWindow, shortBookingConflicts } from "./podcast-booking";
 import type { PodcastBookingSubmission } from "./staff/store";
 
 const booking = (overrides: Partial<PodcastBookingSubmission> = {}): PodcastBookingSubmission => ({
@@ -15,9 +15,9 @@ describe("podcast booking availability", () => {
     expect(slots.every(slot => Date.parse(slot.startUtc) >= Date.parse("2026-11-03T23:00:00.000Z"))).toBe(true);
   });
 
-  it("offers short-form interviews only after the Nov 2 red carpet walk", () => {
+  it("does not assign a clock time to short-form interviews", () => {
     const slots = availablePodcastSlots("short", { arrivalUtc: "2026-11-02T16:00:00.000Z", arrivalDate: "2026-11-02", exact: true }, []);
-    expect(slots.map(slot => slot.startUtc)).toEqual(["2026-11-03T02:30:00.000Z", "2026-11-03T03:00:00.000Z"]);
+    expect(slots).toEqual([]);
   });
 
   it("starts full-length interview availability at 10 AM Las Vegas time", () => {
@@ -30,6 +30,19 @@ describe("podcast booking availability", () => {
     const slots = availablePodcastSlots("long", { arrivalUtc: null, arrivalDate: "2026-11-03", exact: false }, []);
     expect(slots.length).toBeGreaterThan(0);
     expect(slots.every(slot => slot.startUtc.startsWith("2026-11-04"))).toBe(true);
+  });
+
+  it("uses the latest arrival across the interview guest and podcast hosts", () => {
+    expect(latestTravelWindow([
+      { arrivalUtc: "2026-11-03T18:00:00.000Z", arrivalDate: "2026-11-03", exact: true },
+      { arrivalUtc: "2026-11-03T22:00:00.000Z", arrivalDate: "2026-11-03", exact: true },
+      null
+    ])?.arrivalUtc).toBe("2026-11-03T22:00:00.000Z");
+    expect(latestTravelWindow([null, null])).toBeNull();
+  });
+
+  it("prevents duplicate short-form requests without assigning a time or room", () => {
+    expect(shortBookingConflicts({ format: "short", podcast: "The Big Silence", guestName: "Guest One" }, [booking()])).toBe(true);
   });
 
   it("prevents room, guest and podcast overlaps", () => {

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { podcasts2026 } from "../../../lib/podcasts-2026";
 import { getAirtableTravelWindow } from "../../../lib/airtable";
-import { availablePodcastSlots, bookingConflicts, bookingDurationMinutes, selfReportedTravelWindow, type BookingFormat } from "../../../lib/podcast-booking";
+import { availablePodcastSlots, bookingConflicts, bookingDurationMinutes, latestTravelWindow, shortBookingConflicts, type BookingFormat } from "../../../lib/podcast-booking";
 import { getSubmissionStore, newSubmission, podcastBookingPayloadSchema } from "../../../lib/staff/store";
 import { withSubmissionInbox } from "../../../lib/staff/submission-inbox";
 
@@ -15,11 +15,21 @@ export async function GET(request: Request) {
   const guestName = query.get("guestName")?.trim() ?? "";
   const format = query.get("format") as BookingFormat | null;
   const podcast = query.get("podcast")?.trim() ?? "";
-  const arrivalLocal = query.get("arrivalLocal")?.trim() ?? "";
   if (guestName.length < 2 || !knownPodcasts.has(podcast) || !format || !(format in bookingDurationMinutes)) return NextResponse.json({ ok: false, error: "Please choose a podcast, format and enter the interview guest’s full name." }, { status: 400, headers });
-  const [airtableTravel, bookings] = await Promise.all([getAirtableTravelWindow(guestName), getSubmissionStore().then(store => store.list("podcastBooking"))]);
-  const travel = airtableTravel ?? selfReportedTravelWindow(arrivalLocal);
-  return NextResponse.json({ ok: true, travelVerified: Boolean(airtableTravel?.arrivalUtc), arrivalKnown: Boolean(travel?.arrivalUtc || travel?.arrivalDate), needsArrival: !travel, slots: travel ? availablePodcastSlots(format, travel, bookings) : [] }, { headers });
+  if (format === "short") return NextResponse.json({ ok: true, shortForm: true, slots: [] }, { headers });
+  const entry = podcasts2026.find(candidate => candidate.show === podcast)!;
+  const [guestTravel, hostTravel, bookings] = await Promise.all([
+    getAirtableTravelWindow(guestName),
+    Promise.all(entry.hosts.map(host => getAirtableTravelWindow(host.name))),
+    getSubmissionStore().then(store => store.list("podcastBooking"))
+  ]);
+  const travel = latestTravelWindow([guestTravel, ...hostTravel]);
+  return NextResponse.json({
+    ok: true,
+    travelVerified: Boolean(guestTravel?.arrivalUtc),
+    arrivalKnown: Boolean(guestTravel?.arrivalUtc || guestTravel?.arrivalDate),
+    slots: availablePodcastSlots(format, travel, bookings)
+  }, { headers });
 }
 
 export async function handlePodcastBookingPost(request: Request) {
@@ -32,12 +42,24 @@ export async function handlePodcastBookingPost(request: Request) {
   if (!knownPodcasts.has(parsed.data.podcast)) return NextResponse.json({ ok: false, error: "That podcast is not available." }, { status: 400, headers });
 
   const store = await getSubmissionStore();
-  const [airtableTravel, bookings] = await Promise.all([getAirtableTravelWindow(parsed.data.guestName), store.list("podcastBooking")]);
-  const travel = airtableTravel ?? selfReportedTravelWindow(parsed.data.arrivalLocal);
-  if (!travel) return NextResponse.json({ ok: false, error: "Add the guest’s arrival date and local Las Vegas time before booking." }, { status: 400, headers });
+  const bookings = await store.list("podcastBooking");
+  if (parsed.data.format === "short") {
+    const candidate = { ...parsed.data, startUtc: "", endUtc: "", room: "" as const, travelVerified: false, arrivalLocal: "" };
+    if (shortBookingConflicts(candidate, bookings)) return NextResponse.json({ ok: false, error: "This short-form interview request has already been received." }, { status: 409, headers });
+    const { website: _website, ...payload } = candidate;
+    const saved = newSubmission(payload);
+    await store.add("podcastBooking", saved);
+    return NextResponse.json({ ok: true, booking: { id: saved.id, podcast: saved.podcast, guestName: saved.guestName, format: saved.format, startUtc: "", endUtc: "", room: "", travelVerified: false } }, { headers });
+  }
+  const entry = podcasts2026.find(candidate => candidate.show === parsed.data.podcast)!;
+  const [guestTravel, hostTravel] = await Promise.all([
+    getAirtableTravelWindow(parsed.data.guestName),
+    Promise.all(entry.hosts.map(host => getAirtableTravelWindow(host.name)))
+  ]);
+  const travel = latestTravelWindow([guestTravel, ...hostTravel]);
   const slots = availablePodcastSlots(parsed.data.format, travel, bookings);
-  const slot = slots.find(item => item.startUtc === parsed.data.startUtc && item.endUtc === parsed.data.endUtc && item.rooms.includes(parsed.data.room));
-  const candidate = { ...parsed.data, travelVerified: Boolean(airtableTravel?.arrivalUtc) };
+  const slot = slots.find(item => item.startUtc === parsed.data.startUtc && item.endUtc === parsed.data.endUtc && item.rooms.some(room => room === parsed.data.room));
+  const candidate = { ...parsed.data, travelVerified: Boolean(guestTravel?.arrivalUtc) };
   if (!slot || bookingConflicts(candidate, bookings)) return NextResponse.json({ ok: false, error: "That time or room was just taken. Please choose another option." }, { status: 409, headers });
   const { website: _website, ...payload } = candidate;
   const saved = newSubmission(payload);
