@@ -60,6 +60,7 @@
 .badgeAwards { background: #d9202a; color: #ffffff; }       /* Awards Show = red (owner, Sept 23) */
 .badgeCommunity { background: #2f5bd6; color: #ffffff; }    /* Community Day = blue (owner, Sept 23) */
 .badgeFollowUp { background: #fff1d6; color: #7a4a00; }     /* Oct 21: guest details missing = follow-up, not a cancellation */
+.badgeTest { margin-left: 6px; background: #eceff3; color: #4a4f58; border: 1px solid #c7ccd4; }
 .badgeTennis { background: #2e8b57; color: #ffffff; }    /* Tennis (Thu Nov 5 site visit) */
 .badgeTea { background: #8a5cf6; color: #ffffff; }       /* High Tea (Thu Nov 5 site visit) */
 .statCommunity { background: #2f5bd6; border-color: #2f5bd6; color: #ffffff; }

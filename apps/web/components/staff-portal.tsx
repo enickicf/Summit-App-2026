@@ -3,7 +3,7 @@ import { SiteImage } from "./site-image";
 import { PortalViewSwitch } from "./portal-views";
 import { PortalAutoRefresh } from "./portal-auto-refresh";
 import { RsvpEmailTools } from "./rsvp-email-tools";
-import { activeOf, activeRsvps, comingTo, currentRequests, guestDetailsMissing, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, ustaRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels, siteVisitTransportLabels, type SiteVisitTransport, type TextPreferenceRecord, type ClosingDinnerSubmission, type PodcastBookingSubmission, closingDinnerSeats, closingDinnerTotals } from "../lib/staff/store";
+import { activeOf, activeRsvps, comingTo, currentRequests, excludedFromPortalTotals, guestDetailsMissing, isPokerSponsor, pokerInterestLabels, pokerSeatInterests, pokerSponsorshipLevels, pokerSponsorshipTotals, pokerTotals, removedOf, removedRsvps, rsvpTotals, type NominationSubmission, type PokerSponsorshipLevel, type PokerSubmission, type RsvpSubmission, type WorkshopSubmission, vipRsvps, namiRsvps, ustaRsvps, lakeLasVegasRsvps, rsvpForm, rsvpHeardFromLabels, siteVisitTransportLabels, type SiteVisitTransport, type TextPreferenceRecord, type ClosingDinnerSubmission, type PodcastBookingSubmission, closingDinnerSeats, closingDinnerTotals } from "../lib/staff/store";
 import styles from "../app/staff/staff.module.css";
 import type { InboxEntry } from "../lib/staff/submission-inbox";
 import { wellnessSessions } from "../lib/wellness-signups-2026";
@@ -77,7 +77,7 @@ function RsvpTable({ rows, action = "remove", prefs = [] }: { rows: RsvpSubmissi
   return <div className={styles.tableWrap}><table className={styles.table}>
     <thead><tr><th>Submitted</th><th>Form</th><th>Name</th><th>Coming to</th><th>Email</th><th>Phone</th><th>Texts</th><th>Organization</th><th>Role / title</th><th>Invited by</th><th>Heard from</th><th>Party</th><th>Notes</th><th>Source</th>{action === "restore" && <th>Removed</th>}<th></th></tr></thead>
     <tbody>{rows.map(row => <tr key={row.id}>
-      <td className={styles.nowrap}>{when(row.submittedAt)}</td><td className={styles.nowrap}>{rsvpForm(row)}</td><td className={styles.strong}>{row.name}<br/><small>{waiverSummary(row.eventWaiver)}</small>{guestDetailsMissing(row) && <><br/><span className={`${styles.badge} ${styles.badgeFollowUp}`}>Guest details missing</span></>}{/* Owner (Oct 5): the other people in the party, with their own email and phone. */}{row.guests?.length ? <ul className={styles.partyGuests}>{row.guests.map((guest, index) => <li key={index}><span>{guest.name}</span> · <a href={`mailto:${guest.email}`}>{guest.email}</a> · {guest.phone}<br/><small>{waiverSummary(guest.eventWaiver)}</small></li>)}</ul> : null}</td><td><ComingTo record={row} /></td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td className={styles.nowrap}>{row.phone}</td><td className={styles.nowrap}><TextConsent record={row} prefs={prefs} /></td><td>{row.organization}</td><td>{row.professionalRole}</td><td>{row.invitedBy}</td><td>{row.heardFrom ? rsvpHeardFromLabels[row.heardFrom] : ""}</td>
+      <td className={styles.nowrap}>{when(row.submittedAt)}</td><td className={styles.nowrap}>{rsvpForm(row)}</td><td className={styles.strong}>{row.name}{excludedFromPortalTotals(row) && <><br/><span className={`${styles.badge} ${styles.badgeTest}`}>Test · excluded from totals</span></>}<br/><small>{waiverSummary(row.eventWaiver)}</small>{guestDetailsMissing(row) && <><br/><span className={`${styles.badge} ${styles.badgeFollowUp}`}>Guest details missing</span></>}{/* Owner (Oct 5): the other people in the party, with their own email and phone. */}{row.guests?.length ? <ul className={styles.partyGuests}>{row.guests.map((guest, index) => <li key={index}><span>{guest.name}</span> · <a href={`mailto:${guest.email}`}>{guest.email}</a> · {guest.phone}<br/><small>{waiverSummary(guest.eventWaiver)}</small></li>)}</ul> : null}</td><td><ComingTo record={row} /></td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td className={styles.nowrap}>{row.phone}</td><td className={styles.nowrap}><TextConsent record={row} prefs={prefs} /></td><td>{row.organization}</td><td>{row.professionalRole}</td><td>{row.invitedBy}</td><td>{row.heardFrom ? rsvpHeardFromLabels[row.heardFrom] : ""}</td>
       <td className={styles.center}>{row.guestCount}</td><td className={styles.notes}>{row.notes}</td><td className={styles.muted}>{row.source === "import" ? "Previous portal" : row.source === "staff" ? `Added by ${row.addedBy || "staff"}` : "Form"}</td>{action === "restore" && <td className={styles.notes}>{row.removedAt ? when(row.removedAt) : ""}{row.removedReason ? ` · ${row.removedReason}` : ""}</td>}<td><span className={styles.badges}><RowAction row={row} action={action} />{action === "restore" && <RowAction row={row} action="delete" />}</span></td>
     </tr>)}</tbody>
   </table></div>;
@@ -92,7 +92,7 @@ function PokerTable({ rows, action = "remove" }: { rows: PokerSubmission[]; acti
     <tbody>{rows.map(row => {
       const level = isPokerSponsor(row) ? pokerSponsorshipLevels[row.sponsorship as PokerSponsorshipLevel] : undefined;
       return <tr key={row.id} className={level ? styles.sponsorRow : undefined}>
-        <td className={styles.nowrap}>{when(row.submittedAt)}</td><td className={styles.strong}>{row.name}</td>
+        <td className={styles.nowrap}>{when(row.submittedAt)}</td><td className={styles.strong}>{row.name}{excludedFromPortalTotals(row) && <><br/><span className={`${styles.badge} ${styles.badgeTest}`}>Test · excluded from totals</span></>}</td>
         {/* A sponsor is flagged with their level and what it is worth, so it can never read as a guest. */}
         <td className={styles.nowrap}>{level
           ? <><span className={`${styles.badge} ${styles.badgeSponsor}`}>Sponsor</span> {level.label} · {level.price}</>
@@ -172,6 +172,8 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
   const sponsors = pokerActive.filter(isPokerSponsor);
   const workshopRows = workshops.filter(row => row.category !== "siteVisit" && row.category !== "wellness");
   const wellnessRows = workshops.filter(row => row.category === "wellness");
+  const countedWorkshopRows = workshopRows.filter(row => !excludedFromPortalTotals(row));
+  const countedWellnessRows = wellnessRows.filter(row => !excludedFromPortalTotals(row));
   // Oct 12 (owner): text message consent and opt-outs, one row per phone number (lib/staff/text-consent.ts).
   const dinnerActive = activeOf(closingDinner);
   const dinner = closingDinnerTotals(dinnerActive);
@@ -186,10 +188,11 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
   const textCount = (status: string) => textContacts.filter(row => row.status === status).length;
   const textChoices = [...textPreferences].sort((a, b) => b.submittedAt.localeCompare(a.submittedAt));
   const wellnessGroups = groupWellness(wellnessRows);
-  const wellnessPeople = new Set(wellnessRows.map(row => row.name.trim().toLowerCase().replace(/\s+/g, " "))).size;
+  const wellnessPeople = new Set(countedWellnessRows.map(row => row.name.trim().toLowerCase().replace(/\s+/g, " "))).size;
   const workshopGroups = groupWorkshops(workshopRows);
   const siteVisitPeople = groupSiteVisit(workshops.filter(row => row.category === "siteVisit"));
-  const tennis = siteVisitPeople.filter(person => person.tennis).length, highTea = siteVisitPeople.filter(person => person.highTea).length;
+  const countedSiteVisitPeople = siteVisitPeople.filter(person => !excludedFromPortalTotals(person));
+  const tennis = countedSiteVisitPeople.filter(person => person.tennis).length, highTea = countedSiteVisitPeople.filter(person => person.highTea).length;
   return <main id="main-content" tabIndex={-1} className={styles.page}>
     <PortalViewSwitch />
     <PortalAutoRefresh />
@@ -338,8 +341,8 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
 
     <div data-view="workshops" id="workshops" hidden>
       <section className={styles.stats} aria-label="Summit workshop totals">
-        <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{workshopRows.length}</span><span className={styles.statLabel}>Summit workshop sign-ups</span><span className={styles.statNote}>Name-only sign-ups from the schedule page</span></div>
-        {workshopGroups.map(group => <div key={group.key} className={styles.stat}><span className={styles.statValue}>{group.people.length}</span><span className={styles.statLabel}>{group.title}</span><span className={styles.statNote}>{group.day}{group.time ? ` · ${group.time}` : ""}</span></div>)}
+        <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{countedWorkshopRows.length}</span><span className={styles.statLabel}>Summit workshop sign-ups</span><span className={styles.statNote}>Test submissions excluded</span></div>
+        {workshopGroups.map(group => <div key={group.key} className={styles.stat}><span className={styles.statValue}>{group.people.filter(row => !excludedFromPortalTotals(row)).length}</span><span className={styles.statLabel}>{group.title}</span><span className={styles.statNote}>{group.day}{group.time ? ` · ${group.time}` : ""}</span></div>)}
       </section>
 
       <section className={styles.section} id="workshop-list" aria-labelledby="workshops-title">
@@ -347,8 +350,8 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
         <p className={styles.help}>Sign-ups from the Summit schedule page for Wellness &amp; Community Programming (Monday, November 2) and the Wellness Activity mornings (Tuesday, November 3 and Wednesday, November 4). Each date is its own list. Name only. The sign-up is for Summit attendees only; check each name against the guest list and remove anyone who is not on it.</p>
         {workshopRows.length === 0 ? <p className={styles.empty}>No workshop sign-ups yet.</p> : <div className={styles.cards}>{workshopGroups.map(group => <article key={group.key} className={styles.card}>
           <p className={styles.cardKicker}>{group.day}{group.time ? ` · ${group.time}` : ""}</p>
-          <h3>{group.title} <span className={styles.count}>{group.people.length}</span></h3>
-          <ol className={styles.lineupList}>{group.people.map(row => <li key={row.id}><span className={styles.strong}>{row.name}</span><span className={styles.muted}> · {when(row.submittedAt)}</span></li>)}</ol>
+          <h3>{group.title} <span className={styles.count}>{group.people.filter(row => !excludedFromPortalTotals(row)).length}</span></h3>
+          <ol className={styles.lineupList}>{group.people.map(row => <li key={row.id}><span className={styles.strong}>{row.name}</span>{excludedFromPortalTotals(row) && <span className={`${styles.badge} ${styles.badgeTest}`}>Test · excluded</span>}<span className={styles.muted}> · {when(row.submittedAt)}</span></li>)}</ol>
         </article>)}</div>}
       </section>
     </div>
@@ -357,8 +360,8 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
       <section className={styles.stats} aria-label="Tennis and High Tea totals">
         <div className={`${styles.stat} ${styles.statTennis}`}><span className={styles.statValue}>{tennis}</span><span className={styles.statLabel}>Tennis</span><span className={styles.statNote}>People signed up · Thursday, November 5</span></div>
         <div className={`${styles.stat} ${styles.statTea}`}><span className={styles.statValue}>{highTea}</span><span className={styles.statLabel}>High Tea</span><span className={styles.statNote}>People signed up · Thursday, November 5</span></div>
-        <div className={styles.stat}><span className={styles.statValue}>{siteVisitPeople.filter(person => person.tennis && person.highTea).length}</span><span className={styles.statLabel}>Both</span></div>
-        <div className={styles.stat}><span className={styles.statValue}>{siteVisitPeople.length}</span><span className={styles.statLabel}>People in total</span></div>
+        <div className={styles.stat}><span className={styles.statValue}>{countedSiteVisitPeople.filter(person => person.tennis && person.highTea).length}</span><span className={styles.statLabel}>Both</span></div>
+        <div className={styles.stat}><span className={styles.statValue}>{countedSiteVisitPeople.length}</span><span className={styles.statLabel}>People in total</span><span className={styles.statNote}>Test submissions excluded</span></div>
       </section>
 
       <section className={styles.section} id="site-visit-list" aria-labelledby="site-visit-title">
@@ -366,7 +369,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
         <p className={styles.help}>Thursday November 5 ICF site visit sign-ups from the Tennis &amp; High Tea form (notalonesummit.org/tennis-high-tea) and the schedule page. <span className={`${styles.badge} ${styles.badgeTennis}`}>Tennis</span> = signed up for Tennis; <span className={`${styles.badge} ${styles.badgeTea}`}>High Tea</span> = signed up for High Tea; both badges when both. Waiver = the full name typed to sign the activity waiver (sign-ups from Oct 7 on; earlier sign-ups show —). Attendees only; remove anyone not on the guest list.</p>
         {siteVisitPeople.length === 0 ? <p className={styles.empty}>No Tennis or High Tea sign-ups yet.</p> : <div className={styles.tableWrap}><table className={styles.table}>
           <thead><tr><th>Name</th><th>Signed up for</th><th>Email</th><th>Phone</th><th>Texts</th><th>Getting there</th><th>Waiver</th><th>First sign-up</th></tr></thead>
-          <tbody>{siteVisitPeople.map(person => <tr key={person.key}><td className={styles.strong}>{person.name}</td><td><span className={styles.badges}>{person.tennis && <span className={`${styles.badge} ${styles.badgeTennis}`}>Tennis</span>}{person.highTea && <span className={`${styles.badge} ${styles.badgeTea}`}>High Tea</span>}</span></td><td>{person.email ? <a href={`mailto:${person.email}`}>{person.email}</a> : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{person.phone || <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}><TextConsent record={{ phone: person.phone, email: person.email, textConsent: person.textConsent, submittedAt: person.first }} prefs={textPreferences} /></td><td className={styles.nowrap}>{person.transport ? siteVisitTransportLabels[person.transport] : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{person.signature ? `Signed: ${person.signature}` : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{when(person.first)}</td></tr>)}</tbody>
+          <tbody>{siteVisitPeople.map(person => <tr key={person.key}><td className={styles.strong}>{person.name}{excludedFromPortalTotals(person) && <><br/><span className={`${styles.badge} ${styles.badgeTest}`}>Test · excluded from totals</span></>}</td><td><span className={styles.badges}>{person.tennis && <span className={`${styles.badge} ${styles.badgeTennis}`}>Tennis</span>}{person.highTea && <span className={`${styles.badge} ${styles.badgeTea}`}>High Tea</span>}</span></td><td>{person.email ? <a href={`mailto:${person.email}`}>{person.email}</a> : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{person.phone || <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}><TextConsent record={{ phone: person.phone, email: person.email, textConsent: person.textConsent, submittedAt: person.first }} prefs={textPreferences} /></td><td className={styles.nowrap}>{person.transport ? siteVisitTransportLabels[person.transport] : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{person.signature ? `Signed: ${person.signature}` : <span className={styles.muted}>—</span>}</td><td className={styles.nowrap}>{when(person.first)}</td></tr>)}</tbody>
         </table></div>}
       </section>
     </div>
@@ -374,8 +377,8 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
     {/* Oct 12 (Kristin via owner): the morning wellness classes (Nov 3 and 4) from notalonesummit.org/wellness, one list per class. */}
     <div data-view="wellness" id="wellness" hidden>
       <section className={styles.stats} aria-label="Wellness totals">
-        <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{wellnessPeople}</span><span className={styles.statLabel}>People signed up</span><span className={styles.statNote}>{wellnessRows.length} class sign-ups in total</span></div>
-        {wellnessDays.map(day => { const count = wellnessRows.filter(row => row.sessionDay === day).length; return <div key={day} className={styles.stat}><span className={styles.statValue}>{count}</span><span className={styles.statLabel}>{day}</span><span className={styles.statNote}>Class sign-ups that morning</span></div>; })}
+        <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{wellnessPeople}</span><span className={styles.statLabel}>People signed up</span><span className={styles.statNote}>{countedWellnessRows.length} class sign-ups · tests excluded</span></div>
+        {wellnessDays.map(day => { const count = countedWellnessRows.filter(row => row.sessionDay === day).length; return <div key={day} className={styles.stat}><span className={styles.statValue}>{count}</span><span className={styles.statLabel}>{day}</span><span className={styles.statNote}>Class sign-ups that morning</span></div>; })}
       </section>
 
       <section className={styles.section} id="wellness-list" aria-labelledby="wellness-title">
@@ -383,8 +386,8 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
         <p className={styles.help}>Sign-ups from the wellness form (notalonesummit.org/wellness) for the Tuesday November 3 and Wednesday November 4 morning classes: Fitness, Pilates with Yvette Baker, Movement &amp; Breathwork and drop-in Pickleball. One list per class, oldest sign-up first. Waiver = the full name typed to sign the activity waiver. Attendees only; remove anyone not on the guest list.</p>
         {wellnessRows.length === 0 ? <p className={styles.empty}>No wellness sign-ups yet.</p> : <div className={styles.cards}>{wellnessGroups.map(group => <article key={group.key} className={styles.card}>
           <p className={styles.cardKicker}>{group.day} · {group.time}</p>
-          <h3>{group.title} <span className={styles.count}>{group.people.length}</span></h3>
-          <ol className={styles.lineupList}>{group.people.map(row => <li key={row.id}><span className={styles.strong}>{row.name}</span>{row.email ? <> · <a href={`mailto:${row.email}`}>{row.email}</a></> : null}{row.phone ? <span className={styles.muted}> · {row.phone}</span> : null}<span className={styles.muted}> · Texts: <TextConsent record={row} prefs={textPreferences} /> · {row.signature ? `Signed: ${row.signature}` : "No waiver"} · {when(row.submittedAt)}</span></li>)}</ol>
+          <h3>{group.title} <span className={styles.count}>{group.people.filter(row => !excludedFromPortalTotals(row)).length}</span></h3>
+          <ol className={styles.lineupList}>{group.people.map(row => <li key={row.id}><span className={styles.strong}>{row.name}</span>{excludedFromPortalTotals(row) && <span className={`${styles.badge} ${styles.badgeTest}`}>Test · excluded</span>}{row.email ? <> · <a href={`mailto:${row.email}`}>{row.email}</a></> : null}{row.phone ? <span className={styles.muted}> · {row.phone}</span> : null}<span className={styles.muted}> · Texts: <TextConsent record={row} prefs={textPreferences} /> · {row.signature ? `Signed: ${row.signature}` : "No waiver"} · {when(row.submittedAt)}</span></li>)}</ol>
         </article>)}</div>}
       </section>
     </div>
@@ -401,7 +404,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
         <p className={styles.help}>Closing night dinner and live performance with Jewel, Wednesday November 4, 7:00&ndash;10:00 PM, Margaux Ballroom at Wynn Las Vegas. Requests from the unlisted VIP form (notaloneawards.org/rsvp/closing-dinner-yiqy7fw0j3), oldest first: space is limited and first come, first served. A request is not a seat; the team emails each guest whose spot is secured.</p>
         {dinnerActive.length === 0 ? <p className={styles.empty}>No closing dinner requests yet.</p> : <div className={styles.tableWrap}><table className={styles.table}>
           <thead><tr><th>#</th><th>When</th><th>Name</th><th>Organization / title</th><th>Email</th><th>Phone</th><th>Seats</th><th>Guest</th><th>Texts</th><th>Notes</th></tr></thead>
-          <tbody>{[...dinnerActive].sort((a, b) => a.submittedAt.localeCompare(b.submittedAt)).map((row, index) => <tr key={row.id}><td>{index + 1}</td><td className={styles.nowrap}>{when(row.submittedAt)}</td><td className={styles.strong}>{row.name}<br/><small>{waiverSummary(row.eventWaiver)}</small>{row.bringingGuest && <><br/><small>{row.guestName}: {waiverSummary(row.guestEventWaiver)}</small></>}</td><td>{[row.organization, row.professionalRole].filter(Boolean).join(" · ")}</td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td className={styles.nowrap}>{row.phone}</td><td>{closingDinnerSeats(row)}</td><td>{row.bringingGuest ? `${row.guestName} <${row.guestEmail}> ${row.guestPhone} ${[row.guestOrganization, row.guestProfessionalRole].filter(Boolean).join(" · ")}` : "—"}</td><td className={styles.nowrap}>{textConsentShortLabels[textConsentStatus(row, textPreferences)]}</td><td className={styles.notes}>{row.notes}</td></tr>)}</tbody>
+          <tbody>{[...dinnerActive].sort((a, b) => a.submittedAt.localeCompare(b.submittedAt)).map((row, index) => <tr key={row.id}><td>{index + 1}</td><td className={styles.nowrap}>{when(row.submittedAt)}</td><td className={styles.strong}>{row.name}{excludedFromPortalTotals(row) && <><br/><span className={`${styles.badge} ${styles.badgeTest}`}>Test · excluded from totals</span></>}<br/><small>{waiverSummary(row.eventWaiver)}</small>{row.bringingGuest && <><br/><small>{row.guestName}: {waiverSummary(row.guestEventWaiver)}</small></>}</td><td>{[row.organization, row.professionalRole].filter(Boolean).join(" · ")}</td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td className={styles.nowrap}>{row.phone}</td><td>{closingDinnerSeats(row)}</td><td>{row.bringingGuest ? `${row.guestName} <${row.guestEmail}> ${row.guestPhone} ${[row.guestOrganization, row.guestProfessionalRole].filter(Boolean).join(" · ")}` : "—"}</td><td className={styles.nowrap}>{textConsentShortLabels[textConsentStatus(row, textPreferences)]}</td><td className={styles.notes}>{row.notes}</td></tr>)}</tbody>
         </table></div>}
       </section>
     </div>

@@ -267,13 +267,21 @@ export function closingDinnerGuestProblem(payload: Pick<ClosingDinnerPayload, "b
 }
 export type ClosingDinnerSubmission = Submission<Omit<ClosingDinnerPayload, "website">> & { removedAt?: string; removedReason?: string };
 export const closingDinnerSeats = (record: Pick<ClosingDinnerSubmission, "bringingGuest">) => record.bringingGuest ? 2 : 1;
+const excludedTotalEmails = new Set(["sethwintertongolf@gmail.com", "ambassador@inspiringchildren.org"]);
+const excludedTotalNames = new Set(["charlie the unicorn", "cherrial odell"]);
+const normalizedIdentity = (value: string | undefined) => (value ?? "").trim().toLowerCase().replace(/\s+/g, " ");
+/** Test submissions remain stored and visible, but never contribute to attendance or seat totals. */
+export function excludedFromPortalTotals(record: { name?: string | undefined; email?: string | undefined }): boolean {
+  return excludedTotalEmails.has(normalizedIdentity(record.email)) || excludedTotalNames.has(normalizedIdentity(record.name));
+}
 export function closingDinnerTotals(records: ClosingDinnerSubmission[]) {
+  records = records.filter(record => !excludedFromPortalTotals(record));
   const latestByEmail = new Map<string, ClosingDinnerSubmission>();
   for (const record of byNewest(records)) if (!latestByEmail.has(record.email)) latestByEmail.set(record.email, record);
   const latest = [...latestByEmail.values()];
   return { formsSubmitted: records.length, requests: latest.length, seatsRequested: latest.reduce((total, record) => total + closingDinnerSeats(record), 0), withGuest: latest.filter(record => record.bringingGuest).length };
 }
-export const closingDinnerCsvColumns = ["submittedAt", "name", "email", "phone", "organization", "professionalRole", "bringingGuest", "seats", "guestName", "guestEmail", "guestPhone", "guestOrganization", "guestProfessionalRole", "groupWaiverAttestation", "waiverStatus", "guestWaiverStatus", "waiverRecord", "guestWaiverRecord", "notes", "textMessageConsent", "textConsentDate", "textConsentProtocol", "invitationLevel", "invitationRequestId", "requesterName", "requesterEmail", "requesterPhone", "requesterOrganization", "requesterProfessionalRole", "source", "id", "removedAt", "removedReason"];
+export const closingDinnerCsvColumns = ["submittedAt", "name", "email", "phone", "excludedFromTotals", "organization", "professionalRole", "bringingGuest", "seats", "guestName", "guestEmail", "guestPhone", "guestOrganization", "guestProfessionalRole", "groupWaiverAttestation", "waiverStatus", "guestWaiverStatus", "waiverRecord", "guestWaiverRecord", "notes", "textMessageConsent", "textConsentDate", "textConsentProtocol", "invitationLevel", "invitationRequestId", "requesterName", "requesterEmail", "requesterPhone", "requesterOrganization", "requesterProfessionalRole", "source", "id", "removedAt", "removedReason"];
 export type TextPreferenceRecord = Submission<Omit<z.infer<typeof textPreferenceSchema>, "website"> & { via: "page" | "staff" | "stop-reply"; note?: string }>;
 export type RsvpEmailRecord = Submission<{ email: string; subject: string; rsvpId: string }>;
 export const podcastBookingPayloadSchema = z.object({
@@ -471,6 +479,7 @@ export function currentRequests(records: RsvpSubmission[]) {
   return { awards: newestPerEmail(records, wantsAwardsShow), communityDay: newestPerEmail(records, wantsCommunityDay), latest: newestPerEmail(records, () => true) };
 }
 export function rsvpTotals(records: RsvpSubmission[]) {
+  records = records.filter(record => !excludedFromPortalTotals(record));
   const { awards, communityDay, latest } = currentRequests(records);
   const awardsTickets = awards.filter(requestsTickets);
   const awardsEmails = new Set(awardsTickets.map(record => record.email.trim().toLowerCase()));
@@ -531,7 +540,7 @@ export function rsvpForm(record: Pick<RsvpSubmission, "vip" | "partner" | "tier"
 export const rsvpExportForms = { "uber-vip": "Uber VIP", vip: "VIP", "nami-vip": "NAMI VIP", "lake-las-vegas-vip": "Lake Las Vegas VIP", "lake-las-vegas": "Lake Las Vegas", nami: "NAMI", usta: "USTA", standard: "Standard" } as const;
 export type RsvpExportForm = keyof typeof rsvpExportForms;
 export const rsvpsOfForm = (records: RsvpSubmission[], form: RsvpExportForm) => records.filter(record => rsvpForm(record) === rsvpExportForms[form]);
-export const withRsvpForm = (records: RsvpSubmission[], textPreferences: readonly TextPreferenceRecord[] = []) => records.map(record => ({ ...record, form: rsvpForm(record), attendingLabel: record.attending ? rsvpAttendingLabels[record.attending] : (record.communityDay ? rsvpAttendingLabels.both : ""), heardFromLabel: record.heardFrom ? rsvpHeardFromLabels[record.heardFrom] : "", guestDetails: (record.guests ?? []).map(partyGuestLine).join("; "), guestDetailsMissing: guestDetailsMissing(record) ? "yes" : "", waiverRecord: JSON.stringify(record.eventWaiver ?? null), waiverStatus: waiverSummary(record.eventWaiver), guestWaiverStatus: (record.guests ?? []).map(g=>`${g.name}: ${waiverSummary(g.eventWaiver)}`).join("; "), ...textConsentColumns(record, textPreferences) }));
+export const withRsvpForm = (records: RsvpSubmission[], textPreferences: readonly TextPreferenceRecord[] = []) => records.map(record => ({ ...record, form: rsvpForm(record), excludedFromTotals: excludedFromPortalTotals(record) ? "yes" : "", attendingLabel: record.attending ? rsvpAttendingLabels[record.attending] : (record.communityDay ? rsvpAttendingLabels.both : ""), heardFromLabel: record.heardFrom ? rsvpHeardFromLabels[record.heardFrom] : "", guestDetails: (record.guests ?? []).map(partyGuestLine).join("; "), guestDetailsMissing: guestDetailsMissing(record) ? "yes" : "", waiverRecord: JSON.stringify(record.eventWaiver ?? null), waiverStatus: waiverSummary(record.eventWaiver), guestWaiverStatus: (record.guests ?? []).map(g=>`${g.name}: ${waiverSummary(g.eventWaiver)}`).join("; "), ...textConsentColumns(record, textPreferences) }));
 // Owner (Sept 30): the mass RSVP lists never include a VIP request, and the VIP portal reads only VIP requests.
 // Owner (Oct 1, 2026, superseding the Sept 30 split): "make the backend of the VIP RSVP the same now since
 // we are upping security, but make the forms still different". All RSVPs, VIP or not, live under "rsvp" and
@@ -590,7 +599,7 @@ function csvCell(value: unknown): string {
 export function toCsv(rows: Record<string, unknown>[], columns: string[]): string {
   return [columns.join(","), ...rows.map(row => columns.map(column => csvCell(row[column])).join(","))].join("\r\n") + "\r\n";
 }
-export const rsvpCsvColumns = ["submittedAt", "form", "name", "email", "phone", "organization", "professionalRole", "invitedBy", "heardFromLabel", "vip", "partner", "tier", "attendanceStatus", "attendingLabel", "communityDay", "guestCount", "guestDetails", "guestDetailsMissing", "groupWaiverAttestation", "waiverStatus", "guestWaiverStatus", "waiverRecord", ...textConsentCsvColumns, "notes", "invitationLevel", "invitationRequestId", "requesterName", "requesterEmail", "requesterPhone", "requesterOrganization", "requesterProfessionalRole", "source", "addedBy", "id", "removedAt", "removedReason"];
+export const rsvpCsvColumns = ["submittedAt", "form", "name", "email", "phone", "excludedFromTotals", "organization", "professionalRole", "invitedBy", "heardFromLabel", "vip", "partner", "tier", "attendanceStatus", "attendingLabel", "communityDay", "guestCount", "guestDetails", "guestDetailsMissing", "groupWaiverAttestation", "waiverStatus", "guestWaiverStatus", "waiverRecord", ...textConsentCsvColumns, "notes", "invitationLevel", "invitationRequestId", "requesterName", "requesterEmail", "requesterPhone", "requesterOrganization", "requesterProfessionalRole", "source", "addedBy", "id", "removedAt", "removedReason"];
 
 // Which part(s) of the evening a request covers: the Awards Show (their response) and/or Community Day (the toggle).
 export function comingTo(record: Pick<RsvpSubmission, "attendanceStatus" | "communityDay"> & { attending?: RsvpAttending | undefined }): ("awards" | "communityDay")[] {
@@ -603,6 +612,7 @@ export const nominationCsvColumns = ["submittedAt", "nomineeName", "nomineeOrgan
 export const pokerSeatInterests: PokerInterest[] = ["player", "table"];
 
 export function pokerTotals(records: PokerSubmission[]) {
+  records = records.filter(record => !excludedFromPortalTotals(record));
   const latestByEmail = new Map<string, PokerSubmission>();
   for (const record of byNewest(records)) if (!latestByEmail.has(record.email)) latestByEmail.set(record.email, record);
   const latest = [...latestByEmail.values()];
@@ -625,17 +635,18 @@ export const pokerInterestLabels: Record<PokerInterest, string> = {
   information: "Wants more information"
 };
 
-export const workshopCsvColumns = ["submittedAt", "name", "category", "sessionTitle", "sessionDay", "sessionTime", "sessionId", "source", "id"];
+export const workshopCsvColumns = ["submittedAt", "name", "excludedFromTotals", "category", "sessionTitle", "sessionDay", "sessionTime", "sessionId", "source", "id"];
 // Oct 7: the Tennis / High Tea spreadsheet also carries the signed waiver (empty for sign-ups from before Oct 7).
 export const siteVisitCsvColumns = [...workshopCsvColumns, "waiverAccepted", "signature", "waiverVersion", "email", "phone", "transport"];
-export const wellnessCsvColumns = ["submittedAt", "sessionDay", "sessionTime", "sessionTitle", "name", "email", "phone", "waiverAccepted", "signature", "waiverVersion", "sessionId", "id"];
-export const pokerCsvColumns = ["submittedAt", "name", "email", "phone", "organization", "interest", "sponsorship", "seats", "experience", "notes", "source", "id", "removedAt", "removedReason"];
+export const wellnessCsvColumns = ["submittedAt", "sessionDay", "sessionTime", "sessionTitle", "name", "email", "phone", "excludedFromTotals", "waiverAccepted", "signature", "waiverVersion", "sessionId", "id"];
+export const pokerCsvColumns = ["submittedAt", "name", "email", "phone", "excludedFromTotals", "organization", "interest", "sponsorship", "seats", "experience", "notes", "source", "id", "removedAt", "removedReason"];
 
 /** A sponsor is anyone who asked for a level; their pledged value is the matrix's own figure. */
 export function isPokerSponsor(record: Pick<PokerSubmission, "interest" | "sponsorship">): boolean {
   return record.interest === "table" && Boolean(record.sponsorship);
 }
 export function pokerSponsorshipTotals(records: PokerSubmission[]) {
+  records = records.filter(record => !excludedFromPortalTotals(record));
   const latestByEmail = new Map<string, PokerSubmission>();
   for (const record of byNewest(records)) if (!latestByEmail.has(record.email)) latestByEmail.set(record.email, record);
   const sponsors = [...latestByEmail.values()].filter(isPokerSponsor);

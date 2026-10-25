@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { inboxCsvColumns, listFailedSubmissions, listReceivedSubmissions } from "../../../../lib/staff/submission-inbox";
 import { textConsentColumns, textConsentCsvColumns, textContactCsvColumns, textContactRows, type TextContact } from "../../../../lib/staff/text-consent";
 import { isPodcastStaffSession, isStaffSession, podcastStaffCookieName, staffCookieName } from "../../../../lib/staff/auth";
-import { activeOf, activeRsvps, closingDinnerCsvColumns, closingDinnerSeats, getSubmissionStore, listAllRsvps, rsvpExportForms, rsvpsOfForm, type RsvpExportForm, withRsvpForm, nominationCsvColumns, pokerCsvColumns, rsvpCsvColumns, siteVisitCsvColumns, toCsv, wellnessCsvColumns, workshopCsvColumns } from "../../../../lib/staff/store";
+import { activeOf, activeRsvps, closingDinnerCsvColumns, closingDinnerSeats, excludedFromPortalTotals, getSubmissionStore, listAllRsvps, rsvpExportForms, rsvpsOfForm, type RsvpExportForm, withRsvpForm, nominationCsvColumns, pokerCsvColumns, rsvpCsvColumns, siteVisitCsvColumns, toCsv, wellnessCsvColumns, workshopCsvColumns } from "../../../../lib/staff/store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -49,7 +49,7 @@ export async function GET(request: Request) {
   }
   // Oct 13 (owner / Ryan): the Nov 4 closing night dinner requests, one row per request with the guest's guest.
   if (kind === "closing-dinner") {
-    const rows = (await store.list("closingDinner")).map(row => ({ ...row, seats: closingDinnerSeats(row), waiverStatus:waiverSummary(row.eventWaiver), guestWaiverStatus:row.bringingGuest?waiverSummary(row.guestEventWaiver):"", waiverRecord:JSON.stringify(row.eventWaiver??null), guestWaiverRecord:JSON.stringify(row.guestEventWaiver??null), ...textConsentColumns(row, textPreferences) }));
+    const rows = (await store.list("closingDinner")).map(row => ({ ...row, excludedFromTotals: excludedFromPortalTotals(row) ? "yes" : "", seats: closingDinnerSeats(row), waiverStatus:waiverSummary(row.eventWaiver), guestWaiverStatus:row.bringingGuest?waiverSummary(row.guestEventWaiver):"", waiverRecord:JSON.stringify(row.eventWaiver??null), guestWaiverRecord:JSON.stringify(row.guestEventWaiver??null), ...textConsentColumns(row, textPreferences) }));
     return new Response(toCsv(rows, closingDinnerCsvColumns), { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-closing-dinner-requests-${stamp}.csv"`, "Cache-Control": "no-store" } });
   }
   if (kind === "podcast-bookings") {
@@ -62,20 +62,20 @@ export async function GET(request: Request) {
   }
   if (kind === "site-visit") {
     // Oct 7: with the signed waiver columns (waiverAccepted, signature, waiverVersion).
-    const csv = toCsv((await store.list("workshop")).filter(row => row.category === "siteVisit").map(row => ({ ...row, ...textConsentColumns(row, textPreferences) })), [...siteVisitCsvColumns, ...textConsentCsvColumns]);
+    const csv = toCsv((await store.list("workshop")).filter(row => row.category === "siteVisit").map(row => ({ ...row, excludedFromTotals: excludedFromPortalTotals(row) ? "yes" : "", ...textConsentColumns(row, textPreferences) })), [...siteVisitCsvColumns, ...textConsentCsvColumns]);
     return new Response(csv, { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-summit-tennis-high-tea-signups-${stamp}.csv"`, "Cache-Control": "no-store" } });
   }
   // Oct 12: the morning wellness classes (notalonesummit.org/wellness), with contact details and the signed waiver.
   if (kind === "wellness") {
-    const csv = toCsv((await store.list("workshop")).filter(row => row.category === "wellness").map(row => ({ ...row, ...textConsentColumns(row, textPreferences) })), [...wellnessCsvColumns, ...textConsentCsvColumns]);
+    const csv = toCsv((await store.list("workshop")).filter(row => row.category === "wellness").map(row => ({ ...row, excludedFromTotals: excludedFromPortalTotals(row) ? "yes" : "", ...textConsentColumns(row, textPreferences) })), [...wellnessCsvColumns, ...textConsentCsvColumns]);
     return new Response(csv, { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-summit-wellness-signups-${stamp}.csv"`, "Cache-Control": "no-store" } });
   }
   if (kind === "workshops") {
-    const csv = toCsv((await store.list("workshop")).filter(row => row.category !== "siteVisit" && row.category !== "wellness"), workshopCsvColumns);
+    const csv = toCsv((await store.list("workshop")).filter(row => row.category !== "siteVisit" && row.category !== "wellness").map(row => ({ ...row, excludedFromTotals: excludedFromPortalTotals(row) ? "yes" : "" })), workshopCsvColumns);
     return new Response(csv, { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="not-alone-summit-workshop-signups-${stamp}.csv"`, "Cache-Control": "no-store" } });
   }
   if (kind === "poker") {
-    const csv = toCsv(await store.list("poker"), pokerCsvColumns);
+    const csv = toCsv((await store.list("poker")).map(row => ({ ...row, excludedFromTotals: excludedFromPortalTotals(row) ? "yes" : "" })), pokerCsvColumns);
     return new Response(csv, { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="all-in-poker-seat-requests-${stamp}.csv"`, "Cache-Control": "no-store" } });
   }
   // Owner (Oct 3): one seating spreadsheet per form (VIP / Lake Las Vegas / NAMI / Standard), active requests only.
