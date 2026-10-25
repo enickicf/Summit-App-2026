@@ -22,7 +22,7 @@ export function SiteHeader() {
   const year = archive ? 2025 : 2026;
   const awards = `/awards/${year}`;
   // Owner (Sept 23): the staff portal has its own chrome.
-  if (pathname.startsWith("/staff")) return null;
+  if (pathname.startsWith("/staff") || pathname.startsWith("/tickets/confirm/")) return null;
   const awardsPage = pathname.startsWith("/awards") || (pathname.startsWith("/directory/") && fromAwards) || Boolean(partner);
   if (siteVariant === "classic") return <ClassicHeader pathname={pathname} awards={awardsPage} />;
   // Owner (Sept 29): Community Day has its own menu (no Summit, Schedule or Directory).

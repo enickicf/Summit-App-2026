@@ -41,7 +41,7 @@ export function AskAiWidget() {
     return () => window.removeEventListener("keydown", close);
   }, [open]);
 
-  if (pathname === "/ask-ai" || pathname === "/ask" || pathname.startsWith("/staff")) return null;
+  if (pathname === "/ask-ai" || pathname === "/ask" || pathname.startsWith("/staff") || pathname.startsWith("/tickets/confirm/")) return null;
 
   return <div className={`${styles.widget}${actionsVisibleOnPhone && !open ? ` ${styles.hiddenByActions}` : ""}`}>
     {open && <section className={styles.panel} id={panelId} role="dialog" aria-label="Ask AI">
