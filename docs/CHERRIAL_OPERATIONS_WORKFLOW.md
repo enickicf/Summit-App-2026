@@ -6,9 +6,9 @@ Branch: `codex/cheryl-operations`
 
 Route: `https://notalonesummit.org/staff/cherrial-operations`
 
-Production deploy: `6add7a02fc8f3a605c1c5466`
+Production deploy: `6add7c8158581fd1b9e40056`
 
-Rollback deploy: `6add75ed419d0326fb215642`
+Rollback deploy: `6add7a02fc8f3a605c1c5466`
 
 ## Purpose
 
