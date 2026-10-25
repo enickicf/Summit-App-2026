@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { ProgramApprovalCandidate } from "../lib/staff/cheryl-operations";
+import type { ProgramApprovalCandidate } from "../lib/staff/cherrial-operations";
 import type { TicketApprovalCandidate } from "../lib/staff/ticket-approval";
 import type { ProgramApprovalSubmission, TicketConfirmationSubmission, TicketOfferSubmission } from "../lib/staff/store";
 import styles from "../app/staff/staff.module.css";
@@ -47,7 +47,7 @@ function TicketCard({ candidate, initial, confirmation, onSaved }: { candidate: 
       <label><span>Awards Show</span><small>{candidate.awardsRequested} requested</small><select value={awards} onChange={event => setAwards(Number(event.target.value))}>{selectOptions(candidate.awardsRequested, "approved")}</select></label>
       <label><span>Nevada Mental Health Day</span><small>{candidate.communityDayRequested} requested</small><select value={day} onChange={event => setDay(Number(event.target.value))}>{selectOptions(candidate.communityDayRequested, "approved")}</select></label>
     </div>
-    <label className={styles.opsNotes}>Internal note<input value={notes} onChange={event => setNotes(event.target.value)} placeholder="Optional note for Ryan or Cheryl" /></label>
+    <label className={styles.opsNotes}>Internal note<input value={notes} onChange={event => setNotes(event.target.value)} placeholder="Optional note for Ryan or Cherrial" /></label>
     <div className={styles.approvalActions}><button className={styles.button} disabled={state === "saving"} onClick={() => save("approved", "hold")}>Approve</button><button className={styles.secondaryButton} disabled={state === "saving"} onClick={() => save("hold", "hold")}>Hold</button><button className={styles.dangerButton} disabled={state === "saving"} onClick={() => save("declined", "hold")}>Decline</button>{decision === "approved" && queue !== "ready" && <button className={styles.readyButton} disabled={state === "saving"} onClick={() => save("approved", "ready")}>Add to confirmation queue</button>}{decision === "approved" && queue === "ready" && <button className={styles.secondaryButton} disabled={state === "saving"} onClick={() => save("approved", "hold")}>Remove from queue</button>}</div>
     {message && <p role="status" className={state === "error" ? styles.noticeError : styles.notice}>{message}</p>}
     {path && <div className={styles.approvalLink}><div><strong>Private confirmation page</strong><br/><a href={path} target="_blank" rel="noreferrer">{path}</a></div><button className={styles.linkButton} type="button" onClick={() => navigator.clipboard.writeText(new URL(path, window.location.origin).toString())}>Copy</button></div>}
@@ -80,13 +80,13 @@ function ProgramCard({ candidate, initial, onSaved }: { candidate: ProgramApprov
     <div className={styles.approvalIdentity}><div><p className={styles.cardKicker}>{candidate.form} · {candidate.formVersion} form · {when(candidate.submittedAt)}</p><h2>{candidate.eventLabel}</h2><p><strong>{candidate.name}</strong>{candidate.email ? <> · <a href={`mailto:${candidate.email}`}>{candidate.email}</a></> : ""}{candidate.phone ? ` · ${candidate.phone}` : ""}</p></div><div className={styles.badges}>{candidate.excludedFromTotals && <span className={`${styles.badge} ${styles.badgeTest}`}>Test / excluded</span>}<span className={`${styles.badge} ${decision === "approved" ? styles.badgeApproved : decision === "declined" ? styles.badgeDeclined : decision === "hold" ? styles.badgeHold : ""}`}>{decision ?? "Needs review"}</span></div></div>
     {candidate.missingDetails.length > 0 && <p className={styles.opsWarning}><strong>Missing:</strong> {candidate.missingDetails.join(", ")}</p>}
     <div className={styles.programDecision}><label>Requested<strong>{candidate.requestedQuantity}</strong></label><label>Approved<select value={quantity} onChange={event => setQuantity(Number(event.target.value))}>{selectOptions(candidate.requestedQuantity, "places")}</select></label><label>Fulfillment<strong>{candidate.fulfillment === "check-in" ? "Check-in list" : candidate.fulfillment === "ticket" ? "Ticket" : "Reservation list"}</strong></label></div>
-    <label className={styles.opsNotes}>Internal note<input value={notes} onChange={event => setNotes(event.target.value)} placeholder="Optional note for Ryan or Cheryl" /></label>
+    <label className={styles.opsNotes}>Internal note<input value={notes} onChange={event => setNotes(event.target.value)} placeholder="Optional note for Ryan or Cherrial" /></label>
     <div className={styles.approvalActions}><button className={styles.button} disabled={state === "saving"} onClick={() => save("approved", "hold")}>Approve</button><button className={styles.secondaryButton} disabled={state === "saving"} onClick={() => save("hold", "hold")}>Hold</button><button className={styles.dangerButton} disabled={state === "saving"} onClick={() => save("declined", "hold")}>Decline</button>{decision === "approved" && queue !== "ready" && <button className={styles.readyButton} disabled={state === "saving"} onClick={() => save("approved", "ready")}>Mark ready for follow-up</button>}{decision === "approved" && queue === "ready" && <button className={styles.secondaryButton} disabled={state === "saving"} onClick={() => save("approved", "hold")}>Remove from queue</button>}</div>
     {message && <p role="status" className={state === "error" ? styles.noticeError : styles.notice}>{message}</p>}
   </article>;
 }
 
-export function CherylOperations({ ticketCandidates, programCandidates, initialOffers, confirmations, initialProgramApprovals }: { ticketCandidates: TicketApprovalCandidate[]; programCandidates: ProgramApprovalCandidate[]; initialOffers: TicketOfferSubmission[]; confirmations: TicketConfirmationSubmission[]; initialProgramApprovals: ProgramApprovalSubmission[] }) {
+export function CherrialOperations({ ticketCandidates, programCandidates, initialOffers, confirmations, initialProgramApprovals }: { ticketCandidates: TicketApprovalCandidate[]; programCandidates: ProgramApprovalCandidate[]; initialOffers: TicketOfferSubmission[]; confirmations: TicketConfirmationSubmission[]; initialProgramApprovals: ProgramApprovalSubmission[] }) {
   const [offers, setOffers] = useState(initialOffers);
   const [programApprovals, setProgramApprovals] = useState(initialProgramApprovals);
   const [query, setQuery] = useState("");
@@ -114,7 +114,7 @@ export function CherylOperations({ ticketCandidates, programCandidates, initialO
   const dayCheckIn = confirmations.reduce((sum, row) => sum + row.communityDayAttendees.length, 0);
   return <>
     <section className={`${styles.section} ${styles.opsHero}`}>
-      <div className={styles.sectionHead}><div><p className={styles.eyebrow}>Protected staff workspace</p><h1>Cheryl&rsquo;s Approval Portal</h1></div><div className={styles.viewTabs}><a href="/staff">Staff portal</a><a href="/api/staff/export?kind=all">Full backup</a></div></div>
+      <div className={styles.sectionHead}><div><p className={styles.eyebrow}>Protected staff workspace</p><h1>Cherrial&rsquo;s Approval Portal</h1></div><div className={styles.viewTabs}><a href="/staff">Staff portal</a><a href="/api/staff/export?kind=all">Full backup</a></div></div>
       <p className={styles.opsLead}>One connected workflow for every request. Original forms remain unchanged; decisions, confirmation responses and fulfillment status are stored separately in the same journaled staff database.</p>
       <ol className={styles.workflow}><li><strong>1. Intake</strong><span>All form types</span></li><li><strong>2. Review</strong><span>Approve, hold, decline</span></li><li><strong>3. Contact queue</strong><span>Choose who receives a confirmation</span></li><li><strong>4. Guest response</strong><span>Counts, contacts and waivers</span></li><li><strong>5. Fulfillment</strong><span>Awards tickets or event check-in</span></li></ol>
     </section>

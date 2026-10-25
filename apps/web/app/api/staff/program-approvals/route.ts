@@ -31,7 +31,7 @@ export async function POST(request: Request) {
     id: existing?.id ?? randomUUID(),
     submittedAt: existing?.submittedAt ?? now,
     source: "staff",
-    addedBy: existing?.addedBy ?? "Cheryl Operations",
+    addedBy: existing?.addedBy ?? "Cherrial Operations",
   };
   await store.add("programApproval", record);
   return NextResponse.json({ ok: true, approval: record }, { headers: { "Cache-Control": "no-store" } });

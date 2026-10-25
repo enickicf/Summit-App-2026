@@ -1,10 +1,10 @@
-# Cheryl's Approval Portal Workflow
+# Cherrial's Approval Portal Workflow
 
 Status: **LIVE**
 
 Branch: `codex/cheryl-operations`
 
-Route: `https://notalonesummit.org/staff/cheryl-operations`
+Route: `https://notalonesummit.org/staff/cherrial-operations`
 
 Production deploy: `6add7a02fc8f3a605c1c5466`
 
@@ -12,7 +12,7 @@ Rollback deploy: `6add75ed419d0326fb215642`
 
 ## Purpose
 
-Cheryl's Approval Portal is a separate workspace inside the existing password-protected staff portal. It uses the same canonical `staff-portal` store and append-only `staff-portal-journal`; it does not create a second RSVP database or require the 15-minute spreadsheet sync to operate.
+Cherrial's Approval Portal is a separate workspace inside the existing password-protected staff portal. It uses the same canonical `staff-portal` store and append-only `staff-portal-journal`; it does not create a second RSVP database or require the 15-minute spreadsheet sync to operate.
 
 ## Workflow
 
@@ -39,11 +39,11 @@ Outbound email, text, and ticket sending remains disabled. â€œReady to contactâ€
 ## Verification
 
 - TypeScript check passed.
-- Production build passed and includes `/staff/cheryl-operations` plus `/api/staff/program-approvals`.
+- Production build passed and includes `/staff/cherrial-operations` plus the backward-compatible `/staff/cheryl-operations` redirect and `/api/staff/program-approvals`.
 - Focused workflow, ticket approval, and ticket confirmation tests passed.
 - Browser-tested locally against a disposable copy of the October 24 production backup.
 - Verified an Awards approval and queue transition, a Closing Dinner program approval, and unchanged source record counts.
-- Authenticated production checks passed for the staff menu, Cheryl's Approval Portal, and the program-approvals API; unauthenticated API access remains blocked.
+- Authenticated production checks passed for the staff menu, Cherrial's Approval Portal, and the program-approvals API; unauthenticated API access remains blocked.
 - The public live-site suite passed 33 checks with no failures or warnings after deployment.
-- The full web suite was also run. It retains 50 documented baseline failures in unrelated schedule, RSVP-copy and public-site assertions; none involve Cheryl Operations, its APIs or the confirmation workflow.
+- The full web suite was also run. It retains 50 documented baseline failures in unrelated schedule, RSVP-copy and public-site assertions; none involve Cherrial Operations, its APIs or the confirmation workflow.
 

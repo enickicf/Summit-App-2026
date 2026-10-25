@@ -208,7 +208,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
         <a href="#podcasts" data-view-tab="podcasts" aria-selected="false">Podcasts</a>
         <a href="#texts" data-view-tab="texts" aria-selected="false">Texts</a>
         <a href="#poker" data-view-tab="poker" aria-selected="false">Sponsorship</a>
-        <a href="/staff/cheryl-operations" className={styles.opsLaunch}>Cheryl&rsquo;s Approval Portal</a>
+        <a href="/staff/cherrial-operations" className={styles.opsLaunch}>Cherrial&rsquo;s Approval Portal</a>
         <a href="/staff/ticket-approvals">Ticket approvals</a>
         <a href="/staff/submissions">Submission review{needsAttention && needsAttention.length > 0 ? ` (${needsAttention.length})` : ""}</a>
         {/* Owner (Sept 30): a complete copy of everything, downloadable from any device at any time. */}
@@ -218,7 +218,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
     </header>
 
     <div data-view="awards" id="awards">
-      <nav className={styles.sectionNav} aria-label="Awards sections"><a href="/staff/cheryl-operations"><strong>Open Cheryl&rsquo;s Approval Portal</strong></a><a href="#add-guest">Add a guest</a><a href="/staff/ticket-approvals">Make ticket decisions</a><a href="#ticket-confirmations">Approvals &amp; confirmations</a><a href="#vip">VIP</a><a href="#lake-las-vegas">Lake Las Vegas</a><a href="#nami">NAMI</a><a href="#usta">USTA</a><a href="#tickets">Tickets</a><a href="#community-day">Community Day</a><a href="#nominations">Nominations</a><a href="#removed">Removed</a><a href="#lineup">Lineup</a></nav>
+      <nav className={styles.sectionNav} aria-label="Awards sections"><a href="/staff/cherrial-operations"><strong>Open Cherrial&rsquo;s Approval Portal</strong></a><a href="#add-guest">Add a guest</a><a href="/staff/ticket-approvals">Make ticket decisions</a><a href="#ticket-confirmations">Approvals &amp; confirmations</a><a href="#vip">VIP</a><a href="#lake-las-vegas">Lake Las Vegas</a><a href="#nami">NAMI</a><a href="#usta">USTA</a><a href="#tickets">Tickets</a><a href="#community-day">Community Day</a><a href="#nominations">Nominations</a><a href="#removed">Removed</a><a href="#lineup">Lineup</a></nav>
       {/* Oct 20 (Cherrial, owner approved): add a guest Trent sends by WhatsApp / text. Stored like an RSVP, tagged "Added by
           staff"; no confirmation email (they get one only when they RSVP themselves). */}
       <section className={styles.section} id="add-guest" aria-labelledby="add-guest-title">

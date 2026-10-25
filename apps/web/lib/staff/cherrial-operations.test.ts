@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { programApprovalCandidates } from "./cheryl-operations";
+import { programApprovalCandidates } from "./cherrial-operations";
 import { memorySubmissionStore, programApprovalPayloadSchema, type ClosingDinnerSubmission, type PokerSubmission, type ProgramApprovalSubmission, type WorkshopSubmission } from "./store";
 
-describe("Cheryl Operations", () => {
+describe("Cherrial Operations", () => {
   it("builds review candidates for every non-ticket program and flags legacy contact gaps", () => {
     const common = { submittedAt: "2026-10-24T20:00:00.000Z", source: "form" as const };
     const dinner = { ...common, id: "dinner", name: "Dinner Guest", email: "dinner@example.com", phone: "7025551212", organization: "ICF", professionalRole: "Guest", bringingGuest: false, guestName: "", guestEmail: "", guestPhone: "", notes: "", textConsent: false } as ClosingDinnerSubmission;
