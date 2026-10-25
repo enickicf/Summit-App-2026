@@ -8,6 +8,17 @@
 [build.environment]
   NEXT_TELEMETRY_DISABLED = "1"
 
+# Apply the baseline browser protections at Netlify's edge as well as in Next.js. This also covers
+# redirects and the proxied /rsvp pages, which do not pass through the Next.js headers function.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), browsing-topics=()"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+
 # Owner (Sept 22, 2026): notaloneawards.org opens the Awards page; notalonesummit.org opens the Summit home.
 # Both domains are served by this one site, so every other path keeps working on either domain.
 [[redirects]]
