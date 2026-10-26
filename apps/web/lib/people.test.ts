@@ -4,6 +4,7 @@ import { directoryPeople, people2025, people2026 } from "./people";
 import { originalProducerCredits, producerCredits2026 } from "@not-alone/config";
 import { personPortrait, personInitials } from "./person-portraits";
 import { airtableHeadshotCrops } from "./airtable-headshot-crops";
+import { summitPortrait2026 } from "./portrait-overrides";
 
 describe("website reviewed directory", () => {
   it("restricts producer listings to ICF's 2025 credits and the Sept 21 meeting's 2026 credits", () => {
@@ -59,6 +60,10 @@ describe("website reviewed directory", () => {
     expect(personPortrait("Jon Hershfield")).toBe("/2026-headshots/portraits/jon-hershfield-2.jpg");
     expect(personPortrait("Steve Wozniak")).toBe("/2026-headshots/portraits/steve-wozniak-2-c.jpg");
     expect(personPortrait("Dr. Blaise Aguirre")).toBe("/2026-headshots/portraits/blaise-aguirre-harvard-20261026.jpg");
+  });
+  it("uses Theresa Magnus's centered restoration on Summit without changing the shared Awards portrait", () => {
+    expect(summitPortrait2026("Theresa Magnus")).toBe("/2026-headshots/portraits/theresa-magnus-summit-restored-20261026.jpg");
+    expect(personPortrait("Theresa Magnus")).toBe("/2026-headshots/portraits/theresa-magnus-framed-20261026.jpg");
   });
   it("uses the Oct 26 full-frame portrait refresh for every requested guest", () => {
     const refreshed = [

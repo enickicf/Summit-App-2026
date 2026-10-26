@@ -14,7 +14,7 @@ import { ProfilePortrait } from "./portrait";
 import { CurrentEventUpdates } from "../../../components/current-event-updates";
 import { ProfileBackLink } from "../../../components/profile-return";
 import { awards2026Editorial } from "../../../lib/awards-editorial";
-import { portraitAttribution2026 } from "../../../lib/portrait-overrides";
+import { portraitAttribution2026, summitPortrait2026 } from "../../../lib/portrait-overrides";
 import styles from "./profile.module.css";
 
 export const dynamic = "force-dynamic";
@@ -26,12 +26,16 @@ type ProfilePageProps = { params: Promise<{ slug: string }>; searchParams: Promi
 const getProfileSnapshot = cache(getSiteSnapshot);
 
 function summitProfiles(snapshot: Awaited<ReturnType<typeof getSiteSnapshot>> | null) {
-  const curated = awardsPeople(snapshot, { includeCohens: true });
-  const displayed = awardsDisplayPeople(snapshot, { includeCohens: true });
+  const summitPortrait = (person: ReturnType<typeof awardsPeople>[number]) => {
+    const image = summitPortrait2026(person.name);
+    return image ? { ...person, image } : person;
+  };
+  const curated = awardsPeople(snapshot, { includeCohens: true }).map(summitPortrait);
+  const displayed = awardsDisplayPeople(snapshot, { includeCohens: true }).map(summitPortrait);
   const groupedNames = new Set(displayed.filter(person => person.slug.startsWith("2026-")).flatMap(person => person.name === "Sean & Ana Wolfington" ? ["Sean Wolfington", "Ana Wolfington"] : person.name === "Melinda & Noah Springer" ? ["Melinda Springer", "Noah Springer"] : []));
   const profiles = [...directoryPeople(snapshot).filter(person => !groupedNames.has(person.name)).map(person => {
     const publicProfile = curated.find(candidate => candidate.slug === person.slug);
-    return publicProfile ? { ...person, ...(["Caroline Silby", "Lexi Hensler", "Bob Bryan", "Mike Bryan"].includes(person.name) && publicProfile.image ? { image: publicProfile.image } : {}), bio: person.bio.trim() || publicProfile.bio } : person;
+    return publicProfile ? { ...person, ...(["Caroline Silby", "Lexi Hensler", "Bob Bryan", "Mike Bryan", "Theresa Magnus"].includes(person.name) && publicProfile.image ? { image: publicProfile.image } : {}), bio: person.bio.trim() || publicProfile.bio } : person;
   }), ...displayed.filter(person => ["2026-sean-ana-wolfington", "2026-melinda-noah-springer"].includes(person.slug))];
   // Credits without a staff record (owner-approved co-chairs and ICF founders) are listed on the
   // Summit page too, so their profiles must resolve there.

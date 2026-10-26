@@ -6,6 +6,7 @@ import type { SummitPerson } from "../lib/people";
 import { isKeynote, peopleSections } from "../lib/people-sections";
 import { originalAsset } from "../lib/original-assets";
 import { updatedPortrait } from "../lib/person-portraits";
+import { summitPortrait2026 } from "../lib/portrait-overrides";
 import { ClassicHeroVideo } from "./classic-hero-video";
 import { getSiteImageMetadata, SiteImage } from "./site-image";
 import styles from "./classic-summit.module.css";
@@ -64,7 +65,9 @@ const listedCategories = ["Founders", "Founders & Entrepreneurs", "Philanthropis
 
 export function attendeeSections(snapshot: EventSnapshot | null, variant: "summit" | "awards" = "summit") {
   const seen = new Set<string>();
-  const people = awardsDisplayPeople(snapshot, { includeCohens: variant === "summit" }).filter(person => {
+  const people = awardsDisplayPeople(snapshot, { includeCohens: variant === "summit" })
+    .map(person => variant === "summit" && summitPortrait2026(person.name) ? { ...person, image: summitPortrait2026(person.name)! } : person)
+    .filter(person => {
     const key = personNameKey(person.name);
     if (person.year !== 2026 || seen.has(key)) return false;
     seen.add(key);

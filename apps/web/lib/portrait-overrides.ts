@@ -301,6 +301,15 @@ export function portrait2026(name: string): string | null | undefined {
   return portraitOverrides2026[key]?.file;
 }
 
+// Summit-only presentation overrides. These do not alter the Awards directory or the shared Airtable
+// record. The owner is currently reviewing and correcting the Summit guest cards independently.
+const summitPortraitOverrides2026: Record<string, string> = {
+  "theresa magnus": "/2026-headshots/portraits/theresa-magnus-summit-restored-20261026.jpg"
+};
+export function summitPortrait2026(name: string): string | undefined {
+  return summitPortraitOverrides2026[personNameKey(name)];
+}
+
 // Explicit temporary removals remain off until the owner clears them. Everyone else who is confirmed in
 // Airtable is listed; cards without a portrait use the site's initials treatment (owner, Oct 24).
 // Oct 21 (owner): Hayden Harveston stays off the site; Zak Levitt and Jayson Ainsworth off "for now" (identities not
