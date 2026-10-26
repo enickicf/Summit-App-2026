@@ -4,7 +4,19 @@
 //  - bytes null + file: a better photo than Airtable's is approved for the site; it stays until reviewed.
 //  - file null: no photo passed review yet (Airtable's is too small/blurry); listed by name only.
 export const airtableHeadshotCrops: Record<string, { bytes: number | null; file: string | null }> = {
-  recsp9ukQoi7wHXFM: { bytes: 266240, file: "/2026-headshots/portraits/kate-doerge-20261016.jpg" },
+  // Oct 25 full-site portrait sweep: exact 948x900 card crops. Official public portraits stay pinned
+  // with bytes:null; reviewed Airtable portraits stay pinned only while that exact upload is unchanged.
+  rec97E7jRL9ZlUYKa: { bytes: 136546, file: "/2026-headshots/portraits/andrew-diehl-card-20261025.jpg" },
+  recnirvb72mepu9zE: { bytes: 184555, file: "/2026-headshots/portraits/dalaura-kader-card-20261025.jpg" },
+  recwfbAG03JmOJx26: { bytes: null, file: "/2026-headshots/portraits/dj-charlie-chan-official-20261025.jpg" },
+  reccYQjPt7TNpk4AP: { bytes: 208046, file: "/2026-headshots/portraits/douglas-mckenzie-card-20261025.jpg" },
+  receLk6EPZiyQliEE: { bytes: 252836, file: "/2026-headshots/portraits/ia-cheveres-card-20261025.jpg" },
+  recSQtMbd6BTw3v9o: { bytes: null, file: "/2026-headshots/portraits/jhone-ebert-official-20261025.jpg" },
+  rech2Y2rToKGdcvuR: { bytes: 704205, file: "/2026-headshots/portraits/joanna-howard-card-20261025.jpg" },
+  recFg2EqNUcHpyqaB: { bytes: null, file: "/2026-headshots/portraits/jordan-rose-official-20261025.jpg" },
+  recNIfdEXMa1wnld2: { bytes: null, file: "/2026-headshots/portraits/justice-shepard-official-20261025.jpg" },
+  recPcFRLBxAqRzyc5: { bytes: 2140304, file: "/2026-headshots/portraits/tj-farrell-card-20261025.jpg" },
+  recsp9ukQoi7wHXFM: { bytes: 266240, file: "/2026-headshots/portraits/kate-doerge-card-20261025.jpg" },
   recgN4s4V5qQi3C6D: { bytes: null, file: "/2026-headshots/portraits/alexa-price-hd-20261015.jpg" },
   recVWLRzYl01Hc7y6: { bytes: 15978, file: "/2026-headshots/portraits/allison-elbl.jpg" },
   recjSe6G2Qj50IleV: { bytes: 133215, file: "/2026-headshots/portraits/ana-wolfington.jpg" },
@@ -46,7 +58,7 @@ export const airtableHeadshotCrops: Record<string, { bytes: number | null; file:
   recdS1vYczdSPx1PV: { bytes: null, file: "/2026-headshots/portraits/anthony-ramos.jpg" },
   rec2E5AC6Qf3kwzBf: { bytes: null, file: "/2026-headshots/portraits/aphrah-brokaw-2-c.jpg" },
   rectTFBmVOINHypYQ: { bytes: null, file: "/2026-headshots/portraits/bishop-briggs.jpg" },
-  recUODHCLbJTR7fd7: { bytes: null, file: "/2026-headshots/portraits/cherrial-odell-20261015.jpg" },
+  recUODHCLbJTR7fd7: { bytes: 62043, file: "/2026-headshots/portraits/cherrial-odell-card-20261025.jpg" },
   rec2VyMC3lhRGOdJQ: { bytes: null, file: "/2026-headshots/portraits/darryl-mcdaniels-2-c.jpg" },
   recvspdVLJQposUyX: { bytes: null, file: "/2026-headshots/portraits/ellie-kanner-2-c.jpg" },
   receZ4AeROyhMMnjY: { bytes: null, file: "/2026-headshots/portraits/janet-wozniak-4.png" },

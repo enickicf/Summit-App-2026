@@ -1,10 +1,10 @@
 import type { AirtablePerson } from "./airtable";
 
-// Reviewed fallback of Airtable's Guest Tracker, synchronized October 24, 2026. Production uses
+// Reviewed fallback of Airtable's Guest Tracker, synchronized October 25, 2026. Production uses
 // this copy when AIRTABLE_TOKEN is unavailable. Attendance status, Website Grouping, title, bio and
 // headshot presence match Airtable; locally saved portraits prevent expiring attachment links.
 export type RecordedAirtablePerson = AirtablePerson & { headshotFile?: string };
-export const airtableTalentRecordedAt = "2026-10-24";
+export const airtableTalentRecordedAt = "2026-10-25";
 export const airtableTalent2026: RecordedAirtablePerson[] = [
   {
     "recordId": "rec1M288OYcpaWTDb",
@@ -1097,7 +1097,7 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "bio": "Cherrial Odell has risen above extreme childhood trauma to find peace of mind and levels of joy so meaningful they bring her tears of joy. She is a two-time suicide attempt survivor, lived-experience mental health advocate, and psychology student at Stanford University. Her message and story is one of hope and healing, and she uses her journey to now help others do the same.\n\nHer advocacy has been featured in People magazine, The Kelly Clarkson Show, and at national conferences and festivals. An alumni of Jewel’s Inspiring Children Foundation, where she served as an intern, ambassador, and now Alumni Board Co-Chair, Cherrial continues to mentor countless young people as a peer support specialist and peer counselor.\n\nAt Stanford, she serves as President of the Mental Health Outreach Club, co-founded “Wellness Buddies” with Jewel and ICF, created the largest mental health movement in Stanford history: Flourish Stories, and was named a Top 50 finalist for the Chegg Global Student Award. During COVID-19, she launched Inspire House, a community that reached 2.7 million people, and created “Inspire Cards,” a mental health tool to help people learn how to have deeper conversations.\n\nCherrial previously served on Lady Gaga’s Born This Way Foundation Advisory Board and as a Rare Impact College Ambassador with Selena Gomez’s nonprofit, continuing to amplify hope, healing, and resilience worldwide.",
     "hasHeadshot": true,
     "headshotBytes": 62043,
-    "headshotFile": "/2026-headshots/portraits/cherrial-odell-20261015.jpg"
+    "headshotFile": "/2026-headshots/portraits/cherrial-odell-card-20261025.jpg"
   },
   {
     "recordId": "recbGihz8WzPHqCia",
@@ -1484,7 +1484,7 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "bio": "Quentenas Charles Beason, professionally known as DJ Charlie Chan Soprano, is a St. Louis DJ known for his longstanding work with Darryl “DMC” McDaniels. Mentored by the legendary Jam Master Jay, he has performed internationally alongside DMC, bringing Run-DMC’s music to audiences through live turntablism. His career reflects a deep connection to hip-hop’s history and the St. Louis music community.",
     "hasHeadshot": true,
     "headshotBytes": 309639,
-    "headshotFile": "/2026-headshots/airtable-current/recwfbAG03JmOJx26.jpg"
+    "headshotFile": "/2026-headshots/portraits/dj-charlie-chan-official-20261025.jpg"
   },
   {
     "recordId": "recazhW7wq3Mw11QA",
@@ -1884,7 +1884,7 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     ],
     "occupation": "NAMI Chief Communications & Marketing Officer",
     "organization": "NAMI",
-    "title": "Co-Owner, Show Creators Studios",
+    "title": "",
     "bio": "Amanda Deacon is an entertainment and production professional who co-owns Show Creators Studios in Las Vegas alongside Ian Herrington. Drawing on her background as a performer, she helps bring creative projects to life through live events, virtual productions, and content creation. The studio provides space and production support for entertainers, speakers, and organizations.",
     "hasHeadshot": true,
     "headshotBytes": 152984,
@@ -2273,7 +2273,7 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "bio": "Kate Doerge is a USA TODAY bestselling author, motivational speaker, certified grief coach, brand strategist, and nonprofit founder whose work centers on resilience, connection, purpose, and finding a way forward when life doesn’t go as planned.\n\nShe is the author of Reimagining Grief: A New Path to Finding Healing, Strength and Joy After Loss (Hay House), a deeply personal and actionable guide inspired by her own experiences with profound loss. Within six years, Kate lost her father to heart failure, her mother in a car accident, and, unimaginably, her 16-year-old daughter, Penny, to glioblastoma caused by neurofibromatosis (NF).\n\nRather than allowing loss to define what came next, Kate made a choice to move forward with purpose. She co-founded Penny’s Flight Foundation in honor of Penny to raise awareness and critical funding for NF research and to carry forward Penny’s legacy of joy, kindness, and positivity.\n\nToday, Kate brings her message to corporations, schools, wellness communities, and audiences across the country through keynotes, workshops, and conversations about navigating grief, adversity, change, and life’s unexpected challenges. Her work is grounded in a belief passed down from her father: We don’t choose the cards we’re dealt, but we do choose how we play them.\n\nAt the heart of everything Kate does is a simple philosophy: It’s not your lifespan that matters. It’s your wingspan—the impact you have on others while you’re here.",
     "hasHeadshot": true,
     "headshotBytes": 266240,
-    "headshotFile": "/2026-headshots/portraits/kate-doerge-20261016.jpg"
+    "headshotFile": "/2026-headshots/portraits/kate-doerge-card-20261025.jpg"
   },
   {
     "recordId": "recEgb4HzUGo843bo",
@@ -2637,7 +2637,7 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "bio": "Andrew Diehl is a business professional at Red Ventures and a Princeton University graduate. Originally from Wayne, Pennsylvania, he competed in high jump for Princeton, earning an NCAA Regional qualification and an Ivy League outdoor runner-up finish in 2019. His academic work examined how corruption affects business growth in developing countries, informed by two summers in the Dominican Republic.",
     "hasHeadshot": true,
     "headshotBytes": 136546,
-    "headshotFile": "/2026-headshots/airtable-current/rec97E7jRL9ZlUYKa.jpg"
+    "headshotFile": "/2026-headshots/portraits/andrew-diehl-card-20261025.jpg"
   },
   {
     "recordId": "rec9efT1YUzSwOQv7",
@@ -2697,7 +2697,7 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "bio": "Jordan Rose is an attorney and entrepreneur who founded Rose Law Group in Scottsdale, Arizona, in 2000, growing it into the largest woman-owned law firm in Arizona history. Her practice spans land use, zoning, government affairs, and business development. Recognized by The Business Journals as one of the nation’s top 100 Influencers in Law, Jordan also supports community organizations through board service with the Phoenix Art Museum, Barrow Neurological Institute, and the American Cancer Society’s CEOs Against Cancer.",
     "hasHeadshot": true,
     "headshotBytes": 266726,
-    "headshotFile": "/2026-headshots/airtable-current/recFg2EqNUcHpyqaB.jpg"
+    "headshotFile": "/2026-headshots/portraits/jordan-rose-official-20261025.jpg"
   },
   {
     "recordId": "recHUe7yCx96KjyX2",
@@ -2784,7 +2784,7 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "bio": "Justice Shepard is an educational creator and entrepreneur known online as @justicethetutor. Raised in San Jose, California, he earned an electrical engineering degree from UC Santa Barbara. Based in Los Angeles, he creates mathematics tutorials and educational courses while helping brands develop their social media presence.",
     "hasHeadshot": true,
     "headshotBytes": 216854,
-    "headshotFile": "/2026-headshots/airtable-current/recNIfdEXMa1wnld2.jpg"
+    "headshotFile": "/2026-headshots/portraits/justice-shepard-official-20261025.jpg"
   },
   {
     "recordId": "recPZzrkSwp5GJzDe",
@@ -2812,7 +2812,7 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "bio": "TJ Farrell joined the Phillies in March of 2014 and is entering his third season in his current role with the Alumni Relations and Community Projects department. In this position with the organization, TJ and the outreach team strive to connect the Phillies players, coaches, broadcasters, alumni, and front office members with the community through events and special projects. Additionally, TJ works closely with the team’s alumni and their families, ensuring the rich history of the Philadelphia Phillies organization continues to be showcased.\n\nBorn in Broomall, PA, TJ graduated from Villanova University with a degree in Communications and minors in Economics and Writing & Rhetoric. He obtained his graduate degree from West Chester University (PA.) in Business Administration. He and his wife, Kristina, reside in Havertown, PA.\n\nIn February 2021, TJ and the Phillies community team coordinated the inception of the organization’s mental health awareness program, “Strike Out the Stigma”. Once a program created out of necessity, Strike Out the Stigma has turned into the heartbeat of the organization’s philanthropic efforts to raise awareness and dismantle the stigma surrounding mental health. The program serves as a vital bridge between the Phillies organization and the mental health community.\n\nThe purpose of the Strike Out the Stigma program is to support individuals struggling with mental health challenges, bring important conversations to the forefront, educate families and support systems on crisis intervention, and honor the dedicated professionals working within the mental health industry.\n\nThe program focuses on raising vital awareness and funds for local non-profits, hosting meaningful, memorable events for participants, and providing necessary educational resources regarding mental health aid. Ultimately, the foundational mission of the program remains constant: to reinforce the message that mental health impacts everyone, and that you are “Never Fightin’ Alone”.",
     "hasHeadshot": true,
     "headshotBytes": 2140304,
-    "headshotFile": "/2026-headshots/airtable-current/recPcFRLBxAqRzyc5.jpg"
+    "headshotFile": "/2026-headshots/portraits/tj-farrell-card-20261025.jpg"
   },
   {
     "recordId": "recSQtMbd6BTw3v9o",
@@ -2827,7 +2827,7 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "bio": "Jhone Ebert is superintendent of the Clark County School District and previously served as Nevada’s Superintendent of Public Instruction. A former mathematics teacher, she has led efforts to expand access to technology, strengthen college and career readiness, and improve school funding. Her honors include the Presidential Award for Excellence in Mathematics Teaching.",
     "hasHeadshot": true,
     "headshotBytes": 186728,
-    "headshotFile": "/2026-headshots/airtable-current/recSQtMbd6BTw3v9o.jpg"
+    "headshotFile": "/2026-headshots/portraits/jhone-ebert-official-20261025.jpg"
   },
   {
     "recordId": "recTr8Jw4jSSXQzCL",
@@ -2917,7 +2917,7 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "bio": "Doug McKenzie is a Scottish-born magician and mentalist known for blending technology with close-up magic. A longtime collaborator of David Blaine, he has consulted on and produced television specials and live performances. He holds a degree from NYU’s Stern School of Business and has performed internationally for entertainment and corporate audiences.",
     "hasHeadshot": true,
     "headshotBytes": 208046,
-    "headshotFile": "/2026-headshots/airtable-current/reccYQjPt7TNpk4AP.jpg"
+    "headshotFile": "/2026-headshots/portraits/douglas-mckenzie-card-20261025.jpg"
   },
   {
     "recordId": "recdgfoWNeqCQf0iU",
@@ -2947,7 +2947,7 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "bio": "Ia Cheveres joins the Not Alone Summit as a guest of renowned percussionist and recording artist Sheila E.",
     "hasHeadshot": true,
     "headshotBytes": 252836,
-    "headshotFile": "/2026-headshots/airtable-current/receLk6EPZiyQliEE.jpg"
+    "headshotFile": "/2026-headshots/portraits/ia-cheveres-card-20261025.jpg"
   },
   {
     "recordId": "rech2Y2rToKGdcvuR",
@@ -2962,7 +2962,7 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "bio": "Lauren Ann serves as Executive Assistant to the CEO and Founder of The Ultimate Matchmaker, supporting executive operations and day-to-day coordination. Her work helps the leadership team advance the company’s mission of building meaningful relationships. She joins The Ultimate Matchmaker team at the Not Alone Summit, a gathering focused on mental health, human connection, and community.",
     "hasHeadshot": true,
     "headshotBytes": 704205,
-    "headshotFile": "/2026-headshots/airtable-current/rech2Y2rToKGdcvuR.jpg"
+    "headshotFile": "/2026-headshots/portraits/joanna-howard-card-20261025.jpg"
   },
   {
     "recordId": "rechK8GVDYbJCAWSX",
@@ -3001,7 +3001,7 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     ],
     "occupation": "",
     "organization": "",
-    "title": "Grammy-Winning Gospel Artist & Worship Leader",
+    "title": "Music Producer",
     "bio": "Israel Houghton is a GRAMMY-winning singer, songwriter, and worship leader whose music combines gospel, jazz, rock, and Latin influences. As the creative force behind Israel & New Breed, he has helped shape contemporary worship music for more than two decades, connecting audiences across cultures through faith and music.",
     "hasHeadshot": true,
     "headshotBytes": 357971,
@@ -3096,7 +3096,7 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "bio": "Dalaura Kader is a healthcare entrepreneur whose background includes co-founding Stratify Genomics and working with Achieve Concierge. Alongside her professional work, she has served in volunteer leadership roles with Special Olympics Alberta and the National Charity League. Her experience spans business development, healthcare, and community service.",
     "hasHeadshot": true,
     "headshotBytes": 184555,
-    "headshotFile": "/2026-headshots/airtable-current/recnirvb72mepu9zE.jpg"
+    "headshotFile": "/2026-headshots/portraits/dalaura-kader-card-20261025.jpg"
   },
   {
     "recordId": "recnk2ezXOmNHDLIB",
