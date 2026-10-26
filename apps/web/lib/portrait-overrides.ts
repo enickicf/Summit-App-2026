@@ -228,7 +228,7 @@ const portraitOverridesBase2026: Record<string, PortraitOverride> = {
   "harry hudson": { file: "/2026-headshots/portraits/harry-hudson.jpg", source: "airtable", airtableBytes: 113310 },
   "karena dawn": { file: "/2026-headshots/portraits/karena-dawn-2-c.jpg", source: "airtable", airtableBytes: 10726132 },
   "forest blakk": { file: "/2026-headshots/portraits/forest-blakk-c.jpg", source: "airtable", airtableBytes: 301322 },
-  "raquelle stevens": { file: "/2026-headshots/portraits/raquelle-stevens-c.jpg", source: "airtable", airtableBytes: 238753 },
+  "raquelle stevens": { file: "/2026-headshots/portraits/raquelle-stevens-light-20261026.png", source: "airtable", airtableBytes: 238753 },
   "gavin magnus": { file: "/2026-headshots/portraits/gavin-magnus-hd-20261015.jpg", source: "web", credit: "Gavin Magnus official Linktree portrait, linktr.ee/gavinmagnus" },
   "clayton alenik": { file: "/2026-headshots/portraits/clayton-alenik-c.jpg", source: "airtable", airtableBytes: 1346880 },
   "beth kojima": { file: "/2026-headshots/portraits/beth-kojima-2-c.jpg", source: "airtable", airtableBytes: 26074 },
