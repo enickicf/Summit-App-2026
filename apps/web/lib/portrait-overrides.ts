@@ -72,6 +72,8 @@ const portraitRefresh20261026: Record<string, PortraitOverride> = {
 };
 
 const portraitOverridesBase2026: Record<string, PortraitOverride> = {
+  // Oct 26 (owner): verified Jeneva Ventures profile; restored from Dana's public LinkedIn portrait.
+  "dana moskowitz": { file: "/2026-headshots/portraits/dana-moskowitz-restored-20261026.jpg", source: "web", credit: "Dana Moskowitz public LinkedIn profile, Jeneva Ventures (restored and reframed)" },
   // Oct 25 (owner): final card-ratio crops. These files are 948x900, the exact rendered card ratio, so the
   // browser does not crop heads again. Kristin is cropped inside the circular source so the public card is rectangular.
   "sheila escovedo": { file: "/2026-headshots/portraits/sheila-escovedo-sq-20261024.jpg", source: "airtable" },

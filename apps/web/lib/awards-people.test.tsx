@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import { event2026Snapshot } from "@not-alone/test-fixtures/event-2026";
 import { awardsDisplayPeople, awardsPeople, awardsGuestCategories } from "./awards-people";
+import { withAirtable } from "./airtable-overlay";
 import { directoryPeople } from "./people";
 import { OriginalAwardsPage } from "../components/original-event-page";
 
@@ -12,7 +13,7 @@ describe("curated Awards people", () => {
     const snapshot = structuredClone(event2026Snapshot);
     const before = structuredClone(snapshot);
     const selected = awardsPeople(snapshot);
-    expect(selected).toHaveLength(59);
+    expect(selected).toHaveLength(58);
     expect(new Set(selected.map(person => person.name)).size).toBe(selected.length);
     expect(selected.every(person => person.categories.length >= 1 && person.bio.trim())).toBe(true);
     // Owner (Sept 21): people are listed in every category they hold, primary credit first.
@@ -24,7 +25,7 @@ describe("curated Awards people", () => {
     expect(selected.find(person => person.name === "Loni Love")?.categories).toEqual(["Hosts", "Entertainers & Athletes"]);
     expect(selected.find(person => person.name === "Jen Smorgen")?.categories[0]).toBe("Philanthropists");
     expect(selected.find(person => person.name === "Ellie Kanner")?.categories[0]).toBe("Founders & Entrepreneurs");
-    expect(selected.filter(person => awardsGuestCategories.some(category => person.categories.includes(category)))).toHaveLength(54); // now includes Jewel, Loni Love and Ryan Wolfington via their other categories
+    expect(selected.filter(person => awardsGuestCategories.some(category => person.categories.includes(category)))).toHaveLength(53); // now includes Jewel, Loni Love and Ryan Wolfington via their other categories
     expect(selected.find(person => person.name === "Sarah Gilman")?.categories[0]).toBe("Entertainers & Athletes");
     // Sept 21 meeting: confirmed talent appears; staff, press and plus-ones never do.
     expect(selected.find(person => person.name === "Sarah Steil")?.categories[0]).toBe("Musicians");
@@ -32,12 +33,27 @@ describe("curated Awards people", () => {
     expect(selected.find(person => person.name === "Mike Majlak")?.categories[0]).toBe("Business Leaders");
     // ICF's published founders are a standing credit (meeting: "and last year's").
     expect(selected.find(person => person.name === "John Couch")?.categories[0]).toBe("Founders & Entrepreneurs");
-    expect(selected.find(person => person.name === "Steven & Alexandra Cohen")?.categories[0]).toBe("Philanthropists");
+    expect(selected.find(person => /Steven.*Alexandra Cohen/.test(person.name))).toBeUndefined();
     expect(selected.find(person => person.name === "Pam & Duncan Goldie-Morrison")?.categories[0]).toBe("Philanthropists");
     for (const name of ["Nick Dana", "Bianca Mok", "Cathy Olson", "Morgan Marler", "Isabella Wolfington", "Sophie Novak", "Steven Cohen", "Alexandra Cohen"]) expect(selected.map(person => person.name)).not.toContain(name);
     expect(directoryPeople(snapshot)).toHaveLength(46);
     expect(selected.map(person => person.name)).not.toContain("Mike Tyson");
     expect(snapshot).toEqual(before);
+  });
+
+  it("shows the Cohens only on Summit as one philanthropists card and gives Dana a reviewed portrait", async () => {
+    const snapshot = await withAirtable(structuredClone(event2026Snapshot));
+    expect(awardsDisplayPeople(snapshot).some(person => /Cohen/.test(person.name))).toBe(false);
+    const summit = awardsDisplayPeople(snapshot, { includeCohens: true });
+    const cohens = summit.find(person => person.slug === "2026-steven-alexandra-cohen");
+    expect(cohens).toMatchObject({
+      name: "Steven and Alexandra Cohen",
+      categories: ["Philanthropists"],
+      image: "/original-2025/020a823cfe4f160d93b0.png"
+    });
+    expect(cohens?.bio).not.toMatch(/founders? of the Not Alone Summit/i);
+    expect(summit.find(person => person.name === "Dana Moskowitz")?.image)
+      .toBe("/2026-headshots/portraits/dana-moskowitz-restored-20261026.jpg");
   });
 
   it("renders Awards display people once, grouping the Wolfingtons without changing canonical records", () => {

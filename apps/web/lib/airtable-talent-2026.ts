@@ -2377,7 +2377,8 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "organization": "",
     "title": "Guest of Jeneva Bell",
     "bio": "",
-    "hasHeadshot": false
+    "hasHeadshot": true,
+    "headshotFile": "/2026-headshots/portraits/dana-moskowitz-restored-20261026.jpg"
   },
   {
     "recordId": "recegdc2xIEOIVRUZ",

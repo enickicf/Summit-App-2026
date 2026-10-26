@@ -64,7 +64,7 @@ const listedCategories = ["Founders", "Founders & Entrepreneurs", "Philanthropis
 
 export function attendeeSections(snapshot: EventSnapshot | null, variant: "summit" | "awards" = "summit") {
   const seen = new Set<string>();
-  const people = awardsDisplayPeople(snapshot).filter(person => {
+  const people = awardsDisplayPeople(snapshot, { includeCohens: variant === "summit" }).filter(person => {
     const key = personNameKey(person.name);
     if (person.year !== 2026 || seen.has(key)) return false;
     seen.add(key);

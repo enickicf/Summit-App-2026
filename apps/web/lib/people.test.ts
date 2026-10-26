@@ -54,6 +54,7 @@ describe("website reviewed directory", () => {
     expect(personInitials("Sanem (Sam) Alkan")).toBe("SA");
   });
   it("uses the reviewed 2026 Airtable portraits without copying expiring attachment URLs", () => {
+    expect(personPortrait("Dana Moskowitz")).toBe("/2026-headshots/portraits/dana-moskowitz-restored-20261026.jpg");
     expect(personPortrait("Dr. Wendy Oliver-Pyatt")).toBe("/2026-headshots/portraits/wendy-oliver-pyatt-framed-20261026.jpg");
     expect(personPortrait("Jon Hershfield")).toBe("/2026-headshots/portraits/jon-hershfield-2.jpg");
     expect(personPortrait("Steve Wozniak")).toBe("/2026-headshots/portraits/steve-wozniak-2-c.jpg");

@@ -53,7 +53,7 @@ export default async function PartnersPage() {
   // Sept 22 meeting: confirmed people grouped "Philanthropist" in Airtable, listed on this page.
   // Owner / Ryan (Sept 29): every founder is listed here as well, founders first, then the other philanthropists.
   // Owner (Oct 5): couples are one card here ("Sean and Ana Wolfington", "Steve and Janet Wozniak"), as in Founders.
-  const everyone = philanthropistDisplayPeople(awardsDisplayPeople(snapshot));
+  const everyone = philanthropistDisplayPeople(awardsDisplayPeople(snapshot, { includeCohens: true }));
   const founders = everyone.filter(isFounder);
   const philanthropists = [...founders, ...everyone.filter(person => person.categories.includes("Philanthropists") && !founders.includes(person))].filter((person, index, list) => list.findIndex(other => other.slug === person.slug) === index);
   const nami = topAirtable.find(partner => isNami(partner.name));

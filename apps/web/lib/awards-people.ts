@@ -177,8 +177,11 @@ export function awardsPerson(person: SummitPerson): SummitPerson | undefined {
     bio: person.bio.trim() || biography?.bio || (founderKeys.has(key) ? `${person.name} ${/ & /.test(person.name) ? "are" : "is"} listed among the founders of the Not Alone Summit on Inspiring Children Foundation's public Summit and Awards websites.` : ""), ...(image ? { image } : {}) };
 }
 
-export function awardsPeople(snapshot: EventSnapshot | null): SummitPerson[] {
-  const reviewed = directoryPeople(snapshot);
+export type AwardsPeopleOptions = { includeCohens?: boolean };
+const isCohenProfile = (name: string) => /^(?:steven cohen|alexandra cohen|steven (?:and|&) alexandra cohen)$/.test(personNameKey(name));
+
+export function awardsPeople(snapshot: EventSnapshot | null, options: AwardsPeopleOptions = {}): SummitPerson[] {
+  const reviewed = directoryPeople(snapshot).filter(person => options.includeCohens || !isCohenProfile(person.name));
   const supplied = [...reviewed];
   if (snapshot?.event.directoryEnabled && reviewed.length) {
     for (const name of ownerApprovedCoChairs2026) {
@@ -209,6 +212,7 @@ export function awardsPeople(snapshot: EventSnapshot | null): SummitPerson[] {
   const seen = new Set<string>();
   return supplied.flatMap(person => {
     const key = personNameKey(person.name);
+    if (!options.includeCohens && isCohenProfile(person.name)) return [];
     const selected = awardsPerson(person);
     if (!selected || seen.has(key)) return [];
     seen.add(key);
@@ -219,8 +223,8 @@ export function awardsPeople(snapshot: EventSnapshot | null): SummitPerson[] {
 // The public Awards display intentionally recognizes the Wolfingtons together.
 // Canonical people remain separate for the Summit and all operational data.
 // Owner (Oct 5, 2026): couples read "Sean and Ana Wolfington" (the word "and", not an ampersand).
-export function awardsDisplayPeople(snapshot: EventSnapshot | null): SummitPerson[] {
-  let people = awardsPeople(snapshot);
+export function awardsDisplayPeople(snapshot: EventSnapshot | null, options: AwardsPeopleOptions = {}): SummitPerson[] {
+  let people = awardsPeople(snapshot, options);
   const couples: { first: string; second: string; name: string; slug: string; bio: string; image?: string }[] = [
     { first: "Sean Wolfington", second: "Ana Wolfington", name: "Sean and Ana Wolfington", slug: "2026-sean-ana-wolfington", bio: "Sean and Ana Wolfington are entrepreneurs and philanthropists. Inspiring Children Foundation's public Awards and Summit materials recognize their shared philanthropic work and support for youth development." },
     { first: "Melinda Springer", second: "Noah Springer", name: "Melinda and Noah Springer", slug: "2026-melinda-noah-springer", bio: "Melinda and Noah Springer are recognized together among the founders on Inspiring Children Foundation's public Awards website, with their affiliation listed as Pickle Pro Labs." },
@@ -239,11 +243,22 @@ export function awardsDisplayPeople(snapshot: EventSnapshot | null): SummitPerso
     // the two of them (lib/portrait-overrides.ts "bob and mike bryan", credited on the profile).
     { first: "Mike Bryan", second: "Bob Bryan", name: "Bob and Mike Bryan", slug: "2026-bob-mike-bryan", bio: "Bob and Mike Bryan are the most successful doubles team in tennis history and founders of the Not Alone Summit.", image: "/2026-headshots/portraits/bob-mike-bryan.jpg" },
     // Sept 22: Airtable now holds Steven and Alexandra as two records; the website keeps ICF's joint card and photo.
-    { first: "Steven Cohen", second: "Alexandra Cohen", name: "Steven and Alexandra Cohen", slug: "2026-steven-alexandra-cohen", bio: "The Steven & Alexandra Cohen Foundation powers the Not Alone Summit and Awards; Steven and Alexandra Cohen are founders of the Not Alone Summit.", image: "/original-2025/020a823cfe4f160d93b0.png" }
+    { first: "Steven Cohen", second: "Alexandra Cohen", name: "Steven and Alexandra Cohen", slug: "2026-steven-alexandra-cohen", bio: "Steven and Alexandra Cohen are philanthropists whose foundation powers the Not Alone Summit and Awards and supports mental health, veterans and their families, children, communities, the arts, sustainability, and Lyme disease research.", image: "/original-2025/020a823cfe4f160d93b0.png" }
   ];
   for (const couple of couples) {
     const first = people.find(person => person.name === couple.first);
     const second = people.find(person => person.name === couple.second);
+    // Alexandra's current attendance record is withdrawn, but the owner still wants the Cohens'
+    // shared philanthropic foundation credit on the Summit. Build the joint Summit card from Steven's
+    // current public record without changing either attendance record or exposing it on Awards pages.
+    if (couple.slug === "2026-steven-alexandra-cohen" && options.includeCohens && first && !second) {
+      people = people.map(person => person.name === couple.first
+        ? { ...person, name: couple.name, slug: couple.slug, categories: ["Philanthropists"],
+            role: "Philanthropists · Steven & Alexandra Cohen Foundation", bio: couple.bio,
+            ...(couple.image ? { image: couple.image } : {}) }
+        : person);
+      continue;
+    }
     if (!first || !second) continue;
     // With Airtable: both people's Airtable bios and titles, the photo of the two of them (Ana's and
     // Noah's Airtable headshots show the couple), and every category either one holds.
@@ -262,6 +277,12 @@ export function awardsDisplayPeople(snapshot: EventSnapshot | null): SummitPerso
         categories: [...new Set([...first.categories, ...second.categories])], featured: Boolean(first.featured || second.featured),
         order: Math.min(first.order ?? Number.MAX_SAFE_INTEGER, second.order ?? Number.MAX_SAFE_INTEGER), ...best, ...(image ? { image } : {}) }
       : { ...first, name: couple.name, slug: couple.slug, bio: couple.bio };
+    if (couple.slug === "2026-steven-alexandra-cohen") {
+      shared.categories = ["Philanthropists"];
+      shared.role = "Philanthropists · Steven & Alexandra Cohen Foundation";
+      shared.categoryRoles = { Philanthropists: shared.role };
+      shared.bio = couple.bio;
+    }
     if (couple.slug === "2026-bob-mike-bryan") {
       shared.role = "Winningest Double Team in History";
       shared.categoryRoles = Object.fromEntries(shared.categories.map(category => [category, shared.role]));

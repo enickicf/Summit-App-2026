@@ -250,7 +250,7 @@ function ProducerCredits2026({ confirmedNames, profiles, awardsContext = false, 
 export function OriginalSummitPage({ year, snapshot = null }: { year: 2025 | 2026; snapshot?: EventSnapshot | null }) {
   const archive = year === 2025;
   const venue = snapshot?.event.venueName;
-  const reviewedPeople = uniquePeople(awardsDisplayPeople(snapshot));
+  const reviewedPeople = uniquePeople(awardsDisplayPeople(snapshot, { includeCohens: true }));
   const confirmedNames = new Set(reviewedPeople.map(person => normalizePersonName(person.name)));
   const coChairNames = currentCoChairNames(snapshot, confirmedNames);
   // Owner (Sept 21): co-chairs and producers also appear in their other categories (e.g. Jewel in Musicians).

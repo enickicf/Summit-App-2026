@@ -230,8 +230,8 @@ export function airtableCategories(groups: string[]): string[] {
 // Owner (Sept 22): these founders are listed whatever their invitation status in Airtable.
 export const foundersListedRegardless = new Set([
   "sheri sobrato", "sheri sabroto",
-  // Oct 21 (owner): Steven and Alexandra Cohen are OFF the Founders board (excludedFromSite2026 below); the
-  // "Powered by Steven & Alexandra Cohen Foundation" credit and the Cohen Foundation partner card stay (lib/event-partners-2026.ts).
+  // Oct 26 (owner): Steven and Alexandra Cohen are philanthropists on the Summit, not Founders. Their
+  // Summit-only display boundary is enforced by awardsDisplayPeople's includeCohens option.
   // Paige/owner, Sept 22: these founders are Hold Space in Airtable and are credited regardless.
   "jay mcgraw", "erica mcgraw", "melony lewis", "adam lewis", "winston kelly", "cameron kelly",
   // Owner (Sept 23): Jennifer Donnelly, added by hand until she is in Airtable.
@@ -270,8 +270,9 @@ export const isNoLongerAttendingStatus = (status: string) => /declined|withdrew|
 // Owner (Oct 11, 2026): never listed on the websites in any section (lineups, founders, producer credits, profiles),
 // whatever Airtable says. "Take Seth Porter Winterton off the website. I'm making that executive decision."
 // Ryan (Oct 9): "Take Ratcliff out of the Founders" (Airtable groups him Founder; he has no other role on the site).
-// Owner (Oct 21): "Take Steven and Alexandra Cohen off founders board on website" (their foundation credit stays).
-export const excludedFromSite2026 = new Set(["seth porter winterton", "john ratcliff", "steven cohen", "alexandra cohen", "bryan hubbard", "brian hubbard"]);
+// Owner (Oct 26): Steven and Alexandra Cohen return to the Summit as Philanthropists, but remain off the
+// Founders board and off the Awards directory. That presentation rule lives in awards-people.ts.
+export const excludedFromSite2026 = new Set(["seth porter winterton", "john ratcliff", "bryan hubbard", "brian hubbard"]);
 export function isPublicAirtablePerson(person: AirtablePerson): boolean {
   if (excludedFromSite2026.has(person.name.trim().toLowerCase())) return false;
   // The current attendance status wins over an older standing Founder credit.

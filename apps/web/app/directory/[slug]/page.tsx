@@ -26,8 +26,8 @@ type ProfilePageProps = { params: Promise<{ slug: string }>; searchParams: Promi
 const getProfileSnapshot = cache(getSiteSnapshot);
 
 function summitProfiles(snapshot: Awaited<ReturnType<typeof getSiteSnapshot>> | null) {
-  const curated = awardsPeople(snapshot);
-  const displayed = awardsDisplayPeople(snapshot);
+  const curated = awardsPeople(snapshot, { includeCohens: true });
+  const displayed = awardsDisplayPeople(snapshot, { includeCohens: true });
   const groupedNames = new Set(displayed.filter(person => person.slug.startsWith("2026-")).flatMap(person => person.name === "Sean & Ana Wolfington" ? ["Sean Wolfington", "Ana Wolfington"] : person.name === "Melinda & Noah Springer" ? ["Melinda Springer", "Noah Springer"] : []));
   const profiles = [...directoryPeople(snapshot).filter(person => !groupedNames.has(person.name)).map(person => {
     const publicProfile = curated.find(candidate => candidate.slug === person.slug);

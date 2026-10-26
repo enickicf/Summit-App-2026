@@ -4,6 +4,8 @@
 //  - bytes null + file: a better photo than Airtable's is approved for the site; it stays until reviewed.
 //  - file null: no photo passed review yet (Airtable's is too small/blurry); listed by name only.
 export const airtableHeadshotCrops: Record<string, { bytes: number | null; file: string | null }> = {
+  // Oct 26 (owner): verified Dana Moskowitz / Jeneva Ventures public profile portrait, restored for the Summit.
+  rectG5lUfTRimZxos: { bytes: null, file: "/2026-headshots/portraits/dana-moskowitz-restored-20261026.jpg" },
   // Oct 26 Awards pass: keep the approved restoration/source and framing consistent after live Airtable refreshes.
   recmtGEPHjplKheEU: { bytes: null, file: "/2026-headshots/portraits/cathy-olson-restored-20261026.jpg" },
   recEZUTCUGANKByLl: { bytes: null, file: "/2026-headshots/portraits/beth-kojima-restored-20261026.jpg" },
