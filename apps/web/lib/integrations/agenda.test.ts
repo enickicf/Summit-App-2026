@@ -47,11 +47,27 @@ describe("wellness-only source and canonical schedule", () => {
   });
   it("returns a private noncached feed with stable reminder keys", async () => {
     const store = memorySubmissionStore({ workshop: [row()] });
-    const response = await agendaGet(request(), { env, store, now: new Date("2026-10-26T21:00:00Z") });
+    const response = await agendaGet(request(), { env: { ...env, INTEGRATION_SMS_SEND_APPROVED: "true" }, store, now: new Date("2026-10-26T21:00:00Z") });
     expect(response.status).toBe(200); expect(response.headers.get("cache-control")).toContain("no-store");
     const data = await response.json(); expect(data).toMatchObject({ complete: true, scope: "wellness", generatedAt: "2026-10-26T21:00:00.000Z" });
     expect(data.reminderJobs).toHaveLength(2);
     expect(data.reminderJobs.map((job: { dueAt: string }) => job.dueAt)).toEqual(["2026-11-03T03:00:00.000Z", "2026-11-03T15:00:00.000Z"]);
+  });
+  it("returns previews and no dispatch jobs until the whole SMS process/build is explicitly approved", async () => {
+    const store = memorySubmissionStore({ workshop: [row()] });
+    for (const setting of [undefined, "false", "yes"]) {
+      const response = await agendaGet(request(), { env: { ...env, INTEGRATION_SMS_SEND_APPROVED: setting }, store });
+      const data = await response.json();
+      expect(data.sendApproval).toBe("pending");
+      expect(data.reminderJobs).toEqual([]);
+      expect(data.previewJobs).toHaveLength(2);
+    }
+  });
+  it("does not allow isolated test activities to bypass the SMS approval gate", async () => {
+    const settings = { ...env, REMINDER_SOURCE_MODE: "test", INTEGRATION_TEST_STORE_PREFIX: "nas-reminders-test-approval", INTEGRATION_TEST_ACTIVITIES_JSON: JSON.stringify([{ activityId: "wellness-test-approval", title: "TEST: No sending before approval", startsAt: "2026-10-28T18:00:00Z" }]) };
+    const response = await agendaGet(request(), { env: settings, store: memorySubmissionStore({ workshop: [row({ sessionId: "wellness-test-approval" })] }) });
+    const data = await response.json();
+    expect(data.previewJobs).toHaveLength(2); expect(data.reminderJobs).toEqual([]); expect(data.sendApproval).toBe("pending");
   });
   it("does not revive a cancelled or held selection through an older duplicate", async () => {
     const store = memorySubmissionStore({ workshop: [row(), row({ id: "new", submittedAt: "2026-10-22T10:00:00Z", cancelledAt: "2026-10-22T11:00:00Z" })] });

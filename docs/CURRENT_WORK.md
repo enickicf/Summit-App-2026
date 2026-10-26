@@ -1,3 +1,7 @@
+## OWNER HOLD — October 26: all SMS pending complete approval
+
+Nick requires approval of the complete process and build before any text, including tests. The reminder feed now defaults to previews only and an empty dispatch queue; `INTEGRATION_SMS_SEND_APPROVED` must remain unset/false. No Make run, live SMS, deployment or provider setting was changed. This gate is source code pending deployment, not a claim that an already deployed service was modified.
+
 ## IMPLEMENTED locally / PARTIAL rollout — October 26: wellness reminder port and booking foundation
 
 Built on production commit `39f561da94a6ce24a2191089f9294281344f2ed2` on `codex/wellness-reminders-20261026`. New authenticated wellness-only feed and STOP routes plus shared companion-service source derive all 30 current sessions from the canonical public form. Feed reads only wellness workshops, text preferences and program approvals; it honors staff/contact holds without changing approval code. Added a disabled capacity policy, atomic booking ledger/conditional-write adapter, FIFO waitlist/cancellation logic and optional read-only booking suppression. Real limits remain unset. Public signup/cancellation UI binding and reviewed migration of existing registrations are PLANNED, not live. Source is prepared for draft review; nothing was deployed or sent. See `docs/WELLNESS_REMINDER_REVIEW.txt`; exact validation and baseline failure comparison are supplied in the local review package.

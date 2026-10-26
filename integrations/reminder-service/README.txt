@@ -7,7 +7,10 @@ From repository root with the pinned Node and pnpm dependencies installed:
   pnpm exec tsc --project integrations/reminder-service/tsconfig.json
 Output: integrations/reminder-service/dist (ignored by Git), containing netlify.toml, public/, netlify/functions/ and a source-hash manifest. Building does not deploy. Upload the functions with the Netlify CLI/API only after review; the main website does not need replacement.
 
+SMS HOLD: No SMS, including tests, until Nick approves the complete process and build. The source defaults to preview-only: sendApproval=pending, previewJobs populated, reminderJobs empty. INTEGRATION_SMS_SEND_APPROVED must remain unset/false. Reviews, merges, deployment and test success are not permission to enable sending. Keep Make scenarios inactive.
+
 Required server-only provider settings (names only; no secrets in source):
+  INTEGRATION_SMS_SEND_APPROVED: leave unset/false until explicit complete-process/build approval.
   INTEGRATION_FEED_TOKEN: independent random secret, minimum 32 characters.
   CLICKSEND_INBOUND_SECRET: different random secret, minimum 32 characters.
   CLICKSEND_DEDICATED_NUMBER: dedicated sender/destination number.

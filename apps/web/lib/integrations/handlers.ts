@@ -21,7 +21,11 @@ export async function agendaGet(request: Request, dependencies: Dependencies = {
     const agenda = await buildWellnessAgenda(dependencies.store ?? await (dependencies.storeProvider ?? integrationStore)(), {
       activities, now: dependencies.now, bookingStatuses: snapshot ? bookingStatuses(snapshot.value) : undefined,
     });
-    return integrationJson({ ...agenda, reminderJobs: planReminders(agenda) });
+    const previewJobs = planReminders(agenda);
+    // Owner approval covers the complete process/build, including test SMS.
+    // Reviews, merges, deployments and passing tests do not grant send approval.
+    const sendApproved = env.INTEGRATION_SMS_SEND_APPROVED === "true";
+    return integrationJson({ ...agenda, sendApproval: sendApproved ? "approved" : "pending", previewJobs, reminderJobs: sendApproved ? previewJobs : [] });
   } catch {
     // Never include partial recipients, raw errors, credentials, or contact details.
     return integrationJson({ error: "A complete reminder snapshot is unavailable. Hold sends and retry." }, 503);
