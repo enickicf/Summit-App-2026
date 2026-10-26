@@ -10,11 +10,12 @@ describe("Izzy Houghton Airtable sync", () => {
     expect(izzy).toMatchObject({
       name: "Izzy Houghton",
       title: "Music Producer",
-      bio: "Israel Houghton II is a songwriter with 7 credits across their career. Best known for their work with The Kid LAROI, Israel Houghton II's songwriting spans 5 tracks. Beyond writing, they have also contributed 1 production credit.",
+      bio: "Israel Houghton II is a songwriter with seven credits across his career. Best known for his work with Justin Bieber and The Kid LAROI, his songwriting spans five tracks.",
       hasHeadshot: true,
       headshotBytes: 221900,
       headshotFile: "/2026-headshots/airtable-current/reciu05MxS6ye5lXf-20261026.jpg"
     });
     expect(existsSync(join(process.cwd(), "public", izzy!.headshotFile!))).toBe(true);
+    expect(izzy!.bio).not.toMatch(/production credit/i);
   });
 });
