@@ -13,10 +13,11 @@ import styles from "./directory.module.css";
 function DirectoryPortrait({ person }: { person: SummitPerson }) {
   const [failedImage, setFailedImage] = useState<string>();
   // Oct. 26 approved Summit portrait baseline: preserve every reviewed crop; Leah alone needs
-  // a slight leftward shift so her face sits in the visual center of the card.
+  // a slight leftward shift so her face sits in the visual center of the card. Keep enough scale
+  // around that shift to cover the full portrait frame without exposing the blue card background.
   const portraitStyle = {
     ...portraitImageStyle(person.name, person.image),
-    ...(person.name === "Leah Smith" ? { transform: "scale(1.04) translateX(-4%)", transformOrigin: "center" } : {})
+    ...(person.name === "Leah Smith" ? { transform: "scale(1.1) translateX(-4%)", transformOrigin: "center" } : {})
   };
   return <div className="portrait" data-person={person.name} aria-hidden="true">{person.image && person.image !== failedImage
     ? getSiteImageMetadata(person.image)
