@@ -58,7 +58,7 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "blu eyes": { file: "/2026-headshots/portraits/blu-eyes.jpg", source: "airtable" },
   "brian hill": { file: "/2026-headshots/portraits/brian-hill.jpg", source: "airtable" },
   "caitlin bonner": { file: "/2026-headshots/portraits/caitlin-bonner.jpg", source: "airtable" },
-  "corey j nigro": { file: "/2026-headshots/portraits/dr-corey-j-nigro.jpg", source: "airtable" },
+  "corey j nigro": { file: "/2026-headshots/portraits/dr-corey-j-nigro-official-20261025.jpg", source: "web", credit: "Dr. Corey J. Nigro portrait published with his Think Unbroken podcast appearance, https://www.thinkunbrokenpodcast.com/e155-psychology-demystified-and-the-healing-power-of-cbt-with-dr-corey-nigro-trauma-healing-podcast/" },
   "shashita inamdar": { file: "/2026-headshots/portraits/dr-shashita-inamdar-2.jpg", source: "web" }, // Oct 20: sharper copy of their photo from their own organization / press page (hires agent)
   "franco pascali": { file: "/2026-headshots/portraits/franco-pascali.jpg", source: "airtable" },
   "geoff ralston": { file: "/2026-headshots/portraits/geoff-ralston-2.jpg", source: "commons", credit: "Gdr2023, GeoffHeadshot.jpg, CC BY-SA 4.0 (cropped), https://commons.wikimedia.org/wiki/File:GeoffHeadshot.jpg", attribution: { label: "Gdr2023 / Wikimedia Commons, CC BY-SA 4.0 (cropped)", href: "https://commons.wikimedia.org/wiki/File:GeoffHeadshot.jpg" } },
