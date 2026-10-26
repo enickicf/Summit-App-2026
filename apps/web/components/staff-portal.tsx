@@ -43,7 +43,7 @@ function PodcastBookings({ bookings, notice = {} }: { bookings: PodcastBookingSu
     </section>
     <section className={styles.section} id="podcast-bookings" aria-labelledby="podcast-bookings-title">
       <div className={styles.sectionHead}><h2 id="podcast-bookings-title">Podcast interview bookings</h2><a className={styles.button} href="/api/staff/export?kind=podcast-bookings">Download CSV</a></div>
-      <p className={styles.help}>Short-form interviews take place after each guest’s red carpet walk. Long-form submissions are requests within an eligible window; after a podcast accepts one, staff can assign its exact time and room here. Removing a request does not delete any other portal data.</p>
+      <p className={styles.help}>Podcast interviews take place Monday, November 2. Short-form interviews happen after each guest’s red carpet walk. A long-form submission requests one 75-minute interview within an eligible window; after a podcast accepts it, staff assigns one exact time and room here. The guest is not booked for the entire window. Removing a request does not delete any other portal data.</p>
       {notice.action === "rescheduled" && <p className={styles.notice}>Podcast booking updated.</p>}
       {notice.action === "removed" && <p className={styles.notice}>Podcast booking removed. Its room and time are available again.</p>}
       {notice.error && <p className={styles.noticeError}>{notice.error}</p>}

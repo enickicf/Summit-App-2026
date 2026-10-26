@@ -21,13 +21,13 @@ export default function PodcastsPage() {
     <section className={`${styles.section} ${styles.first}`} aria-labelledby="podcasts-title">
       {/* Owner (Oct 20): no "Not Alone Awards 2026" line; the page starts right at the top with "Podcast Interviewers", and the
           "to be announced" line sits under it in the Awards lineup style (18px bold lavender, centered). */}
-      <div className={styles.sectionHead}><h1 id="podcasts-title">Podcast Interviewers</h1><p className={styles.announcement}>Explore each show, then request a short-form or long-form interview.</p></div>
+      <div className={styles.sectionHead}><h1 id="podcasts-title">Podcast Interviewers</h1><p className={styles.announcement}>Explore each show, then request a short-form or long-form interview for Monday, November 2.</p></div>
       <div className={styles.grid}>{entries.map(entry => <PodcastCard key={entry.show} entry={entry} />)}</div>
     </section>
 
     <section className={styles.cta} aria-labelledby="cta-title">
       <h2 id="cta-title">Private interview scheduling</h2>
-      <p>Short-form interviews happen after each guest’s red carpet walk, with no time selection. Long-form submissions are requests. The page shows the eligible recording window based on recorded arrivals; if the podcast accepts a request, it will contact the guest with the confirmed time.</p>
+      <p>All interviews take place Monday, November 2. Short-form interviews happen after each guest’s red carpet walk, with no time selection. A long-form submission requests one 75-minute interview. If accepted, the podcast will coordinate one exact time within the displayed window; guests are not expected to be interviewed or remain on site for the full window.</p>
     </section>
   </main>;
 }

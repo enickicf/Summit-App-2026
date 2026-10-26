@@ -15,8 +15,8 @@ const booking = (overrides: Partial<PodcastBookingSubmission> = {}): PodcastBook
   guestName: "Guest One",
   email: "guest@example.com",
   format: "long",
-  startUtc: "2026-11-03T18:00:00.000Z",
-  endUtc: "2026-11-03T19:15:00.000Z",
+  startUtc: "2026-11-02T18:00:00.000Z",
+  endUtc: "2026-11-02T19:15:00.000Z",
   room: "Room 1",
   travelVerified: true,
   arrivalLocal: "",
@@ -26,28 +26,28 @@ const booking = (overrides: Partial<PodcastBookingSubmission> = {}): PodcastBook
 describe("staff podcast booking controls", () => {
   it("reschedules a long-form interview using a canonical available room and time", async () => {
     const store = memorySubmissionStore({ podcastBooking: [booking()] });
-    const result = await mutatePodcastBooking(store, booking().id, "reschedule", "2026-11-03T19:30:00.000Z|Room 2");
+    const result = await mutatePodcastBooking(store, booking().id, "reschedule", "2026-11-02T19:30:00.000Z|Room 2");
 
-    expect(result).toMatchObject({ ok: true, action: "rescheduled", record: { startUtc: "2026-11-03T19:30:00.000Z", endUtc: "2026-11-03T20:45:00.000Z", room: "Room 2" } });
-    expect(await store.list("podcastBooking")).toEqual([expect.objectContaining({ id: booking().id, startUtc: "2026-11-03T19:30:00.000Z", room: "Room 2" })]);
+    expect(result).toMatchObject({ ok: true, action: "rescheduled", record: { startUtc: "2026-11-02T19:30:00.000Z", endUtc: "2026-11-02T20:45:00.000Z", room: "Room 2" } });
+    expect(await store.list("podcastBooking")).toEqual([expect.objectContaining({ id: booking().id, startUtc: "2026-11-02T19:30:00.000Z", room: "Room 2" })]);
   });
 
   it("rejects a room and time occupied by another interview", async () => {
-    const occupied = booking({ id: "22222222-2222-4222-8222-222222222222", guestName: "Guest Two", startUtc: "2026-11-03T19:30:00.000Z", endUtc: "2026-11-03T20:45:00.000Z", room: "Room 2" });
+    const occupied = booking({ id: "22222222-2222-4222-8222-222222222222", guestName: "Guest Two", startUtc: "2026-11-02T19:30:00.000Z", endUtc: "2026-11-02T20:45:00.000Z", room: "Room 2" });
     const store = memorySubmissionStore({ podcastBooking: [booking(), occupied] });
-    const result = await mutatePodcastBooking(store, booking().id, "reschedule", "2026-11-03T19:30:00.000Z|Room 2");
+    const result = await mutatePodcastBooking(store, booking().id, "reschedule", "2026-11-02T19:30:00.000Z|Room 2");
 
     expect(result).toMatchObject({ ok: false, status: 409 });
-    expect((await store.list("podcastBooking")).find(row => row.id === booking().id)?.startUtc).toBe("2026-11-03T18:00:00.000Z");
+    expect((await store.list("podcastBooking")).find(row => row.id === booking().id)?.startUtc).toBe("2026-11-02T18:00:00.000Z");
   });
 
   it("rejects a time when the same guest is booked in another room", async () => {
-    const sameGuest = booking({ id: "33333333-3333-4333-8333-333333333333", startUtc: "2026-11-03T19:30:00.000Z", endUtc: "2026-11-03T20:45:00.000Z", room: "Room 3" });
+    const sameGuest = booking({ id: "33333333-3333-4333-8333-333333333333", startUtc: "2026-11-02T19:30:00.000Z", endUtc: "2026-11-02T20:45:00.000Z", room: "Room 3" });
     const store = memorySubmissionStore({ podcastBooking: [booking(), sameGuest] });
-    const result = await mutatePodcastBooking(store, booking().id, "reschedule", "2026-11-03T19:30:00.000Z|Room 2");
+    const result = await mutatePodcastBooking(store, booking().id, "reschedule", "2026-11-02T19:30:00.000Z|Room 2");
 
     expect(result).toMatchObject({ ok: false, status: 409, error: "That guest already has an interview at this time. Choose another option." });
-    expect((await store.list("podcastBooking")).find(row => row.id === booking().id)?.startUtc).toBe("2026-11-03T18:00:00.000Z");
+    expect((await store.list("podcastBooking")).find(row => row.id === booking().id)?.startUtc).toBe("2026-11-02T18:00:00.000Z");
   });
 
   it("removes a booking and immediately returns its room to public availability", async () => {

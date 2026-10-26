@@ -11,8 +11,9 @@ const booking = (overrides: Partial<PodcastBookingSubmission> = {}): PodcastBook
 
 describe("podcast booking availability", () => {
   it("removes slots before an exact flight arrival plus a three-hour buffer", () => {
-    const slots = availablePodcastSlots("long", { arrivalUtc: "2026-11-03T20:00:00.000Z", arrivalDate: "2026-11-03", exact: true }, []);
-    expect(slots.every(slot => Date.parse(slot.startUtc) >= Date.parse("2026-11-03T23:00:00.000Z"))).toBe(true);
+    const slots = availablePodcastSlots("long", { arrivalUtc: "2026-11-02T18:30:00.000Z", arrivalDate: "2026-11-02", exact: true }, []);
+    expect(slots.length).toBeGreaterThan(0);
+    expect(slots.every(slot => Date.parse(slot.startUtc) >= Date.parse("2026-11-02T21:30:00.000Z"))).toBe(true);
   });
 
   it("does not assign a clock time to short-form interviews", () => {
@@ -21,20 +22,20 @@ describe("podcast booking availability", () => {
   });
 
   it("starts full-length interview availability at 10 AM Las Vegas time", () => {
-    const slots = availablePodcastSlots("long", { arrivalUtc: "2026-11-02T16:00:00.000Z", arrivalDate: "2026-11-02", exact: true }, []);
-    expect(slots[0]?.startUtc).toBe("2026-11-03T18:00:00.000Z");
+    const slots = availablePodcastSlots("long", null, []);
+    expect(slots[0]?.startUtc).toBe("2026-11-02T18:00:00.000Z");
     expect(slots.every(slot => new Date(slot.startUtc).getUTCHours() >= 18)).toBe(true);
   });
 
   it("offers a scheduling window instead of assigning an exact long-form time", () => {
     const window = podcastRequestWindow(availablePodcastSlots("long", null, []));
-    expect(window).toEqual({ startUtc: "2026-11-03T18:00:00.000Z", endUtc: "2026-11-04T01:00:00.000Z" });
+    expect(window).toEqual({ startUtc: "2026-11-02T18:00:00.000Z", endUtc: "2026-11-03T01:00:00.000Z" });
   });
 
-  it("moves a date-only Nov 3 arrival to Nov 4", () => {
-    const slots = availablePodcastSlots("long", { arrivalUtc: null, arrivalDate: "2026-11-03", exact: false }, []);
+  it("uses the 10 AM fallback when no exact arrival time is on file", () => {
+    const slots = availablePodcastSlots("long", { arrivalUtc: null, arrivalDate: "2026-11-02", exact: false }, []);
     expect(slots.length).toBeGreaterThan(0);
-    expect(slots.every(slot => slot.startUtc.startsWith("2026-11-04"))).toBe(true);
+    expect(slots[0]?.startUtc).toBe("2026-11-02T18:00:00.000Z");
   });
 
   it("uses the latest arrival across the interview guest and podcast hosts", () => {
@@ -51,7 +52,7 @@ describe("podcast booking availability", () => {
   });
 
   it("prevents a duplicate pending long-form request for the same guest and podcast", () => {
-    const pending = booking({ format: "long", room: "", startUtc: "2026-11-03T18:00:00.000Z", endUtc: "2026-11-04T01:00:00.000Z" });
+    const pending = booking({ format: "long", room: "", startUtc: "2026-11-02T18:00:00.000Z", endUtc: "2026-11-03T01:00:00.000Z" });
     expect(podcastRequestConflicts({ format: "long", podcast: "The Big Silence", guestName: "Guest One" }, [pending])).toBe(true);
   });
 
@@ -63,12 +64,12 @@ describe("podcast booking availability", () => {
   });
 
   it("does not reserve a room or block a guest while a long-form request is awaiting acceptance", () => {
-    const pending = booking({ format: "long", room: "", startUtc: "2026-11-03T18:00:00.000Z", endUtc: "2026-11-04T01:00:00.000Z" });
-    expect(bookingConflicts({ startUtc: "2026-11-03T19:30:00.000Z", endUtc: "2026-11-03T20:45:00.000Z", room: "Room 1", guestName: "Guest One" }, [pending])).toBe(false);
+    const pending = booking({ format: "long", room: "", startUtc: "2026-11-02T18:00:00.000Z", endUtc: "2026-11-03T01:00:00.000Z" });
+    expect(bookingConflicts({ startUtc: "2026-11-02T19:30:00.000Z", endUtc: "2026-11-02T20:45:00.000Z", room: "Room 1", guestName: "Guest One" }, [pending])).toBe(false);
   });
 
   it("keeps a time visible while at least one of the three rooms is available", () => {
-    const startUtc = "2026-11-03T18:00:00.000Z", endUtc = "2026-11-03T19:15:00.000Z";
+    const startUtc = "2026-11-02T18:00:00.000Z", endUtc = "2026-11-02T19:15:00.000Z";
     const occupied = [booking({ startUtc, endUtc, room: "Room 1" }), booking({ id: "22222222-2222-4222-8222-222222222222", startUtc, endUtc, room: "Room 2", guestName: "Guest Two", podcast: "Another show" })];
     const slot = availablePodcastSlots("long", null, occupied).find(item => item.startUtc === startUtc);
     expect(slot?.rooms).toEqual(["Room 3"]);

@@ -7,7 +7,8 @@ export type BookingFormat = "short" | "long";
 export const bookingDurationMinutes: Record<BookingFormat, number> = { short: 20, long: 75 };
 
 const zone = "America/Los_Angeles";
-const longFormDays = ["2026-11-03", "2026-11-04"];
+// Owner (Oct 26): podcast interviews take place on Awards day, Monday, November 2.
+const longFormDays = ["2026-11-02"];
 
 function localUtc(day: string, hour: number, minute: number) {
   const [year, month, date] = day.split("-").map(Number) as [number, number, number];
@@ -30,7 +31,7 @@ const overlaps = (start: number, end: number, booking: Pick<PodcastBookingSubmis
 
 function availabilityCutoff(travel: AirtableTravelWindow) {
   return travel.arrivalUtc ? Date.parse(travel.arrivalUtc) + 3 * 60 * 60 * 1000
-    : travel.arrivalDate ? localUtc(travel.arrivalDate, 23, 59).getTime() : Number.NEGATIVE_INFINITY;
+    : Number.NEGATIVE_INFINITY;
 }
 
 /** Uses the latest recorded arrival across the guest and podcast hosts. Missing travel defaults to 10 AM. */
@@ -42,7 +43,7 @@ export function latestTravelWindow(windows: Array<AirtableTravelWindow | null>):
 export function availablePodcastSlots(format: BookingFormat, travel: AirtableTravelWindow | null, bookings: PodcastBookingSubmission[]) {
   const duration = bookingDurationMinutes[format];
   const earliest = travel?.arrivalUtc ? Date.parse(travel.arrivalUtc) + 3 * 60 * 60 * 1000
-    : travel?.arrivalDate ? localUtc(travel.arrivalDate, 23, 59).getTime() : null;
+    : null;
   const slots: { startUtc: string; endUtc: string; rooms: PodcastRoom[] }[] = [];
   // Short form has no scheduled time: it happens after the guest's red-carpet walk.
   if (format === "short") return [];

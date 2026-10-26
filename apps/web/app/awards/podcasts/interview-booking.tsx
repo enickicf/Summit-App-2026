@@ -42,7 +42,7 @@ export function InterviewBooking({ entry, startOpen = false }: { entry: PodcastE
     setLoading(false);
     if (!response.ok) { setMessage(data.error ?? "Times could not be loaded."); return; }
     setRequestWindow(data.requestWindow); setTravelVerified(data.travelVerified);
-    setMessage(data.requestWindow ? "Review the available recording window, then send your request." : "No compatible long-form window is currently available. Production will follow up.");
+    setMessage(data.requestWindow ? "Review the scheduling window, then send your request." : "No compatible long-form window is currently available. Production will follow up.");
   }
 
   async function submit(event: FormEvent) {
@@ -60,7 +60,7 @@ export function InterviewBooking({ entry, startOpen = false }: { entry: PodcastE
   }
 
   if (!started) return <button type="button" className={styles.bookInterview} onClick={() => setStarted(true)}>Request an interview</button>;
-  if (bookedFormats.length) return <div className={styles.bookingSuccess} role="status"><span>Request received</span><h3>{entry.show}</h3><p>{bookedFormats.map(format => <span key={format}>{formatLabel(format)}{format === "long" && requestWindow ? <><br />If confirmed: {when(requestWindow.startUtc)}–{when(requestWindow.endUtc)}</> : null}</span>)}</p><strong>{message}</strong>{bookedFormats.includes("long") && <small>This is a request, not a confirmed long-form interview. The podcast will follow up if it accepts the request.</small>}</div>;
+  if (bookedFormats.length) return <div className={styles.bookingSuccess} role="status"><span>Request received</span><h3>{entry.show}</h3><p>{bookedFormats.map(format => <span key={format}>{formatLabel(format)}{format === "long" && requestWindow ? <><br />Scheduling window: {when(requestWindow.startUtc)}–{when(requestWindow.endUtc)}</> : null}</span>)}</p><strong>{message}</strong>{bookedFormats.includes("long") && <small>This is a request, not a confirmed long-form interview. If accepted, the podcast will coordinate one 75-minute interview time within the window shown. You will not be interviewed for the entire window.</small>}</div>;
 
   return <form className={styles.booking} onSubmit={submit}>
     <div className={styles.bookingTitle}><p className={styles.cardKicker}>Request an interview</p><h3>Choose one or both formats</h3></div>
@@ -68,13 +68,13 @@ export function InterviewBooking({ entry, startOpen = false }: { entry: PodcastE
       <label>Interview guest’s full name<input value={guestName} onChange={event => { setGuestName(event.target.value); setRequestWindow(null); }} required /></label>
       <label>Email<input type="email" value={email} onChange={event => setEmail(event.target.value)} required /></label>
     </div>
-    <fieldset><legend>Interview format</legend><div className={styles.formatChoices}>{formats.map(item => <label key={item} className={styles.formatChoice}><input type="checkbox" checked={selectedFormats.includes(item)} onChange={() => toggleFormat(item)} /><span><strong>{item === "long" ? "Long form" : "Short form"}</strong><small>{item === "long" ? "75-minute recording (1+ hour) · available times begin at 10:00 AM or after recorded arrivals" : "After your red carpet walk · no time selection needed"}</small></span></label>)}</div></fieldset>
+    <fieldset><legend>Interview format</legend><div className={styles.formatChoices}>{formats.map(item => <label key={item} className={styles.formatChoice}><input type="checkbox" checked={selectedFormats.includes(item)} onChange={() => toggleFormat(item)} /><span><strong>{item === "long" ? "Long form" : "Short form"}</strong><small>{item === "long" ? "One 75-minute interview on Monday, November 2 · the exact time is coordinated after acceptance" : "Monday, November 2 · after your red carpet walk · no time selection needed"}</small></span></label>)}</div></fieldset>
     {wantsShort && !wantsLong ? <>
       <p className={styles.travelNote}>Your short-form interview will take place after your red carpet walk. No time selection is needed.</p>
       <button className={styles.confirmBooking} type="submit" disabled={loading}>{loading ? "Saving…" : "Request short-form interview"}</button>
     </> : wantsLong && !requestWindow ? <button type="button" className={styles.findTimes} onClick={findTimes} disabled={loading}>{loading ? "Checking availability…" : "See request window"}</button> : null}
     {requestWindow && <>
-      <div className={styles.requestWindow}><span>If confirmed, your long-form interview will be scheduled between</span><strong>{when(requestWindow.startUtc)}–{when(requestWindow.endUtc)}</strong><small>This is a request, not a confirmed interview. If accepted, the podcast will contact you with the confirmed time. {travelVerified ? "This window begins after the recorded guest and podcast availability." : "This window uses the podcast’s recorded availability and the 10:00 AM fallback when no guest arrival is on file."}</small></div>
+      <div className={styles.requestWindow}><span>If accepted, the podcast will coordinate one 75-minute interview time within this window</span><strong>{when(requestWindow.startUtc)}–{when(requestWindow.endUtc)}</strong><small>You do not need to be interviewed or remain on site for this entire window. The podcast will contact you with one exact time. {travelVerified ? "The window begins after the recorded guest and podcast arrivals." : "When no exact arrival time is on file, availability begins at 10:00 AM."}</small></div>
       <button className={styles.confirmBooking} type="submit" disabled={loading}>{loading ? "Sending request…" : wantsShort ? "Send both interview requests" : "Send long-form request"}</button>
     </>}
     {message && <p className={styles.bookingMessage} role="status">{message}</p>}
