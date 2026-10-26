@@ -7,7 +7,7 @@ import type { PersonCategory, SummitPerson } from "../lib/people";
 import { awardsGuestCategories, awardsPerson } from "../lib/awards-people";
 import { isKeynote, peopleSections } from "../lib/people-sections";
 import { EventPartners } from "./event-partners";
-import { personInitials, personNameKey, portraitBackgroundStyle, portraitImageStyle } from "../lib/person-portraits";
+import { personInitials, personNameKey, portraitImageStyle } from "../lib/person-portraits";
 import styles from "./awards-guest-directory.module.css";
 import eventStyles from "./original-event-page.module.css";
 import { getSiteImageMetadata, SiteImage } from "./site-image";
@@ -32,7 +32,7 @@ export function orderAwardsGuests(people: SummitPerson[]) {
 function GuestPortrait({ person }: { person: SummitPerson }) {
   const [failedSource, setFailedSource] = useState<string>();
   return person.image && person.image !== failedSource
-    ? <span className={styles.photoFrame} style={portraitBackgroundStyle(person.image)}>{getSiteImageMetadata(person.image)
+    ? <span className={styles.photoFrame}>{getSiteImageMetadata(person.image)
       ? <SiteImage src={person.image} alt="" sizes="(max-width: 600px) 44vw, (max-width: 900px) 30vw, (max-width: 1240px) 22vw, 280px" style={portraitImageStyle(person.name, person.image)} onError={() => setFailedSource(person.image)} />
       : <img src={person.image} alt="" style={portraitImageStyle(person.name, person.image)} loading="lazy" decoding="async" width={500} height={500} onError={() => setFailedSource(person.image)} />}</span>
     : <span className={styles.portraitFallback} aria-hidden="true">{personInitials(person.name)}</span>;

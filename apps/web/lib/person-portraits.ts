@@ -97,39 +97,14 @@ export function portraitImageStyle(name: string, src?: string) {
   return undefined;
 }
 
-export function portraitBackgroundStyle(src?: string) {
-  return src ? { backgroundImage: `url("${src.replace(/["\\]/g, "")}")`, backgroundPosition: "center", backgroundSize: "cover" } : undefined;
-}
-
 const portraitCardAdjustments = new Map<string, { transform?: string; position?: string }>([
-  ["jason kennedy", { transform: "scale(.92) translateY(2.5%)" }],
-  ["anthony ramos", { transform: "scale(.94) translateY(2%)" }],
-  ["lia shelesh", { transform: "scale(.95) translateY(2%)" }],
   ["caroline jones", { transform: "scale(1.08)" }],
   ["mike posner", { transform: "scale(1.07)" }],
-  ["atz kilcher", { transform: "scale(.94) translate(2%, 2%)" }],
-  ["blaise aguirre", { transform: "scale(.96) translateY(1.5%)" }],
-  ["beth kojima", { transform: "scale(.96) translateX(2%)" }],
-  ["tasha rasolkhani kalhorn", { transform: "scale(.94) translateY(2%)" }],
-  ["megan haley", { transform: "scale(.94) translateY(2%)" }],
-  ["sarah steil", { transform: "scale(.94) translate(3%, 2%)" }],
-  ["nicole kalhorn", { transform: "scale(.94) translateY(2%)" }],
-  ["jeff levin", { transform: "scale(.93) translateY(2.5%)" }],
-  ["kate flannery", { transform: "scale(.93) translateY(2.5%)" }],
   ["sheila escovedo", { transform: "scale(1.1)" }],
-  ["dylan aguilar", { transform: "scale(.93) translateY(2.5%)" }],
-  ["princess love", { transform: "scale(.94) translateY(2%)" }],
   ["yvette baker", { transform: "scale(1.06) translateX(2%)", position: "center 35%" }],
-  ["alexander roque", { transform: "scale(.94) translateY(2%)" }],
-  ["ross rocketto", { transform: "scale(.94) translateY(2%)" }],
   ["cameron muller", { position: "center 18%" }],
-  ["angie mcphaul", { transform: "scale(.94) translateY(2%)" }],
-  ["sara steinweiss", { transform: "scale(1.06)" }],
-  ["janet wozniak", { transform: "scale(.88) translateY(1%)" }],
+  ["sara steinweiss", { transform: "scale(1.18)" }],
   ["miriam isa", { transform: "scale(1.15)", position: "center 42%" }],
-  ["winston kelly", { transform: "scale(.94) translateY(2%)" }],
-  ["sean wolfington", { transform: "scale(.94) translateY(2%)" }],
-  ["ryan wolfington", { transform: "scale(.94) translateY(2%)" }],
-  ["george rapier", { transform: "scale(.94) translateY(2%)" }],
+  ["gabriella viveros", { transform: "scale(1.12)" }],
   ["jennifer donnelly", { transform: "scale(1.22)", position: "center 42%" }],
 ]);
