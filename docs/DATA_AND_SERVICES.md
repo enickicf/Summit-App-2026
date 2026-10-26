@@ -1,3 +1,7 @@
+## October 26 wellness integration — IMPLEMENTED locally / PARTIAL activation
+
+The current web staff source is Netlify Blobs, not the historical admin/Supabase flow described elsewhere in this document. The new reminder feed reads `workshop`, `textPreference` and `programApproval`; only canonical wellness workshops enter the feed. The source adapter only writes generated journaled STOP opt-outs and cannot delete, approve or alter bookings. The optional booking projection reads `wellness/ledger-v1.json` through a read-only adapter, requires confirmed capacity configuration and refuses a missing live ledger. The atomic booking engine and sample policies are local foundation code; no live migration, public booking binding, provider setting or attendee sending was activated. See `docs/WELLNESS_REMINDER_REVIEW.txt`.
+
 # Data and Services
 
 This document names systems and configuration variables only. It contains no secret values.

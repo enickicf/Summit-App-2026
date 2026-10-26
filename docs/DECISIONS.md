@@ -1,3 +1,7 @@
+## October 26 — wellness reminders and editable capacity draft
+
+**IMPLEMENTED locally:** derive reminder times/titles from `wellness-signups-2026.ts`, use UTC instants and Las Vegas rendering, exclude other event domains, and honor exact staff decisions/contact holds. An ordinary wellness signup does not require a new approval. **IMPLEMENTED locally / not activated:** distinguish unset from unlimited capacity, reserve/cancel/promote through a single conditional ledger write with audit/idempotency, and suppress nonregistered ledger entries in reminder snapshots. **PLANNED:** existing-record migration, recoverable public signup writes, cancellation capability links/UI and final capacity/promotion policy. A draft or missing ledger must never silently activate capacity behavior. No production publication or sends occurred.
+
 # Decisions
 
 ## Latest Owner Decisions (September 18)

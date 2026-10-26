@@ -1,3 +1,7 @@
+## October 26 wellness branch — local implementation, no publication
+
+**IMPLEMENTED locally:** wellness-only authenticated feed/STOP port, shared companion build, canonical 30-session mapping, and an atomic capacity/waitlist/cancellation engine with disabled placeholder settings. **PARTIAL:** public booking/cancellation UI binding, existing-record migration and production rollout are not complete. Staff approval/confirmation code and all live data/settings remain unchanged. This dated update supersedes the historical migration-only task statement for this branch; historical records below are retained. See `docs/WELLNESS_REMINDER_REVIEW.txt`.
+
 # Project State
 
 Recorded September 18, 2026 during migration (capture 11:30 UTC). CURRENTLY VERIFIED locally: Git branch/HEAD/status and safe source inventory. Runtime results are LAST KNOWN, not rerun in migration. Latest 421 web tests passed following the September 18 cleanliness pass (around 00:26 America/New_York in preceding session); web TypeScript passed before final CSS/copy pass, isolated web build before final portrait/cleanliness refinements. Full September 17 baseline passed 649 workspace + 27 script tests, lint/typecheck and both builds. Exact dates/scopes matter: no fresh full-current-state build claim. Public endpoints LAST KNOWN inspected September 17 22:02 UTC. External auth/config/deployed commits/migrations/RLS and physical release remain unverified.
