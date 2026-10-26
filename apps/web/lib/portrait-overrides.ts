@@ -205,7 +205,7 @@ const portraitOverridesBase2026: Record<string, PortraitOverride> = {
   "noah springer": { file: "/2026-headshots/portraits/noah-springer.jpg", source: "airtable", airtableBytes: 160737 },
   "paige neuenschwander": { file: "/2026-headshots/portraits/paige-neuenschwander.jpg", source: "airtable", airtableBytes: 216817 },
   "paul dalio": { file: "/2026-headshots/portraits/paul-dalio-2-c.jpg", source: "icf-card" },
-  "rachel platten": { file: "/2026-headshots/portraits/rachel-platten.jpg", source: "site-2026" },
+  "rachel platten": { file: "/2026-headshots/portraits/rachel-platten.jpg", source: "commons", credit: "Gage Skidmore, 2024 Gateway Celebrity Fight Night, CC BY-SA 2.0 (cropped)", attribution: { label: "Gage Skidmore / Wikimedia Commons, CC BY-SA 2.0 (cropped)", href: "https://commons.wikimedia.org/wiki/File:Rachel_Platten_(53695417073)_cropped.jpg" } },
   "rahil briggs": { file: "/2026-headshots/portraits/rahil-briggs-2-c.jpg", source: "airtable", airtableBytes: 688686 },
   "ray lewis": { file: "/2026-headshots/portraits/ray-lewis-3.jpg", source: "web", // Oct 7 (owner): looser cut, face a touch above center (40%) so head and shoulders show instead of a giant head
      credit: "Official speaker promo photo, Washington Speakers Bureau (wsb.com/speakers/ray-lewis); courtesy image (owner asked for a better photo, Sept 21 late)" },

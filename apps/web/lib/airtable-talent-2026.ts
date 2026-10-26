@@ -1,10 +1,10 @@
 import type { AirtablePerson } from "./airtable";
 
-// Reviewed fallback of Airtable's Guest Tracker, synchronized October 25, 2026. Production uses
+// Reviewed fallback of Airtable's Guest Tracker, synchronized October 26, 2026. Production uses
 // this copy when AIRTABLE_TOKEN is unavailable. Attendance status, Website Grouping, title, bio and
 // headshot presence match Airtable; locally saved portraits prevent expiring attachment links.
 export type RecordedAirtablePerson = AirtablePerson & { headshotFile?: string };
-export const airtableTalentRecordedAt = "2026-10-25";
+export const airtableTalentRecordedAt = "2026-10-26";
 export const airtableTalent2026: RecordedAirtablePerson[] = [
   {
     "recordId": "rec1M288OYcpaWTDb",
@@ -55,6 +55,22 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "hasHeadshot": true,
     "headshotBytes": 290862,
     "headshotFile": "/2026-headshots/portraits/anthony-ramos.jpg"
+  },
+  {
+    "recordId": "rec0Kv5Ve7GQVY3tQ",
+    "name": "Rachel Platten",
+    "status": "Confirmed Attendance",
+    "groups": [
+      "A-Talent",
+      "9 "
+    ],
+    "occupation": "Singer-Songwriter, Author & Mental Health Advocate",
+    "organization": "",
+    "title": "Emmy Award-Winning, Multi-Platinum Singer-Songwriter & Mental Health Advocate",
+    "bio": "Rachel Platten is an Emmy Award-winning, multi-platinum singer-songwriter and author whose music has become a global source of hope and resilience. Her breakthrough anthem “Fight Song” has surpassed one billion streams, while “Stand By You” became another platinum Billboard Hot 100 hit.\n\nHer 2024 album, I Am Rachel Platten, explores motherhood, mental health, healing and self-acceptance with raw honesty. Drawing on her own experience with postpartum depression and anxiety, she uses her voice to encourage open conversations about mental health and remind people they are not alone.",
+    "hasHeadshot": true,
+    "headshotBytes": 184804,
+    "headshotFile": "/2026-headshots/portraits/rachel-platten.jpg"
   },
   {
     "recordId": "recMzTDCDVD2xkeK2",
