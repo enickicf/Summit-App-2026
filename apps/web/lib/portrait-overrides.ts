@@ -34,7 +34,7 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "joanna howard": { file: "/2026-headshots/portraits/joanna-howard-card-20261025.jpg", source: "airtable" },
   "justice shepard": { file: "/2026-headshots/portraits/justice-shepard-official-20261025.jpg", source: "web", credit: "Official portrait from justiceshepard.com" },
   "kate doerge": { file: "/2026-headshots/portraits/kate-doerge-card-20261025.jpg", source: "airtable" },
-  "tj farrell": { file: "/2026-headshots/portraits/tj-farrell-card-20261025.jpg", source: "airtable", airtableBytes: 2140304 },
+  "tj farrell": { file: "/2026-headshots/portraits/tj-farrell-card-20261025.jpg", source: "airtable", airtableBytes: 70080 },
   "melony lewis": { file: "/2026-headshots/portraits/melony-lewis-card-20261025.jpg", source: "airtable" },
   "brad keating": { file: "/2026-headshots/portraits/brad-keating-hires-20261025.jpg", source: "web", credit: "Professional portrait by Wade Vandervort, published by Vegas Inc.", attribution: { label: "Wade Vandervort / Vegas Inc.", href: "https://vegasinc.lasvegassun.com/business/2020/mar/12/40-under-40-brad-keating-director-of-government-af/" } },
   "winston kelly": { file: "/2026-headshots/portraits/winston-kelly-sq-20261024.jpg", source: "airtable" },
@@ -98,7 +98,7 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "brandon saho": { file: "/2026-headshots/portraits/brandon-saho.jpg", source: "airtable", airtableBytes: 3884561 },
   "caroline jones": { file: "/2026-headshots/portraits/caroline-jones-2-c.jpg", source: "web", credit: "Official \"Good Omen\" press headshot (Nashville Harbor Records / Big Machine, 2025), photo: Alysse Gafkjen; via tasteofcountry.com" },
   "cathy olson": { file: "/2026-headshots/portraits/cathy-olson-2-c.jpg", source: "airtable", airtableBytes: 962208 },
-  "cherrial odell": { file: "/2026-headshots/portraits/cherrial-odell-card-20261025.jpg", source: "airtable", airtableBytes: 62043 }, // owner-selected photo, card-ratio crop; identity and full composition preserved
+  "cherrial odell": { file: "/2026-headshots/portraits/cherrial-odell-card-20261025.jpg", source: "airtable", airtableBytes: 123671 }, // owner-selected photo, card-ratio crop; identity and full composition preserved
   "clark cummings": { file: "/2026-headshots/portraits/clark-cummings-2-c.jpg", source: "airtable", airtableBytes: 570136 },
   "dan burkhead": { file: "/2026-headshots/portraits/dan-burkhead-2-c.jpg", source: "airtable", airtableBytes: 234293 },
   "daniel gillison": { file: "/2026-headshots/portraits/daniel-gillison.jpg", source: "airtable", airtableBytes: 508513 },
