@@ -58,7 +58,7 @@ export const eventMetadataContent = {
   "/": {
     title: "Not Alone Summit 2026",
     description: "The 2026 Not Alone Summit from Inspiring Children Foundation. Published event information and confirmed Summit guest updates.",
-    image: { path: "/images/social-summit-panel-2026.jpg", width: 1200, height: 630, alt: "Steve Wozniak at the Not Alone Summit panel", card: "summary_large_image" }
+    image: { path: "/images/social-summit-panel-cherrial-2026.jpg", width: 1200, height: 630, alt: "A panelist speaking at the Not Alone Summit", card: "summary_large_image" }
   },
   "/2025": {
     title: "Not Alone Summit 2025 Archive",
