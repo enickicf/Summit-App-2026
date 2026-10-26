@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { initials, linkLabels, type PodcastEntry, type PodcastLinks } from "../../../lib/podcasts-2026";
 import styles from "./podcasts.module.css";
 import { InterviewBooking } from "./interview-booking";
@@ -11,18 +12,43 @@ export function PodcastCard({ entry }: { entry: PodcastEntry }) {
   const [openForBooking, setOpenForBooking] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
   const dialog = useRef<HTMLDivElement>(null);
+  const historyToken = useRef<string | null>(null);
+  const finishClose = () => {
+    setOpen(false);
+    setOpenForBooking(false);
+    historyToken.current = null;
+    requestAnimationFrame(() => trigger.current?.focus());
+  };
   useEffect(() => {
     if (!open) return;
     const previousOverflow = document.body.style.overflow;
-    const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") setOpen(false); };
+    const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") close(); };
+    const onPopState = () => {
+      if (window.history.state?.notAlonePodcastProfile !== historyToken.current) finishClose();
+    };
     document.body.style.overflow = "hidden";
     document.addEventListener("keydown", onKeyDown);
+    window.addEventListener("popstate", onPopState);
     requestAnimationFrame(() => dialog.current?.focus());
-    return () => { document.body.style.overflow = previousOverflow; document.removeEventListener("keydown", onKeyDown); };
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("popstate", onPopState);
+    };
   }, [open]);
-  const showDetails = () => { setOpenForBooking(false); setOpen(true); };
-  const showBooking = () => { setOpenForBooking(true); setOpen(true); };
-  const close = () => { setOpen(false); setOpenForBooking(false); requestAnimationFrame(() => trigger.current?.focus()); };
+  const openProfile = (booking: boolean) => {
+    const token = `${slug(entry.show)}-${Date.now()}`;
+    historyToken.current = token;
+    window.history.pushState({ ...window.history.state, notAlonePodcastProfile: token }, "");
+    setOpenForBooking(booking);
+    setOpen(true);
+  };
+  const showDetails = () => openProfile(false);
+  const showBooking = () => openProfile(true);
+  const close = () => {
+    if (historyToken.current && window.history.state?.notAlonePodcastProfile === historyToken.current) window.history.back();
+    else finishClose();
+  };
   const hostLine = entry.kind === "interviewer" ? "Social media creator and interviewer" : `with ${entry.hosts.map(host => host.name).join(" and ")}`;
   const links = Object.entries(entry.links ?? {}).filter(([, url]) => url) as [keyof PodcastLinks, string][];
   const media = entry.image
@@ -43,9 +69,9 @@ export function PodcastCard({ entry }: { entry: PodcastEntry }) {
       </button>
       <button type="button" className={styles.cardBook} onClick={showBooking} aria-haspopup="dialog">Book an interview</button>
     </article>
-    {open && <div className={styles.modalBackdrop} onMouseDown={event => { if (event.target === event.currentTarget) close(); }}>
+    {open && createPortal(<div className={styles.modalBackdrop} onMouseDown={event => { if (event.target === event.currentTarget) close(); }}>
       <div ref={dialog} className={styles.dialogPanel} role="dialog" aria-modal="true" aria-labelledby={`${slug(entry.show)}-title`} tabIndex={-1}>
-        <button type="button" className={styles.close} onClick={close}>Close</button>
+        <button type="button" className={styles.close} onClick={close} aria-label="Back to all podcasts"><span aria-hidden="true">←</span> Back to podcasts</button>
         <div className={styles.dialogHead}>
           <span className={styles.dialogMedia}>{media}</span>
           <div>
@@ -61,7 +87,7 @@ export function PodcastCard({ entry }: { entry: PodcastEntry }) {
         {links.length > 0 && <section className={styles.dialogSection}><h3>Listen and follow</h3><div className={styles.links}>{links.map(([kind, url]) => <a key={kind} href={url} target="_blank" rel="noopener noreferrer">{linkLabels[kind]}</a>)}</div></section>}
         <InterviewBooking entry={entry} startOpen={openForBooking} />
       </div>
-    </div>}
+    </div>, document.body)}
   </>;
 }
 

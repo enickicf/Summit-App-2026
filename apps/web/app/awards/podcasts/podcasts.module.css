@@ -76,9 +76,9 @@
 .stat strong { color: #f1dfbb; font-family: "Podcast Poppins ExtraBold", "Original Poppins", sans-serif; font-size: 18px; letter-spacing: 0; text-transform: none; }
 .more { margin-top: auto; padding-top: 14px; color: #d2b47b; font-size: 13px; font-weight: 700; }
 .cardLogo { width: 100%; height: 100%; object-fit: cover; display: block; }
-.modalBackdrop { position: fixed; inset: 0; z-index: 1000; overflow-y: auto; display: grid; place-items: center; padding: 16px; background: rgb(0 0 0 / 82%); }
+.modalBackdrop { position: fixed; inset: 0; z-index: 1000; overflow-y: auto; display: grid; place-items: center; padding: 16px; background: rgb(0 0 0 / 82%); overscroll-behavior: contain; }
 .dialogPanel { position: relative; width: min(680px, 100%); max-height: calc(100dvh - 32px); overflow-y: auto; box-sizing: border-box; padding: 28px; display: grid; gap: 18px; border: 1px solid rgb(210 180 123 / 45%); border-radius: 10px; background: #141414; color: #fff; box-shadow: 0 24px 80px rgb(0 0 0 / 65%); outline: none; }
-.close { position: absolute; top: 12px; right: 14px; z-index: 2; border: 1px solid rgb(210 180 123 / 60%); border-radius: 999px; background: #141414; color: #f1dfbb; cursor: pointer; font: inherit; font-size: 12px; font-weight: 800; line-height: 1; padding: 9px 13px; }
+.close { position: absolute; top: 12px; right: 14px; z-index: 2; display: inline-flex; align-items: center; gap: 7px; border: 1px solid rgb(210 180 123 / 60%); border-radius: 999px; background: #141414; color: #f1dfbb; cursor: pointer; font: inherit; font-size: 12px; font-weight: 800; line-height: 1; padding: 9px 13px; }
 .dialogHead { display: grid; grid-template-columns: 140px 1fr; gap: 20px; align-items: center; padding-right: 30px; }
 .dialogMedia { position: relative; width: 140px; height: 140px; border-radius: 8px; overflow: hidden; background: linear-gradient(145deg, #2b2418, #0f0d0a); display: grid; place-items: center; }
 .dialogMedia .monogram { font-size: 46px; }
@@ -91,7 +91,16 @@
 .links { display: flex; flex-wrap: wrap; gap: 10px; }
 .links a { border: 1px solid rgb(210 180 123 / 60%); border-radius: 999px; color: #f1dfbb; font-size: 14px; font-weight: 600; padding: 8px 14px; text-decoration: none; }
 .links a:hover { background: #d2b47b; color: #111; }
-@media (max-width: 600px) { .modalBackdrop { place-items: stretch; padding: 0; } .dialogPanel { width: 100%; min-height: 100dvh; max-height: 100dvh; padding: 68px 18px 28px; border: 0; border-radius: 0; } .dialogHead { grid-template-columns: 96px 1fr; gap: 14px; padding-right: 0; } .dialogMedia { width: 96px; height: 96px; } .dialogPanel h2 { font-size: 22px; } .more { padding-top: 8px; } .close { position: fixed; top: 14px; right: 14px; } }
+@media (max-width: 600px) {
+  .modalBackdrop { display: block; padding: 0; background: #141414; }
+  .dialogPanel { width: 100%; min-height: 100svh; max-height: 100svh; padding: calc(66px + env(safe-area-inset-top)) 18px calc(30px + env(safe-area-inset-bottom)); border: 0; border-radius: 0; box-shadow: none; }
+  .dialogHead { grid-template-columns: 88px minmax(0, 1fr); gap: 14px; padding-right: 0; align-items: start; }
+  .dialogMedia { width: 88px; height: 88px; }
+  .dialogPanel h2 { font-size: 21px; line-height: 1.12; overflow-wrap: normal; }
+  .dialogHead .roles { margin-top: 9px; padding-top: 0; }
+  .more { padding-top: 8px; }
+  .close { position: fixed; top: calc(12px + env(safe-area-inset-top)); left: 14px; right: auto; min-height: 40px; padding: 10px 14px; background: #211d16; }
+}
 
 /* Oct 24: private, arrival-aware interview scheduling lives inside each podcast profile. */
 .booking { margin-top: 8px; padding-top: 24px; border-top: 1px solid #39352d; display: grid; gap: 18px; }
