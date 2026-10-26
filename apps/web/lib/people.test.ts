@@ -72,4 +72,10 @@ describe("website reviewed directory", () => {
     ];
     for (const name of refreshed) expect(personPortrait(name), name).toMatch(/-framed-20261026\.jpg$/);
   });
+  it("uses the second Oct 26 portrait refresh and never assigns Lauren Ann's face to Joanna Howard", () => {
+    const refreshed = ["Karen Niemi", "Christina Steil", "Maryn Pierce", "Gabriella Viveros", "Dalaura Kader", "Lauren Ann"];
+    for (const name of refreshed) expect(personPortrait(name), name).toMatch(/-framed-20261026\.jpg$/);
+    expect(personPortrait("Joanna Howard")).toBeUndefined();
+    expect(personPortrait("Lauren Ann")).toBe("/2026-headshots/portraits/lauren-ann-framed-20261026.jpg");
+  });
 });

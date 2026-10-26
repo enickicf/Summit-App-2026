@@ -8,6 +8,12 @@
 // attribution: the credit a freely licensed photo must show; it appears under the bio on the person's profile.
 export type PortraitOverride = { file: string; source: string; airtableBytes?: number; credit?: string; attribution?: { label: string; href: string } };
 const portraitRefresh20261026: Record<string, PortraitOverride> = {
+  "karen niemi": { file: "/2026-headshots/portraits/karen-niemi-framed-20261026.jpg", source: "airtable" },
+  "christina steil": { file: "/2026-headshots/portraits/christina-steil-framed-20261026.jpg", source: "web", credit: "Hinsdale Magazine Group, https://oakbrookmagazine.com/dr-christina-steil-of-csc-steil-dermatology/" },
+  "maryn pierce": { file: "/2026-headshots/portraits/maryn-pierce-framed-20261026.jpg", source: "airtable" },
+  "gabriella viveros": { file: "/2026-headshots/portraits/gabriella-viveros-framed-20261026.jpg", source: "airtable", credit: "Identity-preserving restoration of the verified Airtable portrait" },
+  "dalaura kader": { file: "/2026-headshots/portraits/dalaura-kader-framed-20261026.jpg", source: "airtable", credit: "Identity-preserving restoration of the verified Airtable portrait" },
+  "lauren ann": { file: "/2026-headshots/portraits/lauren-ann-framed-20261026.jpg", source: "airtable" },
   "loni love": { file: "/2026-headshots/portraits/loni-love-framed-20261026.jpg", source: "airtable" },
   "jason kennedy": { file: "/2026-headshots/portraits/jason-kennedy-framed-20261026.jpg", source: "airtable" },
   "anthony ramos": { file: "/2026-headshots/portraits/anthony-ramos-framed-20261026.jpg", source: "web", credit: "Official Anthony Ramos promotional portrait, America250" },
@@ -84,7 +90,6 @@ const portraitOverridesBase2026: Record<string, PortraitOverride> = {
   "douglas mckenzie": { file: "/2026-headshots/portraits/douglas-mckenzie-card-20261025.jpg", source: "airtable" },
   "ia cheveres": { file: "/2026-headshots/portraits/ia-cheveres-card-20261025.jpg", source: "airtable" },
   "jhone ebert": { file: "/2026-headshots/portraits/jhone-ebert-official-20261025.jpg", source: "web", credit: "Official Clark County School District leadership portrait, ccsd.net" },
-  "joanna howard": { file: "/2026-headshots/portraits/joanna-howard-card-20261025.jpg", source: "airtable" },
   "justice shepard": { file: "/2026-headshots/portraits/justice-shepard-official-20261025.jpg", source: "web", credit: "Official portrait from justiceshepard.com" },
   "kate doerge": { file: "/2026-headshots/portraits/kate-doerge-card-20261025.jpg", source: "airtable" },
   "tj farrell": { file: "/2026-headshots/portraits/tj-farrell-card-20261025.jpg", source: "airtable", airtableBytes: 70080 },
@@ -273,7 +278,9 @@ function personNameKey(name: string): string {
 
 // Owner (Sept 21, late): everyone listed shows a photo when any certain-identity photo exists. Jen Whalen and
 // Mario Martinez have no photo anywhere (Airtable or public) and no page establishes which person they are.
-export const noApprovedPortrait2026 = new Set<string>([].map(personNameKey));
+// Joanna Howard's Airtable attachment was a second crop of Lauren Ann's portrait. Keep Joanna's
+// identity visible without publishing another person's face until a verified Joanna photo arrives.
+export const noApprovedPortrait2026 = new Set<string>(["joanna howard"].map(personNameKey));
 
 // The visible credit for a freely licensed portrait, only while that portrait is the photo being shown.
 export function portraitAttribution2026(name: string, image: string | undefined): { label: string; href: string } | null {
