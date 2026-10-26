@@ -3002,10 +3002,10 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "occupation": "",
     "organization": "",
     "title": "Music Producer",
-    "bio": "Israel Houghton is a GRAMMY-winning singer, songwriter, and worship leader whose music combines gospel, jazz, rock, and Latin influences. As the creative force behind Israel & New Breed, he has helped shape contemporary worship music for more than two decades, connecting audiences across cultures through faith and music.",
+    "bio": "Israel Houghton II is a songwriter with 7 credits across their career. Best known for their work with The Kid LAROI, Israel Houghton II's songwriting spans 5 tracks. Beyond writing, they have also contributed 1 production credit.",
     "hasHeadshot": true,
-    "headshotBytes": 357971,
-    "headshotFile": "/2026-headshots/airtable-current/reciu05MxS6ye5lXf.jpg"
+    "headshotBytes": 221900,
+    "headshotFile": "/2026-headshots/airtable-current/reciu05MxS6ye5lXf-20261026.jpg"
   },
   {
     "recordId": "recivkdGt03NZfS2Y",
