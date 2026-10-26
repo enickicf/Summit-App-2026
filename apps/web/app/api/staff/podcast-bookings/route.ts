@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { availablePodcastSlots } from "../../../../lib/podcast-booking";
+import { availablePodcastSlots, bookingConflicts } from "../../../../lib/podcast-booking";
 import { isPodcastStaffSession, isStaffSession, podcastStaffCookieName, staffCookieName } from "../../../../lib/staff/auth";
 import { getSubmissionStore, type PodcastBookingSubmission, type SubmissionStore } from "../../../../lib/staff/store";
 
@@ -30,6 +30,7 @@ export async function mutatePodcastBooking(store: SubmissionStore, id: string, a
   if (!slot || !["Room 1", "Room 2", "Room 3"].includes(room)) return { ok: false, status: 409, error: "That room and time are no longer available. Refresh and choose another option." };
 
   const updated: PodcastBookingSubmission = { ...record, startUtc: slot.startUtc, endUtc: slot.endUtc, room: room as PodcastBookingSubmission["room"] };
+  if (bookingConflicts(updated, otherBookings)) return { ok: false, status: 409, error: "That guest already has an interview at this time. Choose another option." };
   await store.add("podcastBooking", updated);
   return { ok: true, action: "rescheduled", record: updated };
 }

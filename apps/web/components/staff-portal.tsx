@@ -9,7 +9,7 @@ import type { InboxEntry } from "../lib/staff/submission-inbox";
 import { wellnessSessions } from "../lib/wellness-signups-2026";
 import { staffGuestEvents, staffGuestLists } from "../lib/staff/staff-guest";
 import { textConsentLabels, textConsentProtocolNote, textConsentShortLabels, textConsentStatus, textContactRows, textOptOutFooter } from "../lib/staff/text-consent";
-import { availablePodcastSlots } from "../lib/podcast-booking";
+import { availablePodcastSlots, bookingConflicts } from "../lib/podcast-booking";
 
 export type LineupGroup = { title: string; people: { name: string; role: string; rank: number | null; tier: string | null; photo: boolean }[] };
 
@@ -19,8 +19,11 @@ type PodcastNotice = { action?: string | undefined; error?: string | undefined }
 
 function podcastSlotOptions(row: PodcastBookingSubmission, bookings: PodcastBookingSubmission[]) {
   if (row.format !== "long") return [];
-  return availablePodcastSlots("long", null, bookings.filter(booking => booking.id !== row.id))
-    .flatMap(slot => slot.rooms.map(room => ({
+  const otherBookings = bookings.filter(booking => booking.id !== row.id);
+  return availablePodcastSlots("long", null, otherBookings)
+    .flatMap(slot => slot.rooms
+      .filter(room => !bookingConflicts({ startUtc: slot.startUtc, endUtc: slot.endUtc, room, guestName: row.guestName }, otherBookings))
+      .map(room => ({
       value: `${slot.startUtc}|${room}`,
       label: `${when(slot.startUtc)} · ${room}`,
       current: slot.startUtc === row.startUtc && room === row.room

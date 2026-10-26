@@ -41,6 +41,15 @@ describe("staff podcast booking controls", () => {
     expect((await store.list("podcastBooking")).find(row => row.id === booking().id)?.startUtc).toBe("2026-11-03T18:00:00.000Z");
   });
 
+  it("rejects a time when the same guest is booked in another room", async () => {
+    const sameGuest = booking({ id: "33333333-3333-4333-8333-333333333333", startUtc: "2026-11-03T19:30:00.000Z", endUtc: "2026-11-03T20:45:00.000Z", room: "Room 3" });
+    const store = memorySubmissionStore({ podcastBooking: [booking(), sameGuest] });
+    const result = await mutatePodcastBooking(store, booking().id, "reschedule", "2026-11-03T19:30:00.000Z|Room 2");
+
+    expect(result).toMatchObject({ ok: false, status: 409, error: "That guest already has an interview at this time. Choose another option." });
+    expect((await store.list("podcastBooking")).find(row => row.id === booking().id)?.startUtc).toBe("2026-11-03T18:00:00.000Z");
+  });
+
   it("removes a booking and immediately returns its room to public availability", async () => {
     const original = booking();
     const store = memorySubmissionStore({ podcastBooking: [original] });
