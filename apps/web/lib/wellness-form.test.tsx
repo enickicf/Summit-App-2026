@@ -18,7 +18,7 @@ describe("wellness form API", () => {
     const store = memorySubmissionStore();
     expect((await handleWellnessPost(post(valid), store)).status).toBe(201);
     const rows = await store.list("workshop");
-    expect(rows.map(row => `${row.sessionDay} ${row.sessionTitle}`).sort()).toEqual(["Tuesday, November 3 Pickleball Clinic", "Tuesday, November 3 Reformer Pilates 1", "Wednesday, November 4 Fitness 2 with Kelly Richardson"]);
+    expect(rows.map(row => `${row.sessionDay} ${row.sessionTitle}`).sort()).toEqual(["Tuesday, November 3 Pickleball Clinic", "Tuesday, November 3 Reformer Pilates with Olympian Yvette Baker", "Wednesday, November 4 Fitness with Kelly Richardson"]);
     for (const row of rows) expect(row).toMatchObject({ category: "wellness", email: "guest@example.com", phone: "+1 702 555 0100", waiverAccepted: true, signature: "test guest" });
     expect(toCsv(rows, wellnessCsvColumns)).toContain("guest@example.com");
   });
@@ -27,7 +27,7 @@ describe("wellness form API", () => {
     const store = memorySubmissionStore();
     for (const body of [
       { ...valid, sessions: ["wellness-nov3-breathwork", "wellness-nov3-pilates-1"] },
-      { ...valid, sessions: ["wellness-nov4-fitness-1", "wellness-nov4-pilates-1"] },
+      { ...valid, sessions: ["wellness-nov4-chiro-1", "wellness-nov4-pilates-1"] },
       { ...valid, sessions: ["wellness-nov4-movement-breathwork"] }, // Oct 20: not offered on Wednesday any more (Airtable)
       { ...valid, sessions: ["wellness-nov3-yoga"] },
       { ...valid, sessions: [] },
@@ -47,13 +47,19 @@ describe("wellness form API", () => {
 describe("wellness page (public/wellness)", () => {
   const dir = join(__dirname, "..", "public", "wellness");
   const html = readFileSync(join(dir, "index.html"), "utf8");
-  it("lists every class, the current waiver, no rooms, and posts to our endpoint", () => {
+  it("lists every current activity by time, the current waiver, no rooms, and posts to our endpoint", () => {
     for (const session of wellnessSessions) expect(html).toContain(`value="${session.id}"`);
     expect(html).toContain(siteVisitWaiver.text);
     expect(html).toContain(`name="waiverVersion" value="${siteVisitWaiver.version}"`);
     for (const room of ["Montrachet", "LaFleur", "Margaux"]) expect(html).not.toContain(room);
     expect(html).toContain('<meta name="robots" content="noindex, nofollow">');
-    expect(readFileSync(join(dir, "form.js"), "utf8")).toContain("fetch('/api/wellness'");
+    expect(html).toContain('class="time-picker"');
+    expect(html).toContain("Move Together, Breathe Together with Karena Dawn");
+    expect(html).toContain("Reformer Pilates with Aleina Lasker");
+    expect(html).not.toContain("Pet Partners");
+    const script = readFileSync(join(dir, "form.js"), "utf8");
+    expect(script).toContain("fetch('/api/wellness'");
+    expect(script).toContain("setSlot");
   });
 });
 
@@ -64,7 +70,7 @@ describe("staff portal Wellness view", () => {
     const html = renderToStaticMarkup(<StaffPortal rsvps={[]} nominations={[]} poker={[]} workshops={await store.list("workshop")} lineup={[]} generatedAt="2026-10-12T00:00:00Z" />);
     expect(html).toContain('data-view-tab="wellness"');
     expect(html).toContain("/api/staff/export?kind=wellness");
-    expect(html).toContain("Movement &amp; Breathwork");
+    expect(html).toContain("Reformer Pilates with Olympian Yvette Baker");
     expect(html).toContain("No workshop sign-ups yet.");
     expect(viewForHash("#wellness")).toBe("wellness");
   });
@@ -75,6 +81,9 @@ describe("wellness link on the schedule", () => {
     const { isWellnessSignupEntry } = await import("./wellness-signups-2026");
     expect(isWellnessSignupEntry("Wellness Activity")).toBe(true);
     expect(isWellnessSignupEntry("Wellness Activities & Check-In")).toBe(true); // Oct 21: the Monday wellness afternoon is on the form too
+    expect(isWellnessSignupEntry("Wellness Room Open")).toBe(true);
+    expect(isWellnessSignupEntry("Wellness Rooms Open (Approved Hours)")).toBe(true);
+    expect(isWellnessSignupEntry("Wellness Room: Drop-In")).toBe(true);
     expect(isWellnessSignupEntry("Tennis (ICF Site Visit)")).toBe(false);
     expect(readFileSync(join(__dirname, "..", "components", "schedule-browser.tsx"), "utf8")).toContain("Sign up for wellness classes");
   });

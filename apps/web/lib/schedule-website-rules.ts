@@ -20,16 +20,19 @@ export const neverOnWebsite = /\bred carpet\b|\bspeaker reception\b|\bpre[- ]?sh
 export const scheduleBlockTitles: RegExp[] = [
   /^poker night$/i,
   /^wellness activit/i, // "Wellness Activity", "Wellness Activities & Check-In"
+  /^wellness rooms?(?:: drop-in| open)/i,
   /^nevada mental health day$/i,
   /^pet partners therapy$/i,
   /^(?:awards show )?doors open$/i,
   /^not alone awards\b|^awards show$/i,
   /^late night pickleball/i,
   /^summit sessions$/i,
+  /^(?:morning|afternoon) summit sessions$/i,
   /^lunch$/i,
   /^break$/i,
   /^dinner(?:\s*-\s*talent)?$/i, // "Dinner" / "Dinner - talent"; not the closing dinner's "Dinner & Connection" segment
   /^evening talk/i,
+  /^evening$/i,
   /^closing (?:dinner|celebration)\b(?!.*:)/i, // "Closing Dinner and Performance", not its "Closing Dinner: Welcome" segment
   /^tennis\b/i,
   /^high tea\b/i
@@ -132,13 +135,14 @@ export function privateEventScope(title: string): typeof foundersOnlyScope | typ
 // casual; the Nov 5 ICF program visit (Tennis, High Tea) Athletic attire and ready for tennis. "The River" is not on the schedule.
 export const ownerAttire2026: Array<{ title: RegExp; date?: string; attire: string }> = [
   { title: /^poker night$/i, attire: "Smart casual" },
-  { title: /^wellness activit(y|ies & check-in)$/i, attire: "Athleisure" },
+  { title: /^wellness (?:activit(?:y|ies & check-in)|rooms?(?:: drop-in| open))/i, attire: "Athleisure" },
   { title: /^nevada mental health day$/i, attire: "Smart casual" },
   { title: /^not alone awards\b|^awards show$/i, attire: "Formal or semi-formal, with flair" },
-  { title: /^summit sessions$/i, attire: "Athleisure" },
+  { title: /^(?:(?:morning|afternoon) )?summit sessions$/i, attire: "Athleisure" },
   { title: /^lunch$/i, attire: "Athleisure" },
   { title: /^dinner\b/i, date: "2026-11-03", attire: "Smart casual" },
   { title: /^evening performance\b/i, date: "2026-11-03", attire: "Smart casual" },
+  { title: /^evening$/i, date: "2026-11-03", attire: "Smart casual" },
   { title: /^closing dinner\b/i, attire: "Cocktail attire" },
   { title: /^(tennis|high tea)$/i, attire: "Athletic attire and ready for tennis" }
 ];

@@ -1,15 +1,30 @@
-/* Oct 12: the wellness class form, on top of the Tennis & High Tea form's styles. */
-.reference-layout fieldset.class-day{display:block;margin:28px 0 8px}
-.class-day legend{font-size:17px;margin-bottom:12px}
+/* Wellness sign-up additions on top of the Tennis & High Tea form system. */
+.reference-layout fieldset.class-day{display:block;margin:32px 0 10px}
+.class-day legend{font-size:19px;margin-bottom:4px}
+.slot-instruction{margin:0 0 12px;color:#4b5263;font-size:14px;line-height:1.5}
+.time-picker{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.time-slot{border:1px solid #aeb6c8;border-radius:999px;background:#fff;color:#222a3a;font:inherit;font-size:14px;font-weight:700;padding:9px 15px;cursor:pointer}
+.time-slot:hover{border-color:#5674aa;background:#f4f7fc}
+.time-slot[aria-pressed="true"]{border-color:#254f91;background:#254f91;color:#fff;box-shadow:0 0 0 2px #c8d8ef}
+.time-slot:focus-visible{outline:3px solid #8fb1e0;outline-offset:2px}
 .class-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px}
-.reference-layout .class-option{margin-top:0;min-height:72px}
-.class-option small{margin-top:2px;line-height:1.45}
+.reference-layout .class-option{margin-top:0;min-height:86px}
+.class-option[hidden]{display:none}
+.class-option small{margin-top:3px;line-height:1.45}
 .class-option.disabled{opacity:.45;cursor:not-allowed;background:#f6f7fa}
+.selection-summary{margin:24px 0;padding:18px 20px;border:1px solid #9db2d2;border-radius:12px;background:#f3f7fc}
+.selection-summary h3{margin:0 0 8px;font-size:17px}
+.selection-summary p{margin:5px 0;font-size:14px;line-height:1.45}
 .exclusive{font-size:13px;line-height:1.6;color:#4b5263;margin:4px 0 16px}
 .reference-layout .confirmed-activities p{margin:6px 0}
-@media(max-width:700px){.class-grid{grid-template-columns:1fr}.reference-layout .class-option{min-height:64px}}
+@media(max-width:700px){
+  .reference-hero .intro{font-size:17px;line-height:1.55}
+  .class-grid{grid-template-columns:1fr}
+  .reference-layout .class-option{min-height:72px}
+  .time-picker{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .time-slot{width:100%;padding:10px 8px}
+}
 
-/* Oct 12: optional text updates consent. */
 .text-consent{align-items:flex-start;font-size:13px;font-weight:400;line-height:1.55;color:#4b5263}
 .text-consent input{margin-top:2px}
 .text-consent.selected{background:#eef3fc;border-color:#8cafdf;box-shadow:0 0 0 1px #8cafdf}

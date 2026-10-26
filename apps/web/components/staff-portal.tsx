@@ -427,7 +427,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
 
       <section className={styles.section} id="wellness-list" aria-labelledby="wellness-title">
         <div className={styles.sectionHead}><h2 id="wellness-title">Wellness classes</h2><a className={styles.button} href="/api/staff/export?kind=wellness">Download CSV</a></div>
-        <p className={styles.help}>Sign-ups from the wellness form (notalonesummit.org/wellness) for the Tuesday November 3 and Wednesday November 4 morning classes: Fitness, Pilates with Yvette Baker, Movement &amp; Breathwork and drop-in Pickleball. One list per class, oldest sign-up first. Waiver = the full name typed to sign the activity waiver. Attendees only; remove anyone not on the guest list.</p>
+        <p className={styles.help}>Sign-ups from notalonesummit.org/wellness, organized by activity and time for Monday November 2 through Wednesday November 4. The public form uses Bianca&apos;s reviewed Airtable titles and does not offer Pet Partners. One list per activity, oldest sign-up first. Waiver = the full name typed to sign the activity waiver. Attendees only; remove anyone not on the guest list.</p>
         {wellnessRows.length === 0 ? <p className={styles.empty}>No wellness sign-ups yet.</p> : <div className={styles.cards}>{wellnessGroups.map(group => <article key={group.key} className={styles.card}>
           <p className={styles.cardKicker}>{group.day} · {group.time}</p>
           <h3>{group.title} <span className={styles.count}>{group.people.filter(row => !excludedFromPortalTotals(row)).length}</span></h3>

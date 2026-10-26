@@ -13,7 +13,7 @@ export const airtableRefreshSeconds = 300;
 // survive renames; the tables are found by the field they contain.
 export const airtableFields = {
   talent: { name: "fldBEcxaNMOMy7QJY", status: "fldjMPPN6wDNN9ChS", occupation: "fld1PDqZX5X0Y4Iqx", grouping: "fldMHx7esA6yXkQPF", organization: "fldERdiRzbEAu5iPH", summitRole: "fldUBydiZaANUL8iF", awardRole: "fldffOpUIMMwVakrr", headshot: "fldBTZ27PVbUhjN8M", title: "fldBRqhKl5xhM90zg", bio: "fldQmLqgSF2Fiy5hL" },
-  schedule: { activity: "fldQtT1Md2g4GqBhp", date: "fldxfGqU9abYMKcY7", forum: "flde4HHZHJ3WGkQR9", start: "fldnajgNm1o7FYb3w", end: "fldHGcQHEYJOinoP2", location: "fldrvxnATxfN8YacY", websiteTime: "fldTOoqUKpSsc70RY", synopsis: "fldkjJiyONmq1ZESu", talent: "fldkf0maVaQqlO40I" },
+  schedule: { activity: "fldQtT1Md2g4GqBhp", date: "fldxfGqU9abYMKcY7", forum: "flde4HHZHJ3WGkQR9", start: "fldnajgNm1o7FYb3w", end: "fldGVNYiXFfGN4Kza", location: "fldrvxnATxfN8YacY", websiteTime: "fldTOoqUKpSsc70RY", synopsis: "fldkjJiyONmq1ZESu", talent: "fldkf0maVaQqlO40I" },
   partners: { name: "fldRJewow3mTJuDT8", item: "fldNKosobgxgOdvod", select: "fldnp2qYq9uAly4tq", status: "fldnA6Ejphs7UvG63" }
 } as const;
 
