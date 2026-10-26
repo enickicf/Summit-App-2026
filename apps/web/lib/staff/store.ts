@@ -290,8 +290,8 @@ export const podcastBookingPayloadSchema = z.object({
   room: z.union([z.literal(""), z.enum(["Room 1", "Room 2", "Room 3"])]), travelVerified: z.boolean(),
   arrivalLocal: text(30).regex(/^$|^2026-(?:10|11)-\d{2}T\d{2}:\d{2}$/).optional().default(""), website: text(200).optional().default("")
 }).strip().superRefine((value, context) => {
-  if (value.format === "long" && (!value.startUtc || !value.endUtc || !value.room)) {
-    context.addIssue({ code: "custom", message: "Long-form interviews require a time and room." });
+  if (value.format === "long" && (!value.startUtc || !value.endUtc)) {
+    context.addIssue({ code: "custom", message: "Long-form interview requests require an availability window." });
   }
 });
 export type PodcastBookingPayload = z.infer<typeof podcastBookingPayloadSchema>;

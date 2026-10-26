@@ -34,27 +34,28 @@ function PodcastBookings({ bookings, notice = {} }: { bookings: PodcastBookingSu
   const rows = [...bookings].sort((a, b) => (a.startUtc || "9999").localeCompare(b.startUtc || "9999") || a.podcast.localeCompare(b.podcast));
   const short = rows.filter(row => row.format === "short").length;
   const long = rows.filter(row => row.format === "long").length;
+  const pendingLong = rows.filter(row => row.format === "long" && !row.room).length;
   return <>
     <section className={styles.stats} aria-label="Podcast booking totals">
-      <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{rows.length}</span><span className={styles.statLabel}>Interviews booked</span></div>
+      <div className={`${styles.stat} ${styles.statPrimary}`}><span className={styles.statValue}>{rows.length}</span><span className={styles.statLabel}>Interview requests</span></div>
       <div className={styles.stat}><span className={styles.statValue}>{short}</span><span className={styles.statLabel}>Short form</span><span className={styles.statNote}>After the red carpet walk</span></div>
-      <div className={styles.stat}><span className={styles.statValue}>{long}</span><span className={styles.statLabel}>Long form</span><span className={styles.statNote}>75-minute recordings</span></div>
+      <div className={styles.stat}><span className={styles.statValue}>{long}</span><span className={styles.statLabel}>Long form</span><span className={styles.statNote}>{pendingLong} awaiting acceptance</span></div>
     </section>
     <section className={styles.section} id="podcast-bookings" aria-labelledby="podcast-bookings-title">
       <div className={styles.sectionHead}><h2 id="podcast-bookings-title">Podcast interview bookings</h2><a className={styles.button} href="/api/staff/export?kind=podcast-bookings">Download CSV</a></div>
-      <p className={styles.help}>Long-form interview times and short-form requests from the private podcast page. Short-form interviews take place after each guest’s red carpet walk. Staff can reschedule long-form bookings or remove a booking; a removed booking immediately releases its room and time on the public booking page.</p>
+      <p className={styles.help}>Short-form interviews take place after each guest’s red carpet walk. Long-form submissions are requests within an eligible window; after a podcast accepts one, staff can assign its exact time and room here. Removing a request does not delete any other portal data.</p>
       {notice.action === "rescheduled" && <p className={styles.notice}>Podcast booking updated.</p>}
       {notice.action === "removed" && <p className={styles.notice}>Podcast booking removed. Its room and time are available again.</p>}
       {notice.error && <p className={styles.noticeError}>{notice.error}</p>}
       {rows.length === 0 ? <p className={styles.empty}>No podcast interviews have been booked yet.</p> : <div className={styles.tableWrap}><table className={styles.table}>
-        <thead><tr><th>Interview time</th><th>Podcast</th><th>Guest</th><th>Email</th><th>Format</th><th>Room</th><th>Travel</th><th>Booked</th><th>Staff actions</th></tr></thead>
+        <thead><tr><th>Time / eligible window</th><th>Podcast</th><th>Guest</th><th>Email</th><th>Format</th><th>Status / room</th><th>Travel</th><th>Submitted</th><th>Staff actions</th></tr></thead>
         <tbody>{rows.map(row => {
           const options = podcastSlotOptions(row, rows);
-          return <tr key={row.id}><td className={styles.nowrap}>{row.format === "short" ? "After red carpet walk" : <>{when(row.startUtc)}<br/><small>to {when(row.endUtc)}</small></>}</td><td className={styles.strong}>{row.podcast}</td><td>{row.guestName}</td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td>{row.format === "short" ? "Short form" : "Long form"}</td><td className={styles.nowrap}>{row.format === "short" ? "Assigned on-site" : row.room}</td><td>{row.format === "short" ? "Not required" : row.travelVerified ? "Verified flight" : "10:00 AM fallback used"}</td><td className={styles.nowrap}>{when(row.submittedAt)}</td><td><div className={styles.podcastActions}>
+          return <tr key={row.id}><td className={styles.nowrap}>{row.format === "short" ? "After red carpet walk" : <>{row.room ? "Confirmed: " : "If accepted: "}{when(row.startUtc)}<br/><small>to {when(row.endUtc)}</small></>}</td><td className={styles.strong}>{row.podcast}</td><td>{row.guestName}</td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td>{row.format === "short" ? "Short form" : "Long form"}</td><td className={styles.nowrap}>{row.format === "short" ? "Assigned on-site" : row.room || "Pending podcast acceptance"}</td><td>{row.format === "short" ? "Not required" : row.travelVerified ? "Verified flight" : "10:00 AM fallback used"}</td><td className={styles.nowrap}>{when(row.submittedAt)}</td><td><div className={styles.podcastActions}>
             {row.format === "long" && <form method="post" action="/api/staff/podcast-bookings" className={styles.podcastEditForm}>
               <input type="hidden" name="id" value={row.id} /><input type="hidden" name="action" value="reschedule" />
-              <label><span>Time and room</span><select name="slot" defaultValue={`${row.startUtc}|${row.room}`} aria-label={`Time and room for ${row.guestName}`}>{options.map(option => <option key={option.value} value={option.value}>{option.label}{option.current ? " (current)" : ""}</option>)}</select></label>
-              <button type="submit" className={styles.linkButton}>Save time</button>
+              <label><span>{row.room ? "Time and room" : "Assign accepted request"}</span><select name="slot" defaultValue={row.room ? `${row.startUtc}|${row.room}` : ""} aria-label={`Time and room for ${row.guestName}`}><option value="">Select a time and room</option>{options.map(option => <option key={option.value} value={option.value}>{option.label}{option.current ? " (current)" : ""}</option>)}</select></label>
+              <button type="submit" className={styles.linkButton}>{row.room ? "Save time" : "Confirm time"}</button>
             </form>}
             <form method="post" action="/api/staff/podcast-bookings" className={styles.rowAction}>
               <input type="hidden" name="id" value={row.id} /><input type="hidden" name="action" value="remove" />

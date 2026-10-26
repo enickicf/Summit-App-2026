@@ -120,6 +120,10 @@
 .bookInterview:hover { background: #f1dfbb; }
 .findTimes:disabled, .confirmBooking:disabled { cursor: wait; opacity: .55; }
 .travelNote { padding: 11px 13px; border-left: 3px solid #d2b47b; background: #211d16; color: #e4d8c1; font-size: 12px; line-height: 1.5; }
+.requestWindow { display: grid; gap: 7px; padding: 16px; border: 1px solid #665638; border-radius: 9px; background: #1d1913; color: #eee7da; }
+.requestWindow span { font-size: 13px; line-height: 1.45; }
+.requestWindow strong { color: #f1dfbb; font-family: "Podcast Poppins ExtraBold", "Original Poppins", sans-serif; font-size: 18px; line-height: 1.35; }
+.requestWindow small { color: #aaa397; font-size: 12px; line-height: 1.5; }
 .roomChoices { grid-template-columns: repeat(3, 1fr); }
 .bookingMessage { margin: 0; color: #f1dfbb; font-size: 13px; font-weight: 700; }
 .arrivalHelp { display: block; margin-top: 6px; color: #aaa397; font-weight: 400; line-height: 1.45; }

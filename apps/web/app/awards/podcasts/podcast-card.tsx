@@ -67,7 +67,7 @@ export function PodcastCard({ entry }: { entry: PodcastEntry }) {
           <span className={styles.more}>View bio and links</span>
         </span>
       </button>
-      <button type="button" className={styles.cardBook} onClick={showBooking} aria-haspopup="dialog">Book an interview</button>
+      <button type="button" className={styles.cardBook} onClick={showBooking} aria-haspopup="dialog">Request an interview</button>
     </article>
     {open && createPortal(<div className={styles.modalBackdrop} onMouseDown={event => { if (event.target === event.currentTarget) close(); }}>
       <div ref={dialog} className={styles.dialogPanel} role="dialog" aria-modal="true" aria-labelledby={`${slug(entry.show)}-title`} tabIndex={-1}>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { availablePodcastSlots, bookingConflicts, latestTravelWindow, selfReportedTravelWindow, shortBookingConflicts } from "./podcast-booking";
+import { availablePodcastSlots, bookingConflicts, latestTravelWindow, podcastRequestConflicts, podcastRequestWindow, selfReportedTravelWindow, shortBookingConflicts } from "./podcast-booking";
 import type { PodcastBookingSubmission } from "./staff/store";
 
 const booking = (overrides: Partial<PodcastBookingSubmission> = {}): PodcastBookingSubmission => ({
@@ -26,6 +26,11 @@ describe("podcast booking availability", () => {
     expect(slots.every(slot => new Date(slot.startUtc).getUTCHours() >= 18)).toBe(true);
   });
 
+  it("offers a scheduling window instead of assigning an exact long-form time", () => {
+    const window = podcastRequestWindow(availablePodcastSlots("long", null, []));
+    expect(window).toEqual({ startUtc: "2026-11-03T18:00:00.000Z", endUtc: "2026-11-04T01:00:00.000Z" });
+  });
+
   it("moves a date-only Nov 3 arrival to Nov 4", () => {
     const slots = availablePodcastSlots("long", { arrivalUtc: null, arrivalDate: "2026-11-03", exact: false }, []);
     expect(slots.length).toBeGreaterThan(0);
@@ -45,11 +50,21 @@ describe("podcast booking availability", () => {
     expect(shortBookingConflicts({ format: "short", podcast: "The Big Silence", guestName: "Guest One" }, [booking()])).toBe(true);
   });
 
+  it("prevents a duplicate pending long-form request for the same guest and podcast", () => {
+    const pending = booking({ format: "long", room: "", startUtc: "2026-11-03T18:00:00.000Z", endUtc: "2026-11-04T01:00:00.000Z" });
+    expect(podcastRequestConflicts({ format: "long", podcast: "The Big Silence", guestName: "Guest One" }, [pending])).toBe(true);
+  });
+
   it("allows simultaneous interviews in separate rooms while preventing room and guest overlaps", () => {
     const current = booking();
     expect(bookingConflicts({ startUtc: current.startUtc, endUtc: current.endUtc, room: "Room 1", guestName: "Another" }, [current])).toBe(true);
     expect(bookingConflicts({ startUtc: current.startUtc, endUtc: current.endUtc, room: "Room 2", guestName: "Guest One" }, [current])).toBe(true);
     expect(bookingConflicts({ startUtc: current.startUtc, endUtc: current.endUtc, room: "Room 2", guestName: "Another" }, [current])).toBe(false);
+  });
+
+  it("does not reserve a room or block a guest while a long-form request is awaiting acceptance", () => {
+    const pending = booking({ format: "long", room: "", startUtc: "2026-11-03T18:00:00.000Z", endUtc: "2026-11-04T01:00:00.000Z" });
+    expect(bookingConflicts({ startUtc: "2026-11-03T19:30:00.000Z", endUtc: "2026-11-03T20:45:00.000Z", room: "Room 1", guestName: "Guest One" }, [pending])).toBe(false);
   });
 
   it("keeps a time visible while at least one of the three rooms is available", () => {

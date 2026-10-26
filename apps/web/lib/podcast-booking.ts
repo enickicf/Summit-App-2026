@@ -61,6 +61,19 @@ export function availablePodcastSlots(format: BookingFormat, travel: AirtableTra
   return slots;
 }
 
+/** The first viable long-form window shown to a guest. The podcast still accepts the request and assigns the exact time. */
+export function podcastRequestWindow(slots: ReturnType<typeof availablePodcastSlots>) {
+  const first = slots[0];
+  if (!first) return null;
+  const day = new Intl.DateTimeFormat("en-CA", { timeZone: zone, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(first.startUtc));
+  return { startUtc: first.startUtc, endUtc: localUtc(day, 17, 0).toISOString() };
+}
+
+export function podcastRequestConflicts(candidate: Pick<PodcastBookingSubmission, "guestName" | "podcast" | "format">, bookings: PodcastBookingSubmission[]) {
+  return bookings.some(booking => booking.format === candidate.format && booking.podcast === candidate.podcast
+    && booking.guestName.toLowerCase() === candidate.guestName.toLowerCase());
+}
+
 export function shortBookingConflicts(candidate: Pick<PodcastBookingSubmission, "guestName" | "podcast" | "format">, bookings: PodcastBookingSubmission[]) {
   return candidate.format === "short" && bookings.some(booking => booking.format === "short"
     && booking.podcast === candidate.podcast && booking.guestName.toLowerCase() === candidate.guestName.toLowerCase());
@@ -70,5 +83,6 @@ export function bookingConflicts(candidate: Pick<PodcastBookingSubmission, "star
   const start = Date.parse(candidate.startUtc), end = Date.parse(candidate.endUtc);
   // Several interviews may run at the same time. A conflict exists only when the selected room is
   // occupied or the same guest would be in two places at once; another room keeps the time available.
-  return bookings.some(booking => overlaps(start, end, booking) && (booking.room === candidate.room || booking.guestName.toLowerCase() === candidate.guestName.toLowerCase()));
+  // A long-form request has no room yet and must not reserve its whole eligibility window.
+  return bookings.some(booking => Boolean(booking.room) && overlaps(start, end, booking) && (booking.room === candidate.room || booking.guestName.toLowerCase() === candidate.guestName.toLowerCase()));
 }

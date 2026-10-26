@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { podcasts2026 } from "../../../lib/podcasts-2026";
 import { getAirtableTravelWindow } from "../../../lib/airtable";
-import { availablePodcastSlots, bookingConflicts, bookingDurationMinutes, latestTravelWindow, shortBookingConflicts, type BookingFormat } from "../../../lib/podcast-booking";
+import { availablePodcastSlots, bookingConflicts, bookingDurationMinutes, latestTravelWindow, podcastRequestConflicts, podcastRequestWindow, shortBookingConflicts, type BookingFormat } from "../../../lib/podcast-booking";
 import { getSubmissionStore, newSubmission, podcastBookingPayloadSchema, type PodcastBookingPayload, type PodcastBookingSubmission } from "../../../lib/staff/store";
 import { withSubmissionInbox } from "../../../lib/staff/submission-inbox";
 
@@ -24,11 +24,13 @@ export async function GET(request: Request) {
     getSubmissionStore().then(store => store.list("podcastBooking"))
   ]);
   const travel = latestTravelWindow([guestTravel, ...hostTravel]);
+  const slots = availablePodcastSlots(format, travel, bookings);
   return NextResponse.json({
     ok: true,
     travelVerified: Boolean(guestTravel?.arrivalUtc),
     arrivalKnown: Boolean(guestTravel?.arrivalUtc || guestTravel?.arrivalDate),
-    slots: availablePodcastSlots(format, travel, bookings)
+    requestWindow: podcastRequestWindow(slots),
+    slots
   }, { headers });
 }
 
@@ -69,6 +71,15 @@ export async function handlePodcastBookingPost(request: Request) {
     ]);
     const travel = latestTravelWindow([guestTravel, ...hostTravel]);
     const slots = availablePodcastSlots(data.format, travel, bookings);
+    const requestWindow = podcastRequestWindow(slots);
+    if (!data.room) {
+      if (!requestWindow || data.startUtc !== requestWindow.startUtc || data.endUtc !== requestWindow.endUtc) return NextResponse.json({ ok: false, error: "That interview window changed. Please review the current window and try again." }, { status: 409, headers });
+      const candidate = { ...data, room: "" as const, travelVerified: Boolean(guestTravel?.arrivalUtc) };
+      if (podcastRequestConflicts(candidate, bookings)) return NextResponse.json({ ok: false, error: "This long-form interview request has already been received." }, { status: 409, headers });
+      const { website: _website, ...payload } = candidate;
+      prepared.push(newSubmission(payload));
+      continue;
+    }
     const slot = slots.find(item => item.startUtc === data.startUtc && item.endUtc === data.endUtc && item.rooms.some(room => room === data.room));
     const candidate = { ...data, travelVerified: Boolean(guestTravel?.arrivalUtc) };
     if (!slot || bookingConflicts(candidate, bookings)) return NextResponse.json({ ok: false, error: "That room was just taken. Please choose another available room or time." }, { status: 409, headers });
