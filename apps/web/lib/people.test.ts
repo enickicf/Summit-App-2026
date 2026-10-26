@@ -53,9 +53,23 @@ describe("website reviewed directory", () => {
     expect(personInitials("Sanem (Sam) Alkan")).toBe("SA");
   });
   it("uses the reviewed 2026 Airtable portraits without copying expiring attachment URLs", () => {
-    expect(personPortrait("Dr. Wendy Oliver-Pyatt")).toBe("/2026-headshots/portraits/wendy-oliver-pyatt-2.jpg");
+    expect(personPortrait("Dr. Wendy Oliver-Pyatt")).toBe("/2026-headshots/portraits/wendy-oliver-pyatt-framed-20261026.jpg");
     expect(personPortrait("Jon Hershfield")).toBe("/2026-headshots/portraits/jon-hershfield-2.jpg");
     expect(personPortrait("Steve Wozniak")).toBe("/2026-headshots/portraits/steve-wozniak-2-c.jpg");
-    expect(personPortrait("Dr. Blaise Aguirre")).toBe("/2026-headshots/portraits/blaise-aguirre.jpg");
+    expect(personPortrait("Dr. Blaise Aguirre")).toBe("/2026-headshots/portraits/blaise-aguirre-framed-20261026.jpg");
+  });
+  it("uses the Oct 26 full-frame portrait refresh for every requested guest", () => {
+    const refreshed = [
+      "Loni Love", "Jason Kennedy", "Anthony Ramos", "Lia Shelesh", "Lexi Hensler", "Atz Kilcher",
+      "Forest Blakk", "Marc Brackett", "Paul Dalio", "Sarah Gilman", "Wendy Oliver-Pyatt", "Rahil Briggs",
+      "Blaise Aguirre", "Tasha Rasolkhani-Kalhorn", "Beth Kojima", "Jennifer Karson-Strauss", "Sarah Steil",
+      "Nicole Kalhorn", "Jeff Levin", "Leah Smith", "Jessica Edwards", "Kate Flannery", "Dylan Aguilar",
+      "Elisa Sednaoui", "Princess Love", "Jessica Ladd", "Yoli Mayor", "Alexander Roque", "Ross Rocketto",
+      "Anna Muller", "Jhone Ebert", "Douglas McKenzie", "Cameron Muller", "Nick Dana", "Angie McPhaul",
+      "DMC DJ", "Franco Pascali", "Janet Wozniak", "Jay McGraw", "Sean Wolfington", "Winston Kelly",
+      "Theresa Magnus", "Erik Blamoville", "Alexa Price", "Basak Kizilisik", "Julie Catineau", "Rohan Thakkar",
+      "Taylor Perry", "Allison Elbl", "Andrew Diehl"
+    ];
+    for (const name of refreshed) expect(personPortrait(name), name).toMatch(/-framed-20261026\.jpg$/);
   });
 });

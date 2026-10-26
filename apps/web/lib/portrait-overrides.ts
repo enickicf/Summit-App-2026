@@ -7,7 +7,60 @@
 // site-2026 = a portrait already approved for the site; commons / web = a public photo (credit noted).
 // attribution: the credit a freely licensed photo must show; it appears under the bio on the person's profile.
 export type PortraitOverride = { file: string; source: string; airtableBytes?: number; credit?: string; attribution?: { label: string; href: string } };
-export const portraitOverrides2026: Record<string, PortraitOverride> = {
+const portraitRefresh20261026: Record<string, PortraitOverride> = {
+  "loni love": { file: "/2026-headshots/portraits/loni-love-framed-20261026.jpg", source: "airtable" },
+  "jason kennedy": { file: "/2026-headshots/portraits/jason-kennedy-framed-20261026.jpg", source: "airtable" },
+  "anthony ramos": { file: "/2026-headshots/portraits/anthony-ramos-framed-20261026.jpg", source: "web", credit: "Official Anthony Ramos promotional portrait, America250" },
+  "lia shelesh": { file: "/2026-headshots/portraits/lia-shelesh-framed-20261026.jpg", source: "airtable" },
+  "lexi hensler": { file: "/2026-headshots/portraits/lexi-hensler-framed-20261026.jpg", source: "airtable" },
+  "atz kilcher": { file: "/2026-headshots/portraits/atz-kilcher-framed-20261026.jpg", source: "commons", credit: "Wonderlane, Atz Kilcher in Homer, Alaska, CC BY 2.0 (cropped)", attribution: { label: "Wonderlane / Wikimedia Commons, CC BY 2.0 (cropped)", href: "https://commons.wikimedia.org/wiki/File:Atz_Kilcher,_winter_sunlight,_backlit,_glasses,_cap,_sweater,_eldest_son_of_Ruth_and_Senator_Yule_Kilcher,_cafe,_Homer,_Alaska,_USA.jpg" } },
+  "forest blakk": { file: "/2026-headshots/portraits/forest-blakk-framed-20261026.jpg", source: "web", credit: "Official Forest Blakk artist portrait" },
+  "marc brackett": { file: "/2026-headshots/portraits/marc-brackett-framed-20261026.jpg", source: "site-2026" },
+  "paul dalio": { file: "/2026-headshots/portraits/paul-dalio-framed-20261026.jpg", source: "site-2026" },
+  "sarah gilman": { file: "/2026-headshots/portraits/sarah-gilman-framed-20261026.jpg", source: "web", credit: "Sarah Gilman promotional portrait" },
+  "wendy oliver pyatt": { file: "/2026-headshots/portraits/wendy-oliver-pyatt-framed-20261026.jpg", source: "site-2026" },
+  "rahil briggs": { file: "/2026-headshots/portraits/rahil-briggs-framed-20261026.jpg", source: "site-2026" },
+  "blaise aguirre": { file: "/2026-headshots/portraits/blaise-aguirre-framed-20261026.jpg", source: "site-2026" },
+  "tasha rasolkhani kalhorn": { file: "/2026-headshots/portraits/tasha-rasolkhani-kalhorn-framed-20261026.jpg", source: "airtable" },
+  "beth kojima": { file: "/2026-headshots/portraits/beth-kojima-framed-20261026.jpg", source: "airtable" },
+  "jennifer karson strauss": { file: "/2026-headshots/portraits/jennifer-karson-strauss-framed-20261026.jpg", source: "airtable" },
+  "sarah steil": { file: "/2026-headshots/portraits/sarah-steil-framed-20261026.jpg", source: "airtable" },
+  "nicole kalhorn": { file: "/2026-headshots/portraits/nicole-kalhorn-framed-20261026.jpg", source: "airtable" },
+  "jeff levin": { file: "/2026-headshots/portraits/jeff-levin-framed-20261026.jpg", source: "airtable" },
+  "leah smith": { file: "/2026-headshots/portraits/leah-smith-framed-20261026.jpg", source: "site-2026" },
+  "jessica edwards": { file: "/2026-headshots/portraits/jessica-edwards-framed-20261026.jpg", source: "airtable" },
+  "kate flannery": { file: "/2026-headshots/portraits/kate-flannery-framed-20261026.jpg", source: "airtable" },
+  "dylan aguilar": { file: "/2026-headshots/portraits/dylan-aguilar-framed-20261026.jpg", source: "airtable" },
+  "elisa sednaoui": { file: "/2026-headshots/portraits/elisa-sednaoui-framed-20261026.jpg", source: "airtable" },
+  "princess love": { file: "/2026-headshots/portraits/princess-love-framed-20261026.jpg", source: "airtable" },
+  "jessica ladd": { file: "/2026-headshots/portraits/jessica-ladd-framed-20261026.jpg", source: "airtable" },
+  "yoli mayor": { file: "/2026-headshots/portraits/yoli-mayor-framed-20261026.jpg", source: "airtable" },
+  "alexander roque": { file: "/2026-headshots/portraits/alexander-roque-framed-20261026.jpg", source: "airtable" },
+  "ross rocketto": { file: "/2026-headshots/portraits/ross-rocketto-framed-20261026.jpg", source: "airtable" },
+  "anna muller": { file: "/2026-headshots/portraits/anna-muller-framed-20261026.jpg", source: "airtable" },
+  "jhone ebert": { file: "/2026-headshots/portraits/jhone-ebert-framed-20261026.jpg", source: "web", credit: "Official Clark County School District leadership portrait" },
+  "douglas mckenzie": { file: "/2026-headshots/portraits/douglas-mckenzie-framed-20261026.jpg", source: "site-2026" },
+  "cameron muller": { file: "/2026-headshots/portraits/cameron-muller-framed-20261026.jpg", source: "web", credit: "Official West Hills Athletic Club portrait, Western Michigan University" },
+  "nick dana": { file: "/2026-headshots/portraits/nick-dana-framed-20261026.jpg", source: "site-2026" },
+  "angie mcphaul": { file: "/2026-headshots/portraits/angie-mcphaul-framed-20261026.jpg", source: "airtable" },
+  "dj": { file: "/2026-headshots/portraits/dmc-dj-framed-20261026.jpg", source: "airtable" },
+  "franco pascali": { file: "/2026-headshots/portraits/franco-pascali-framed-20261026.jpg", source: "airtable" },
+  "janet wozniak": { file: "/2026-headshots/portraits/janet-wozniak-framed-20261026.jpg", source: "mobile", credit: "Owner-provided Janet Wozniak headshot; Oct 24" },
+  "jay mcgraw": { file: "/2026-headshots/portraits/jay-mcgraw-framed-20261026.jpg", source: "airtable" },
+  "sean wolfington": { file: "/2026-headshots/portraits/sean-wolfington-framed-20261026.jpg", source: "site-2026" },
+  "winston kelly": { file: "/2026-headshots/portraits/winston-kelly-framed-20261026.jpg", source: "airtable" },
+  "theresa magnus": { file: "/2026-headshots/portraits/theresa-magnus-framed-20261026.jpg", source: "airtable" },
+  "erik blamoville": { file: "/2026-headshots/portraits/erik-blamoville-framed-20261026.jpg", source: "airtable" },
+  "alexa price": { file: "/2026-headshots/portraits/alexa-price-framed-20261026.jpg", source: "site-2026" },
+  "basak kizilisik": { file: "/2026-headshots/portraits/basak-kizilisik-framed-20261026.jpg", source: "airtable" },
+  "julie catineau": { file: "/2026-headshots/portraits/julie-catineau-framed-20261026.jpg", source: "airtable" },
+  "rohan thakkar": { file: "/2026-headshots/portraits/rohan-thakkar-framed-20261026.jpg", source: "airtable" },
+  "taylor perry": { file: "/2026-headshots/portraits/taylor-perry-framed-20261026.jpg", source: "airtable" },
+  "allison elbl": { file: "/2026-headshots/portraits/allison-elbl-framed-20261026.jpg", source: "airtable" },
+  "andrew diehl": { file: "/2026-headshots/portraits/andrew-diehl-framed-20261026.jpg", source: "airtable" },
+};
+
+const portraitOverridesBase2026: Record<string, PortraitOverride> = {
   // Oct 25 (owner): final card-ratio crops. These files are 948x900, the exact rendered card ratio, so the
   // browser does not crop heads again. Kristin is cropped inside the circular source so the public card is rectangular.
   "sheila escovedo": { file: "/2026-headshots/portraits/sheila-escovedo-sq-20261024.jpg", source: "airtable" },
@@ -208,6 +261,8 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   "lia shelesh": { file: "/2026-headshots/portraits/lia-shelesh-c.jpg", source: "airtable", airtableBytes: 270581 },
   "ben maxwell": { file: "/2026-headshots/portraits/ben-maxwell-c.jpg", source: "airtable", airtableBytes: 121086 },
 };
+
+export const portraitOverrides2026: Record<string, PortraitOverride> = { ...portraitOverridesBase2026, ...portraitRefresh20261026 };
 
 // No photo passed the checks yet (the owner is asked for one); these people are listed by name only.
 function personNameKey(name: string): string {
