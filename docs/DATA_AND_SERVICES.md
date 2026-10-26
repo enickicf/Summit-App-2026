@@ -94,3 +94,7 @@ Presence of a name in code or templates does not prove the value exists in any d
 # Cherrial Operations review records (October 24, 2026)
 
 Status: **LIVE** in production deploy `6add7c8158581fd1b9e40056` (rollback `6add7a02fc8f3a605c1c5466`). The web staff store has three separate operational layers: source requests (`rsvp`, `closingDinner`, `workshop`, `poker`), approved Awards/Nevada Mental Health Day allocations (`ticketOffer`) and guest replies (`ticketConfirmation`). The `programApproval` kind stores staff decisions for dinner, wellness, workshops, site visits and poker. All use the same strongly consistent `staff-portal` Netlify Blobs store and the append-only `staff-portal-journal`. The full authenticated backup includes all three decision/response kinds. No approval record mutates a source request. No outbound send runs from Cherrial's Approval Portal.
+
+## Podcast booking operations (October 26, 2026)
+
+Status: **IMPLEMENTED.** Authorized full-staff and podcast-only sessions can reschedule or remove records in the `podcastBooking` kind. Reschedules retain the record ID and original submission timestamp and write a new journal version before replacing the active blob. Removals delete only the active blob; the append-only journal retains the prior record for recovery. Public room/time availability reads only active `podcastBooking` records, so a removed booking releases its room and time immediately.

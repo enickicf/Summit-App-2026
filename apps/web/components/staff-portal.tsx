@@ -9,12 +9,25 @@ import type { InboxEntry } from "../lib/staff/submission-inbox";
 import { wellnessSessions } from "../lib/wellness-signups-2026";
 import { staffGuestEvents, staffGuestLists } from "../lib/staff/staff-guest";
 import { textConsentLabels, textConsentProtocolNote, textConsentShortLabels, textConsentStatus, textContactRows, textOptOutFooter } from "../lib/staff/text-consent";
+import { availablePodcastSlots } from "../lib/podcast-booking";
 
 export type LineupGroup = { title: string; people: { name: string; role: string; rank: number | null; tier: string | null; photo: boolean }[] };
 
 const when = (iso: string) => new Date(iso).toLocaleString("en-US", { timeZone: "America/Los_Angeles", month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" }) + " PT";
 
-function PodcastBookings({ bookings }: { bookings: PodcastBookingSubmission[] }) {
+type PodcastNotice = { action?: string | undefined; error?: string | undefined };
+
+function podcastSlotOptions(row: PodcastBookingSubmission, bookings: PodcastBookingSubmission[]) {
+  if (row.format !== "long") return [];
+  return availablePodcastSlots("long", null, bookings.filter(booking => booking.id !== row.id))
+    .flatMap(slot => slot.rooms.map(room => ({
+      value: `${slot.startUtc}|${room}`,
+      label: `${when(slot.startUtc)} · ${room}`,
+      current: slot.startUtc === row.startUtc && room === row.room
+    })));
+}
+
+function PodcastBookings({ bookings, notice = {} }: { bookings: PodcastBookingSubmission[]; notice?: PodcastNotice }) {
   const rows = [...bookings].sort((a, b) => (a.startUtc || "9999").localeCompare(b.startUtc || "9999") || a.podcast.localeCompare(b.podcast));
   const short = rows.filter(row => row.format === "short").length;
   const long = rows.filter(row => row.format === "long").length;
@@ -26,23 +39,40 @@ function PodcastBookings({ bookings }: { bookings: PodcastBookingSubmission[] })
     </section>
     <section className={styles.section} id="podcast-bookings" aria-labelledby="podcast-bookings-title">
       <div className={styles.sectionHead}><h2 id="podcast-bookings-title">Podcast interview bookings</h2><a className={styles.button} href="/api/staff/export?kind=podcast-bookings">Download CSV</a></div>
-      <p className={styles.help}>Long-form interview times and short-form requests from the private podcast page. Short-form interviews take place after each guest’s red carpet walk.</p>
+      <p className={styles.help}>Long-form interview times and short-form requests from the private podcast page. Short-form interviews take place after each guest’s red carpet walk. Staff can reschedule long-form bookings or remove a booking; a removed booking immediately releases its room and time on the public booking page.</p>
+      {notice.action === "rescheduled" && <p className={styles.notice}>Podcast booking updated.</p>}
+      {notice.action === "removed" && <p className={styles.notice}>Podcast booking removed. Its room and time are available again.</p>}
+      {notice.error && <p className={styles.noticeError}>{notice.error}</p>}
       {rows.length === 0 ? <p className={styles.empty}>No podcast interviews have been booked yet.</p> : <div className={styles.tableWrap}><table className={styles.table}>
-        <thead><tr><th>Interview time</th><th>Podcast</th><th>Guest</th><th>Email</th><th>Format</th><th>Room</th><th>Travel</th><th>Booked</th></tr></thead>
-        <tbody>{rows.map(row => <tr key={row.id}><td className={styles.nowrap}>{row.format === "short" ? "After red carpet walk" : <>{when(row.startUtc)}<br/><small>to {when(row.endUtc)}</small></>}</td><td className={styles.strong}>{row.podcast}</td><td>{row.guestName}</td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td>{row.format === "short" ? "Short form" : "Long form"}</td><td className={styles.nowrap}>{row.format === "short" ? "Assigned on-site" : row.room}</td><td>{row.format === "short" ? "Not required" : row.travelVerified ? "Verified flight" : "10:00 AM fallback used"}</td><td className={styles.nowrap}>{when(row.submittedAt)}</td></tr>)}</tbody>
+        <thead><tr><th>Interview time</th><th>Podcast</th><th>Guest</th><th>Email</th><th>Format</th><th>Room</th><th>Travel</th><th>Booked</th><th>Staff actions</th></tr></thead>
+        <tbody>{rows.map(row => {
+          const options = podcastSlotOptions(row, rows);
+          return <tr key={row.id}><td className={styles.nowrap}>{row.format === "short" ? "After red carpet walk" : <>{when(row.startUtc)}<br/><small>to {when(row.endUtc)}</small></>}</td><td className={styles.strong}>{row.podcast}</td><td>{row.guestName}</td><td><a href={`mailto:${row.email}`}>{row.email}</a></td><td>{row.format === "short" ? "Short form" : "Long form"}</td><td className={styles.nowrap}>{row.format === "short" ? "Assigned on-site" : row.room}</td><td>{row.format === "short" ? "Not required" : row.travelVerified ? "Verified flight" : "10:00 AM fallback used"}</td><td className={styles.nowrap}>{when(row.submittedAt)}</td><td><div className={styles.podcastActions}>
+            {row.format === "long" && <form method="post" action="/api/staff/podcast-bookings" className={styles.podcastEditForm}>
+              <input type="hidden" name="id" value={row.id} /><input type="hidden" name="action" value="reschedule" />
+              <label><span>Time and room</span><select name="slot" defaultValue={`${row.startUtc}|${row.room}`} aria-label={`Time and room for ${row.guestName}`}>{options.map(option => <option key={option.value} value={option.value}>{option.label}{option.current ? " (current)" : ""}</option>)}</select></label>
+              <button type="submit" className={styles.linkButton}>Save time</button>
+            </form>}
+            <form method="post" action="/api/staff/podcast-bookings" className={styles.rowAction}>
+              <input type="hidden" name="id" value={row.id} /><input type="hidden" name="action" value="remove" />
+              <label className={styles.removeConfirm}><input type="checkbox" required /> Confirm removal</label>
+              <button type="submit" className={styles.dangerButton}>Remove booking</button>
+            </form>
+          </div></td></tr>;
+        })}</tbody>
       </table></div>}
     </section>
   </>;
 }
 
-export function PodcastStaffPortal({ bookings, generatedAt }: { bookings: PodcastBookingSubmission[]; generatedAt: string }) {
+export function PodcastStaffPortal({ bookings, generatedAt, notice = {} }: { bookings: PodcastBookingSubmission[]; generatedAt: string; notice?: PodcastNotice }) {
   return <main id="main-content" tabIndex={-1} className={styles.page}>
     <PortalAutoRefresh />
     <header className={styles.top}>
       <div className={styles.brand}><SiteImage src="/images/na-summit-logo-black-2.png" alt="Not Alone Summit" sizes="72px" className={styles.brandLogo} /><div><p className={styles.eyebrow}>Not Alone 2026</p><h1>Podcast Bookings</h1></div></div>
       <nav className={styles.viewTabs} aria-label="Podcast staff actions"><a href="/awards/podcasts">Podcast page</a><form method="post" action="/api/staff/logout"><button type="submit" className={styles.linkButton}>Sign out</button></form></nav>
     </header>
-    <PodcastBookings bookings={bookings} />
+    <PodcastBookings bookings={bookings} notice={notice} />
     <p className={styles.footer}>Generated {when(generatedAt)} · Refreshes automatically every minute · Podcast booking access only</p>
   </main>;
 }
@@ -153,7 +183,7 @@ export function groupSiteVisit(rows: WorkshopSubmission[]) {
 
 // Owner (Sept 23): one clean, Not Alone-themed staff portal: ticket requests (with running totals at
 // the top), nominations in their own section, and the current Awards lineup for reference.
-export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPreferences = [], closingDinner = [], podcastBookings = [], ticketOffers = [], ticketConfirmations = [], needsAttention = [], anonymousFailures = 0, lineup, generatedAt, addGuest = {} }: { addGuest?: { added?: string | undefined; to?: string | undefined; error?: string | undefined }; rsvps: RsvpSubmission[]; nominations: NominationSubmission[]; poker: PokerSubmission[]; workshops?: WorkshopSubmission[]; textPreferences?: TextPreferenceRecord[]; closingDinner?: ClosingDinnerSubmission[]; podcastBookings?: PodcastBookingSubmission[]; ticketOffers?: TicketOfferSubmission[]; ticketConfirmations?: TicketConfirmationSubmission[]; needsAttention?: InboxEntry[] | null; anonymousFailures?: number; lineup: LineupGroup[]; generatedAt: string }) {
+export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPreferences = [], closingDinner = [], podcastBookings = [], ticketOffers = [], ticketConfirmations = [], needsAttention = [], anonymousFailures = 0, lineup, generatedAt, addGuest = {}, podcastNotice = {} }: { addGuest?: { added?: string | undefined; to?: string | undefined; error?: string | undefined }; podcastNotice?: PodcastNotice; rsvps: RsvpSubmission[]; nominations: NominationSubmission[]; poker: PokerSubmission[]; workshops?: WorkshopSubmission[]; textPreferences?: TextPreferenceRecord[]; closingDinner?: ClosingDinnerSubmission[]; podcastBookings?: PodcastBookingSubmission[]; ticketOffers?: TicketOfferSubmission[]; ticketConfirmations?: TicketConfirmationSubmission[]; needsAttention?: InboxEntry[] | null; anonymousFailures?: number; lineup: LineupGroup[]; generatedAt: string }) {
   // Removed requests (test entries) leave every list and total but stay stored under "Removed".
   const active = activeRsvps(rsvps);
   const removed = removedRsvps(rsvps);
@@ -420,7 +450,7 @@ export function StaffPortal({ rsvps, nominations, poker, workshops = [], textPre
     </div>
 
     <div data-view="podcasts" id="podcasts" hidden>
-      <PodcastBookings bookings={podcastBookings} />
+      <PodcastBookings bookings={podcastBookings} notice={podcastNotice} />
     </div>
 
     {/* Oct 12 (owner): who may be texted. Never text an opted-out number; news only to "Yes"; every text ends "Reply STOP to opt out." */}

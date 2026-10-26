@@ -57,6 +57,13 @@
 .dangerButton { border: 1px solid #d9202a; background: #ffffff; color: #d9202a; font: inherit; font-weight: 600; padding: 4px 10px; font-size: 12px; border-radius: 999px; cursor: pointer; }
 .dangerButton:hover { background: #d9202a; color: #ffffff; }
 .rowAction .linkButton { padding: 4px 10px; font-size: 12px; }
+.podcastActions { display: grid; gap: 10px; min-width: 250px; }
+.podcastEditForm { display: grid; gap: 7px; }
+.podcastEditForm label { display: grid; gap: 4px; color: #555; font-size: 11px; font-weight: 700; }
+.podcastEditForm select { max-width: 290px; padding: 7px 9px; border: 1px solid #ccd3e6; border-radius: 7px; background: #fff; font: inherit; font-size: 12px; }
+.podcastEditForm .linkButton, .podcastActions .dangerButton { justify-self: start; }
+.removeConfirm { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; color: #555; font-size: 11px; font-weight: 600; }
+.removeConfirm input { width: 15px; height: 15px; margin: 0; }
 .badgeAwards { background: #d9202a; color: #ffffff; }       /* Awards Show = red (owner, Sept 23) */
 .badgeCommunity { background: #2f5bd6; color: #ffffff; }    /* Community Day = blue (owner, Sept 23) */
 .badgeFollowUp { background: #fff1d6; color: #7a4a00; }     /* Oct 21: guest details missing = follow-up, not a cancellation */
