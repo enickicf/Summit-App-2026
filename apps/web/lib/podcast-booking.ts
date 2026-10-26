@@ -66,7 +66,9 @@ export function shortBookingConflicts(candidate: Pick<PodcastBookingSubmission, 
     && booking.podcast === candidate.podcast && booking.guestName.toLowerCase() === candidate.guestName.toLowerCase());
 }
 
-export function bookingConflicts(candidate: Pick<PodcastBookingSubmission, "startUtc" | "endUtc" | "room" | "guestName" | "podcast">, bookings: PodcastBookingSubmission[]) {
+export function bookingConflicts(candidate: Pick<PodcastBookingSubmission, "startUtc" | "endUtc" | "room" | "guestName">, bookings: PodcastBookingSubmission[]) {
   const start = Date.parse(candidate.startUtc), end = Date.parse(candidate.endUtc);
-  return bookings.some(booking => overlaps(start, end, booking) && (booking.room === candidate.room || booking.guestName.toLowerCase() === candidate.guestName.toLowerCase() || booking.podcast === candidate.podcast));
+  // Several interviews may run at the same time. A conflict exists only when the selected room is
+  // occupied or the same guest would be in two places at once; another room keeps the time available.
+  return bookings.some(booking => overlaps(start, end, booking) && (booking.room === candidate.room || booking.guestName.toLowerCase() === candidate.guestName.toLowerCase()));
 }

@@ -44,6 +44,7 @@ describe("submission inbox", () => {
   it("reads contact details from every form's shape", () => {
     expect(contactFromBody(JSON.stringify({ requester: { name: "Vip Person", email: "v@example.com", phone: "1" } }))).toMatchObject({ name: "Vip Person", email: "v@example.com" });
     expect(contactFromBody(JSON.stringify({ nominatorName: "Nom", nominatorEmail: "n@example.com" }))).toMatchObject({ name: "Nom", email: "n@example.com" });
+    expect(contactFromBody(JSON.stringify({ bookings: [{ guestName: "Podcast Guest", email: "podcast@example.com" }] }))).toMatchObject({ name: "Podcast Guest", email: "podcast@example.com" });
     expect(contactFromBody("not json")).toMatchObject({ name: "", email: "" });
   });
   it("drops a failure once the same guest has a saved request", () => {

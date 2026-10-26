@@ -45,11 +45,18 @@ describe("podcast booking availability", () => {
     expect(shortBookingConflicts({ format: "short", podcast: "The Big Silence", guestName: "Guest One" }, [booking()])).toBe(true);
   });
 
-  it("prevents room, guest and podcast overlaps", () => {
+  it("allows simultaneous interviews in separate rooms while preventing room and guest overlaps", () => {
     const current = booking();
-    expect(bookingConflicts({ ...current, room: "Room 1", guestName: "Another", podcast: "Another show" }, [current])).toBe(true);
-    expect(bookingConflicts({ ...current, room: "Room 2", guestName: "Guest One", podcast: "Another show" }, [current])).toBe(true);
-    expect(bookingConflicts({ ...current, room: "Room 2", guestName: "Another", podcast: "The Big Silence" }, [current])).toBe(true);
+    expect(bookingConflicts({ startUtc: current.startUtc, endUtc: current.endUtc, room: "Room 1", guestName: "Another" }, [current])).toBe(true);
+    expect(bookingConflicts({ startUtc: current.startUtc, endUtc: current.endUtc, room: "Room 2", guestName: "Guest One" }, [current])).toBe(true);
+    expect(bookingConflicts({ startUtc: current.startUtc, endUtc: current.endUtc, room: "Room 2", guestName: "Another" }, [current])).toBe(false);
+  });
+
+  it("keeps a time visible while at least one of the three rooms is available", () => {
+    const startUtc = "2026-11-03T18:00:00.000Z", endUtc = "2026-11-03T19:15:00.000Z";
+    const occupied = [booking({ startUtc, endUtc, room: "Room 1" }), booking({ id: "22222222-2222-4222-8222-222222222222", startUtc, endUtc, room: "Room 2", guestName: "Guest Two", podcast: "Another show" })];
+    const slot = availablePodcastSlots("long", null, occupied).find(item => item.startUtc === startUtc);
+    expect(slot?.rooms).toEqual(["Room 3"]);
   });
 
   it("treats a guest-entered time as Las Vegas local time", () => {

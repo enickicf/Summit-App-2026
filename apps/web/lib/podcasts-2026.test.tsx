@@ -38,4 +38,8 @@ describe("Podcasts page", () => {
     }
     expect(html).not.toMatch(/[★→↗×]/u);
   });
+  it("offers interview booking directly from every card", () => {
+    expect(html.match(/>Book an interview<\/button>/g)).toHaveLength(podcasts2026.length);
+    expect(html.match(/>View bio and links<\/span>/g)).toHaveLength(podcasts2026.length);
+  });
 });

@@ -29,8 +29,11 @@
 .section h2, .section h1 { font-size: clamp(30px, 4vw, 46px); }
 .first { padding-top: clamp(48px, 7vw, 88px); }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr)); gap: 22px; }
-.card { appearance: none; font: inherit; color: inherit; text-align: left; cursor: pointer; padding: 0; width: 100%; display: flex; flex-direction: column; background: #141414; border: 1px solid #2a2a2a; border-radius: 6px; overflow: hidden; transition: border-color .2s ease, transform .2s ease; }
+.card { color: inherit; text-align: left; width: 100%; display: flex; flex-direction: column; background: #141414; border: 1px solid #2a2a2a; border-radius: 6px; overflow: hidden; transition: border-color .2s ease, transform .2s ease; }
 .card:hover { border-color: rgb(210 180 123 / 60%); transform: translateY(-2px); }
+.cardDetails { appearance: none; width: 100%; min-width: 0; flex: 1; display: flex; flex-direction: column; padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; text-align: left; }
+.cardBook { margin: 0 12px 14px; border: 1px solid #d2b47b; border-radius: 999px; background: #d2b47b; color: #111; cursor: pointer; font: inherit; font-size: 12px; font-weight: 800; padding: 10px 12px; }
+.cardBook:hover { background: #f1dfbb; border-color: #f1dfbb; }
 .cardMedia { position: relative; width: 100%; min-width: 0; aspect-ratio: 1 / 1; overflow: hidden; background: linear-gradient(145deg, #2b2418, #0f0d0a); display: grid; place-items: center; }
 /* Oct 24 (owner: the Complex Trauma photo is "too big"): height: 100% does not resolve inside an aspect-ratio box, so a
    portrait-shaped file overflowed; the image fills the box absolutely and every photo is cropped to the same square. */
@@ -65,7 +68,7 @@
 }
 
 /* Oct 20: topic, stats, logos, bio dialog */
-.card:focus-visible { outline: 3px solid #d2b47b; outline-offset: 3px; }
+.cardDetails:focus-visible, .cardBook:focus-visible { outline: 3px solid #d2b47b; outline-offset: -3px; }
 .cardKicker, .hosts, .topic, .more { display: block; }
 .topic { margin-top: 6px; color: #e8e2d6; font-size: 14px; line-height: 1.5; }
 .stats { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 12px; }
@@ -115,6 +118,7 @@
 .bookingSuccess > span { color: #d2b47b; font-size: 11px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
 .bookingSuccess h3 { margin: 8px 0; font-size: 24px; }
 .bookingSuccess p { color: #eee7da; line-height: 1.55; }
+.bookingSuccess p span { display: block; margin-top: 8px; }
 .bookingSuccess strong, .bookingSuccess small { display: block; margin-top: 12px; }
 .bookingSuccess small { color: #aaa397; line-height: 1.5; }
 @media (max-width: 600px) { .bookingGrid, .formatChoices, .roomChoices { grid-template-columns: 1fr; } }

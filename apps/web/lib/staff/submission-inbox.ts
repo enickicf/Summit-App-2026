@@ -85,9 +85,11 @@ export function contactFromBody(body: string): { name: string; email: string; ph
   let parsed: unknown = null;
   try { parsed = JSON.parse(body); } catch { /* not JSON: keep the raw text only */ }
   const requester = parsed && typeof parsed === "object" ? (parsed as Record<string, unknown>).requester : undefined;
+  const firstBooking = parsed && typeof parsed === "object" && Array.isArray((parsed as Record<string, unknown>).bookings)
+    ? ((parsed as Record<string, unknown>).bookings as unknown[])[0] : undefined;
   return {
-    name: pick(parsed, ["name", "nominatorName", "requesterName"]) || pick(requester, ["name"]),
-    email: pick(parsed, ["email", "nominatorEmail", "requesterEmail"]) || pick(requester, ["email"]),
+    name: pick(parsed, ["name", "nominatorName", "requesterName"]) || pick(requester, ["name"]) || pick(firstBooking, ["guestName"]),
+    email: pick(parsed, ["email", "nominatorEmail", "requesterEmail"]) || pick(requester, ["email"]) || pick(firstBooking, ["email"]),
     phone: pick(parsed, ["phone", "nominatorPhone", "requesterPhone"]) || pick(requester, ["phone"])
   };
 }
