@@ -59,7 +59,7 @@ export function InterviewBooking({ entry, startOpen = false }: { entry: PodcastE
     setMessage(wantsShort && wantsLong ? "Your long-form request was received, and your short-form interview is confirmed for after your red carpet walk. If the long-form request is accepted, the podcast will contact you with the confirmed time." : wantsShort ? "Your short-form interview is confirmed for after your red carpet walk." : "Your request was received. If it is accepted, the podcast will contact you with the confirmed interview time.");
   }
 
-  if (!started) return <button type="button" className={styles.bookInterview} onClick={() => setStarted(true)}>Book an interview</button>;
+  if (!started) return <button type="button" className={styles.bookInterview} onClick={() => setStarted(true)}>Request an interview</button>;
   if (bookedFormats.length) return <div className={styles.bookingSuccess} role="status"><span>Request received</span><h3>{entry.show}</h3><p>{bookedFormats.map(format => <span key={format}>{formatLabel(format)}{format === "long" && requestWindow ? <><br />If confirmed: {when(requestWindow.startUtc)}–{when(requestWindow.endUtc)}</> : null}</span>)}</p><strong>{message}</strong>{bookedFormats.includes("long") && <small>This is a request, not a confirmed long-form interview. The podcast will follow up if it accepts the request.</small>}</div>;
 
   return <form className={styles.booking} onSubmit={submit}>
