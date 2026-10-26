@@ -12,10 +12,16 @@ import styles from "./directory.module.css";
 
 function DirectoryPortrait({ person }: { person: SummitPerson }) {
   const [failedImage, setFailedImage] = useState<string>();
+  // Oct. 26 approved Summit portrait baseline: preserve every reviewed crop; Leah alone needs
+  // a slight leftward shift so her face sits in the visual center of the card.
+  const portraitStyle = {
+    ...portraitImageStyle(person.name, person.image),
+    ...(person.name === "Leah Smith" ? { transform: "scale(1.04) translateX(-4%)", transformOrigin: "center" } : {})
+  };
   return <div className="portrait" data-person={person.name} aria-hidden="true">{person.image && person.image !== failedImage
     ? getSiteImageMetadata(person.image)
-      ? <SiteImage src={person.image} alt="" sizes="(max-width: 600px) 44vw, (max-width: 900px) 30vw, (max-width: 1240px) 22vw, 280px" style={portraitImageStyle(person.name, person.image)} onError={() => setFailedImage(person.image)} />
-      : <img src={person.image} alt="" style={portraitImageStyle(person.name, person.image)} loading="lazy" decoding="async" width={500} height={500} onError={() => setFailedImage(person.image)} />
+      ? <SiteImage src={person.image} alt="" sizes="(max-width: 600px) 44vw, (max-width: 900px) 30vw, (max-width: 1240px) 22vw, 280px" style={portraitStyle} onError={() => setFailedImage(person.image)} />
+      : <img src={person.image} alt="" style={portraitStyle} loading="lazy" decoding="async" width={500} height={500} onError={() => setFailedImage(person.image)} />
     : <span>{personInitials(person.name)}</span>}</div>;
 }
 
