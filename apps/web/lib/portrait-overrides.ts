@@ -126,7 +126,7 @@ export const portraitOverrides2026: Record<string, PortraitOverride> = {
   // Oct 21 (owner: "Leah Smith's photo needs to be recropped"): re-cut from the 3000x2000 original of Tape Art's "Leah and Michael" photo (Wix original behind tapeart.com/who-we-are), face-centred.
   "leah smith": { file: "/2026-headshots/portraits/leah-smith-4.jpg", source: "web", credit: "Tape Art, tapeart.com/who-we-are (Leah and Michael photograph, cropped to Leah)" },
   "lexi hensler": { file: "/2026-headshots/portraits/lexi-hensler-4-c.jpg", source: "airtable", airtableBytes: 1367302 },
-  "loni love": { file: "/2026-headshots/portraits/loni-love-2.jpg", source: "icf-card" },
+  "loni love": { file: "/images/loni-love.webp", source: "icf-card" },
   "marc brackett": { file: "/2026-headshots/portraits/marc-brackett-2.jpg", source: "icf-card" },
   "margaret hines": { file: "/2026-headshots/portraits/margaret-hines.jpg", source: "airtable", airtableBytes: 60135 },
   "melinda springer": { file: "/2026-headshots/portraits/melinda-springer.jpg", source: "airtable", airtableBytes: 35507 },

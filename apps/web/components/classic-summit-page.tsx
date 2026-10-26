@@ -34,7 +34,7 @@ function leaders(index: number, heading: string, order: string[], current: boole
 
 function Leader({ person, large = false }: { person: { name: string; role: string; image: string }; large?: boolean }) {
   return <article className={styles.leader}>
-    <SiteImage className={large ? styles.leaderImageLarge : styles.leaderImage} src={person.image} alt={person.name} sizes="(max-width: 767px) 70vw, 320px" />
+    <SiteImage className={large ? styles.leaderImageLarge : styles.leaderImage} src={person.image} alt={person.name} sizes="(max-width: 767px) 70vw, 320px" style={portraitImageStyle(person.name, person.image)} />
     <h4>{person.name}</h4>
     <p>{person.role}</p>
   </article>;
@@ -77,7 +77,7 @@ export function AttendeeCard({ person, role, awards = false }: { person: SummitP
   const image = person.image ?? updatedPortrait(person.name);
   return <a className={styles.hoverCard} href={`/directory/${encodeURIComponent(person.slug)}${awards ? "?from=awards" : ""}`}>
     <div className={styles.imageWrap}>{!image ? <span className={styles.noPhoto} aria-hidden="true" />
-      : getSiteImageMetadata(image) ? <SiteImage src={image} alt={person.name} sizes="(max-width: 767px) 90vw, (max-width: 1024px) 45vw, 280px" />
+      : getSiteImageMetadata(image) ? <SiteImage src={image} alt={person.name} sizes="(max-width: 767px) 90vw, (max-width: 1024px) 45vw, 280px" style={portraitImageStyle(person.name, image)} />
       // Airtable and approved public portraits are served from their own URLs.
       : <img src={image} alt={person.name} style={portraitImageStyle(person.name, image)} loading="lazy" decoding="async" width={500} height={500} />}</div>
     <div className={styles.infoBox}><p><span className={styles.nameLine}><strong>{person.name}</strong><br /></span>{role}</p></div>

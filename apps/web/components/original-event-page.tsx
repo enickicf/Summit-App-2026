@@ -17,7 +17,7 @@ import { awards2026Editorial, awards2026Evening, awards2026Program, awards2025Wi
 import { awardsDisplayPeople, awardsPeople } from "../lib/awards-people";
 import { archiveSlug } from "../app/directory/[slug]/archive-profile";
 import { producerCredits2026 } from "@not-alone/config";
-import { personNameKey as normalizePersonName, updatedPortrait } from "../lib/person-portraits";
+import { personNameKey as normalizePersonName, portraitImageStyle, updatedPortrait } from "../lib/person-portraits";
 import { airtableOverlay } from "../lib/airtable-shared";
 import { Directory } from "./directory";
 import { AwardsHighlights } from "./awards-highlights";
@@ -111,7 +111,7 @@ function Portraits({ section, awardsContext = false }: { section: SourceSection;
   if (!section.people.length) return null;
   return <section className={`${styles.band} ${styles.portraitSection}`}><h2>{section.title}</h2>
     <div className={styles.portraits}>{section.people.map(person => {
-      const card = <><SiteImage src={person.image} alt={person.name} sizes="(max-width: 600px) 44vw, (max-width: 900px) 30vw, (max-width: 1240px) 22vw, 280px" /><div><h3>{person.name}</h3><p>{person.role}</p></div></>;
+      const card = <><SiteImage src={person.image} alt={person.name} sizes="(max-width: 600px) 44vw, (max-width: 900px) 30vw, (max-width: 1240px) 22vw, 280px" style={portraitImageStyle(person.name, person.image)} /><div><h3>{person.name}</h3><p>{person.role}</p></div></>;
       const hasProfile = ![source.summit.source, source.awards.source].includes(person.href.split("#")[0]!);
       return awardsContext ? <Link href={`/directory/${archiveSlug(person.name)}?from=awards`} prefetch={false} key={person.name} aria-label={`${person.name}, ${person.role}`}>{card}</Link> : hasProfile ? <a href={person.href} key={person.name} aria-label={`${person.name}, ${person.role}`}>{card}</a> : <article key={person.name}>{card}</article>;
     })}</div>
@@ -168,7 +168,7 @@ function Hosts2026({ profiles }: { profiles: ReturnType<typeof awardsPeople> }) 
   return <section className={`${styles.band} ${styles.leadership}`} id="hosts">
     <div><h2>Hosts</h2><div className={styles.leaders}>
       {hosts.map(person => <article key={person.slug}><Link href={`/directory/${encodeURIComponent(person.slug)}`} prefetch={false} aria-label={`Meet ${person.name}`}>
-        <SiteImage src={person.image!} alt={person.name} sizes="(max-width: 600px) 230px, 250px" /><h3>{person.name}</h3><p>{hostRoles2026[normalizePersonName(person.name)]}</p>
+        <SiteImage src={person.image!} alt={person.name} sizes="(max-width: 600px) 230px, 250px" style={portraitImageStyle(person.name, person.image)} /><h3>{person.name}</h3><p>{hostRoles2026[normalizePersonName(person.name)]}</p>
       </Link></article>)}
     </div></div>
   </section>;
@@ -185,7 +185,7 @@ function Leadership(props: LeadershipProps) {
       return <div key={group.title}><h2>{group.title}</h2><div className={photos ? styles.leaders : styles.creditNames}>
       {group.people.map(person => {
         const profile = props.awardsProfiles?.find(profile => normalizePersonName(profile.name) === normalizePersonName(person.name));
-        const card = <>{photos && <SiteImage src={person.image} alt={person.name} sizes="(max-width: 600px) 230px, 250px" />}<h3>{person.name}</h3><p><RoleLines text={person.role} /></p></>;
+        const card = <>{photos && <SiteImage src={person.image} alt={person.name} sizes="(max-width: 600px) 230px, 250px" style={portraitImageStyle(person.name, person.image)} />}<h3>{person.name}</h3><p><RoleLines text={person.role} /></p></>;
         return <article key={person.name}>{profile ? <Link href={`/directory/${encodeURIComponent(profile.slug)}${props.summitLinks ? "" : "?from=awards"}`} prefetch={false} aria-label={`Meet ${person.name}`}>{card}</Link> : card}</article>;
       })}
     </div></div>;

@@ -33,7 +33,7 @@ function GuestPortrait({ person }: { person: SummitPerson }) {
   const [failedSource, setFailedSource] = useState<string>();
   return person.image && person.image !== failedSource
     ? getSiteImageMetadata(person.image)
-      ? <SiteImage src={person.image} alt="" sizes="(max-width: 600px) 44vw, (max-width: 900px) 30vw, (max-width: 1240px) 22vw, 280px" onError={() => setFailedSource(person.image)} />
+      ? <SiteImage src={person.image} alt="" sizes="(max-width: 600px) 44vw, (max-width: 900px) 30vw, (max-width: 1240px) 22vw, 280px" style={portraitImageStyle(person.name, person.image)} onError={() => setFailedSource(person.image)} />
       : <span className={styles.photoFrame}><img src={person.image} alt="" style={portraitImageStyle(person.name, person.image)} loading="lazy" decoding="async" width={500} height={500} onError={() => setFailedSource(person.image)} /></span>
     : <span className={styles.portraitFallback} aria-hidden="true">{personInitials(person.name)}</span>;
 }

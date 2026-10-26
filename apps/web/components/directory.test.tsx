@@ -40,7 +40,7 @@ describe("current Summit directory", () => {
     const person = { ...people[0]!, name: "Unpictured Guest" };
     delete person.image;
     const html = renderToStaticMarkup(<Directory people2026={[person]} />);
-    expect(html).toContain('<div class="portrait" aria-hidden="true"><span>UG</span></div>');
+    expect(html).toContain('<div class="portrait" data-person="Unpictured Guest" aria-hidden="true"><span>UG</span></div>');
     expect(html).not.toContain("<img");
   });
 

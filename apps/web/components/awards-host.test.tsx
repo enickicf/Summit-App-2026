@@ -78,6 +78,6 @@ describe("Awards host feature", () => {
     snapshot.speakers.find(person => person.name === "Loni Love")!.headshotUrl = "https://example.test/approved-host.jpg";
     expect(hostSection(render(snapshot))).not.toContain('src="https://example.test/approved-host.jpg"');
     // Owner (Sept 21): the reviewed portrait (ICF's own card photo, re-cropped) is used everywhere.
-    expect(decodeURIComponent(hostSection(render(snapshot))!)).toContain("/2026-headshots/portraits/loni-love-2.jpg");
+    expect(decodeURIComponent(hostSection(render(snapshot))!)).toContain("/images/loni-love.webp");
   });
 });

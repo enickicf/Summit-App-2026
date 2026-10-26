@@ -84,6 +84,9 @@ export function personInitials(name: string): string {
 }
 
 export function portraitImageStyle(name: string, src?: string) {
+  // The approved transparent Loni Love portrait reaches the top edge of its source canvas. A small
+  // inset preserves her full hairstyle at every responsive crop without introducing letterbox bands.
+  if (personNameKey(name) === "loni love" && src === "/images/loni-love.webp") return { objectFit: "contain" as const, objectPosition: "center", transform: "scale(.9)", transformOrigin: "center" };
   // Reviewed portraits are already framed like ICF's cards; a photo straight from Airtable is framed
   // toward the top so the face stays in the box.
   if (src?.startsWith("/2026-headshots/portraits/")) return { objectFit: "cover" as const, objectPosition: "center" };

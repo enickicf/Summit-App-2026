@@ -3,9 +3,9 @@
 .page h1 { font-family: inherit; font-size: 48px; line-height: 1.12; overflow-wrap: anywhere; }
 .page :global(.profileHero) { grid-template-columns: minmax(0, 340px) minmax(0, 1fr); }
 .page :global(.profilePortrait) { aspect-ratio: 1; border-radius: 4px; width: 100%; height: auto; background: #d0d4ea; color: #4a5faa; }
-.page :global(.profilePortrait img) { aspect-ratio: 1; object-fit: contain; }
+.page :global(.profilePortrait img) { aspect-ratio: 1; object-fit: cover; object-position: center; }
 .page :global(.profilePortrait[data-person="Lexi Hensler"]) { aspect-ratio:4/5; }
-.page :global(.profilePortrait[data-person="Lexi Hensler"] img) { aspect-ratio:auto; height:100%; object-fit:contain; }
+.page :global(.profilePortrait[data-person="Lexi Hensler"] img) { aspect-ratio:auto; height:100%; object-fit:cover; }
 .page :global(.profileRole) { color: #4a5faa; }
 .page :global(.profileBio) { white-space: pre-line; }
 .page p, .page a { overflow-wrap: anywhere; }

@@ -31,4 +31,11 @@ describe("Podcasts page", () => {
   it("links Dr. Cecelia's larger Instagram profile", () => {
     expect(podcasts2026.find(entry => entry.show === "Too Late To Pretend")?.links?.instagram).toBe("https://www.instagram.com/dr.cecelia/");
   });
+  it("uses concise complete card summaries and no emoji-like decoration", () => {
+    for (const entry of podcasts2026) {
+      expect(entry.summary?.trim().endsWith(".")).toBe(true);
+      expect(html).toContain(entry.summary!);
+    }
+    expect(html).not.toMatch(/[★→↗×]/u);
+  });
 });
