@@ -4,15 +4,22 @@
 //  - bytes null + file: a better photo than Airtable's is approved for the site; it stays until reviewed.
 //  - file null: no photo passed review yet (Airtable's is too small/blurry); listed by name only.
 export const airtableHeadshotCrops: Record<string, { bytes: number | null; file: string | null }> = {
+  // Oct 26 follow-up: use the same verified full-frame portraits on every Summit/Awards surface and
+  // through the live Airtable overlay. Joanna's attachment belonged to Lauren Ann, so it is blocked.
+  recHUe7yCx96KjyX2: { bytes: null, file: "/2026-headshots/portraits/karen-niemi-framed-20261026.jpg" },
+  recscpFoAZnCCcFIS: { bytes: null, file: "/2026-headshots/portraits/christina-steil-framed-20261026.jpg" },
+  recdgfoWNeqCQf0iU: { bytes: null, file: "/2026-headshots/portraits/maryn-pierce-framed-20261026.jpg" },
+  reclRFyb7EOWg9fYQ: { bytes: null, file: "/2026-headshots/portraits/gabriella-viveros-framed-20261026.jpg" },
+  recnirvb72mepu9zE: { bytes: null, file: "/2026-headshots/portraits/dalaura-kader-framed-20261026.jpg" },
+  recSFlPwhOVKxnUW0: { bytes: null, file: "/2026-headshots/portraits/lauren-ann-framed-20261026.jpg" },
+  rech2Y2rToKGdcvuR: { bytes: null, file: null },
   // Oct 25 full-site portrait sweep: exact 948x900 card crops. Official public portraits stay pinned
   // with bytes:null; reviewed Airtable portraits stay pinned only while that exact upload is unchanged.
   rec97E7jRL9ZlUYKa: { bytes: 47221, file: "/2026-headshots/portraits/andrew-diehl-card-20261025.jpg" },
-  recnirvb72mepu9zE: { bytes: 61871, file: "/2026-headshots/portraits/dalaura-kader-card-20261025.jpg" },
   recwfbAG03JmOJx26: { bytes: null, file: "/2026-headshots/portraits/dj-charlie-chan-official-20261025.jpg" },
   reccYQjPt7TNpk4AP: { bytes: 64945, file: "/2026-headshots/portraits/douglas-mckenzie-card-20261025.jpg" },
   receLk6EPZiyQliEE: { bytes: 86272, file: "/2026-headshots/portraits/ia-cheveres-card-20261025.jpg" },
   recSQtMbd6BTw3v9o: { bytes: null, file: "/2026-headshots/portraits/jhone-ebert-official-20261025.jpg" },
-  rech2Y2rToKGdcvuR: { bytes: 74656, file: "/2026-headshots/portraits/joanna-howard-card-20261025.jpg" },
   recFg2EqNUcHpyqaB: { bytes: null, file: "/2026-headshots/portraits/jordan-rose-official-20261025.jpg" },
   recNIfdEXMa1wnld2: { bytes: null, file: "/2026-headshots/portraits/justice-shepard-official-20261025.jpg" },
   recPcFRLBxAqRzyc5: { bytes: 70080, file: "/2026-headshots/portraits/tj-farrell-card-20261025.jpg" },

@@ -1605,8 +1605,8 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "title": "Executive Assistant to the CEO & Founder, The Ultimate Matchmaker",
     "bio": "Lauren Ann serves as Executive Assistant to the CEO and Founder of The Ultimate Matchmaker, supporting executive operations and day-to-day coordination. Her work helps the leadership team advance the company’s mission of building meaningful relationships. She joins The Ultimate Matchmaker team at the Not Alone Summit, a gathering focused on mental health, human connection, and community.",
     "hasHeadshot": true,
-    "headshotBytes": 704205,
-    "headshotFile": "/2026-headshots/airtable-current/recSFlPwhOVKxnUW0.jpg"
+    "headshotBytes": 160486,
+    "headshotFile": "/2026-headshots/portraits/lauren-ann-framed-20261026.jpg"
   },
   {
     "recordId": "recmXRCfAyi4ygTuJ",
@@ -2301,7 +2301,9 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "organization": "",
     "title": "",
     "bio": "",
-    "hasHeadshot": false
+    "hasHeadshot": true,
+    "headshotBytes": 169327,
+    "headshotFile": "/2026-headshots/portraits/christina-steil-framed-20261026.jpg"
   },
   {
     "recordId": "recnHos23LByx9hZS",
@@ -2711,8 +2713,8 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "title": "Executive Director, Yale Center for Emotional Intelligence",
     "bio": "Karen Niemi is the Executive Director at the Yale Center for Emotional Intelligence. With a distinguished career in the field of social and emotional learning (SEL), Karen has been instrumental in shaping the landscape of SEL both nationally and globally. Before joining the Center, she served as the President and CEO of the Collaborative for Academic, Social, and Emotional Learning (CASEL), where she played a pivotal role in establishing SEL as a critical component of education reform, enhancing CASEL’s operational strategies, and fostering impactful collaborations. Karen has been a key figure in expanding funding sources, diversifying revenue streams, and driving the financial and operational success of SEL initiatives.\n\nBefore assuming her position at CASEL, Niemi held diverse roles in the education and social-emotional learning sector, notably serving as a distinguished CEO and President for SEL and education publishing enterprises. Additionally, she garnered respect as an advisor to school districts, schools, educational publishing companies, and non-profit organizations. Niemi’s reputation as a catalyst for positive change in education precedes her, firmly establishing her as a trusted figure in advancing social and emotional learning initiatives. Karen’s favorite ways to recharge and maintain balance are through spending time with her family, yoga, and exploring the great outdoors, a passion that aligns with her commitment to holistic well-being and lifelong learning.",
     "hasHeadshot": true,
-    "headshotBytes": 659768,
-    "headshotFile": "/2026-headshots/airtable-current/recHUe7yCx96KjyX2.jpg"
+    "headshotBytes": 125865,
+    "headshotFile": "/2026-headshots/portraits/karen-niemi-framed-20261026.jpg"
   },
   {
     "recordId": "recJ0BZ7CUDIKF8hc",
@@ -2931,8 +2933,8 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "title": "Figure Skater | U.S. International Competitor",
     "bio": "Maryn Pierce is an American figure skater from Frisco, Texas, who began skating at age four. She has competed at the U.S. Championships and represented the United States on the Junior Grand Prix circuit. Her accomplishments include a junior bronze medal at the 2021 Cranberry Cup and a Southwestern Regional Challenge title.",
     "hasHeadshot": true,
-    "headshotBytes": 2481151,
-    "headshotFile": "/2026-headshots/airtable-current/recdgfoWNeqCQf0iU.jpg"
+    "headshotBytes": 208303,
+    "headshotFile": "/2026-headshots/portraits/maryn-pierce-framed-20261026.jpg"
   },
   {
     "recordId": "receLk6EPZiyQliEE",
@@ -2960,9 +2962,7 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "organization": "",
     "title": "Executive Assistant to the CEO & Founder, The Ultimate Matchmaker",
     "bio": "Lauren Ann serves as Executive Assistant to the CEO and Founder of The Ultimate Matchmaker, supporting executive operations and day-to-day coordination. Her work helps the leadership team advance the company’s mission of building meaningful relationships. She joins The Ultimate Matchmaker team at the Not Alone Summit, a gathering focused on mental health, human connection, and community.",
-    "hasHeadshot": true,
-    "headshotBytes": 74656,
-    "headshotFile": "/2026-headshots/portraits/joanna-howard-card-20261025.jpg"
+    "hasHeadshot": false
   },
   {
     "recordId": "rechK8GVDYbJCAWSX",
@@ -3065,8 +3065,8 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "title": "Brand Experience & Events Professional, Hugz",
     "bio": "Gabriella Viveros is a member of the Hugz team with more than 13 years of experience creating events and experiences that bring people together. Her background includes creative agency work, brand activations, and event production. She brings that experience to Hugz, a weighted stuffed-animal brand built around comfort and mental health awareness.",
     "hasHeadshot": true,
-    "headshotBytes": 110824,
-    "headshotFile": "/2026-headshots/airtable-current/reclRFyb7EOWg9fYQ.jpg"
+    "headshotBytes": 201397,
+    "headshotFile": "/2026-headshots/portraits/gabriella-viveros-framed-20261026.jpg"
   },
   {
     "recordId": "recmFe8BwsTzjk1oe",
@@ -3095,8 +3095,8 @@ export const airtableTalent2026: RecordedAirtablePerson[] = [
     "title": "Healthcare Entrepreneur & Community Volunteer",
     "bio": "Dalaura Kader is a healthcare entrepreneur whose background includes co-founding Stratify Genomics and working with Achieve Concierge. Alongside her professional work, she has served in volunteer leadership roles with Special Olympics Alberta and the National Charity League. Her experience spans business development, healthcare, and community service.",
     "hasHeadshot": true,
-    "headshotBytes": 61871,
-    "headshotFile": "/2026-headshots/portraits/dalaura-kader-card-20261025.jpg"
+    "headshotBytes": 235817,
+    "headshotFile": "/2026-headshots/portraits/dalaura-kader-framed-20261026.jpg"
   },
   {
     "recordId": "recnk2ezXOmNHDLIB",

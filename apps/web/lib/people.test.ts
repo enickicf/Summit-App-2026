@@ -3,6 +3,7 @@ import { demoSnapshot } from "@not-alone/test-fixtures";
 import { directoryPeople, people2025, people2026 } from "./people";
 import { originalProducerCredits, producerCredits2026 } from "@not-alone/config";
 import { personPortrait, personInitials } from "./person-portraits";
+import { airtableHeadshotCrops } from "./airtable-headshot-crops";
 
 describe("website reviewed directory", () => {
   it("restricts producer listings to ICF's 2025 credits and the Sept 21 meeting's 2026 credits", () => {
@@ -77,5 +78,9 @@ describe("website reviewed directory", () => {
     for (const name of refreshed) expect(personPortrait(name), name).toMatch(/-framed-20261026\.jpg$/);
     expect(personPortrait("Joanna Howard")).toBeUndefined();
     expect(personPortrait("Lauren Ann")).toBe("/2026-headshots/portraits/lauren-ann-framed-20261026.jpg");
+    for (const record of ["recHUe7yCx96KjyX2", "recscpFoAZnCCcFIS", "recdgfoWNeqCQf0iU", "reclRFyb7EOWg9fYQ", "recnirvb72mepu9zE", "recSFlPwhOVKxnUW0"]) {
+      expect(airtableHeadshotCrops[record]?.file, record).toMatch(/-framed-20261026\.jpg$/);
+    }
+    expect(airtableHeadshotCrops.rech2Y2rToKGdcvuR).toEqual({ bytes: null, file: null });
   });
 });
