@@ -4,7 +4,7 @@ import Link from "next/link";
 import { RoleLines } from "./role-lines";
 import { Fragment, useId, useMemo, useState } from "react";
 import { categories, type PersonCategory, type SummitPerson } from "../lib/people";
-import { personInitials, portraitImageStyle } from "../lib/person-portraits";
+import { personInitials, portraitBackgroundStyle, portraitImageStyle } from "../lib/person-portraits";
 import { AwardsGuestDirectory } from "./awards-guest-directory";
 import { peopleSections } from "../lib/people-sections";
 import { getSiteImageMetadata, SiteImage } from "./site-image";
@@ -12,7 +12,7 @@ import styles from "./directory.module.css";
 
 function DirectoryPortrait({ person }: { person: SummitPerson }) {
   const [failedImage, setFailedImage] = useState<string>();
-  return <div className="portrait" data-person={person.name} aria-hidden="true">{person.image && person.image !== failedImage
+  return <div className="portrait" data-person={person.name} aria-hidden="true" style={portraitBackgroundStyle(person.image)}>{person.image && person.image !== failedImage
     ? getSiteImageMetadata(person.image)
       ? <SiteImage src={person.image} alt="" sizes="(max-width: 600px) 44vw, (max-width: 900px) 30vw, (max-width: 1240px) 22vw, 280px" style={portraitImageStyle(person.name, person.image)} onError={() => setFailedImage(person.image)} />
       : <img src={person.image} alt="" style={portraitImageStyle(person.name, person.image)} loading="lazy" decoding="async" width={500} height={500} onError={() => setFailedImage(person.image)} />

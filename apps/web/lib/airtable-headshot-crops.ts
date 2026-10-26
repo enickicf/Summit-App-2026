@@ -4,6 +4,18 @@
 //  - bytes null + file: a better photo than Airtable's is approved for the site; it stays until reviewed.
 //  - file null: no photo passed review yet (Airtable's is too small/blurry); listed by name only.
 export const airtableHeadshotCrops: Record<string, { bytes: number | null; file: string | null }> = {
+  // Oct 26 Awards pass: keep the approved restoration/source and framing consistent after live Airtable refreshes.
+  recmtGEPHjplKheEU: { bytes: null, file: "/2026-headshots/portraits/cathy-olson-restored-20261026.jpg" },
+  recEZUTCUGANKByLl: { bytes: null, file: "/2026-headshots/portraits/beth-kojima-restored-20261026.jpg" },
+  recKnTXzRvPPusd3z: { bytes: null, file: "/2026-headshots/portraits/jennifer-karson-strauss-restored-20261026.jpg" },
+  recmFe8BwsTzjk1oe: { bytes: null, file: "/2026-headshots/portraits/elisa-sednaoui-restored-20261026.jpg" },
+  recMnrUM2qcLWIhbL: { bytes: null, file: "/2026-headshots/portraits/anna-muller-restored-20261026.jpg" },
+  recD5l8Ltr2oUGnUI: { bytes: null, file: "/2026-headshots/portraits/blaise-aguirre-harvard-20261026.jpg" },
+  reccYQjPt7TNpk4AP: { bytes: null, file: "/2026-headshots/portraits/douglas-mckenzie-restored-20261026.jpg" },
+  recjdC3Wg6cLcksFd: { bytes: null, file: "/2026-headshots/portraits/cameron-muller-official-20261026.jpg" },
+  rec8KwGvKFACbi2Fb: { bytes: null, file: "/2026-headshots/portraits/miriam-isa-official-20261026.jpg" },
+  rec4872W99ReQ3wEB: { bytes: null, file: "/2026-headshots/portraits/yvette-baker-official-20261026.jpg" },
+  recF45shNSaP9wTPo: { bytes: null, file: "/2026-headshots/portraits/jennifer-donnelly-official-20261026.jpg" },
   // Oct 26 follow-up: use the same verified full-frame portraits on every Summit/Awards surface and
   // through the live Airtable overlay. Joanna's attachment belonged to Lauren Ann, so it is blocked.
   recHUe7yCx96KjyX2: { bytes: null, file: "/2026-headshots/portraits/karen-niemi-framed-20261026.jpg" },
@@ -17,7 +29,6 @@ export const airtableHeadshotCrops: Record<string, { bytes: number | null; file:
   // with bytes:null; reviewed Airtable portraits stay pinned only while that exact upload is unchanged.
   rec97E7jRL9ZlUYKa: { bytes: 47221, file: "/2026-headshots/portraits/andrew-diehl-card-20261025.jpg" },
   recwfbAG03JmOJx26: { bytes: null, file: "/2026-headshots/portraits/dj-charlie-chan-official-20261025.jpg" },
-  reccYQjPt7TNpk4AP: { bytes: 64945, file: "/2026-headshots/portraits/douglas-mckenzie-card-20261025.jpg" },
   receLk6EPZiyQliEE: { bytes: 86272, file: "/2026-headshots/portraits/ia-cheveres-card-20261025.jpg" },
   recSQtMbd6BTw3v9o: { bytes: null, file: "/2026-headshots/portraits/jhone-ebert-official-20261025.jpg" },
   recFg2EqNUcHpyqaB: { bytes: null, file: "/2026-headshots/portraits/jordan-rose-official-20261025.jpg" },
@@ -28,10 +39,8 @@ export const airtableHeadshotCrops: Record<string, { bytes: number | null; file:
   recVWLRzYl01Hc7y6: { bytes: 15978, file: "/2026-headshots/portraits/allison-elbl.jpg" },
   recjSe6G2Qj50IleV: { bytes: 133215, file: "/2026-headshots/portraits/ana-wolfington.jpg" },
   rec21VwaMaoSYXXtF: { bytes: 191013, file: "/2026-headshots/portraits/bianca-mok.jpg" },
-  recD5l8Ltr2oUGnUI: { bytes: 64007, file: "/2026-headshots/portraits/blaise-aguirre.jpg" },
   rect0ek98fHdiivP4: { bytes: 3884561, file: "/2026-headshots/portraits/brandon-saho.jpg" },
   rec0vSvESPiQdltil: { bytes: 34760, file: "/2026-headshots/portraits/caroline-jones-2-c.jpg" },
-  recmtGEPHjplKheEU: { bytes: 962208, file: "/2026-headshots/portraits/cathy-olson-2-c.jpg" },
   recqhLGSO9v58a470: { bytes: 570136, file: "/2026-headshots/portraits/clark-cummings-2-c.jpg" },
   rec6Rq9niGUiPfPvF: { bytes: 234293, file: "/2026-headshots/portraits/dan-burkhead-2-c.jpg" },
   recPp9jZG87QlNaSX: { bytes: 508513, file: "/2026-headshots/portraits/daniel-gillison.jpg" },
@@ -50,7 +59,6 @@ export const airtableHeadshotCrops: Record<string, { bytes: number | null; file:
   recs3sOrFxD1pBYwS: { bytes: null, file: "/2026-headshots/portraits/michael-townsend-hd-20261015.jpg" },
   recuOxLcyzqcTmqlF: { bytes: 24030, file: "/2026-headshots/portraits/mike-bryan-2.jpg" },
   recdC5AYx00UN7Vsj: { bytes: 217678, file: "/2026-headshots/portraits/mike-majlak-3-c.jpg" },
-  rec8KwGvKFACbi2Fb: { bytes: null, file: "/2026-headshots/portraits/miriam-isa-hd-20261015.jpg" },
   recis3OFj5IM80TL2: { bytes: 16430, file: "/2026-headshots/portraits/morgan-marler.jpg" },
   rec9ALE83duU2XwYK: { bytes: null, file: "/2026-headshots/portraits/nick-dana-hd-20261015.jpg" },
   recQKZYqH5TdCKP4a: { bytes: 160737, file: "/2026-headshots/portraits/noah-springer.jpg" },
@@ -98,8 +106,6 @@ export const airtableHeadshotCrops: Record<string, { bytes: number | null; file:
   recWyQHmaVdMKfrih: { bytes: 238753, file: "/2026-headshots/portraits/raquelle-stevens-c.jpg" },
   recAwr1mM0YIHXMNG: { bytes: null, file: "/2026-headshots/portraits/gavin-magnus-hd-20261015.jpg" },
   recA1UhSPyb3vqTaw: { bytes: 1346880, file: "/2026-headshots/portraits/clayton-alenik-c.jpg" },
-  recEZUTCUGANKByLl: { bytes: 26074, file: "/2026-headshots/portraits/beth-kojima-2-c.jpg" },
-  recF45shNSaP9wTPo: { bytes: 241439, file: "/2026-headshots/portraits/jennifer-donnelly-2-c.jpg" },
   recWZqOFK1ZeWCkYH: { bytes: 201591, file: "/2026-headshots/portraits/jeneva-bell-c.jpg" },
   // Oct 3 Airtable re-read (work/new-headshots-20261003/manifest.json).
   recEQlvX1qbFabpY4: { bytes: 594979, file: "/2026-headshots/portraits/king-trot-c.jpg" },
@@ -116,7 +122,6 @@ export const airtableHeadshotCrops: Record<string, { bytes: number | null; file:
   rec9Ra0XaogvjnRGN: { bytes: 134401, file: "/2026-headshots/portraits/nicole-kalhorn-c.jpg" },
   recnhLeRSENhRfSLM: { bytes: 574606, file: "/2026-headshots/portraits/jp-saxe-c.jpg" },
   recnyWzq2ubeVmXsm: { bytes: 536096, file: "/2026-headshots/portraits/atz-kilcher-c.jpg" },
-  recKnTXzRvPPusd3z: { bytes: 209410, file: "/2026-headshots/portraits/jennifer-karson-strauss-2-c.jpg" },
   recP9QQsAum7S2XvQ: { bytes: 93719, file: "/2026-headshots/portraits/alex-banayan-c.jpg" },
   reci6PAY1AHRJzpP1: { bytes: 50626, file: "/2026-headshots/portraits/rohan-thakkar-c.jpg" },
   recYAPVbxJzhFVgGm: { bytes: 686239, file: "/2026-headshots/portraits/alyson-niemann-c.jpg" },

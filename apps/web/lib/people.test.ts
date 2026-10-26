@@ -57,7 +57,7 @@ describe("website reviewed directory", () => {
     expect(personPortrait("Dr. Wendy Oliver-Pyatt")).toBe("/2026-headshots/portraits/wendy-oliver-pyatt-framed-20261026.jpg");
     expect(personPortrait("Jon Hershfield")).toBe("/2026-headshots/portraits/jon-hershfield-2.jpg");
     expect(personPortrait("Steve Wozniak")).toBe("/2026-headshots/portraits/steve-wozniak-2-c.jpg");
-    expect(personPortrait("Dr. Blaise Aguirre")).toBe("/2026-headshots/portraits/blaise-aguirre-framed-20261026.jpg");
+    expect(personPortrait("Dr. Blaise Aguirre")).toBe("/2026-headshots/portraits/blaise-aguirre-harvard-20261026.jpg");
   });
   it("uses the Oct 26 full-frame portrait refresh for every requested guest", () => {
     const refreshed = [
@@ -71,7 +71,7 @@ describe("website reviewed directory", () => {
       "Theresa Magnus", "Erik Blamoville", "Alexa Price", "Basak Kizilisik", "Julie Catineau", "Rohan Thakkar",
       "Taylor Perry", "Allison Elbl", "Andrew Diehl"
     ];
-    for (const name of refreshed) expect(personPortrait(name), name).toMatch(/-framed-20261026\.jpg$/);
+    for (const name of refreshed) expect(personPortrait(name), name).toMatch(/-20261026\.(?:jpg|png)$/);
   });
   it("uses the second Oct 26 portrait refresh and never assigns Lauren Ann's face to Joanna Howard", () => {
     const refreshed = ["Karen Niemi", "Christina Steil", "Maryn Pierce", "Gabriella Viveros", "Dalaura Kader", "Lauren Ann"];

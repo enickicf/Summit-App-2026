@@ -84,6 +84,10 @@ export function personInitials(name: string): string {
 }
 
 export function portraitImageStyle(name: string, src?: string) {
+  // Oct 26 Awards portrait review: fine framing adjustments shared by the Awards, Summit and profile
+  // cards. These keep the full hairline visible and normalize head size without changing the source photo.
+  const adjustment = portraitCardAdjustments.get(personNameKey(name));
+  if (adjustment) return { objectFit: "cover" as const, objectPosition: adjustment.position ?? "center", transform: adjustment.transform, transformOrigin: "center" };
   // Reviewed portraits are already framed like ICF's cards; a photo straight from Airtable is framed
   // toward the top so the face stays in the box.
   if (src?.startsWith("/2026-headshots/portraits/")) return { objectFit: "cover" as const, objectPosition: "center" };
@@ -92,3 +96,40 @@ export function portraitImageStyle(name: string, src?: string) {
   if (["Bob Bryan", "Mike Bryan"].includes(name)) return { objectFit: "cover" as const, objectPosition: "center top", transform: "scale(1.35)", transformOrigin: "center top" };
   return undefined;
 }
+
+export function portraitBackgroundStyle(src?: string) {
+  return src ? { backgroundImage: `url("${src.replace(/["\\]/g, "")}")`, backgroundPosition: "center", backgroundSize: "cover" } : undefined;
+}
+
+const portraitCardAdjustments = new Map<string, { transform?: string; position?: string }>([
+  ["jason kennedy", { transform: "scale(.92) translateY(2.5%)" }],
+  ["anthony ramos", { transform: "scale(.94) translateY(2%)" }],
+  ["lia shelesh", { transform: "scale(.95) translateY(2%)" }],
+  ["caroline jones", { transform: "scale(1.08)" }],
+  ["mike posner", { transform: "scale(1.07)" }],
+  ["atz kilcher", { transform: "scale(.94) translate(2%, 2%)" }],
+  ["blaise aguirre", { transform: "scale(.96) translateY(1.5%)" }],
+  ["beth kojima", { transform: "scale(.96) translateX(2%)" }],
+  ["tasha rasolkhani kalhorn", { transform: "scale(.94) translateY(2%)" }],
+  ["megan haley", { transform: "scale(.94) translateY(2%)" }],
+  ["sarah steil", { transform: "scale(.94) translate(3%, 2%)" }],
+  ["nicole kalhorn", { transform: "scale(.94) translateY(2%)" }],
+  ["jeff levin", { transform: "scale(.93) translateY(2.5%)" }],
+  ["kate flannery", { transform: "scale(.93) translateY(2.5%)" }],
+  ["sheila escovedo", { transform: "scale(1.1)" }],
+  ["dylan aguilar", { transform: "scale(.93) translateY(2.5%)" }],
+  ["princess love", { transform: "scale(.94) translateY(2%)" }],
+  ["yvette baker", { transform: "scale(1.06) translateX(2%)", position: "center 35%" }],
+  ["alexander roque", { transform: "scale(.94) translateY(2%)" }],
+  ["ross rocketto", { transform: "scale(.94) translateY(2%)" }],
+  ["cameron muller", { position: "center 18%" }],
+  ["angie mcphaul", { transform: "scale(.94) translateY(2%)" }],
+  ["sara steinweiss", { transform: "scale(1.06)" }],
+  ["janet wozniak", { transform: "scale(.88) translateY(1%)" }],
+  ["miriam isa", { transform: "scale(1.15)", position: "center 42%" }],
+  ["winston kelly", { transform: "scale(.94) translateY(2%)" }],
+  ["sean wolfington", { transform: "scale(.94) translateY(2%)" }],
+  ["ryan wolfington", { transform: "scale(.94) translateY(2%)" }],
+  ["george rapier", { transform: "scale(.94) translateY(2%)" }],
+  ["jennifer donnelly", { transform: "scale(1.22)", position: "center 42%" }],
+]);
