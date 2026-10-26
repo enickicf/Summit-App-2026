@@ -32,7 +32,7 @@ const portraitRefresh20261026: Record<string, PortraitOverride> = {
   "beth kojima": { file: "/2026-headshots/portraits/beth-kojima-restored-20261026.jpg", source: "airtable", credit: "Identity-preserving restoration of the verified Airtable portrait" },
   "jennifer karson strauss": { file: "/2026-headshots/portraits/jennifer-karson-strauss-restored-20261026.jpg", source: "airtable", credit: "Identity-preserving restoration of the verified Airtable portrait" },
   "sarah steil": { file: "/2026-headshots/portraits/sarah-steil-framed-20261026.jpg", source: "airtable" },
-  "nicole kalhorn": { file: "/2026-headshots/portraits/nicole-kalhorn-restored-20261026.jpg", source: "airtable", credit: "Identity-preserving restoration of the verified Airtable portrait" },
+  "nicole kalhorn": { file: "/2026-headshots/portraits/nicole-kalhorn-owner-20261026.jpg", source: "owner", credit: "Owner-provided portrait; Oct 26" },
   "jeff levin": { file: "/2026-headshots/portraits/jeff-levin-framed-20261026.jpg", source: "airtable" },
   "leah smith": { file: "/2026-headshots/portraits/leah-smith-restored-20261026.jpg", source: "web", credit: "Identity-preserving restoration of Tape Art's verified Leah Smith portrait" },
   "jessica edwards": { file: "/2026-headshots/portraits/jessica-edwards-framed-20261026.jpg", source: "airtable" },

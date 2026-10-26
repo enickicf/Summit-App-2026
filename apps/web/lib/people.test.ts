@@ -61,6 +61,7 @@ describe("website reviewed directory", () => {
     expect(personPortrait("Steve Wozniak")).toBe("/2026-headshots/portraits/steve-wozniak-2-c.jpg");
     expect(personPortrait("Dr. Blaise Aguirre")).toBe("/2026-headshots/portraits/blaise-aguirre-harvard-20261026.jpg");
     expect(personPortrait("Raquelle Stevens")).toBe("/2026-headshots/portraits/raquelle-stevens-light-20261026.png");
+    expect(personPortrait("Nicole Kalhorn")).toBe("/2026-headshots/portraits/nicole-kalhorn-owner-20261026.jpg");
   });
   it("uses Theresa Magnus's centered restoration on Summit without changing the shared Awards portrait", () => {
     expect(summitPortrait2026("Theresa Magnus")).toBe("/2026-headshots/portraits/theresa-magnus-summit-restored-20261026.jpg");
