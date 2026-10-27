@@ -1,6 +1,6 @@
 import { getStore } from "@netlify/blobs";
 import { mapWithConcurrency, withRetry, type AnySubmission, type SubmissionKind, type SubmissionStore, type TextPreferenceRecord } from "../staff/store";
-import { approvedCapacityRules } from "../wellness-booking/capacity";
+import { approvedCapacityRules, testCapacityRules } from "../wellness-booking/capacity";
 import { blobBookingStore, readOnlyBookingStore } from "../wellness-booking/blob-store";
 
 export const summitSourceSiteId = "dca09595-b5fa-4210-9d36-010bccfb903c";
@@ -21,7 +21,10 @@ function sourceConnection(env: Partial<NodeJS.ProcessEnv>) {
 
 export async function sourceBookingStore(env: Partial<NodeJS.ProcessEnv> = process.env) {
   if (env.WELLNESS_BOOKING_ENABLED !== "true") return undefined;
-  approvedCapacityRules();
+  if (env.WELLNESS_BOOKING_MODE === "test") {
+    if (env.REMINDER_SOURCE_MODE !== "test") throw new Error("Test booking rules require an isolated test source.");
+    testCapacityRules(env);
+  } else approvedCapacityRules();
   const { name, options } = sourceConnection(env);
   return readOnlyBookingStore(blobBookingStore(getStore({ ...options, name }), { allowCreate: false }));
 }

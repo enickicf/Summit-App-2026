@@ -21,7 +21,7 @@ export async function agendaGet(request: Request, dependencies: Dependencies = {
     const agenda = await buildWellnessAgenda(dependencies.store ?? await (dependencies.storeProvider ?? integrationStore)(), {
       activities, now: dependencies.now, bookingStatuses: snapshot ? bookingStatuses(snapshot.value) : undefined,
     });
-    const previewJobs = planReminders(agenda);
+    const previewJobs = planReminders(agenda, snapshot?.value);
     // Owner approval covers the complete process/build, including test SMS.
     // Reviews, merges, deployments and passing tests do not grant send approval.
     const sendApproved = env.INTEGRATION_SMS_SEND_APPROVED === "true";

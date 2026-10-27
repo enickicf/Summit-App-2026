@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { readFileSync } from "node:fs";
 import draft from "../../config/wellness-capacity-2026.draft.json";
 import { wellnessSessions } from "../wellness-signups-2026";
 
@@ -18,6 +19,15 @@ export function capacityRules(input: unknown): CapacityRules {
 }
 
 export const draftCapacityRules = capacityRules(draft.sessions);
+
+export function testCapacityRules(env: Partial<NodeJS.ProcessEnv>): CapacityRules {
+  if (!/^nas-reminders-test-[a-z0-9-]+$/.test(env.INTEGRATION_TEST_STORE_PREFIX ?? "")) throw new Error("An isolated booking test prefix is required.");
+  const raw = env.WELLNESS_BOOKING_TEST_CAPACITY_JSON ?? (env.WELLNESS_BOOKING_TEST_CAPACITY_FILE ? readFileSync(env.WELLNESS_BOOKING_TEST_CAPACITY_FILE, "utf8") : null);
+  if (!raw || raw.length > 30_000) throw new Error("An explicit synthetic capacity configuration is required.");
+  const fixture = JSON.parse(raw);
+  if (fixture.status !== "test-only") throw new Error("Only labelled synthetic policies may be used in test mode.");
+  return capacityRules(fixture.sessions);
+}
 
 // Sample limits can be used by an injected local repository. Only a separately
 // reviewed complete policy can pass the runtime activation gate.

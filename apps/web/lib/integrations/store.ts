@@ -3,9 +3,15 @@ import { fileSubmissionStore, journaledStore, mapWithConcurrency, netlifyBlobsSu
 import { approvedCapacityRules } from "../wellness-booking/capacity";
 import { blobBookingStore, readOnlyBookingStore } from "../wellness-booking/blob-store";
 import { ledgerSchema, type VersionedLedgerStore } from "../wellness-booking/ledger";
+import { getWellnessWorkflow } from "../wellness-booking/workflow-store";
 
 export async function integrationBookingStore(env: Partial<NodeJS.ProcessEnv> = process.env): Promise<VersionedLedgerStore | undefined> {
   if (env.WELLNESS_BOOKING_ENABLED !== "true") return undefined;
+  if (env.WELLNESS_BOOKING_MODE === "test") {
+    const workflow = await getWellnessWorkflow(env);
+    if (!workflow) throw new Error("Test booking workflow is unavailable.");
+    return readOnlyBookingStore(workflow.ledger);
+  }
   approvedCapacityRules();
   if (!(env.NETLIFY === "true" || env.NETLIFY_BLOBS_CONTEXT)) {
     if (!env.WELLNESS_BOOKING_FIXTURE_FILE) throw new Error("An explicit local booking fixture is required.");

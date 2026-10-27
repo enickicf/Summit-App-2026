@@ -1,3 +1,7 @@
+OCTOBER 26 PHASE 2 UPDATE
+
+IMPLEMENTED locally: public booking binding, durable retry/recovery, private guest cancellation, automatic first-come promotion (Nick’s choice), staff view/actions/private backup and read-only initial migration planning. All remain disabled for production. All 30 real capacities below are still unset. Historical foundation-only descriptions below are superseded by WELLNESS_BOOKING_WORKFLOW.txt; no live source data changed.
+
 WELLNESS CAPACITY PLACEHOLDERS — OCTOBER 26, 2026
 
 PARTIAL: editable draft settings plus a locally tested booking engine and reminder-status integration. No live capacity, waitlist or cancellation behavior is activated. No existing signup or staff approval code has changed.

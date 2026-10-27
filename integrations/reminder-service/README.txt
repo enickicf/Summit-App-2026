@@ -26,7 +26,7 @@ Optional isolated rehearsal settings:
   INTEGRATION_TEST_ACTIVITIES_JSON: at most four TEST-labelled fictional wellness-test IDs; requires isolated test mode. It cannot override real sessions.
 
 Future capacity connection:
-  WELLNESS_BOOKING_ENABLED: leave unset/false. When true, the code requires an approved complete capacity configuration and reads an already initialized booking ledger. Unset limits or missing ledger return 503. The reminder service cannot initialize or write the booking ledger. Public signup/cancellation wiring and migration are not included in this foundation.
+  WELLNESS_BOOKING_ENABLED: leave unset/false. When true, the code requires an approved complete capacity configuration and reads an already initialized booking ledger. Unset limits or missing ledger return 503. The reminder service cannot initialize or write the booking ledger. The web app now contains disabled signup/cancellation/recovery wiring; see docs/WELLNESS_BOOKING_WORKFLOW.txt. Initial live migration is still not included. The companion only reads booking state and cannot initialize or mutate it. Explicit synthetic test-capacity settings are allowed only with isolated test source mode/prefix; they cannot satisfy the live gate.
 
 API:
   GET /api/integrations/agenda — feed bearer auth; private/no-store; 401 before source access; 503 for incomplete required data.

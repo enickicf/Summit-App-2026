@@ -1,3 +1,7 @@
+## October 26 wellness follow-up — IMPLEMENTED locally / PARTIAL rollout
+
+The disabled booking flow now includes public signup binding, durable source-save recovery, private view/cancellation, automatic FIFO promotion, staff management/private backup, and read-only initial migration planning. Source review remains in draft PR #2; nothing is merged, deployed or live. Actual capacities, reviewed real-record migration, legacy link recovery, restore rehearsal, provider/Make reconciliation and Nick’s complete-process/build approval remain required. All SMS stays disabled. See `docs/WELLNESS_BOOKING_WORKFLOW.txt`; historical foundation-only statements below are superseded for this branch.
+
 ## October 26 wellness branch — local implementation, no publication
 
 **IMPLEMENTED locally:** wellness-only authenticated feed/STOP port, shared companion build, canonical 30-session mapping, and an atomic capacity/waitlist/cancellation engine with disabled placeholder settings. **PARTIAL:** public booking/cancellation UI binding, existing-record migration and production rollout are not complete. Staff approval/confirmation code and all live data/settings remain unchanged. This dated update supersedes the historical migration-only task statement for this branch; historical records below are retained. See `docs/WELLNESS_REMINDER_REVIEW.txt`.

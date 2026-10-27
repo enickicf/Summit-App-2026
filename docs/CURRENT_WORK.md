@@ -1,3 +1,7 @@
+## October 26 — IMPLEMENTED locally: complete booking flow and automatic promotion
+
+Connected the disabled atomic booking engine to wellness signup, durable private intake/source recovery, signed guest cancellation, full-staff booking view/actions/private backup, promotion-message previews and a read-only initial migration report. Nick chose automatic first-come promotion. All 30 real limits remain unset. All SMS, including tests, remains on hold; the Make reminder scenario was verified inactive earlier on October 26. No live data, deployment or provider setting changed. Production-build HTTP/browser rehearsals used fictional isolated records only. See `docs/WELLNESS_BOOKING_WORKFLOW.txt` for exact checks and remaining migration/cutover requirements. This update supersedes earlier foundation-only descriptions below.
+
 ## OWNER HOLD — October 26: all SMS pending complete approval
 
 Nick requires approval of the complete process and build before any text, including tests. The reminder feed now defaults to previews only and an empty dispatch queue; `INTEGRATION_SMS_SEND_APPROVED` must remain unset/false. No Make run, live SMS, deployment or provider setting was changed. This gate is source code pending deployment, not a claim that an already deployed service was modified.

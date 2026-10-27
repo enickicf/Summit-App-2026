@@ -1,9 +1,10 @@
 import { createHash } from "node:crypto";
 import type { Agenda, Selection } from "./agenda";
 import { timeZone } from "./catalog";
+import type { Ledger } from "../wellness-booking/ledger";
 
 export type ReminderJob = {
-  key: string; recipientKey: string; to: string; kind: "agenda" | "activity";
+  key: string; recipientKey: string; to: string; kind: "agenda" | "activity" | "promotion";
   activityDate: string; activityOccurrenceIds: string[]; dueAt: string; sendBefore: string;
   body: string;
 };
@@ -35,7 +36,7 @@ const agendaLine = (selection: Selection) => {
 
 // Pure planning only. Make owns durable reservations, send attempts and delivery logs.
 // Recompute from a fresh successful snapshot immediately before dispatching.
-export function planReminders(agenda: Agenda): ReminderJob[] {
+export function planReminders(agenda: Agenda, ledger?: Ledger): ReminderJob[] {
   if (!agenda.complete) throw new Error("Cannot plan from a partial snapshot.");
   const jobs: ReminderJob[] = [];
   for (const recipient of agenda.recipients) {
@@ -57,6 +58,23 @@ export function planReminders(agenda: Agenda): ReminderJob[] {
       const label = new Intl.DateTimeFormat("en-US", { timeZone, weekday: "short", month: "short", day: "numeric" }).format(new Date(selections[0]!.startsAt));
       add("agenda", activityDate, activityDate, selections, previousEvening(activityDate), 15,
         `Not Alone Summit: Your agenda for tomorrow (${label}), Las Vegas time:\n${selections.map(agendaLine).join("\n")}\n${footer}`);
+    }
+  }
+  if (ledger) {
+    for (const recipient of agenda.recipients) for (const selection of recipient.selections) {
+      const booking = ledger.bookings.find(row => row.sourceRecordId === selection.sourceRecordId && row.status === "registered");
+      if (!booking) continue;
+      const event = [...ledger.audit].reverse().find(row => row.promotedIds.includes(booking.id));
+      if (!event) continue;
+      const sendBefore = Math.min(Date.parse(event.at) + 15 * 60_000, Date.parse(selection.startsAt));
+      if (sendBefore <= Date.parse(event.at)) continue;
+      const label = new Intl.DateTimeFormat("en-US", { timeZone, weekday: "short", month: "short", day: "numeric" }).format(new Date(selection.startsAt));
+      jobs.push({
+        key: createHash("sha256").update(`${agenda.programId}:${recipient.recipientKey}:promotion:${booking.id}:${event.requestId}`).digest("hex"),
+        recipientKey: recipient.recipientKey, to: recipient.phone, kind: "promotion", activityDate: localDate(new Date(selection.startsAt)),
+        activityOccurrenceIds: [selection.activityOccurrenceId], dueAt: event.at, sendBefore: new Date(sendBefore).toISOString(),
+        body: `Not Alone Summit: A place opened up! You're now registered for ${selection.title} on ${label} at ${time(selection.startsAt)}. Las Vegas time. ${footer}`,
+      });
     }
   }
   return jobs.sort((a, b) => a.dueAt.localeCompare(b.dueAt) || a.key.localeCompare(b.key));
