@@ -1,3 +1,7 @@
+## October 27 — existing import complete; ongoing sync next
+
+Do not re-create the 12 imported wellness rows. Match/update by Source Record ID and preserve staff notes/manual links. Resolve 2 unmatched guest links and review 5 other contact/schedule discrepancies listed in Sync Details. Prepare the inactive Make source-to-Airtable connection after the reviewed source feed is available; do not run messaging modules or enable SMS. Existing-record copy is complete, but automatic booking migration and production source reconciliation remain separate pending work.
+
 ## October 27 Airtable wellness connection — PLANNED rollout
 
 Empty Wellness Signups table and private preview code are ready for review. Verify exact ROS links and guest Record IDs using All Summit Data, then prepare a separate inactive, single-run-at-a-time Make upsert with no messaging step. Preserve staff notes/unverified links and stop on duplicate source keys or incomplete snapshots. Rehearse fictional recovery/cancellation/promotion before a reviewed existing-record import and cutover. No production deployment or SMS activation; Porter publishes reviewed source and Nick must approve the complete process/build before any text. See `docs/WELLNESS_AIRTABLE_SYNC.txt`.

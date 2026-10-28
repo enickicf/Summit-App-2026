@@ -1,3 +1,7 @@
+## October 27 Airtable migration — IMPLEMENTED snapshot / PARTIAL ongoing sync
+
+Owner-approved existing-record import is verified: 12 unique wellness selections, 5 people, 12 activity links and 10 verified guest links; 2 guest links remain unmatched. Seven rows have review details for identity/contact or source schedule differences. Original source data is preserved; booking admission and texting are not activated. The earlier empty-table note is historical. Automatic Make sync still needs connection/review; no deployment or SMS.
+
 ## October 27 Airtable wellness — PARTIAL
 
 Owner authorized preparing wellness signup storage in Airtable. New table Wellness Signups exists with no records; its links/schema were verified. Preview-only web/companion feed is implemented locally; no live sync, data import or booking changes. Netlify retains original submissions/waivers and atomic booking authority. Contact details remain in All Summit Data under the existing privacy workflow. No deployment or SMS. See `docs/WELLNESS_AIRTABLE_SYNC.txt`.

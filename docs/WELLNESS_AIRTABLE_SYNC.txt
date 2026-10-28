@@ -1,5 +1,34 @@
 WELLNESS SIGNUPS IN AIRTABLE — OCTOBER 27, 2026
 
+IMPLEMENTED: EXISTING SIGNUPS IMPORTED OCTOBER 27 (SUPERSEDES EMPTY-TABLE NOTES)
+Nick explicitly requested migration of existing signups. Read the authenticated
+wellness-only staff CSV: 12 distinct source records from 5 people, matching the
+live portal totals. Reviewed guest/session links against All Summit Data and live
+Guest Tracker/ROS; imported by Source Record ID using upsert, then read back and
+compared every written field. All 12 source IDs, timestamps and original labels
+are preserved. All 12 activity links and 10 verified guest links are present.
+Two guest links remain unassigned because the contact sheet matches a different
+roster name; no name-only/fuzzy link or replacement guest record was created.
+Sync Details records generic private-contact/schedule discrepancy notes without
+contact values: 2 guest-identity conflicts, 2 contact-detail differences, 2 changed
+activity titles and 1 changed activity time (7 reviewed rows). The other 5 are
+Current. All booking states remain Signup received and Text Permission remains
+Not evaluated. This import is an operational copy, not an atomic booking migration
+or approval of places. Source submissions/waivers, contacts, admissions, existing
+automation settings and Staff Notes are unchanged. No outbound step or SMS.
+Automatic ongoing sync remains PLANNED; the endpoint remains preview-only.
+Private CSV/import payloads stay in the ignored owner workspace, not this repo.
+
+MAKE DRAFT PREPARED, NOT CONNECTED OR RUN
+Saved NAS 2026 - wellness Airtable sync - HOLD, scenario 6805809, in team 3087705.
+Verified Inactive. Contains only a disconnected HTTP GET source-reader placeholder
+and explicit hold/integration notes; no Airtable writer, sender or execution.
+Existing reminder scenario 6765208 was separately verified Inactive.
+The companion's WELLNESS_AIRTABLE_SOURCE_MODE defaults test; explicit live only
+changes this new endpoint's source read, removes its test prefix and disables its
+source writes. Existing reminder/STOP source settings are not changed. The feed's
+bearer credential and source publication remain pending; nothing was deployed.
+
 PARTIAL: Nick asked to make Airtable the central place for wellness signup data.
 This is narrow owner authorization to prepare the wellness table and integration;
 it does not authorize changing other records, admission decisions, deployment or SMS.
@@ -78,7 +107,7 @@ NEXT CONNECTION STEPS — PLANNED, NOT EXECUTED
    required at send time; a manually edited Airtable cell cannot override them.
 
 VALIDATED LOCALLY
-145 focused checks across 16 booking/integration/inbox/Cherrial files passed;
+147 focused checks across 16 booking/integration/inbox/Cherrial files passed;
 production web build and TypeScript passed; companion bundle and TypeScript passed.
 Bundled unauthorized/missing-source smoke checks passed with network disabled.
 No UI changed. The full suite was not repeated for this addition; the previously

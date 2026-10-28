@@ -1,3 +1,7 @@
+## October 27 — existing wellness signup import approved
+
+Nick explicitly asked to proceed and migrate existing signups into Wellness Signups. Imported the 12-row source snapshot without changing original submissions, waivers, contacts or admissions. Preserve source identities and flag uncertain guest links or schedule/contact differences; never infer a roster match solely from a similar name or borrowed contact. Automatic syncing and SMS remain separate; no text is authorized by this import.
+
 ## October 27 — owner requests Airtable wellness records
 
 Use Main NA Summit 2026 for the wellness operations view. Prepare a separate linked Wellness Signups table and private source preview; retain original website submissions, waiver evidence and atomic capacity/booking state in Netlify. Preserve existing contact routing to All Summit Data. Exact source IDs identify sync rows; unmatched guests/classes need review and do not imply admission. Table editing is not a booking command or SMS authorization. No live import, deployment or texts authorized by this preparation. Details: `docs/WELLNESS_AIRTABLE_SYNC.txt`.

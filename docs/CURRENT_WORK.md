@@ -1,3 +1,7 @@
+## October 27 — existing wellness signups migrated to Airtable
+
+Nick authorized importing existing signups. Migrated all 12 source selections from 5 people by immutable source ID; verified every written field by readback. All 12 activities are linked; 10 rows have verified guest links and 2 retain an identity-review flag. Generic Sync Details notes preserve contact/schedule discrepancies without copying private contacts. Original source records, waivers, admissions, contact sheet and automation settings are unchanged; no deployment or texts. Ongoing Make sync remains pending. See `docs/WELLNESS_AIRTABLE_SYNC.txt`.
+
 ## October 27 — Airtable wellness table prepared; live sync pending
 
 Nick requested wellness signup data in Airtable. Created and verified an empty Wellness Signups table in Main NA Summit 2026, linked to Guest Tracker and Summit Programming ROS; existing record values and automations are unchanged. Added a private, authenticated, preview-only source projection with stable source IDs, cancellation/waitlist state and review flags. It omits phone/email, signatures, private intake data and management tokens, preserving the existing All Summit Data contact workflow. No records imported, deployments or messages. See `docs/WELLNESS_AIRTABLE_SYNC.txt`; live Make sync, exact link matching and cutover remain planned.

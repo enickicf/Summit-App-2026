@@ -1,3 +1,7 @@
+## October 27 existing wellness import — IMPLEMENTED
+
+Nick authorized existing signup migration. Wellness Signups now contains 12 verified unique source selections (5 people), including legacy/new IDs. Upsert merged only by Source Record ID. Guest/ROS links use verified existing records; 2 guest links remain unassigned. A sync-owned Sync Details field holds generic review notes without private contacts; Staff Notes is preserved. Contacts and original signatures/waivers remain outside this table. The source and all existing automation settings were unchanged. Automatic ongoing sync is still inactive. Details: `docs/WELLNESS_AIRTABLE_SYNC.txt`.
+
 ## October 27 wellness Airtable exception — PARTIAL
 
 Nick explicitly requested wellness signup data in Airtable as the central operations view. Created empty table `tblbfPmjZGnJPnINI` in base `app7BHptsc1bjc3DD`, linked to existing Guest Tracker and Summit Programming ROS. No existing values or automation settings changed; no attendee records imported. This narrow owner request supersedes historical read-only guidance only for the new wellness integration. The private feed always produces previews with an empty write queue; there is no Airtable writer. It excludes private contacts, signatures and management links. The existing contact-to-All Summit Data workflow and website source/waiver/atomic booking storage remain authoritative for those responsibilities. See `docs/WELLNESS_AIRTABLE_SYNC.txt` and the disabled field-ID manifest.

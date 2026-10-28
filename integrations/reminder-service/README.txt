@@ -13,6 +13,7 @@ Required server-only provider settings (names only; no secrets in source):
   INTEGRATION_SMS_SEND_APPROVED: leave unset/false until explicit complete-process/build approval.
   INTEGRATION_FEED_TOKEN: independent random secret, minimum 32 characters.
   WELLNESS_AIRTABLE_FEED_TOKEN: separate private preview-feed bearer secret, minimum 32 characters; not yet provisioned.
+  WELLNESS_AIRTABLE_SOURCE_MODE: test (default) or explicitly live for this read-only endpoint only. Does not change the reminder rehearsal/STOP source. Source writes are always disabled for this connection.
   CLICKSEND_INBOUND_SECRET: different random secret, minimum 32 characters.
   CLICKSEND_DEDICATED_NUMBER: dedicated sender/destination number.
   CLICKSEND_EXPECTED_USER_ID: account ID verified from provider callbacks.

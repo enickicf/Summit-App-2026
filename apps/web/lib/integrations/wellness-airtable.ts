@@ -6,8 +6,27 @@ import { authenticated, integrationJson } from "./http";
 import { integrationBookingStore, integrationStore } from "./store";
 
 type SourceRow = WorkshopSubmission & { removedAt?: string; cancelledAt?: string; isTest?: boolean; bookingStatus?: string };
-type VerifiedLinks = { guestsBySourceRecordId?: ReadonlyMap<string, string>; sessionsByWebsiteSessionId?: ReadonlyMap<string, string> };
+type SourceReviewReason = "contact-name-conflict" | "contact-details-differ" | "activity-title-changed" | "activity-time-changed";
+type VerifiedLinks = { guestsBySourceRecordId?: ReadonlyMap<string, string>; sessionsByWebsiteSessionId?: ReadonlyMap<string, string>; reviewReasonsBySourceRecordId?: ReadonlyMap<string, readonly SourceReviewReason[]> };
+const reviewNotes = {
+  "unmatched-guest": "Guest Tracker identity needs verification; no guest link was assigned.",
+  "unmatched-session": "Programming activity link needs verification.",
+  "booking-needs-review": "Booking state needs review; this row does not confirm a place.",
+  "contact-name-conflict": "Signup contact matches a different roster name. Keep this signup separate until identity is verified.",
+  "contact-details-differ": "Signup and contact-sheet details differ. Original contacts are preserved; verify before any future sending.",
+  "activity-title-changed": "The current programming title differs from the original signup. The original selection label is preserved.",
+  "activity-time-changed": "The current programming time differs from the original signup. The original selection time is preserved.",
+} as const;
 type Fields = Record<string, string | number | null | string[]>;
+// This new read-only feed can use live source data without switching the
+// existing reminder rehearsal or STOP callback out of its isolated test source.
+export function airtableSourceEnvironment(env: Partial<NodeJS.ProcessEnv>) {
+  const mode = env.WELLNESS_AIRTABLE_SOURCE_MODE ?? "test";
+  if (mode !== "test" && mode !== "live") throw new Error("Invalid Airtable source mode.");
+  const result: Partial<NodeJS.ProcessEnv> = { ...env, REMINDER_SOURCE_MODE: mode, REMINDER_SOURCE_WRITES_ENABLED: "false" };
+  if (mode === "live") delete result.INTEGRATION_TEST_STORE_PREFIX;
+  return result;
+}
 const recordId = /^rec[A-Za-z0-9]{14}$/;
 const timestamp = (value: string) => {
   if (!/^\d{4}-\d\d-\d\dT.*(?:Z|[+-]\d\d:\d\d)$/.test(value) || !Number.isFinite(Date.parse(value))) throw new Error("Invalid source timestamp.");
@@ -49,7 +68,7 @@ export function projectWellnessSignups(workshops: readonly SourceRow[], options:
     const guestId = options.guestsBySourceRecordId?.get(row.id);
     const sessionId = options.sessionsByWebsiteSessionId?.get(row.sessionId);
     if ((guestId && !recordId.test(guestId)) || (sessionId && !recordId.test(sessionId))) throw new Error("Invalid verified link.");
-    const issues = [...(!guestId ? ["unmatched-guest"] : []), ...(!sessionId ? ["unmatched-session"] : []), ...(status === "Needs review" ? ["booking-needs-review"] : [])];
+    const issues = [...(!guestId ? ["unmatched-guest" as const] : []), ...(!sessionId ? ["unmatched-session" as const] : []), ...(status === "Needs review" ? ["booking-needs-review" as const] : []), ...(options.reviewReasonsBySourceRecordId?.get(row.id) ?? [])];
     const anyWaiver = row.waiverAccepted !== undefined || Boolean(row.signature || row.waiverVersion);
     const fields: Fields = {
       [target.fields.Signup]: [row.name.trim(), row.sessionTitle.trim(), row.sessionDay, row.sessionTime].filter(Boolean).join(" · "),
@@ -65,7 +84,8 @@ export function projectWellnessSignups(workshops: readonly SourceRow[], options:
       // website STOP records, ClickSend suppression and All Summit Data Do Not Text.
       [target.fields["Text Permission"]]: "Not evaluated",
       [target.fields["Booking ID"]]: booking?.id ?? null,
-      [target.fields["Sync State"]]: status === "Needs review" ? "Needs attention" : !guestId ? "Unmatched guest" : !sessionId ? "Unmatched session" : "Current",
+      [target.fields["Sync State"]]: status === "Needs review" ? "Needs attention" : !guestId ? "Unmatched guest" : !sessionId ? "Unmatched session" : issues.length ? "Needs attention" : "Current",
+      [target.fields["Sync Details"]]: issues.map(issue => reviewNotes[issue]).join(" "),
       ...(guestId ? { [target.fields.Guest]: [guestId] } : {}),
       ...(sessionId ? { [target.fields.Session]: [sessionId] } : {}),
     };

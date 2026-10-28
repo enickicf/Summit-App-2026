@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import target from "../../config/wellness-airtable-2026.draft.json";
 import { memorySubmissionStore, type WorkshopSubmission } from "../staff/store";
 import { emptyLedger, memoryBookingStore, type Ledger } from "../wellness-booking/ledger";
-import { projectWellnessSignups, wellnessAirtableGet } from "./wellness-airtable";
+import { airtableSourceEnvironment, projectWellnessSignups, wellnessAirtableGet } from "./wellness-airtable";
 
 const now = new Date("2026-10-27T20:00:00Z");
 const env = { WELLNESS_AIRTABLE_FEED_TOKEN: "fictional-wellness-airtable-preview-secret-32-chars" };
@@ -21,6 +21,16 @@ function ledgerFor(rows: WorkshopSubmission[], statuses: ("registered" | "waitli
 const field = (name: keyof typeof target.fields) => target.fields[name];
 
 describe("private Airtable wellness preparation", () => {
+  it("keeps live Airtable reads separate from reminder/STOP rehearsals and disables source writes", () => {
+    const original = { REMINDER_SOURCE_MODE: "test", INTEGRATION_TEST_STORE_PREFIX: "nas-reminders-test-keep", REMINDER_SOURCE_WRITES_ENABLED: "true" };
+    expect(airtableSourceEnvironment(original)).toMatchObject({ REMINDER_SOURCE_MODE: "test", INTEGRATION_TEST_STORE_PREFIX: "nas-reminders-test-keep", REMINDER_SOURCE_WRITES_ENABLED: "false" });
+    const live = airtableSourceEnvironment({ ...original, WELLNESS_AIRTABLE_SOURCE_MODE: "live" });
+    expect(live).toMatchObject({ REMINDER_SOURCE_MODE: "live", REMINDER_SOURCE_WRITES_ENABLED: "false" });
+    expect(live).not.toHaveProperty("INTEGRATION_TEST_STORE_PREFIX");
+    expect(original.REMINDER_SOURCE_MODE).toBe("test");
+    expect(original.INTEGRATION_TEST_STORE_PREFIX).toBe("nas-reminders-test-keep");
+    expect(() => airtableSourceEnvironment({ WELLNESS_AIRTABLE_SOURCE_MODE: "unexpected" })).toThrow();
+  });
   it("retains legacy and newer unknown session IDs without inventing confirmed seats", () => {
     const records = projectWellnessSignups([row(), row({ id: "other", category: "siteVisit" })], { now });
     expect(records).toHaveLength(1);
@@ -52,6 +62,18 @@ describe("private Airtable wellness preparation", () => {
   });
   it("excludes explicitly marked test records and dedicated test session IDs", () => {
     expect(projectWellnessSignups([row({ isTest: true }), row({ id: "test-2", sessionId: "wellness-test-rehearsal" })])).toEqual([]);
+  });
+  it("flags reviewed source differences without changing original labels, contacts or guest admission", () => {
+    const [record] = projectWellnessSignups([row()], {
+      guestsBySourceRecordId: new Map([["signup-1", "rec11111111111111"]]),
+      sessionsByWebsiteSessionId: new Map([[row().sessionId, "rec22222222222222"]]),
+      reviewReasonsBySourceRecordId: new Map([["signup-1", ["activity-title-changed", "contact-details-differ"]]]), now,
+    });
+    expect(record!.fields[field("Sync State")]).toBe("Needs attention");
+    expect(record!.fields[field("Sync Details")]).toContain("original selection label is preserved");
+    expect(record!.fields[field("Signup")]).toContain("Morning class");
+    expect(record!.fields[field("Booking Status")]).toBe("Signup received");
+    expect(JSON.stringify(record)).not.toContain(row().phone);
   });
   it("keeps source keys and revisions stable across retries while identifying real source changes", () => {
     const one = projectWellnessSignups([row()], { now })[0]!;
