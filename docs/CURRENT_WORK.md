@@ -1,3 +1,7 @@
+## October 28 — remaining guest identities confirmed by owner
+
+Nick explicitly confirmed the previously ambiguous roster identities. Added the 3 guest links on existing Wellness Signups rows and appended owner confirmation without clearing prior notes. All 19 current selections now have verified guest and activity links. Original signup labels/spelling, source IDs, Staff Notes, booking states, text permission and contact-sheet/roster values were preserved; readback verified and no duplicate source IDs exist. Contact differences remain separate review items. This supersedes earlier pending identity questions; do not ask them again. No texts or booking-status changes. Current production source access and the initial capacity exception remain pending.
+
 ## October 28 owner follow-up — current repository identified; access pending
 
 The owner supplied a new production repository and latest commit/tag. Our existing GitHub account cannot yet read that source (404; no pending invitation). Exact private handoff coordinates remain in the owner workspace. This older repository and draft PR are references only: hold merging/deploying them while scoped wellness changes are prepared against the verified current website source. Preserve the newer website and Git history; inspect a file-level port after access is granted.
