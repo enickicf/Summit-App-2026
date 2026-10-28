@@ -1,3 +1,7 @@
+## October 27 — private Airtable source feed LIVE; Make writer pending permission
+
+Owner-approved companion-only deployment `6ae1722358b471bf0feaa9f1` publishes reviewed source `986b1d3`; the main website deploy is unchanged. Authenticated feed and the Make HTTP reader both return 200 with all 12 wellness signups; unauthorized routes reject access and the SMS queue remains empty. Temporary deployment token revoked and verified unusable. A dedicated origin-restricted feed credential is saved in Netlify/Make. No automatic Airtable writer or sender is active. Existing Airtable OAuth needs renewed permissions; a separate base-limited wellness connection is prepared and awaiting owner approval. Computed Link Review preserves visibility of unmatched new rows while the future writer preserves existing links/notes. See `docs/WELLNESS_AIRTABLE_SYNC.txt`.
+
 ## October 27 — existing wellness signups migrated to Airtable
 
 Nick authorized importing existing signups. Migrated all 12 source selections from 5 people by immutable source ID; verified every written field by readback. All 12 activities are linked; 10 rows have verified guest links and 2 retain an identity-review flag. Generic Sync Details notes preserve contact/schedule discrepancies without copying private contacts. Original source records, waivers, admissions, contact sheet and automation settings are unchanged; no deployment or texts. Ongoing Make sync remains pending. See `docs/WELLNESS_AIRTABLE_SYNC.txt`.

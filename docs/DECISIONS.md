@@ -1,3 +1,7 @@
+## October 27 — data-feed deployment approved, texts still held
+
+Nick approved a temporary Netlify token, deployment to nas-2026-reminders only, separate private feed credential in Netlify/Make and immediate token revocation. Completed that scope without replacing the website or changing reminder/STOP source mode. Authenticated read-only Make verification is permitted for this data-only connection; no SMS test or sender activation is approved. A new Airtable base-limited OAuth grant is a separate pending approval.
+
 ## October 27 — existing wellness signup import approved
 
 Nick explicitly asked to proceed and migrate existing signups into Wellness Signups. Imported the 12-row source snapshot without changing original submissions, waivers, contacts or admissions. Preserve source identities and flag uncertain guest links or schedule/contact differences; never infer a roster match solely from a similar name or borrowed contact. Automatic syncing and SMS remain separate; no text is authorized by this import.

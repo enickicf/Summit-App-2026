@@ -1,5 +1,37 @@
 WELLNESS SIGNUPS IN AIRTABLE — OCTOBER 27, 2026
 
+LIVE FEED DEPLOYMENT — OCTOBER 27; AUTOMATIC WRITER STILL PENDING
+Nick explicitly approved the reminder-service-only deployment and its separate
+feed credential. Published reviewed source 986b1d3c4ea792daa59a59b8ce10da1030ee5556
+to nas-2026-reminders, deploy 6ae1722358b471bf0feaa9f1. Verified ready; the main
+website's published deploy stayed 6ae15d877db1993298dfab04. Rollback companion
+deploy is 6ade3cc97fe4cdf0f71c5453. No main website deployment was performed.
+Set only WELLNESS_AIRTABLE_FEED_TOKEN (secret/functions/production),
+WELLNESS_AIRTABLE_SOURCE_MODE=live and INTEGRATION_SMS_SEND_APPROVED=false.
+Existing reminder source remains test, its isolated prefix is unchanged and live
+STOP writes remain false. The new endpoint is read-only and always preview-only.
+Verified authenticated feed HTTP 200 with all 12 unique imported source IDs;
+unauthenticated feed/agenda/STOP routes return 401; response is private/no-store,
+complete and wellness-only, sendApproval=pending, records=[] with no sender.
+Temporary deployment token was revoked immediately after deployment; its old
+credential was verified to return HTTP 401. No deployment credential entered Make.
+
+Make scenario 6805809 now uses a dedicated feed-only HTTP API-key connection,
+restricted to https://nas-2026-reminders.netlify.app. Its one-module read-only test
+succeeded: HTTP 200, 1 operation/credit. No Airtable writer ran and scheduling
+remains Inactive. Preparing the Airtable bulk-upsert module revealed that the old
+OAuth connection requires permission renewal. No renewal was granted. A separate
+wellness connection is prepared, narrowed to Main NA Summit 2026; owner approval
+is requested before Grant access. Do not modify unrelated existing connections.
+
+New computed Airtable field Link Review (fldQPO5NnbLr6mTwt) flags missing Guest or
+Session links as Needs matching and existing Sync Details as Needs review. Current
+verified counts: 2 Needs matching, 5 Needs review, 5 Linked. This is not admission
+or SMS approval. The future writer must omit Guest, Session, Staff Notes, Sync
+State and Sync Details unless a separately verified matching process supplies
+them. Preserve the migration's verified links/review notes. New raw-source rows
+are caught by the computed matching flag instead of overwriting existing review.
+
 IMPLEMENTED: EXISTING SIGNUPS IMPORTED OCTOBER 27 (SUPERSEDES EMPTY-TABLE NOTES)
 Nick explicitly requested migration of existing signups. Read the authenticated
 wellness-only staff CSV: 12 distinct source records from 5 people, matching the

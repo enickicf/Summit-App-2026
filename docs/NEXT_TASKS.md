@@ -1,3 +1,7 @@
+## October 27 — finish automatic data writer after Airtable permission approval
+
+The private source feed is live and its Make reader verified. Do not recreate a deployment token or redeploy the website. Complete the dedicated OAuth connection limited to Main NA Summit 2026 only after the pending owner grant approval; leave unrelated existing connections unchanged. Finish the inactive idempotent writer with complete-snapshot and duplicate-key guards, preserving migrated links/notes and flagging unmatched incoming rows. Rehearse updates/retries and verify no duplicates or altered notes before enabling only data syncing. No messaging modules or SMS activation.
+
 ## October 27 — existing import complete; ongoing sync next
 
 Do not re-create the 12 imported wellness rows. Match/update by Source Record ID and preserve staff notes/manual links. Resolve 2 unmatched guest links and review 5 other contact/schedule discrepancies listed in Sync Details. Prepare the inactive Make source-to-Airtable connection after the reviewed source feed is available; do not run messaging modules or enable SMS. Existing-record copy is complete, but automatic booking migration and production source reconciliation remain separate pending work.

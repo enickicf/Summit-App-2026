@@ -1,3 +1,7 @@
+## October 27 — approved companion feed publication
+
+Feed endpoint is live on nas-2026-reminders deploy `6ae1722358b471bf0feaa9f1`, source `986b1d3`. Dedicated secret `WELLNESS_AIRTABLE_FEED_TOKEN` is stored only in provider settings/Make's origin-restricted connection; feed source mode is explicitly live and read-only. Existing reminder/STOP test-source settings were preserved, with SMS approval false. Deployment token revoked and its invalidity verified. No website deployment, source mutation or text. Make writer remains pending a separate Main NA Summit 2026 OAuth grant; the existing connection was not changed. New computed Link Review field flags missing links/review details without changing source data or admission. See `docs/WELLNESS_AIRTABLE_SYNC.txt`.
+
 ## October 27 existing wellness import — IMPLEMENTED
 
 Nick authorized existing signup migration. Wellness Signups now contains 12 verified unique source selections (5 people), including legacy/new IDs. Upsert merged only by Source Record ID. Guest/ROS links use verified existing records; 2 guest links remain unassigned. A sync-owned Sync Details field holds generic review notes without private contacts; Staff Notes is preserved. Contacts and original signatures/waivers remain outside this table. The source and all existing automation settings were unchanged. Automatic ongoing sync is still inactive. Details: `docs/WELLNESS_AIRTABLE_SYNC.txt`.

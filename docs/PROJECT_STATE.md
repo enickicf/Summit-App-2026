@@ -1,3 +1,7 @@
+## October 27 — LIVE read-only feed / PARTIAL automatic sync
+
+Companion deploy `6ae1722358b471bf0feaa9f1` serves the approved read-only feed from source `986b1d3`. All 12 source IDs and private/no-store/auth failure behavior verified. Main website deployment unchanged. Deployment token revoked; Make's separate restricted feed connection passed a read-only test. Automatic Airtable writer is pending a new base-limited OAuth permission grant; all scheduling/SMS remain inactive. See `docs/WELLNESS_AIRTABLE_SYNC.txt`.
+
 ## October 27 Airtable migration — IMPLEMENTED snapshot / PARTIAL ongoing sync
 
 Owner-approved existing-record import is verified: 12 unique wellness selections, 5 people, 12 activity links and 10 verified guest links; 2 guest links remain unmatched. Seven rows have review details for identity/contact or source schedule differences. Original source data is preserved; booking admission and texting are not activated. The earlier empty-table note is historical. Automatic Make sync still needs connection/review; no deployment or SMS.
