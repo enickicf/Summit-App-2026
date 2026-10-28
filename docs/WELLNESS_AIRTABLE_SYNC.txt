@@ -30,12 +30,18 @@ No fictional guests or test records were inserted into the live table.
 All 19 rows currently say Booking Status=Signup received and Text Permission=
 Not evaluated. This is an operational signup copy; it does not confirm places,
 initialize a capacity ledger, grant admission or authorize outreach.
-Computed Link Review (fldQPO5NnbLr6mTwt): 9 Needs matching, 5 Needs review,
-5 Linked. The 7 newer rows await verified guest/session links. Two original
-rows have a contact-to-roster identity conflict and remain unlinked. Existing
-generic review notes cover contact differences and original-vs-current activity
-labels/times without copying private contacts. Never match a guest by name alone
-or borrow a different guest's email/phone. Staff Notes remains staff-owned.
+Follow-up reconciliation October 28: all 19 activity links are verified by exact
+public title/date/start/end and published ROS ID. Added 6 guest links using exact
+name, a unique matching source/contact-sheet phone and verified roster record ID.
+Those 6 rows retain an informational email-difference review note; no contacts
+were copied. All reviewed links/notes survived the next scheduled data sync.
+Computed Link Review (fldQPO5NnbLr6mTwt): 3 Needs matching, 11 Needs review,
+5 Linked. Three guest links remain unassigned: 2 conflicting contact-to-roster
+selections and 1 without contact-sheet evidence for a same-name candidate.
+The 11 review rows cover 6 email-only differences, 2 phone differences and 3
+historical activity title/time differences. Never match a guest by name alone or
+borrow a different guest's contact. Staff Notes remains unchanged and staff-owned.
+See WELLNESS_CUTOVER_REVIEW.txt for concrete exceptions and activation gates.
 
 WRITER CONTRACT AND SAFEGUARDS
 Require HTTP 200, schemaVersion=1, complete=true, scope=wellness, exact target
@@ -108,10 +114,12 @@ claimed. Live workflow blueprints and private readback evidence stay only in the
 ignored owner workspace; do not commit provider connections or attendee exports.
 
 REMAINING, SEPARATE FROM THE LIVE DATA MIRROR
-Verify guest/session links for new rows and resolve existing review flags using
-All Summit Data plus actual ROS records. Table edits cannot cancel or promote a
+Resolve the 3 pending guest links and remaining review flags with verified
+identity/programming decisions; all 19 current activity links are verified. Table edits cannot cancel or promote a
 booking or send messages. Keep source data and staff notes intact.
-Reconcile the older 30-session shared branch with the live 32-session catalog,
+The public 32-ID catalog now exactly matches owner policy choices, but current
+production source is still absent from the shared Git branch. Obtain its exact
+commit before integrating the older 30-session shared branch with the live catalog,
 retain exact IDs and Nick's capacity choices, finish the reviewed non-destructive
 booking migration/legacy-link/restore plan, then coordinate website publication
 with Porter. Booking/capacity/cancellation changes remain draft PR #2, not live.

@@ -1,3 +1,7 @@
+## October 28 follow-up — verified link enrichment
+
+Added 7 verified ROS activity links and 6 verified guest links to the existing Wellness Signups rows only. Matching used exact activity title/date/time and exact guest name plus a unique matching source/contact-sheet phone, with existing roster IDs; no name-only guest matching or contact copying. All 19 activity links and 16 guest links are now present. Three guest links remain unassigned; notes preserve contact/program differences. Scheduled writer readback proves those omitted manual fields remain untouched. Original sources/waivers and the contact sheet were unchanged. See `WELLNESS_CUTOVER_REVIEW.txt`.
+
 ## October 28 wellness data sync — IMPLEMENTED LIVE
 
 Nick approved the new Main NA Summit 2026-only OAuth read/schema/write connection. Make scenario 6805809 is Active every 30 minutes and upserts 13 source-owned columns into Wellness Signups by immutable Source Record ID. Guest/Session links and staff/review notes are omitted and preserved; Smart links is false, no deletes or outbound messaging. Nineteen rows are verified, including 7 newer source selections; full UTC timestamp strings avoid native Make Date truncation. Nine matching flags and five additional review flags remain. The feed stays read-only/preview-only; Make is the separately approved data writer. Original Netlify submissions/waivers and All Summit Data contacts remain in place; bookings/admission/SMS are not activated. All historical no-writer/empty-table notes below are superseded. See `WELLNESS_AIRTABLE_SYNC.txt`.

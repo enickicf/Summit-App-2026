@@ -1,8 +1,10 @@
-## October 28 — data mirror live; finish matching and booking review
+## October 28 follow-up — remaining decisions and exact current source
 
-Data-only Make scenario 6805809 is Active every 30 minutes after owner-approved single-base connection, rejection rehearsal, 247 exact field comparisons and duplicate-free retries. Do not re-create the 19 synced rows or ask again for this completed authorization. Preserve the 13-column writer contract and all manual links/staff/review notes; no source deletion or messaging. Nine rows need verified guest/session matching, including the 7 new selections; five other rows retain contact/schedule review notes. Match through All Summit Data and verified ROS record IDs, never names alone. See `WELLNESS_AIRTABLE_SYNC.txt` for current state; earlier empty-table/pending-writer notes elsewhere are historical.
+Data-only sync remains Active every 30 minutes; after 7 reviewed matching updates, the next scheduled run preserved all 19 activity links, 16 guest links and review notes. Three guest links still need identity evidence. Eleven rows retain notes (6 email-only differences with verified phones, 2 phone differences and 3 program title/time differences). Do not recreate the 19 rows or overwrite staff/review notes.
 
-Booking/capacity rollout remains separate: reconcile the 32-session live catalog against this older branch, preserve Nick's limits, review non-destructive migration/legacy-link/restore, and coordinate website publication with Porter. Reminder scenario 6765208 must remain Inactive; all SMS, including tests, needs Nick's complete-process/build approval. No texts were sent during data-sync work.
+Obtain the Git branch/SHA matching CLI-published website deploy 6ae23014e7ddc521294941ac (or its newer published replacement). Shared production branch still points to 39f561d; main is older. Public HTML verifies all 32 policy IDs but cannot substitute for complete current server/build source. Then integrate the capacity/no-signup changes on that exact source and revalidate the build.
+
+Before booking migration, resolve initial 2-selections/1-place chiropractic handling, one legacy ID, and the historical no-signup selection, with a complete source backup and reviewed restore/legacy-link plan. Pending owner questions also cover 2 identity cases and Tuesday Life Plan copy/end time. All SMS, including tests, remains held. See `WELLNESS_CUTOVER_REVIEW.txt` for the concrete acceptance checklist; do not ask again for supplied limits or the completed Airtable connection grant.
 
 ## October 27 wellness next steps
 

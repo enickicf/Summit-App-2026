@@ -1,3 +1,7 @@
+## October 28 follow-up — preserve exceptions; obtain current source
+
+Nick said to proceed with matching/review and the remaining website preparation. Verified links may be added using exact session IDs/times and strong contact evidence, while ambiguous identities remain unlinked. Preserve original contact values, timestamps, labels, waivers and Staff Notes. Do not silently resolve the initial 2-selection/1-place capacity exception or rewrite a retired source session ID. Obtain the exact code of the newer CLI-published website before integration; the older shared branch is not a safe website replacement. Complete-process/build approval remains required for every text, including tests. See `WELLNESS_CUTOVER_REVIEW.txt`.
+
 ## October 28 — dedicated Summit base connection approved; data-only sync active
 
 Nick explicitly approved granting schema/record read and record write to the dedicated Make connection for Main NA Summit 2026 only. Provider write scope includes deletion capability; no workflow deletion step is present. This completes Nick's existing signup-storage/migration/automatic-sync request. After a rejection rehearsal, exact field readback and repeat-run verification, enabled only scenario 6805809 every 30 minutes. Preserve manual guest/session links and staff/review notes; no fuzzy guest matching, contact copying or source deletion. All SMS, including tests, remains held until complete-process/build approval. No additional website deployment was performed. See `WELLNESS_AIRTABLE_SYNC.txt`.
