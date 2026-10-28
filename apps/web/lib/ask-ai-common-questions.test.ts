@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { event2026Snapshot } from "@not-alone/test-fixtures/event-2026";
-import { commonQuestionAnswer, commonQuestions2026, isDetailedSummitQuestion, ticketProcessAnswer } from "./ask-ai-common-questions";
+import { commonQuestionAnswer, commonQuestions2026, ticketProcessAnswer } from "./ask-ai-common-questions";
 
 describe("Ask AI's 20 common event questions", () => {
   it("has a specific public answer and source for every question", () => {
@@ -25,11 +25,4 @@ describe("Ask AI's 20 common event questions", () => {
     expect(ticketProcessAnswer("Show me the RSVP entries")).toBeNull();
   });
 
-  it("separates detailed Summit questions from Awards and Day questions", () => {
-    expect(isDetailedSummitQuestion("Who is speaking at the Summit?")).toBe(true);
-    expect(isDetailedSummitQuestion("What is the Summit schedule? ")).toBe(true);
-    expect(isDetailedSummitQuestion("When is the Summit?")).toBe(false);
-    expect(isDetailedSummitQuestion("What time do Awards doors open?")).toBe(false);
-    expect(isDetailedSummitQuestion("What is the Nevada Mental Health Day schedule?")).toBe(false);
-  });
 });

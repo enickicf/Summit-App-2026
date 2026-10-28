@@ -1,3 +1,7 @@
+## IMPLEMENTED LOCALLY — October 27: attendee Ask AI patch
+
+Isolated patch against shared production commit `39f561d`: reliable public schedule/attire answers, current FAQ logistics, safer privacy/crisis routing, content-aware model cache, protected persistent CSV logs and scheduled retention. Focused 114 tests, TypeScript and normal production build pass; full web suite has the identical 80 failures as untouched baseline. **NOT DEPLOYED:** latest live deploy `6ae143225854ab5a8ebf841a` has newer source absent from GitHub. Reconcile with Porter before publication; FAQ hotel block nights still need staff content. Existing wellness/reading drafts are excluded. See `ASK_AI_ATTENDEE_2026-10-27.md`.
+
 # Next Tasks
 
 **October 14 website follow-ups:** (1) provide a base-scoped, read-only Airtable token for live syncing of approved public fields; (2) check the payment method in the `marketing@inspiringchildren.org` OpenAI API organization; (3) decide whether the `codex/site-improvements` branch should be pushed to the public GitHub repository, since it includes 159 earlier commits beyond remote `main`. The approved Summit/Awards/Community Day website changes are already live on the shared Netlify site; these follow-ups are not release blockers for that deployment.

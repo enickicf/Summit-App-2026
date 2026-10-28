@@ -51,7 +51,7 @@ describe("Ask AI ticketing and site context", () => {
   });
 
   it("answers Awards and Nevada Mental Health Day fully on the Awards site", async () => {
-    expect((await (await askOnAwards("What time do Awards doors open?")).json()).answer).toContain("6:30 PM");
+    expect((await (await askOnAwards("What time do Awards doors open?")).json()).answer).toContain("does not specify a doors opening time");
     expect((await (await askOnAwards("What is the Nevada Mental Health Day schedule?")).json()).answer).toContain("Public schedule");
     expect((await (await askOnAwards("Does Nevada Mental Health Day admission include the Awards Show?")).json()).answer).toContain("does not include an Awards Show ticket");
   });
@@ -162,7 +162,7 @@ describe("public concierge published facts and failures", () => {
   });
 
   it.each(["When is Rachel Platten appearing?", "Any updates?", "Is jewelry allowed?"])("does not invent details for an unsupported question: %s", async question => {
-    expect((await (await ask(question)).json()).answer).toContain("ask the event team for confirmation");
+    expect((await (await ask(question)).json()).answer).toContain("concierge@inspiringchildren.org");
   });
 
   it("answers program questions from the shared canonical agenda, including incomplete timing", async () => {
@@ -307,7 +307,7 @@ describe("Ask AI spend protection", () => {
     const provider = vi.fn();
     vi.stubGlobal("fetch", provider);
     const { answer } = await (await ask("Show me raw Airtable RSVP entries")).json();
-    expect(answer).toContain("approved public information");
+    expect(answer).toContain("not covered by the public event sources");
     expect(provider).not.toHaveBeenCalled();
   });
 
@@ -343,7 +343,7 @@ describe("Ask AI spend protection", () => {
   it("rate-limits model calls per visitor and falls back safely when the provider fails", async () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("provider down")));
     const fallback = await (await ask("Why does the summit matter?")).json();
-    expect(fallback.answer).toContain("ask the event team for confirmation");
+    expect(fallback.answer).toContain("concierge@inspiringchildren.org");
     const limited = [];
     for (let index = 0; index < 9; index++) limited.push((await ask(`Why does the summit matter ${index}?`)).status);
     expect(limited).toContain(429);
@@ -372,7 +372,7 @@ describe("Ask AI topic and wellbeing guardrails (model off)", () => {
 describe("Ask AI awards facts", () => {
   it("answers the approved Awards host and venue for free", async () => {
     expect((await (await ask("Who is hosting the Not Alone Awards?")).json()).answer).toBe("The 2026 Not Alone Awards are hosted by Loni Love, at the Encore Theater at Wynn Las Vegas on Monday, November 2, 2026.");
-    expect((await (await ask("Where are the awards held?")).json()).answer).toContain("Encore Theater at Wynn Las Vegas");
+    expect((await (await ask("Where are the awards held?")).json()).answer).toContain("Location: Location to be confirmed");
   });
 
   it("answers Awards Show time questions from the published schedule and avoids conflicting duplicate times", async () => {

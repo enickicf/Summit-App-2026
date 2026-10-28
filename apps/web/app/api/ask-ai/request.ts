@@ -40,7 +40,8 @@ export async function readQuestion(request: Request): Promise<string> {
     ]);
     const parsed = schema.safeParse(JSON.parse(body));
     if (!parsed.success) throw new QuestionRequestError(400, "Please ask a question between 2 and 500 characters.");
-    return parsed.data.question;
+    // Validate a trimmed copy, but retain the submitted wording in the staff log.
+    return (JSON.parse(body) as { question: string }).question;
   } catch (error) {
     if (error instanceof QuestionRequestError) throw error;
     throw new QuestionRequestError(400, "Please send a valid question.");

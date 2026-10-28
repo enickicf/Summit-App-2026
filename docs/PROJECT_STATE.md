@@ -1,3 +1,7 @@
+## IMPLEMENTED LOCALLY — October 27: attendee Ask AI patch
+
+Isolated patch against shared production commit `39f561d`: reliable public schedule/attire answers, current FAQ logistics, safer privacy/crisis routing, content-aware model cache, protected persistent CSV logs and scheduled retention. Focused 114 tests, TypeScript and normal production build pass; full web suite has the identical 80 failures as untouched baseline. **NOT DEPLOYED:** latest live deploy `6ae143225854ab5a8ebf841a` has newer source absent from GitHub. Reconcile with Porter before publication; FAQ hotel block nights still need staff content. Existing wellness/reading drafts are excluded. See `ASK_AI_ATTENDEE_2026-10-27.md`.
+
 # Project State
 
 Recorded September 18, 2026 during migration (capture 11:30 UTC). CURRENTLY VERIFIED locally: Git branch/HEAD/status and safe source inventory. Runtime results are LAST KNOWN, not rerun in migration. Latest 421 web tests passed following the September 18 cleanliness pass (around 00:26 America/New_York in preceding session); web TypeScript passed before final CSS/copy pass, isolated web build before final portrait/cleanliness refinements. Full September 17 baseline passed 649 workspace + 27 script tests, lint/typecheck and both builds. Exact dates/scopes matter: no fresh full-current-state build claim. Public endpoints LAST KNOWN inspected September 17 22:02 UTC. External auth/config/deployed commits/migrations/RLS and physical release remain unverified.

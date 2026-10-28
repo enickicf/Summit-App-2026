@@ -27,14 +27,6 @@ export function ticketProcessAnswer(question: string, audience: "summit" | "awar
   return result(ticketConfirmationMessage, source);
 }
 
-export const awardsSummitPrivacyAnswer = "The Not Alone Summit is a private, invitation-only event, and I don't have further Summit details to share on the Awards site. I can answer questions about the published Nevada Mental Health Day and Not Alone Awards information here. For Summit inquiries, please use the Summit website or contact the event team.";
-
-/** The Awards site shares high-level Summit context but directs detailed Summit inquiries to its own site. */
-export function isDetailedSummitQuestion(question: string): boolean {
-  if (!/\b(?:not alone )?summit\b/i.test(question) || /\b(?:awards?|nevada mental health day|community day)\b/i.test(question)) return false;
-  return /\b(?:schedule|agenda|sessions?|speakers?|speaking|performing|appearing|guests?|attendees?|lineup|programming|rooms?|detailed?|details?|vip|rsvp|register|registration|tickets?|access|dress code|attire|meals?|breakfast|lunch|dinner|transport|parking|accommodations?|activities|panels?|workshops?|itinerary|invite|invitation|producers?|founders?|co-?chairs?|biograph\w*|bio|accomplishments?)\b|\bwho (?:is|will be|can|gets) (?:at|attending|speaking|invited)\b|\bhow (?:do|can) i attend\b/i.test(question);
-}
-
 /** Twenty common visitor questions, answered from owner-approved public facts. */
 export const commonQuestions2026: readonly CommonQuestion[] = [
   { question: "What is the Not Alone Awards Show?", match: /\bwhat (?:is|are) (?:the )?(?:not alone )?awards(?: show)?\b/i,

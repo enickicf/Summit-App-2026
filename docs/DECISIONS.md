@@ -1,3 +1,7 @@
+## October 27 — attendee Ask AI implementation
+
+**IMPLEMENTED locally / publication pending current source:** published schedule wins over FAQ and pages on either domain; public Summit facts are never refused due to site context. Keep new logs in the dedicated `ask-ai-logs` store, without identifying request metadata; retain through December 31 Las Vegas time and purge independently of visitor traffic. Preserve existing runtime credentials and all newer live content. Staff must state hotel block nights explicitly; do not infer them. See `ASK_AI_ATTENDEE_2026-10-27.md`.
+
 # Decisions
 
 ## Latest Owner Decisions (September 18)

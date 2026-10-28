@@ -65,3 +65,7 @@ Read the environment examples and service documentation before connecting any ex
 - [Ownership and collaboration boundary](docs/PROJECT_OWNERSHIP.md)
 
 Update this README only when the objective, roadmap, major milestone, or high-level direction materially changes.
+
+## Public attendee Ask AI
+
+The website assistant answers from the canonical public schedule, the staff FAQ, the published directory, and approved official pages. Configure server-only `ASK_AI_FAQ_URL` (public Google Doc plain-text export) and `ASK_AI_LOG_KEY` (private CSV-export header secret) in the hosting environment; names are in `apps/web/.env.example`. Never put the log key in a link or public variable. `/ask` is the noindex standalone entry point. See [the October 27 implementation and release notes](docs/ASK_AI_ATTENDEE_2026-10-27.md) for verification, model configuration, log retention and the current production-source release blocker.

@@ -99,6 +99,8 @@ export const notAloneToolsUrl = "https://www.inspiringchildren.org/notalonetools
 const mentalHealthHelp = /\b(crisis|suicid\w*|kill (myself|me)|end my life|want to die|self[- ]?harm\w*|hurt(ing)? myself|depress\w*|anxiety|anxious|panic attacks?|mental health (tips?|advice|help|support)|therap(y|ist)|coping|cope|grie(f|ving)|eating disorders?|addiction|overdose|insomnia|can'?t sleep|lonely|loneliness|hopeless|overwhelmed)\b|\bi(?: am|'m)? (feel(?:ing)? )?(so |really |very )?(sad|down|alone|stressed|scared|worthless|empty)\b|\bhow (do|can|should) i (deal|cope|calm|stop feeling|feel better|get over|handle)\b/i;
 
 export function isMentalHealthQuestion(question: string) {
+  if (/\b(?:crisis|suicid\w*|self[- ]?harm\w*|kill myself|end my life|want to die|hurting myself)\b/i.test(question)) return true;
+  if (/\b(?:medical emergency|chest pain|heart attack|overdose|seizure|bleeding|someone collapsed|someone is hurt|feel unsafe|in danger|i(?: am|'m) (?:injured|dizzy)|need medical help)\b/i.test(question)) return true;
   if (/\b(?:icf|inspiring children|not alone|foundation|program)\b/i.test(question)
     && /\b(?:what|which|how)\b/i.test(question)
     && !/\b(?:i|me|my|myself)\b/i.test(question)) return false;

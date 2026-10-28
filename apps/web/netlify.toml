@@ -8,6 +8,9 @@
 [build.environment]
   NEXT_TELEMETRY_DISABLED = "1"
 
+[functions]
+  directory = "apps/web/netlify/functions"
+
 # Apply the baseline browser protections at Netlify's edge as well as in Next.js. This also covers
 # redirects and the proxied /rsvp pages, which do not pass through the Next.js headers function.
 [[headers]]
