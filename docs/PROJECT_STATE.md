@@ -1,3 +1,9 @@
+## October 28 owner follow-up — current repository identified; access pending
+
+The owner supplied a new production repository and latest commit/tag. Our existing GitHub account cannot yet read that source (404; no pending invitation). Exact private handoff coordinates remain in the owner workspace. This older repository and draft PR are references only: hold merging/deploying them while scoped wellness changes are prepared against the verified current website source. Preserve the newer website and Git history; inspect a file-level port after access is granted.
+
+Nick resolved the programming question: Airtable is authoritative when in doubt. Tuesday Life Plan is 9:00–9:45 AM, “Life Plan Preparedness with DBT expert Dr. Blaise Aguirre.” Added that decision to both affected signup review notes without clearing history, changing states or rewriting original labels/times. Three guest links remain unverified; explaining the uncertainty was not identity confirmation. All SMS stays disabled.
+
 ## October 28 follow-up — IMPLEMENTED matching / PARTIAL booking cutover
 
 Current Airtable copy: 19 selections, all 19 activity links verified and 16 guest links verified; 3 identity matches remain pending. Contact/programming review notes are retained. Scheduled run 18817d23e3a84f4088fe2c412612f349 succeeded after the 7 reviewed updates and preserved them. Public catalog exactly matches all 32 owner policy IDs. Production website deploy 6ae23014e7ddc521294941ac is CLI-published, while the shared production branch remains 39f561d; no current source commit is available yet. Initial booking cutover also needs a decision on 2 selections for 1 chiropractic place and a legacy no-signup disposition. All SMS remains disabled; no website or booking data was changed. `docs/WELLNESS_CUTOVER_REVIEW.txt` is the current readiness checklist.

@@ -1,3 +1,14 @@
+OCTOBER 28 OWNER FOLLOW-UP
+Current production is in a newly identified repository; account access is pending.
+This repository/PR remains a draft reference for a scoped port, not a website
+publication target. Private handoff coordinates are in the owner workspace.
+Airtable is now the explicit owner authority for program discrepancies: Tuesday
+Life Plan is 9:00–9:45 AM, Life Plan Preparedness with DBT expert Dr. Blaise Aguirre.
+Two signup review notes now include that decision. Earlier notes and all states,
+original labels/timestamps, links and Staff Notes remain intact. Review flags remain
+visible until website reconciliation. Three unverified guest links remain blank.
+No booking status, source/waiver record, deployment or texting setting changed.
+
 WELLNESS SIGNUPS IN AIRTABLE — OCTOBER 28, 2026
 
 IMPLEMENTED LIVE: AUTOMATIC SIGNUP DATA SYNC

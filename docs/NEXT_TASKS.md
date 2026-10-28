@@ -1,3 +1,9 @@
+## October 28 owner follow-up — current repository identified; access pending
+
+The owner supplied a new production repository and latest commit/tag. Our existing GitHub account cannot yet read that source (404; no pending invitation). Exact private handoff coordinates remain in the owner workspace. This older repository and draft PR are references only: hold merging/deploying them while scoped wellness changes are prepared against the verified current website source. Preserve the newer website and Git history; inspect a file-level port after access is granted.
+
+Nick resolved the programming question: Airtable is authoritative when in doubt. Tuesday Life Plan is 9:00–9:45 AM, “Life Plan Preparedness with DBT expert Dr. Blaise Aguirre.” Added that decision to both affected signup review notes without clearing history, changing states or rewriting original labels/times. Three guest links remain unverified; explaining the uncertainty was not identity confirmation. All SMS stays disabled.
+
 ## October 28 follow-up — remaining decisions and exact current source
 
 Data-only sync remains Active every 30 minutes; after 7 reviewed matching updates, the next scheduled run preserved all 19 activity links, 16 guest links and review notes. Three guest links still need identity evidence. Eleven rows retain notes (6 email-only differences with verified phones, 2 phone differences and 3 program title/time differences). Do not recreate the 19 rows or overwrite staff/review notes.

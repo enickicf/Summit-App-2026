@@ -1,3 +1,9 @@
+## October 28 owner follow-up — current repository identified; access pending
+
+The owner supplied a new production repository and latest commit/tag. Our existing GitHub account cannot yet read that source (404; no pending invitation). Exact private handoff coordinates remain in the owner workspace. This older repository and draft PR are references only: hold merging/deploying them while scoped wellness changes are prepared against the verified current website source. Preserve the newer website and Git history; inspect a file-level port after access is granted.
+
+Nick resolved the programming question: Airtable is authoritative when in doubt. Tuesday Life Plan is 9:00–9:45 AM, “Life Plan Preparedness with DBT expert Dr. Blaise Aguirre.” Added that decision to both affected signup review notes without clearing history, changing states or rewriting original labels/times. Three guest links remain unverified; explaining the uncertainty was not identity confirmation. All SMS stays disabled.
+
 ## October 28 follow-up — preserve exceptions; obtain current source
 
 Nick said to proceed with matching/review and the remaining website preparation. Verified links may be added using exact session IDs/times and strong contact evidence, while ambiguous identities remain unlinked. Preserve original contact values, timestamps, labels, waivers and Staff Notes. Do not silently resolve the initial 2-selection/1-place capacity exception or rewrite a retired source session ID. Obtain the exact code of the newer CLI-published website before integration; the older shared branch is not a safe website replacement. Complete-process/build approval remains required for every text, including tests. See `WELLNESS_CUTOVER_REVIEW.txt`.

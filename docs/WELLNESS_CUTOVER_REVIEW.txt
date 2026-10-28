@@ -1,3 +1,14 @@
+OCTOBER 28 OWNER FOLLOW-UP — SUPERSEDES EARLIER SOURCE/COPY QUESTIONS
+The owner identified the newer production repository and exact latest commit/tag;
+GitHub account access is pending. Keep this old PR as a draft reference and port
+only scoped wellness files onto verified current website source after access.
+Airtable is authoritative for programming: Tuesday Life Plan is 9:00–9:45 AM,
+Life Plan Preparedness with DBT expert Dr. Blaise Aguirre. This decision was
+appended to both affected review notes; historical details/states are preserved.
+Initial capacity exception handling and three guest links remain unconfirmed.
+All SMS is disabled. Exact repository handoff details stay in the private owner
+workspace because the current source is not readable with this account yet.
+
 WELLNESS PROCESS REVIEW — OCTOBER 28, 2026
 
 CURRENT LIVE STATUS

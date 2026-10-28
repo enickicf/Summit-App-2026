@@ -1,3 +1,9 @@
+## October 28 owner follow-up — current repository identified; access pending
+
+The owner supplied a new production repository and latest commit/tag. Our existing GitHub account cannot yet read that source (404; no pending invitation). Exact private handoff coordinates remain in the owner workspace. This older repository and draft PR are references only: hold merging/deploying them while scoped wellness changes are prepared against the verified current website source. Preserve the newer website and Git history; inspect a file-level port after access is granted.
+
+Nick resolved the programming question: Airtable is authoritative when in doubt. Tuesday Life Plan is 9:00–9:45 AM, “Life Plan Preparedness with DBT expert Dr. Blaise Aguirre.” Added that decision to both affected signup review notes without clearing history, changing states or rewriting original labels/times. Three guest links remain unverified; explaining the uncertainty was not identity confirmation. All SMS stays disabled.
+
 ## October 28 follow-up — verified links and current-source cutover review
 
 Verified all 19 activity links and 16 guest links; 7 reviewed rows updated without touching source/waiver records, source-owned columns or Staff Notes. The next scheduled run succeeded and preserved every new link/note. Three guest links await identity decisions; 11 rows retain contact/programming review notes, including 6 email-only differences with verified phones. All 32 public activity IDs match Nick's policies, including pickleball 10/yoga 20, but the live CLI-published website is newer than the shared production commit. Current-source branch/SHA requested before integration. A read-only capacity inventory found one 2-signup/1-place chiropractic exception plus a legacy ID and one historical no-signup selection. No booking status, SMS setting or deployment changed. See `docs/WELLNESS_CUTOVER_REVIEW.txt` and `docs/WELLNESS_AIRTABLE_SYNC.txt`.
