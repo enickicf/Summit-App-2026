@@ -1,14 +1,8 @@
-## October 27 — finish automatic data writer after Airtable permission approval
+## October 28 — data mirror live; finish matching and booking review
 
-The private source feed is live and its Make reader verified. Do not recreate a deployment token or redeploy the website. Complete the dedicated OAuth connection limited to Main NA Summit 2026 only after the pending owner grant approval; leave unrelated existing connections unchanged. Finish the inactive idempotent writer with complete-snapshot and duplicate-key guards, preserving migrated links/notes and flagging unmatched incoming rows. Rehearse updates/retries and verify no duplicates or altered notes before enabling only data syncing. No messaging modules or SMS activation.
+Data-only Make scenario 6805809 is Active every 30 minutes after owner-approved single-base connection, rejection rehearsal, 247 exact field comparisons and duplicate-free retries. Do not re-create the 19 synced rows or ask again for this completed authorization. Preserve the 13-column writer contract and all manual links/staff/review notes; no source deletion or messaging. Nine rows need verified guest/session matching, including the 7 new selections; five other rows retain contact/schedule review notes. Match through All Summit Data and verified ROS record IDs, never names alone. See `WELLNESS_AIRTABLE_SYNC.txt` for current state; earlier empty-table/pending-writer notes elsewhere are historical.
 
-## October 27 — existing import complete; ongoing sync next
-
-Do not re-create the 12 imported wellness rows. Match/update by Source Record ID and preserve staff notes/manual links. Resolve 2 unmatched guest links and review 5 other contact/schedule discrepancies listed in Sync Details. Prepare the inactive Make source-to-Airtable connection after the reviewed source feed is available; do not run messaging modules or enable SMS. Existing-record copy is complete, but automatic booking migration and production source reconciliation remain separate pending work.
-
-## October 27 Airtable wellness connection — PLANNED rollout
-
-Empty Wellness Signups table and private preview code are ready for review. Verify exact ROS links and guest Record IDs using All Summit Data, then prepare a separate inactive, single-run-at-a-time Make upsert with no messaging step. Preserve staff notes/unverified links and stop on duplicate source keys or incomplete snapshots. Rehearse fictional recovery/cancellation/promotion before a reviewed existing-record import and cutover. No production deployment or SMS activation; Porter publishes reviewed source and Nick must approve the complete process/build before any text. See `docs/WELLNESS_AIRTABLE_SYNC.txt`.
+Booking/capacity rollout remains separate: reconcile the 32-session live catalog against this older branch, preserve Nick's limits, review non-destructive migration/legacy-link/restore, and coordinate website publication with Porter. Reminder scenario 6765208 must remain Inactive; all SMS, including tests, needs Nick's complete-process/build approval. No texts were sent during data-sync work.
 
 ## October 27 wellness next steps
 

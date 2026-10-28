@@ -1,3 +1,7 @@
+## October 28 — IMPLEMENTED LIVE: automatic wellness data mirror
+
+Owner-approved Make connection is granted for Main NA Summit 2026 only. Data-only scenario 6805809 is Active every 30 minutes, with complete/fresh/exact-target guards and source-ID upserts. Nineteen source selections are present: the original 12 plus 7 newer real selections. All 247 mapped values verified exactly; corrected retry preserved record IDs and all protected links/notes. Link Review: 9 Needs matching, 5 Needs review, 5 Linked. No sender/delete step, source mutation or website deployment; SMS scenario 6765208 stays Inactive. This supersedes historical pending grant/writer and empty-table statements. Booking/capacity rollout remains PARTIAL. See `docs/WELLNESS_AIRTABLE_SYNC.txt`.
+
 ## October 27 — LIVE read-only feed / PARTIAL automatic sync
 
 Companion deploy `6ae1722358b471bf0feaa9f1` serves the approved read-only feed from source `986b1d3`. All 12 source IDs and private/no-store/auth failure behavior verified. Main website deployment unchanged. Deployment token revoked; Make's separate restricted feed connection passed a read-only test. Automatic Airtable writer is pending a new base-limited OAuth permission grant; all scheduling/SMS remain inactive. See `docs/WELLNESS_AIRTABLE_SYNC.txt`.

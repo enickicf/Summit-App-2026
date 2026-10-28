@@ -1,3 +1,7 @@
+## October 28 — dedicated Summit base connection approved; data-only sync active
+
+Nick explicitly approved granting schema/record read and record write to the dedicated Make connection for Main NA Summit 2026 only. Provider write scope includes deletion capability; no workflow deletion step is present. This completes Nick's existing signup-storage/migration/automatic-sync request. After a rejection rehearsal, exact field readback and repeat-run verification, enabled only scenario 6805809 every 30 minutes. Preserve manual guest/session links and staff/review notes; no fuzzy guest matching, contact copying or source deletion. All SMS, including tests, remains held until complete-process/build approval. No additional website deployment was performed. See `WELLNESS_AIRTABLE_SYNC.txt`.
+
 ## October 27 — data-feed deployment approved, texts still held
 
 Nick approved a temporary Netlify token, deployment to nas-2026-reminders only, separate private feed credential in Netlify/Make and immediate token revocation. Completed that scope without replacing the website or changing reminder/STOP source mode. Authenticated read-only Make verification is permitted for this data-only connection; no SMS test or sender activation is approved. A new Airtable base-limited OAuth grant is a separate pending approval.
