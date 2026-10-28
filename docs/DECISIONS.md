@@ -1,3 +1,7 @@
+## October 27 — pickleball limit amendment
+
+Nick explicitly changed pickleball capacity from 12 to 10. Apply 10 to every listed pickleball activity and retain the override when re-importing the earlier CSV. This changes no other capacity or rollout approval.
+
 ## October 27 — provisional wellness limits and simple Life Plan policy
 
 Nick approved using the filled CSV for now and explicitly said blank signup-required limits mean unlimited. Two Monday activities require no signup. Nick then deferred complex workbook rules until after the first Life Plan session, so retain the listed 20-place limit for each session and do not add custom allocation logic. Preserve the original shared-40-workbook note as future context only. Complete-process/build approval is still required for all SMS. See `docs/WELLNESS_OWNER_CAPACITY_CHOICES_2026-10-27.txt`.

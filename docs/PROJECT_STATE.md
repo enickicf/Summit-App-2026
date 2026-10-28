@@ -1,3 +1,7 @@
+## October 27 pickleball amendment — draft only
+
+Pickleball is now 10 per Monday/Tuesday/Wednesday activity in the owner choices and applicable disabled runtime draft. No production publication, attendee record or sending setting changed.
+
 ## October 27 wellness settings — IMPLEMENTED draft / PARTIAL source sync
 
 Owner choices are saved for all 32 sheet rows, including unlimited blank limits and Life Plan at 20 per session with later manual workbook review. Exact-ID matches update the disabled capacity draft. The shared GitHub production branch still has the older 30-session source, so publication remains blocked by an explicit activation hold. No new live record, setting, deployment or SMS changed. Details: `docs/WELLNESS_OWNER_CAPACITY_CHOICES_2026-10-27.txt`.

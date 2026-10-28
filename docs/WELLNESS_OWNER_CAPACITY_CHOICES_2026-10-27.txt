@@ -5,7 +5,7 @@ IMPLEMENTED in draft configuration only. Nick supplied Wellness activity plannin
 CURRENT CHOICES
 32 published activity rows: 30 require signup; the two Monday chiropractic/Pilates drop-in rows do not. There are 19 numeric limits and 11 signup-required rows with no number. Nick explicitly confirmed those 11 are unlimited for now.
 
-- Pickleball: 12 places per listed Monday/Tuesday/Wednesday activity.
+- Pickleball: 10 places per listed Monday/Tuesday/Wednesday activity. Nick's later chat instruction supersedes the CSV's original 12-place values.
 - Sauna & Cold Plunge: 14 per listed Monday/Tuesday/Wednesday activity.
 - Tuesday Reformer Pilates with Yvette Baker: 2 per listed 8:30, 9:00 and 9:30 session.
 - Wednesday Reformer Pilates with Aleina Lasker: 2 per listed 8:00, 8:30, 9:00 and 9:30 session.
@@ -25,7 +25,7 @@ The shared production GitHub branch still points to 39f561da94a6ce24a2191089f929
 New Monday IDs preserved:
   wellness-rec456nwSazwD3yrF — chiropractic, no signup
   wellness-recR6UpM64gjwZV0t — Pilates, no signup
-  wellness-recsGwZMl7v1NoN9z — pickleball, 12
+  wellness-recsGwZMl7v1NoN9z — pickleball, 10
   wellness-reckiT92R8wAH2OD4 — sauna/cold plunge, 14
 Older draft IDs absent from the sheet:
   wellness-nov2-breathwork

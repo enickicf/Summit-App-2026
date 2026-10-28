@@ -1,3 +1,7 @@
+## October 27 — pickleball reduced to 10
+
+Nick reduced all three listed pickleball activities from 12 places to 10. Updated both the 32-row owner decision file and the two matching runtime draft entries; the newer Monday ID remains preserved pending source sync. This direct instruction supersedes the CSV, whose original values remain unchanged. Booking/SMS gates and all other choices are unchanged.
+
 ## October 27 — owner capacity choices captured, disabled
 
 Imported Nick’s 32-row capacity/signup CSV by header names and exact session IDs. Recorded 19 numeric limits, 11 unlimited signup-required activities, and two no-signup Monday activities. Life Plan stays at 20 per session; Nick deferred workbook reallocation until after the first session. The older source matches 17 numeric limits and all 11 unlimited choices; four newer Monday IDs and two older absent IDs require source reconciliation. No custom shared-resource engine is required. All SMS and deployments remain held. See `docs/WELLNESS_OWNER_CAPACITY_CHOICES_2026-10-27.txt`; earlier all-unset statements are historical.

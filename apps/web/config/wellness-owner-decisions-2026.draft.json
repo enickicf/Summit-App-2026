@@ -18,7 +18,7 @@
     "wellness-recsGwZMl7v1NoN9z": {
       "signupRequired": true,
       "mode": "limited",
-      "maxPlaces": 12
+      "maxPlaces": 10
     },
     "wellness-recR6UpM64gjwZV0t": {
       "signupRequired": false,
@@ -43,7 +43,7 @@
     "wellness-nov3-pickleball": {
       "signupRequired": true,
       "mode": "limited",
-      "maxPlaces": 12
+      "maxPlaces": 10
     },
     "wellness-nov3-sauna-cold-plunge": {
       "signupRequired": true,
@@ -98,7 +98,7 @@
     "wellness-nov4-pickleball": {
       "signupRequired": true,
       "mode": "limited",
-      "maxPlaces": 12
+      "maxPlaces": 10
     },
     "wellness-nov4-pilates-1": {
       "signupRequired": true,
@@ -171,6 +171,19 @@
       "maxPlaces": 2
     }
   },
+  "ownerOverrides": [
+    {
+      "requestedOn": "2026-10-27",
+      "source": "direct owner chat instruction",
+      "sessionIds": [
+        "wellness-recsGwZMl7v1NoN9z",
+        "wellness-nov3-pickleball",
+        "wellness-nov4-pickleball"
+      ],
+      "previousMaxPlaces": 12,
+      "maxPlaces": 10
+    }
+  ],
   "sharedResources": {
     "life-plan-workbooks": {
       "total": 40,

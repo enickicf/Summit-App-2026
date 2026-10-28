@@ -51,7 +51,7 @@
     },
     "wellness-nov3-pickleball": {
       "mode": "limited",
-      "maxPlaces": 12
+      "maxPlaces": 10
     },
     "wellness-nov3-sauna-cold-plunge": {
       "mode": "limited",
@@ -119,7 +119,7 @@
     },
     "wellness-nov4-pickleball": {
       "mode": "limited",
-      "maxPlaces": 12
+      "maxPlaces": 10
     },
     "wellness-nov4-sauna-cold-plunge": {
       "mode": "limited",
