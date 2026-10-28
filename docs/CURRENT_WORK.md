@@ -1,3 +1,7 @@
+## October 27 — yoga set to 20
+
+Nick set all three listed yoga sessions to 20 places: Tuesday and Wednesday Morning Yoga Flow plus Wednesday Yoga Pilates Fusion. Both draft configuration files and the re-import override now preserve this choice. Current owner totals are 22 limited, 8 unlimited and 2 no-signup activities; source reconciliation and all SMS holds remain in place.
+
 ## October 27 — pickleball reduced to 10
 
 Nick reduced all three listed pickleball activities from 12 places to 10. Updated both the 32-row owner decision file and the two matching runtime draft entries; the newer Monday ID remains preserved pending source sync. This direct instruction supersedes the CSV, whose original values remain unchanged. Booking/SMS gates and all other choices are unchanged.

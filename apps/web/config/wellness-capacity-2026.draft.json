@@ -18,8 +18,8 @@
       "maxPlaces": null
     },
     "wellness-nov3-morning-yoga": {
-      "mode": "unlimited",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 20
     },
     "wellness-nov3-pilates-2": {
       "mode": "limited",
@@ -66,8 +66,8 @@
       "maxPlaces": 1
     },
     "wellness-nov4-morning-yoga": {
-      "mode": "unlimited",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 20
     },
     "wellness-nov4-pilates-2": {
       "mode": "limited",
@@ -78,8 +78,8 @@
       "maxPlaces": 1
     },
     "wellness-nov4-yoga-pilates-fusion": {
-      "mode": "unlimited",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 20
     },
     "wellness-nov4-pilates-3": {
       "mode": "limited",

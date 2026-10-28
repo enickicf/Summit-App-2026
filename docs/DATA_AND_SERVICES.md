@@ -1,6 +1,6 @@
 ## October 27 owner capacity source
 
-The owner-supplied CSV is normalized into `apps/web/config/wellness-owner-decisions-2026.draft.json`, preserving all 32 exact session IDs and the input hash without personal file paths or attendee data. The runtime-facing disabled draft contains 17 matched limited policies and 11 unlimited policies. Four new IDs await canonical source sync; two absent older IDs stay unset. Activation holds prevent enabling an unreconciled policy. No workbook pool automation is required: use 20 per Life Plan session until later owner review.
+The owner-supplied CSV is normalized into `apps/web/config/wellness-owner-decisions-2026.draft.json`, preserving all 32 exact session IDs and the input hash without personal file paths or attendee data. The runtime-facing disabled draft contains 20 matched limited policies and 8 unlimited policies. Four new IDs await canonical source sync; two absent older IDs stay unset. Activation holds prevent enabling an unreconciled policy. No workbook pool automation is required: use 20 per Life Plan session until later owner review.
 
 ## October 26 booking workflow — IMPLEMENTED locally, disabled
 

@@ -19,8 +19,8 @@ const cancel = (i: number, bookingId: string, requestId = `cancel-${i}`): Bookin
 describe("editable capacity policy", () => {
   it("loads matched owner limits and unlimited choices while keeping catalog and activation holds", async () => {
     expect(draftCapacityRules.size).toBe(30);
-    expect([...draftCapacityRules.values()].filter(rule => rule.mode === "limited")).toHaveLength(17);
-    expect([...draftCapacityRules.values()].filter(rule => rule.mode === "unlimited")).toHaveLength(11);
+    expect([...draftCapacityRules.values()].filter(rule => rule.mode === "limited")).toHaveLength(20);
+    expect([...draftCapacityRules.values()].filter(rule => rule.mode === "unlimited")).toHaveLength(8);
     expect([...draftCapacityRules.values()].filter(rule => rule.mode === "unset")).toHaveLength(2);
     expect(() => approvedCapacityRules()).toThrow();
     expect(() => approvedCapacityRules({ schemaVersion: 1, enabled: true, status: "approved", sessions: examples.sessions })).toThrow("Every session");

@@ -1,3 +1,7 @@
+## October 27 — yoga capacity
+
+Nick specified 20 places per yoga session. Apply this to both Morning Yoga Flow sessions and Yoga Pilates Fusion. Preserve this later instruction over the earlier unlimited blank-limit interpretation when re-importing the CSV.
+
 ## October 27 — pickleball limit amendment
 
 Nick explicitly changed pickleball capacity from 12 to 10. Apply 10 to every listed pickleball activity and retain the override when re-importing the earlier CSV. This changes no other capacity or rollout approval.

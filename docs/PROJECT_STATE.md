@@ -1,3 +1,7 @@
+## October 27 yoga amendment — draft only
+
+All three yoga sessions are now limited to 20 each in the owner decisions and disabled runtime draft. The older canonical catalog now has 20 matched limited policies, 8 unlimited policies and 2 unset retired IDs. No live record, deployment or sending setting changed.
+
 ## October 27 pickleball amendment — draft only
 
 Pickleball is now 10 per Monday/Tuesday/Wednesday activity in the owner choices and applicable disabled runtime draft. No production publication, attendee record or sending setting changed.

@@ -37,8 +37,8 @@
     },
     "wellness-nov3-morning-yoga": {
       "signupRequired": true,
-      "mode": "unlimited",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 20
     },
     "wellness-nov3-pickleball": {
       "signupRequired": true,
@@ -92,8 +92,8 @@
     },
     "wellness-nov4-morning-yoga": {
       "signupRequired": true,
-      "mode": "unlimited",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 20
     },
     "wellness-nov4-pickleball": {
       "signupRequired": true,
@@ -122,8 +122,8 @@
     },
     "wellness-nov4-yoga-pilates-fusion": {
       "signupRequired": true,
-      "mode": "unlimited",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 20
     },
     "wellness-nov4-chiro-3": {
       "signupRequired": true,
@@ -182,6 +182,18 @@
       ],
       "previousMaxPlaces": 12,
       "maxPlaces": 10
+    },
+    {
+      "requestedOn": "2026-10-27",
+      "source": "direct owner chat instruction",
+      "sessionIds": [
+        "wellness-nov3-morning-yoga",
+        "wellness-nov4-morning-yoga",
+        "wellness-nov4-yoga-pilates-fusion"
+      ],
+      "previousMode": "unlimited",
+      "mode": "limited",
+      "maxPlaces": 20
     }
   ],
   "sharedResources": {
