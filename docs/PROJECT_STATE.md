@@ -1,3 +1,7 @@
+## October 27 Airtable wellness — PARTIAL
+
+Owner authorized preparing wellness signup storage in Airtable. New table Wellness Signups exists with no records; its links/schema were verified. Preview-only web/companion feed is implemented locally; no live sync, data import or booking changes. Netlify retains original submissions/waivers and atomic booking authority. Contact details remain in All Summit Data under the existing privacy workflow. No deployment or SMS. See `docs/WELLNESS_AIRTABLE_SYNC.txt`.
+
 ## October 27 yoga amendment — draft only
 
 All three yoga sessions are now limited to 20 each in the owner decisions and disabled runtime draft. The older canonical catalog now has 20 matched limited policies, 8 unlimited policies and 2 unset retired IDs. No live record, deployment or sending setting changed.

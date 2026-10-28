@@ -12,6 +12,7 @@ SMS HOLD: No SMS, including tests, until Nick approves the complete process and 
 Required server-only provider settings (names only; no secrets in source):
   INTEGRATION_SMS_SEND_APPROVED: leave unset/false until explicit complete-process/build approval.
   INTEGRATION_FEED_TOKEN: independent random secret, minimum 32 characters.
+  WELLNESS_AIRTABLE_FEED_TOKEN: separate private preview-feed bearer secret, minimum 32 characters; not yet provisioned.
   CLICKSEND_INBOUND_SECRET: different random secret, minimum 32 characters.
   CLICKSEND_DEDICATED_NUMBER: dedicated sender/destination number.
   CLICKSEND_EXPECTED_USER_ID: account ID verified from provider callbacks.
@@ -30,6 +31,7 @@ Future capacity connection:
 
 API:
   GET /api/integrations/agenda — feed bearer auth; private/no-store; 401 before source access; 503 for incomplete required data.
+  GET /api/integrations/wellness-airtable — separate bearer auth; private operational preview, no phone/email/signatures; previewRecords only, records=[]; no Airtable writes. See docs/WELLNESS_AIRTABLE_SYNC.txt.
   POST /api/integrations/clicksend-inbound — separate callback auth; JSON/form; exact opt-out commands; durable save before acknowledgment.
 
 Allowed source reads: workshop (wellness-filtered), textPreference, programApproval; optional read-only wellness/ledger-v1.json. Only generated no/stop-reply preferences may be written; all deletes and other writes are denied. Source clients are fresh per request and strongly consistent. No automatic deployment, attendee sending or credential provisioning occurs.

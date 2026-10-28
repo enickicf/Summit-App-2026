@@ -1,3 +1,7 @@
+## October 27 wellness Airtable exception — PARTIAL
+
+Nick explicitly requested wellness signup data in Airtable as the central operations view. Created empty table `tblbfPmjZGnJPnINI` in base `app7BHptsc1bjc3DD`, linked to existing Guest Tracker and Summit Programming ROS. No existing values or automation settings changed; no attendee records imported. This narrow owner request supersedes historical read-only guidance only for the new wellness integration. The private feed always produces previews with an empty write queue; there is no Airtable writer. It excludes private contacts, signatures and management links. The existing contact-to-All Summit Data workflow and website source/waiver/atomic booking storage remain authoritative for those responsibilities. See `docs/WELLNESS_AIRTABLE_SYNC.txt` and the disabled field-ID manifest.
+
 ## October 27 owner capacity source
 
 The owner-supplied CSV is normalized into `apps/web/config/wellness-owner-decisions-2026.draft.json`, preserving all 32 exact session IDs and the input hash without personal file paths or attendee data. The runtime-facing disabled draft contains 20 matched limited policies and 8 unlimited policies. Four new IDs await canonical source sync; two absent older IDs stay unset. Activation holds prevent enabling an unreconciled policy. No workbook pool automation is required: use 20 per Life Plan session until later owner review.

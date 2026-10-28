@@ -1,3 +1,7 @@
+## October 27 — Airtable wellness table prepared; live sync pending
+
+Nick requested wellness signup data in Airtable. Created and verified an empty Wellness Signups table in Main NA Summit 2026, linked to Guest Tracker and Summit Programming ROS; existing record values and automations are unchanged. Added a private, authenticated, preview-only source projection with stable source IDs, cancellation/waitlist state and review flags. It omits phone/email, signatures, private intake data and management tokens, preserving the existing All Summit Data contact workflow. No records imported, deployments or messages. See `docs/WELLNESS_AIRTABLE_SYNC.txt`; live Make sync, exact link matching and cutover remain planned.
+
 ## October 27 — yoga set to 20
 
 Nick set all three listed yoga sessions to 20 places: Tuesday and Wednesday Morning Yoga Flow plus Wednesday Yoga Pilates Fusion. Both draft configuration files and the re-import override now preserve this choice. Current owner totals are 22 limited, 8 unlimited and 2 no-signup activities; source reconciliation and all SMS holds remain in place.

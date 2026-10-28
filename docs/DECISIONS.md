@@ -1,3 +1,7 @@
+## October 27 — owner requests Airtable wellness records
+
+Use Main NA Summit 2026 for the wellness operations view. Prepare a separate linked Wellness Signups table and private source preview; retain original website submissions, waiver evidence and atomic capacity/booking state in Netlify. Preserve existing contact routing to All Summit Data. Exact source IDs identify sync rows; unmatched guests/classes need review and do not imply admission. Table editing is not a booking command or SMS authorization. No live import, deployment or texts authorized by this preparation. Details: `docs/WELLNESS_AIRTABLE_SYNC.txt`.
+
 ## October 27 — yoga capacity
 
 Nick specified 20 places per yoga session. Apply this to both Morning Yoga Flow sessions and Yoga Pilates Fusion. Preserve this later instruction over the earlier unlimited blank-limit interpretation when re-importing the CSV.

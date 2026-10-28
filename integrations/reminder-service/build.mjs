@@ -15,7 +15,7 @@ await mkdir(join(out, "netlify/functions"), { recursive: true });
 await mkdir(join(out, "public"), { recursive: true });
 const result = await build({
   absWorkingDir: root,
-  entryPoints: { agenda: join(here, "src/agenda.ts"), "clicksend-inbound": join(here, "src/clicksend-inbound.ts") },
+  entryPoints: { agenda: join(here, "src/agenda.ts"), "clicksend-inbound": join(here, "src/clicksend-inbound.ts"), "wellness-airtable": join(here, "src/wellness-airtable.ts") },
   outdir: join(out, "netlify/functions"), outExtension: { ".js": ".mjs" },
   bundle: true, platform: "node", format: "esm", target: "node22", minify: true,
   banner: { js: 'import {createRequire as __createRequire} from "node:module";const require=__createRequire(import.meta.url);' },

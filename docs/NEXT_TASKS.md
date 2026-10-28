@@ -1,3 +1,7 @@
+## October 27 Airtable wellness connection — PLANNED rollout
+
+Empty Wellness Signups table and private preview code are ready for review. Verify exact ROS links and guest Record IDs using All Summit Data, then prepare a separate inactive, single-run-at-a-time Make upsert with no messaging step. Preserve staff notes/unverified links and stop on duplicate source keys or incomplete snapshots. Rehearse fictional recovery/cancellation/promotion before a reviewed existing-record import and cutover. No production deployment or SMS activation; Porter publishes reviewed source and Nick must approve the complete process/build before any text. See `docs/WELLNESS_AIRTABLE_SYNC.txt`.
+
 ## October 27 wellness next steps
 
 Capacity choices are now supplied; do not ask again for the filled limits or introduce a workbook-resource engine. Reconcile the latest live 32-session catalog and production source with the older shared GitHub branch, retaining exact IDs and existing guest records. Then apply the two no-signup policies to public binding, finish migration/restore and provider/delivery reconciliation, and prepare the complete review before any deployment or text. Life Plan remains 20 per session, with workbook reallocation deferred until after the first session.

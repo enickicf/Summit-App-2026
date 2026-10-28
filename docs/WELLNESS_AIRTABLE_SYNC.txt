@@ -1,0 +1,85 @@
+WELLNESS SIGNUPS IN AIRTABLE — OCTOBER 27, 2026
+
+PARTIAL: Nick asked to make Airtable the central place for wellness signup data.
+This is narrow owner authorization to prepare the wellness table and integration;
+it does not authorize changing other records, admission decisions, deployment or SMS.
+Historical repository statements that Airtable is read-only still apply elsewhere.
+
+VERIFIED CURRENT STORAGE
+The website's /api/wellness saves one workshop/category=wellness record per chosen
+class in Netlify Blobs staff-portal. The staff portal reads these records. Original
+names, contacts, selection details and signed activity waivers remain there, with
+the existing journal mechanism. Development file storage is not production.
+
+IMPLEMENTED IN AIRTABLE, NOT YET RECEIVING DATA
+Main NA Summit 2026: app7BHptsc1bjc3DD
+New empty table Wellness Signups: tblbfPmjZGnJPnINI
+Grid view: viwqr4LyJWolD5Wr4
+https://airtable.com/app7BHptsc1bjc3DD/tblbfPmjZGnJPnINI/viwqr4LyJWolD5Wr4
+Schema and zero-record state verified through the connected Airtable service.
+Guest and Session link fields target existing Guest Tracker and Summit Programming
+ROS; Airtable created empty reciprocal link fields in those tables. No existing
+record values or automations were changed. No fictional or real records imported.
+Exact field IDs are in apps/web/config/wellness-airtable-2026.draft.json.
+
+PRIVACY AND AUTHORITY
+The existing Form Submissions automation transfers private contact details through
+Make to All Summit Data, then clears those private Airtable fields after success.
+Keep that workflow: this projection contains guest name, original source ID,
+activity/day/time label, booking/waitlist/cancellation state, waiver status and sync
+metadata. No phone/email, signatures, waiver bodies, intake payloads or guest
+management URLs/tokens are exported. Text Permission remains Not evaluated.
+Nothing in this table grants SMS consent or event admission.
+
+Airtable is the proposed operational view. Netlify remains the durable original
+submission/waiver store and the new atomic booking ledger remains responsible for
+last-place allocation and first-come promotion. Editing a table cell does not
+change a booking, cancel a place, promote a guest, or send anything. Bidirectional
+controls would need explicit booking commands, audit/recovery and separate review.
+
+IMPLEMENTED LOCALLY: PREVIEW ONLY
+GET /api/integrations/wellness-airtable in both the web app and companion service.
+Requires server-only WELLNESS_AIRTABLE_FEED_TOKEN, at least 32 characters, via bearer
+header. Query credentials rejected. No tokens generated or provider settings changed.
+Private/no-store response; failed or incomplete source returns 503 without partial
+records. Reads only workshops and, when enabled, the read-only booking snapshot.
+Always returns mode=preview-only, syncEnabled=false, records=[] and previewRecords.
+No Airtable writer, scheduler, deletion or SMS sender is part of this endpoint.
+
+Each source selection keeps its exact ID, including newer session IDs missing
+from the older checkout. Legacy rows say Signup received, never a newly confirmed
+place. Ledger rows reflect registered/waitlisted/cancelled and FIFO position;
+pending source materialization and unmigrated rows need review. Explicit test rows
+are excluded. Duplicate identities, broken booking references and missing fully
+materialized sources fail the snapshot. SourceRevision excludes sync time so retry
+previews keep the same content hash. Cancelled rows remain; no delete instructions.
+
+Guest/session links require verified record-ID mappings. No name-only/fuzzy guest
+matching or creation of Guest Tracker rows. Missing mappings omit link fields and
+mark review issues, preserving any existing links; Staff Notes is always omitted.
+The shipped handlers supply no mappings yet. This is not an active live sync.
+
+NEXT CONNECTION STEPS — PLANNED, NOT EXECUTED
+1. Reconcile latest live 32-session source and verify exact ROS session links.
+2. Securely match existing contacts to Guest Tracker IDs through All Summit Data;
+   leave ambiguous or absent guests unlinked for staff review, without losing rows.
+3. Publish only reviewed code through Porter, with booking/SMS gates still off;
+   configure the separate feed credential securely and inspect the private preview.
+4. Prepare an inactive Make sync with no messaging modules. Process one run at a
+   time; find by Source Record ID, create when absent, update when exactly one
+   matches, and stop for review on duplicates. Retry by the same source key.
+   Write only sync-owned fields; never clear staff notes or unverified links.
+   Confirm the complete snapshot before writes; never delete a row on absence.
+5. Rehearse fictional isolated records for retry, cancellation, waitlist/promotion,
+   source outage and recovery; inspect a real-source import preview before cutover.
+6. Enable signup-data sync only after reviewed connection/cutover. Keep all SMS on
+   hold until Nick separately approves the complete process and build. Fresh STOP,
+   ClickSend suppression, Sheet Do Not Text and delivery reconciliation remain
+   required at send time; a manually edited Airtable cell cannot override them.
+
+VALIDATED LOCALLY
+145 focused checks across 16 booking/integration/inbox/Cherrial files passed;
+production web build and TypeScript passed; companion bundle and TypeScript passed.
+Bundled unauthorized/missing-source smoke checks passed with network disabled.
+No UI changed. The full suite was not repeated for this addition; the previously
+recorded 77 identical baseline failures remain unresolved, not a green release.
