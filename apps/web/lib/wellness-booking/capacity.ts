@@ -29,10 +29,11 @@ export function testCapacityRules(env: Partial<NodeJS.ProcessEnv>): CapacityRule
   return capacityRules(fixture.sessions);
 }
 
-// Sample limits can be used by an injected local repository. Only a separately
-// reviewed complete policy can pass the runtime activation gate.
+// Owner settings remain a disabled draft until canonical source reconciliation
+// and the remaining rollout review are complete. Test fixtures stay separate.
 export function approvedCapacityRules(input: unknown = draft): CapacityRules {
-  const config = z.object({ schemaVersion: z.literal(1), status: z.literal("approved"), enabled: z.literal(true), sessions: z.unknown() }).parse(input);
+  const config = z.object({ schemaVersion: z.literal(1), status: z.literal("approved"), enabled: z.literal(true), sessions: z.unknown(), activationHolds: z.array(z.string()).default([]) }).parse(input);
+  if (config.activationHolds.length) throw new Error("Unresolved owner policy or source reconciliation prevents capacity activation.");
   const rules = capacityRules(config.sessions);
   if ([...rules.values()].some(rule => rule.mode === "unset")) throw new Error("Every session needs a confirmed capacity policy before activation.");
   return rules;

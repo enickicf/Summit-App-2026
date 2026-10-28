@@ -5,6 +5,7 @@ import { buildWellnessAgenda } from "../integrations/agenda";
 import { planReminders } from "../integrations/planner";
 import { wellnessSessions } from "../wellness-signups-2026";
 import examples from "../../test-fixtures/wellness-capacity.example.json";
+import draft from "../../config/wellness-capacity-2026.draft.json";
 import { approvedCapacityRules, capacityRules, draftCapacityRules } from "./capacity";
 import { applyBookingCommand, bookingStatuses, emptyLedger, memoryBookingStore, type BookingCommand, type VersionedLedgerStore } from "./ledger";
 
@@ -16,14 +17,20 @@ const reserve = (i: number, selections = [{ sessionId, sourceRecordId: `source-$
 const cancel = (i: number, bookingId: string, requestId = `cancel-${i}`): BookingCommand => ({ action: "cancel", requestId, attendeeKey: identity(i), at, bookingId });
 
 describe("editable capacity policy", () => {
-  it("keeps all 30 placeholders explicitly unset and cannot activate the draft", async () => {
+  it("loads matched owner limits and unlimited choices while keeping catalog and activation holds", async () => {
     expect(draftCapacityRules.size).toBe(30);
-    expect([...draftCapacityRules.values()].every(rule => rule.mode === "unset")).toBe(true);
+    expect([...draftCapacityRules.values()].filter(rule => rule.mode === "limited")).toHaveLength(17);
+    expect([...draftCapacityRules.values()].filter(rule => rule.mode === "unlimited")).toHaveLength(11);
+    expect([...draftCapacityRules.values()].filter(rule => rule.mode === "unset")).toHaveLength(2);
     expect(() => approvedCapacityRules()).toThrow();
     expect(() => approvedCapacityRules({ schemaVersion: 1, enabled: true, status: "approved", sessions: examples.sessions })).toThrow("Every session");
     const store = memoryBookingStore();
     await expect(applyBookingCommand(store, draftCapacityRules, reserve(1))).rejects.toThrow("not set");
     expect(await store.read()).toBeNull();
+  });
+  it("cannot activate an unresolved owner policy merely by flipping draft flags", () => {
+    const complete = Object.fromEntries(wellnessSessions.map(session => [session.id, { mode: "unlimited", maxPlaces: null }]));
+    expect(() => approvedCapacityRules({ ...draft, status: "approved", enabled: true, sessions: complete })).toThrow("Unresolved owner policy");
   });
   it.each([0, -1, 1.5, null, "2", Infinity])("rejects an invalid cap %s instead of interpreting it as unlimited", cap => {
     expect(() => capacityRules({ [sessionId]: { mode: "limited", maxPlaces: cap } })).toThrow();
@@ -36,6 +43,13 @@ describe("editable capacity policy", () => {
 });
 
 describe("atomic reservations and FIFO waitlist", () => {
+  it.each([["wellness-nov3-pilates-2", 2], ["wellness-nov4-chiro-1", 1]] as const)("enforces the owner-provided limit for %s under simultaneous requests", async (id, limit) => {
+    const store = memoryBookingStore();
+    await Promise.all(Array.from({ length: 8 }, (_, i) => applyBookingCommand(store, draftCapacityRules, reserve(i, [{ sessionId: id, sourceRecordId: `owner-limit-${i}` }]))));
+    const bookings = (await store.read())!.value.bookings;
+    expect(bookings.filter(booking => booking.status === "registered")).toHaveLength(limit);
+    expect(bookings.filter(booking => booking.status === "waitlisted")).toHaveLength(8 - limit);
+  });
   it("handles 20 simultaneous signups without exceeding a two-place limit", async () => {
     const store = memoryBookingStore();
     await Promise.all(Array.from({ length: 20 }, (_, i) => applyBookingCommand(store, rules, reserve(i))));

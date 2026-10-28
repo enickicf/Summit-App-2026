@@ -1,3 +1,7 @@
+## October 27 — provisional wellness limits and simple Life Plan policy
+
+Nick approved using the filled CSV for now and explicitly said blank signup-required limits mean unlimited. Two Monday activities require no signup. Nick then deferred complex workbook rules until after the first Life Plan session, so retain the listed 20-place limit for each session and do not add custom allocation logic. Preserve the original shared-40-workbook note as future context only. Complete-process/build approval is still required for all SMS. See `docs/WELLNESS_OWNER_CAPACITY_CHOICES_2026-10-27.txt`.
+
 ## October 26 — wellness promotion and booking rollout decisions
 
 IMPLEMENTED locally: Nick selected automatic, first-come promotion after a wellness cancellation. Real capacity modes stay unset until confirmed. The default draft flow closes changes at class start, preserves source/waiver history, holds incomplete source saves from reminders, and treats STOP as message suppression rather than seat cancellation. Source-save recovery and private staff backup are included. Initial migration planning is strictly read-only; no real ledger seed or automatic legacy-link recovery is authorized. All SMS, including tests and promotion notices, requires Nick’s approval of the complete process and build. See `docs/WELLNESS_BOOKING_WORKFLOW.txt` for the reviewable defaults.

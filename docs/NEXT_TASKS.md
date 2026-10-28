@@ -1,3 +1,7 @@
+## October 27 wellness next steps
+
+Capacity choices are now supplied; do not ask again for the filled limits or introduce a workbook-resource engine. Reconcile the latest live 32-session catalog and production source with the older shared GitHub branch, retaining exact IDs and existing guest records. Then apply the two no-signup policies to public binding, finish migration/restore and provider/delivery reconciliation, and prepare the complete review before any deployment or text. Life Plan remains 20 per session, with workbook reallocation deferred until after the first session.
+
 ## October 26 wellness next steps — PARTIAL, all SMS held
 
 Local booking/UI/recovery/private-backup work is implemented and tested; review it in draft PR #2. Next: confirm per-class limits or unlimited policies; review an unchanged real-source migration report and exception/legacy-link plan; implement a separately approved non-destructive cutover plus restore rehearsal; have Porter publish only the reviewed commit with booking/SMS gates off; validate isolated provider previews and reconcile STOP/All Summit Data Do Not Text plus Make delivery records. Nick’s explicit complete-process/build approval is required before any SMS, including tests. Do not activate Make or deploy automatically. Details and local validation are in `docs/WELLNESS_BOOKING_WORKFLOW.txt`.

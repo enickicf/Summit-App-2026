@@ -14,116 +14,130 @@
       "maxPlaces": null
     },
     "wellness-nov3-breathwork": {
-      "mode": "unset",
+      "mode": "unlimited",
       "maxPlaces": null
     },
     "wellness-nov3-morning-yoga": {
-      "mode": "unset",
+      "mode": "unlimited",
       "maxPlaces": null
     },
     "wellness-nov3-pilates-2": {
-      "mode": "unset",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 2
     },
     "wellness-nov3-fitness": {
-      "mode": "unset",
+      "mode": "unlimited",
       "maxPlaces": null
     },
     "wellness-nov3-pilates-3": {
-      "mode": "unset",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 2
     },
     "wellness-nov3-movement-breathwork": {
-      "mode": "unset",
+      "mode": "unlimited",
       "maxPlaces": null
     },
     "wellness-nov3-life-plan": {
-      "mode": "unset",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 20
     },
     "wellness-nov3-inspire-cards": {
-      "mode": "unset",
+      "mode": "unlimited",
       "maxPlaces": null
     },
     "wellness-nov3-pilates-4": {
-      "mode": "unset",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 2
     },
     "wellness-nov3-pickleball": {
-      "mode": "unset",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 12
     },
     "wellness-nov3-sauna-cold-plunge": {
-      "mode": "unset",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 14
     },
     "wellness-nov4-pilates-1": {
-      "mode": "unset",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 2
     },
     "wellness-nov4-chiro-1": {
-      "mode": "unset",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 1
     },
     "wellness-nov4-morning-yoga": {
-      "mode": "unset",
+      "mode": "unlimited",
       "maxPlaces": null
     },
     "wellness-nov4-pilates-2": {
-      "mode": "unset",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 2
     },
     "wellness-nov4-chiro-2": {
-      "mode": "unset",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 1
     },
     "wellness-nov4-yoga-pilates-fusion": {
-      "mode": "unset",
+      "mode": "unlimited",
       "maxPlaces": null
     },
     "wellness-nov4-pilates-3": {
-      "mode": "unset",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 2
     },
     "wellness-nov4-chiro-3": {
-      "mode": "unset",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 1
     },
     "wellness-nov4-fitness-1": {
-      "mode": "unset",
+      "mode": "unlimited",
       "maxPlaces": null
     },
     "wellness-nov4-mindsurf": {
-      "mode": "unset",
+      "mode": "unlimited",
       "maxPlaces": null
     },
     "wellness-nov4-inspire-cards": {
-      "mode": "unset",
+      "mode": "unlimited",
       "maxPlaces": null
     },
     "wellness-nov4-pilates-4": {
-      "mode": "unset",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 2
     },
     "wellness-nov4-chiro-4": {
-      "mode": "unset",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 1
     },
     "wellness-nov4-fitness-2": {
-      "mode": "unset",
+      "mode": "unlimited",
       "maxPlaces": null
     },
     "wellness-nov4-life-plan": {
-      "mode": "unset",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 20
     },
     "wellness-nov4-pickleball": {
-      "mode": "unset",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 12
     },
     "wellness-nov4-sauna-cold-plunge": {
-      "mode": "unset",
-      "maxPlaces": null
+      "mode": "limited",
+      "maxPlaces": 14
     }
-  }
+  },
+  "ownerDecisions": "apps/web/config/wellness-owner-decisions-2026.draft.json",
+  "activationHolds": [
+    "Reconcile the 32 owner-listed live sessions with the older 30-session source before publication."
+  ],
+  "pendingCatalogSessionIds": [
+    "wellness-rec456nwSazwD3yrF",
+    "wellness-recR6UpM64gjwZV0t",
+    "wellness-reckiT92R8wAH2OD4",
+    "wellness-recsGwZMl7v1NoN9z"
+  ],
+  "sourceSessionIdsNotInOwnerSheet": [
+    "wellness-nov2-breathwork",
+    "wellness-nov3-pilates-1"
+  ]
 }

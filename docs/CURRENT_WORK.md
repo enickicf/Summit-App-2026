@@ -1,3 +1,7 @@
+## October 27 — owner capacity choices captured, disabled
+
+Imported Nick’s 32-row capacity/signup CSV by header names and exact session IDs. Recorded 19 numeric limits, 11 unlimited signup-required activities, and two no-signup Monday activities. Life Plan stays at 20 per session; Nick deferred workbook reallocation until after the first session. The older source matches 17 numeric limits and all 11 unlimited choices; four newer Monday IDs and two older absent IDs require source reconciliation. No custom shared-resource engine is required. All SMS and deployments remain held. See `docs/WELLNESS_OWNER_CAPACITY_CHOICES_2026-10-27.txt`; earlier all-unset statements are historical.
+
 ## October 26 — IMPLEMENTED locally: complete booking flow and automatic promotion
 
 Connected the disabled atomic booking engine to wellness signup, durable private intake/source recovery, signed guest cancellation, full-staff booking view/actions/private backup, promotion-message previews and a read-only initial migration report. Nick chose automatic first-come promotion. All 30 real limits remain unset. All SMS, including tests, remains on hold; the Make reminder scenario was verified inactive earlier on October 26. No live data, deployment or provider setting changed. Production-build HTTP/browser rehearsals used fictional isolated records only. See `docs/WELLNESS_BOOKING_WORKFLOW.txt` for exact checks and remaining migration/cutover requirements. This update supersedes earlier foundation-only descriptions below.

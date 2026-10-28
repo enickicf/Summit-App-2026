@@ -1,3 +1,7 @@
+OCTOBER 27 OWNER SETTINGS UPDATE
+
+Nick has supplied the provisional limits and signup choices. Blank signup-required limits are unlimited; Life Plan stays at 20 per session, and workbook reallocation is deferred. All 32 choices are preserved, with matched settings applied to the disabled older source. Source sync remains required and all SMS remains held. See WELLNESS_OWNER_CAPACITY_CHOICES_2026-10-27.txt. Earlier all-unset descriptions below are historical.
+
 CURRENT STATUS — OCTOBER 26 PHASE 2
 
 The booking flow, private guest cancellation, automatic first-come promotion, staff recovery/actions/private backup and read-only migration report are now implemented locally and disabled. See WELLNESS_BOOKING_WORKFLOW.txt for current behavior, exact validation and rollout requirements. The foundation record below is retained as historical implementation detail; its descriptions of UI binding as future work are superseded. No live migration, deployment or SMS occurred.

@@ -1,3 +1,7 @@
+## October 27 owner capacity source
+
+The owner-supplied CSV is normalized into `apps/web/config/wellness-owner-decisions-2026.draft.json`, preserving all 32 exact session IDs and the input hash without personal file paths or attendee data. The runtime-facing disabled draft contains 17 matched limited policies and 11 unlimited policies. Four new IDs await canonical source sync; two absent older IDs stay unset. Activation holds prevent enabling an unreconciled policy. No workbook pool automation is required: use 20 per Life Plan session until later owner review.
+
 ## October 26 booking workflow — IMPLEMENTED locally, disabled
 
 The web booking writer adds conditional `wellness/ledger-v1.json` transitions and immutable `wellness-intakes/<uuid>.json` payloads plus journal copies in the existing Netlify staff store. Source workshops keep original IDs, timestamps and waivers; cancellations live in the new audit/ledger. Pending source materialization suppresses all intake reminders. Test sources, inbox, outbox and ledger require isolated prefixes/directories. The companion remains read-only for bookings and cannot mutate intakes. A new full-staff-only private backup exports booking history and recovery payloads; the older general staff export is unchanged. No live store initialization or migration is included. See `docs/WELLNESS_BOOKING_WORKFLOW.txt` for settings and cutover restrictions.

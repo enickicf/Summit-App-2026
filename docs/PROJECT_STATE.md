@@ -1,3 +1,7 @@
+## October 27 wellness settings — IMPLEMENTED draft / PARTIAL source sync
+
+Owner choices are saved for all 32 sheet rows, including unlimited blank limits and Life Plan at 20 per session with later manual workbook review. Exact-ID matches update the disabled capacity draft. The shared GitHub production branch still has the older 30-session source, so publication remains blocked by an explicit activation hold. No new live record, setting, deployment or SMS changed. Details: `docs/WELLNESS_OWNER_CAPACITY_CHOICES_2026-10-27.txt`.
+
 ## October 26 wellness follow-up — IMPLEMENTED locally / PARTIAL rollout
 
 The disabled booking flow now includes public signup binding, durable source-save recovery, private view/cancellation, automatic FIFO promotion, staff management/private backup, and read-only initial migration planning. Source review remains in draft PR #2; nothing is merged, deployed or live. Actual capacities, reviewed real-record migration, legacy link recovery, restore rehearsal, provider/Make reconciliation and Nick’s complete-process/build approval remain required. All SMS stays disabled. See `docs/WELLNESS_BOOKING_WORKFLOW.txt`; historical foundation-only statements below are superseded for this branch.

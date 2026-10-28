@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { expect, it, vi } from "vitest";
 import { handleStaffBookings } from "../../app/api/staff/wellness-bookings/route";
-import { capacityRules, draftCapacityRules } from "./capacity";
+import { capacityRules } from "./capacity";
 import { planWellnessMigration } from "./migration";
 import { createBookingWorkflow, memoryIntakeStore } from "./service";
 import { memoryBookingStore } from "./ledger";
@@ -18,7 +18,7 @@ it("creates a read-only migration plan that preserves existing places and flags 
   expect(plan.sessions.find(session => session.sessionId === sessionId)!.overProposedCapacity).toBe(1);
   expect(plan).toMatchObject({ dryRun: true, requiresOwnerApproval: true, existingRecordsChanged: false, readyForReviewedMigration: false });
   expect(rows).toEqual(original);
-  expect(planWellnessMigration(rows, draftCapacityRules).sessions.every(session => session.needsCapacityDecision)).toBe(true);
+  expect(planWellnessMigration(rows, capacityRules({})).sessions.every(session => session.needsCapacityDecision)).toBe(true);
 });
 it("does not resurrect an older row behind a cancellation tombstone", () => {
   const old = record(0), cancelled = { ...old, id: randomUUID(), submittedAt: "2026-10-25T22:00:00Z", cancelledAt: "2026-10-26T00:00:00Z" };
